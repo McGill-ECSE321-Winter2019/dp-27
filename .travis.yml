@@ -2,4 +2,4 @@ language: java
 before_script:
   - cd Cooperator-Backend
 script:
-  - mvn test
+  - ./mvnw test
