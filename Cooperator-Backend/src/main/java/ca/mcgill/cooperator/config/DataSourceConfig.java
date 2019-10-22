@@ -16,8 +16,8 @@ public class DataSourceConfig {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.url("jdbc:" + dotenv.get("SPRING_DATASOURCE_URL"));
-        dataSourceBuilder.username("SPRING_DATASOURCE_USERNAME");
-        dataSourceBuilder.password("SPRING_DATASOURCE_PASSWORD");
+        dataSourceBuilder.username(dotenv.get("SPRING_DATASOURCE_USERNAME"));
+        dataSourceBuilder.password(dotenv.get("SPRING_DATASOURCE_PASSWORD"));
         return dataSourceBuilder.build();
     }
 }
