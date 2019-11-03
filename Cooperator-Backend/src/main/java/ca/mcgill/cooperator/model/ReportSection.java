@@ -1,11 +1,11 @@
 package ca.mcgill.cooperator.model;
 
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-public class ReportItem {
-	
-	@Id
+public class ReportSection {
+	@Id @GeneratedValue
 	private int id;
 	private String title;
 	private String content;

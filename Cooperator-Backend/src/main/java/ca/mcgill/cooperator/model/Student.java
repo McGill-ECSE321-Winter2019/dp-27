@@ -3,6 +3,7 @@ package ca.mcgill.cooperator.model;
 import java.util.List;
 
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -10,11 +11,12 @@ import javax.persistence.Entity;
 
 @Entity
 public class Student {
+	@Id @GeneratedValue
+	private int id;
     private String firstName;
     private String lastName;
     private String email;
-	@Id
-	private int id;
+    private String studentId;
 
     private List<Coop> coops;
     
@@ -23,7 +25,7 @@ public class Student {
 		return this.coops;
 	}
 
-	public void setCoop(List<Coop> coops) {
+	public void setCoops(List<Coop> coops) {
 		this.coops = coops;
 	}
 	

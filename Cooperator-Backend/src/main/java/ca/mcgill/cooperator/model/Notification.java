@@ -2,12 +2,12 @@ package ca.mcgill.cooperator.model;
 
 import javax.persistence.ManyToOne;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Notification {
-	//??????
-	@Id
+	@Id @GeneratedValue
 	private int id;
 	private String title;
 	private String body;

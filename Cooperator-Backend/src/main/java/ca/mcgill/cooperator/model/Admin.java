@@ -3,11 +3,12 @@ package ca.mcgill.cooperator.model;
 import java.util.List;
 
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 public class Admin {
-	@Id
+	@Id @GeneratedValue
 	private int id;
     String firstName;
     String lastName;
@@ -16,11 +17,11 @@ public class Admin {
     private List<Notification> sent;
 
 	@OneToMany(mappedBy = "notifications", fetch = FetchType.EAGER)
-	public List<Notification> getStudentReceived() {
+	public List<Notification> getNotificationsSent() {
 		return this.sent;
 	}
 
-	public void setStudentReceived(List<Notification> sent) {
+	public void setNotificationsSent(List<Notification> sent) {
 		this.sent = sent;
 	}
 

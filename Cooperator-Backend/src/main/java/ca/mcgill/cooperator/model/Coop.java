@@ -3,6 +3,7 @@ package ca.mcgill.cooperator.model;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -10,7 +11,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Coop {
-	@Id
+	@Id @GeneratedValue
 	private int id;
     private int year;
     private CoopStatus status;

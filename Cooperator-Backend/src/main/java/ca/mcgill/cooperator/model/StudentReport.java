@@ -1,13 +1,18 @@
 package ca.mcgill.cooperator.model;
+
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
 public class StudentReport {
-	@Id
-	private int id;
+
+	@Id @GeneratedValue
+	private int id;	
     private ReportStatus status;
     
     private Coop coop;
@@ -21,14 +26,14 @@ public class StudentReport {
     	 this.coop = coop;
     }
     
-    private ReportItem reportItem;
+    private List<ReportSection> reportSections;
     
-    @OneToMany
-    public ReportItem getReportItem() {
-    	return this.reportItem;
+    public List<ReportSection> getReportSections(){
+    	return this.reportSections;
     }
-    
-    public void setReportItem(ReportItem reportItem) {
-    	this.reportItem = reportItem;
-    }
+
+	public void setReportSections(List<ReportSection> reportSections){
+		this.reportSections = reportSections;
+	}
+
 }

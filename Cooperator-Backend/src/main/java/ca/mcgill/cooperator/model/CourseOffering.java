@@ -2,12 +2,13 @@ package ca.mcgill.cooperator.model;
 
 import java.util.List;
 
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 public class CourseOffering {
-	@Id
+	@Id @GeneratedValue
 	private int id;
     private int year;
     private Season season;

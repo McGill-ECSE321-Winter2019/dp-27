@@ -1,13 +1,17 @@
 package ca.mcgill.cooperator.model;
 
+import java.sql.Date;
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
 public class EmployerReport {
-	@Id
+	@Id @GeneratedValue
 	private int id;
     private ReportStatus status;
     
@@ -33,14 +37,13 @@ public class EmployerReport {
     	 this.employer = employer;
     }
     
-    private ReportItem reportItem;
+    private List<ReportSection> reportSections;
     
-    @OneToMany
-    public ReportItem getReportItem() {
-    	return this.reportItem;
+    public List<ReportSection> getReportSections(){
+    	return this.reportSections;
     }
-    
-    public void setReportItem(ReportItem reportItem) {
-    	this.reportItem = reportItem;
-    }
+
+	public void setReportSections(List<ReportSection> reportSections){
+		this.reportSections = reportSections;
+	}
 }

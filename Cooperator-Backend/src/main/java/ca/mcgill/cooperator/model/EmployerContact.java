@@ -2,6 +2,7 @@ package ca.mcgill.cooperator.model;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -9,7 +10,7 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class EmployerContact {
-	@Id
+	@Id @GeneratedValue
 	private int id;
     private String email;
     private String firstName;
