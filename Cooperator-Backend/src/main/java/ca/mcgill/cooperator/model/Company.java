@@ -9,13 +9,14 @@ import javax.persistence.Id;
 
 @Entity
 public class Company {
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
-    private String name;
-    
-    private List<EmployerContact> employees;
-    
-    @OneToMany(mappedBy = "employees")
+	private String name;
+
+	private List<EmployerContact> employees;
+
+	@OneToMany(mappedBy = "employees")
 	public List<EmployerContact> getCoops() {
 		return this.employees;
 	}

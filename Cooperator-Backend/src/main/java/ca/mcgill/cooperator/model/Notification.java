@@ -7,11 +7,11 @@ import javax.persistence.Id;
 
 @Entity
 public class Notification {
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
 	private String title;
 	private String body;
-
 
 	private Student student;
 
@@ -23,7 +23,7 @@ public class Notification {
 	public void setStudent(Student student) {
 		this.student = student;
 	}
-	
+
 	private Admin sender;
 
 	@ManyToOne(optional = false)
@@ -34,5 +34,5 @@ public class Notification {
 	public void setSender(Admin sender) {
 		this.sender = sender;
 	}
-  
+
 }

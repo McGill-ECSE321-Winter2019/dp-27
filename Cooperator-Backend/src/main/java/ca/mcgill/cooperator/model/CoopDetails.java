@@ -8,10 +8,11 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class CoopDetails {
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
 	private Company company;
-	
+
 	@ManyToOne(optional = false)
 	public Company getCompany() {
 		return this.company;
@@ -20,10 +21,10 @@ public class CoopDetails {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-	
-    private Coop coop;
-    
-    @OneToOne(mappedBy = "coop")
+
+	private Coop coop;
+
+	@OneToOne(mappedBy = "coop")
 	public Coop getCoop() {
 		return this.coop;
 	}
@@ -31,7 +32,7 @@ public class CoopDetails {
 	public void setCoop(Coop coop) {
 		this.coop = coop;
 	}
-    
-    private double payPerHour;
-    private int hoursPerWeek;
+
+	private double payPerHour;
+	private int hoursPerWeek;
 }

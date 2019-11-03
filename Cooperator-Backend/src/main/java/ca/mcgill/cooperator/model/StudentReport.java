@@ -11,28 +11,29 @@ import javax.persistence.OneToMany;
 @Entity
 public class StudentReport {
 
-	@Id @GeneratedValue
-	private int id;	
-    private ReportStatus status;
-    
-    private Coop coop;
-    
-    @ManyToOne
-    public Coop getCoop() {
-    	return this.coop;
-    }
-    
-    public void setCoop(Coop coop) {
-    	 this.coop = coop;
-    }
-    
-    private List<ReportSection> reportSections;
-    
-    public List<ReportSection> getReportSections(){
-    	return this.reportSections;
-    }
+	@Id
+	@GeneratedValue
+	private int id;
+	private ReportStatus status;
 
-	public void setReportSections(List<ReportSection> reportSections){
+	private Coop coop;
+
+	@ManyToOne
+	public Coop getCoop() {
+		return this.coop;
+	}
+
+	public void setCoop(Coop coop) {
+		this.coop = coop;
+	}
+
+	private List<ReportSection> reportSections;
+
+	public List<ReportSection> getReportSections() {
+		return this.reportSections;
+	}
+
+	public void setReportSections(List<ReportSection> reportSections) {
 		this.reportSections = reportSections;
 	}
 

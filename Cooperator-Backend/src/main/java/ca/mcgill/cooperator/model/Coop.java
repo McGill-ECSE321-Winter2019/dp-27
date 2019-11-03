@@ -11,16 +11,16 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Coop {
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
-    private int year;
-    private CoopStatus status;
-    private Season term;
-    
-    
-    private CourseOffering courseOffering;
-    
-    @ManyToOne(optional = false)
+	private int year;
+	private CoopStatus status;
+	private Season term;
+
+	private CourseOffering courseOffering;
+
+	@ManyToOne(optional = false)
 	public CourseOffering getCourseOffering() {
 		return this.courseOffering;
 	}
@@ -28,10 +28,10 @@ public class Coop {
 	public void setCourseOffering(CourseOffering courseOffering) {
 		this.courseOffering = courseOffering;
 	}
-    
-    private CoopDetails details;
-    
-    @OneToOne(mappedBy = "coop", optional=true)
+
+	private CoopDetails details;
+
+	@OneToOne(mappedBy = "coop", optional = true)
 	public CoopDetails getCoop() {
 		return this.details;
 	}
@@ -39,7 +39,7 @@ public class Coop {
 	public void setCoopDetails(CoopDetails details) {
 		this.details = details;
 	}
-    
+
 	private Student student;
 
 	@ManyToOne(optional = false)
@@ -52,8 +52,8 @@ public class Coop {
 	}
 
 	private List<StudentReport> studentReports;
-    
-    @OneToMany(mappedBy = "studentReports")
+
+	@OneToMany(mappedBy = "studentReports")
 	public List<StudentReport> getStudentReport() {
 		return this.studentReports;
 	}
@@ -61,10 +61,10 @@ public class Coop {
 	public void setStudentReports(List<StudentReport> studentReports) {
 		this.studentReports = studentReports;
 	}
-	
+
 	private List<EmployerReport> employerReports;
-    
-    @OneToMany(mappedBy = "studentReports")
+
+	@OneToMany(mappedBy = "studentReports")
 	public List<EmployerReport> getEmployerReports() {
 		return this.employerReports;
 	}

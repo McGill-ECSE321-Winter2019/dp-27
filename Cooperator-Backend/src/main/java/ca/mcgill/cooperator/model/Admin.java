@@ -8,13 +8,14 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 public class Admin {
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
-    String firstName;
-    String lastName;
-    String email;
-    
-    private List<Notification> sent;
+	String firstName;
+	String lastName;
+	String email;
+
+	private List<Notification> sent;
 
 	@OneToMany(mappedBy = "notifications", fetch = FetchType.EAGER)
 	public List<Notification> getNotificationsSent() {

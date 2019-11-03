@@ -11,16 +11,17 @@ import javax.persistence.Entity;
 
 @Entity
 public class Student {
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String studentId;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String studentId;
 
-    private List<Coop> coops;
-    
-    @OneToMany(mappedBy = "student")
+	private List<Coop> coops;
+
+	@OneToMany(mappedBy = "student")
 	public List<Coop> getCoops() {
 		return this.coops;
 	}
@@ -28,7 +29,7 @@ public class Student {
 	public void setCoops(List<Coop> coops) {
 		this.coops = coops;
 	}
-	
+
 	private List<Notification> studentReceived;
 
 	@OneToMany(mappedBy = "notifications", fetch = FetchType.EAGER)
@@ -39,6 +40,5 @@ public class Student {
 	public void setStudentReceived(List<Notification> studentReceived) {
 		this.studentReceived = studentReceived;
 	}
-
 
 }
