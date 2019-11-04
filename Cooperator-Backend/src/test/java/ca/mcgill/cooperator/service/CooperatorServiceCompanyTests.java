@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import ca.mcgill.cooperator.model.Company;
-
 @SpringBootTest
 public class CooperatorServiceCompanyTests {
 

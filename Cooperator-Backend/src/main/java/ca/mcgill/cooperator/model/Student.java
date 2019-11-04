@@ -20,70 +20,75 @@ public class Student {
 
     @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     private List<Notification> studentReceived;
-    
+
     /*--- Constructors ---*/
 
-    public Student(String firstName, String lastName, String email, String studentId, List<Coop> coops, List<Notification> notifications) {
-    	this.firstName = firstName;
-    	this.lastName = lastName;
-    	this.email = email;
-    	this.studentId = studentId;
-    	this.coops = coops;
-    	this.studentReceived = notifications;
+    public Student(
+            String firstName,
+            String lastName,
+            String email,
+            String studentId,
+            List<Coop> coops,
+            List<Notification> notifications) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.studentId = studentId;
+        this.coops = coops;
+        this.studentReceived = notifications;
     }
-    
+
     /*--- Getters and Setters ---*/
-    
+
     public int getId() {
-    	return this.id;
+        return this.id;
     }
-    
+
     public String getFirstName() {
-    	return this.firstName;
+        return this.firstName;
     }
-    
+
     public void setFirstName(String firstName) {
-    	this.firstName = firstName;
+        this.firstName = firstName;
     }
-    
+
     public String getLastName() {
-    	return this.lastName;
+        return this.lastName;
     }
-    
+
     public void setLastName(String lastName) {
-    	this.lastName = lastName;
+        this.lastName = lastName;
     }
-    
+
     public String getEmail() {
-    	return this.email;
+        return this.email;
     }
-    
+
     public void setEmail(String email) {
-    	this.email = email;
+        this.email = email;
     }
-    
+
     public String getStudentId() {
-    	return this.studentId;
+        return this.studentId;
     }
-    
+
     public void setStudentId(String studentId) {
-    	this.studentId = studentId;
+        this.studentId = studentId;
     }
-    
+
     public List<Coop> getCoops() {
-    	return this.coops;
+        return this.coops;
     }
-    
+
     public void setCoops(List<Coop> coops) {
-    	this.coops = coops;
+        this.coops = coops;
     }
-    
+
     public List<Notification> getNotifications() {
-    	return this.studentReceived;
+        return this.studentReceived;
     }
-    
+
     public void setNotifications(List<Notification> notifications) {
-    	this.studentReceived = notifications;
+        this.studentReceived = notifications;
     }
-     
 }

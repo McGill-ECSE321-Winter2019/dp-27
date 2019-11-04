@@ -13,33 +13,33 @@ public class Course {
 
     @OneToMany(mappedBy = "course")
     private List<CourseOffering> courseOfferings;
-    
+
     /*--- Constructors ---*/
 
     public Course(String name, List<CourseOffering> courseOfferings) {
-    	this.name = name;
-    	this.courseOfferings = courseOfferings;
+        this.name = name;
+        this.courseOfferings = courseOfferings;
     }
-    
+
     /*--- Getters and Setters ---*/
-    
+
     public int getId() {
-    	return this.id;
+        return this.id;
     }
-    
+
     public String getName() {
-    	return this.name;
+        return this.name;
     }
-    
+
     public void setName(String name) {
-    	this.name = name;
+        this.name = name;
     }
-    
+
     public List<CourseOffering> getCourseOfferings() {
-    	return this.courseOfferings;
+        return this.courseOfferings;
     }
-    
+
     public void setCourseOfferings(List<CourseOffering> courseOfferings) {
-    	this.courseOfferings = courseOfferings;
+        this.courseOfferings = courseOfferings;
     }
 }

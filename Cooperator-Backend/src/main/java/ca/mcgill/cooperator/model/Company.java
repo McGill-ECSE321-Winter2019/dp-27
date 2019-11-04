@@ -13,33 +13,33 @@ public class Company {
 
     @OneToMany(mappedBy = "company")
     private List<EmployerContact> employees;
-    
+
     /*--- Constructors ---*/
-    
+
     public Company(String name, List<EmployerContact> employees) {
-    	this.name = name;
-    	this.employees = employees;
+        this.name = name;
+        this.employees = employees;
     }
-    
+
     /*--- Getters and Setters ---*/
-    
+
     public int getId() {
-    	return this.id;
+        return this.id;
     }
-    
+
     public String getName() {
-    	return this.name;
+        return this.name;
     }
-    
+
     public void setName(String name) {
-    	this.name = name;
+        this.name = name;
     }
-    
+
     public List<EmployerContact> getEmployees() {
-    	return this.employees;
+        return this.employees;
     }
-    
+
     public void setEmployees(List<EmployerContact> employees) {
-    	this.employees = employees;
+        this.employees = employees;
     }
 }

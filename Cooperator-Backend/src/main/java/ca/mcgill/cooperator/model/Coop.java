@@ -27,69 +27,75 @@ public class Coop {
 
     @OneToMany(mappedBy = "coop")
     private List<EmployerReport> employerReports;
-    
+
     /*--- Constructors ---*/
-    
-    public Coop(CoopStatus status, CourseOffering courseOffering, CoopDetails details, Student student, List<StudentReport> studentReports, List<EmployerReport> employerReports) {
-    	this.status = status;
-    	this.courseOffering = courseOffering;
-    	this.details = details;
-    	this.student = student;
-    	this.studentReports = studentReports;
-    	this.employerReports = employerReports;
+
+    public Coop(
+            CoopStatus status,
+            CourseOffering courseOffering,
+            CoopDetails details,
+            Student student,
+            List<StudentReport> studentReports,
+            List<EmployerReport> employerReports) {
+        this.status = status;
+        this.courseOffering = courseOffering;
+        this.details = details;
+        this.student = student;
+        this.studentReports = studentReports;
+        this.employerReports = employerReports;
     }
 
     /*--- Getters and Setters ---*/
-    
+
     public int getId() {
-    	return this.id;
+        return this.id;
     }
-    
+
     public CoopStatus getStatus() {
-    	return this.status;
+        return this.status;
     }
-    
+
     public void setStatus(CoopStatus status) {
-    	this.status = status;
+        this.status = status;
     }
-    
+
     public CourseOffering getCourseOffering() {
-    	return this.courseOffering;
+        return this.courseOffering;
     }
-    
+
     public void setCourseOffering(CourseOffering courseOffering) {
-    	this.courseOffering = courseOffering;
+        this.courseOffering = courseOffering;
     }
-    
+
     public CoopDetails getCoopDetails() {
-    	return this.details;
+        return this.details;
     }
-    
+
     public void setCoopDetails(CoopDetails details) {
-    	this.details = details;
+        this.details = details;
     }
-    
+
     public Student getStudent() {
-    	return this.student;
+        return this.student;
     }
-    
+
     public void setStudent(Student student) {
-    	this.student = student;
+        this.student = student;
     }
-    
+
     public List<StudentReport> getStudentReports() {
-    	return this.studentReports;
+        return this.studentReports;
     }
-    
+
     public void setStudentReports(List<StudentReport> studentReports) {
-    	this.studentReports = studentReports;
+        this.studentReports = studentReports;
     }
-    
+
     public List<EmployerReport> getEmployerReports() {
-    	return this.employerReports;
+        return this.employerReports;
     }
-    
+
     public void setEmployerReports(List<EmployerReport> employerReports) {
-    	this.employerReports = employerReports;
+        this.employerReports = employerReports;
     }
 }

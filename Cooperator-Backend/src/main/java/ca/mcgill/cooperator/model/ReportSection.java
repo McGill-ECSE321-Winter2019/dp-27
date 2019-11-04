@@ -16,52 +16,52 @@ public class ReportSection {
 
     @ManyToOne(optional = true)
     private EmployerReport employerReport;
-    
+
     /*--- Constructors ---*/
-    
-    public ReportSection(String title, String content, StudentReport stuReport, EmployerReport employerReport) {
-    	this.title = title;
-    	this.content = content;
-    	this.studentReport = stuReport;
-    	this.employerReport = employerReport;
+
+    public ReportSection(
+            String title, String content, StudentReport stuReport, EmployerReport employerReport) {
+        this.title = title;
+        this.content = content;
+        this.studentReport = stuReport;
+        this.employerReport = employerReport;
     }
-    
+
     /*--- Getters and Setters ---*/
-    
+
     public int getId() {
-    	return this.id;
+        return this.id;
     }
-    
+
     public String getTitle() {
-    	return this.title;
+        return this.title;
     }
-    
+
     public void setTitle(String title) {
-    	this.title = title;
+        this.title = title;
     }
-    
+
     public String getContent() {
-    	return this.content;
+        return this.content;
     }
-    
+
     public void setContent(String content) {
-    	this.content = content;
+        this.content = content;
     }
-    
+
     public StudentReport getStudentReport() {
-    	return this.studentReport;
+        return this.studentReport;
     }
-    
+
     public void setStudentReport(StudentReport studentReport) {
-    	this.studentReport = studentReport;
+        this.studentReport = studentReport;
     }
-    
+
     public EmployerReport getEmployerReport() {
-    	return this.employerReport;
+        return this.employerReport;
     }
-    
+
     public void setEmployerReport(EmployerReport employerReport) {
-    	this.employerReport = employerReport;
+        this.employerReport = employerReport;
     }
-    
 }
