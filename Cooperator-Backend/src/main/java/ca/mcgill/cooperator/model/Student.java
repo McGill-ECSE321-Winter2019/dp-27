@@ -19,9 +19,9 @@ public class Student {
 	private String email;
 	private String studentId;
 
+	@OneToMany(mappedBy = "student")
 	private List<Coop> coops;
 
-	@OneToMany(mappedBy = "student")
 	public List<Coop> getCoops() {
 		return this.coops;
 	}
@@ -30,9 +30,9 @@ public class Student {
 		this.coops = coops;
 	}
 
+	@OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
 	private List<Notification> studentReceived;
 
-	@OneToMany(mappedBy = "notifications", fetch = FetchType.EAGER)
 	public List<Notification> getStudentReceived() {
 		return this.studentReceived;
 	}

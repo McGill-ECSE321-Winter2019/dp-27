@@ -16,9 +16,9 @@ public class EmployerReport {
 	private int id;
 	private ReportStatus status;
 
+	@ManyToOne
 	private Coop coop;
 
-	@ManyToOne
 	public Coop getCoop() {
 		return this.coop;
 	}
@@ -27,17 +27,18 @@ public class EmployerReport {
 		this.coop = coop;
 	}
 
-	private EmployerContact employer;
-
 	@ManyToOne
+	private EmployerContact employerContact;
+
 	public EmployerContact getEmployerContact() {
-		return this.employer;
+		return this.employerContact;
 	}
 
 	public void setEmployerContact(EmployerContact employer) {
-		this.employer = employer;
+		this.employerContact = employer;
 	}
 
+	@OneToMany
 	private List<ReportSection> reportSections;
 
 	public List<ReportSection> getReportSections() {

@@ -11,20 +11,21 @@ public class CoopDetails {
 	@Id
 	@GeneratedValue
 	private int id;
-	private Company company;
-
+	
 	@ManyToOne(optional = false)
-	public Company getCompany() {
-		return this.company;
+	private EmployerContact employerContact;
+
+	public EmployerContact getEmployerContact() {
+		return this.employerContact;
 	}
 
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setEmployerContact(EmployerContact employerContact) {
+		this.employerContact = employerContact;
 	}
 
+	@OneToOne
 	private Coop coop;
 
-	@OneToOne(mappedBy = "coop")
 	public Coop getCoop() {
 		return this.coop;
 	}

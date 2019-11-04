@@ -15,9 +15,9 @@ public class Course {
 	// not really sure about this
 	private String name;
 
+	@OneToMany(mappedBy = "course")
 	private List<CourseOffering> courseOfferings;
 
-	@OneToMany(mappedBy = "course")
 	public List<CourseOffering> getCourseOfferings() {
 		return this.courseOfferings;
 	}

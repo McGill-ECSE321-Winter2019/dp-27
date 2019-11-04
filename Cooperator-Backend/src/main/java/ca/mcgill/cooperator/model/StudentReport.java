@@ -10,15 +10,14 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class StudentReport {
-
 	@Id
 	@GeneratedValue
 	private int id;
 	private ReportStatus status;
 
+	@ManyToOne
 	private Coop coop;
 
-	@ManyToOne
 	public Coop getCoop() {
 		return this.coop;
 	}
@@ -27,6 +26,7 @@ public class StudentReport {
 		this.coop = coop;
 	}
 
+	@OneToMany
 	private List<ReportSection> reportSections;
 
 	public List<ReportSection> getReportSections() {

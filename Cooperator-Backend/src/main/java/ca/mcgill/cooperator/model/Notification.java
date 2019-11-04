@@ -13,9 +13,9 @@ public class Notification {
 	private String title;
 	private String body;
 
+	@ManyToOne
 	private Student student;
 
-	@ManyToOne
 	public Student getStudent() {
 		return this.student;
 	}
@@ -24,9 +24,9 @@ public class Notification {
 		this.student = student;
 	}
 
+	@ManyToOne(optional = false)
 	private Admin sender;
 
-	@ManyToOne(optional = false)
 	public Admin getSender() {
 		return this.sender;
 	}

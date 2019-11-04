@@ -1,9 +1,11 @@
 package ca.mcgill.cooperator.model;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+@Entity
 public class ReportSection {
 	@Id
 	@GeneratedValue
@@ -11,9 +13,9 @@ public class ReportSection {
 	private String title;
 	private String content;
 
+	@ManyToOne(optional = true)
 	private StudentReport stuReport;
 
-	@ManyToOne(optional = true)
 	public StudentReport getStudentReport() {
 		return this.stuReport;
 	}
@@ -22,9 +24,9 @@ public class ReportSection {
 		this.stuReport = stuReport;
 	}
 
+	@ManyToOne(optional = true)
 	private EmployerReport emplReport;
 
-	@ManyToOne(optional = true)
 	public EmployerReport getEmployerReport() {
 		return this.emplReport;
 	}

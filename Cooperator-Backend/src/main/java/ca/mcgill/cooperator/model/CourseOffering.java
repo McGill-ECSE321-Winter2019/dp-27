@@ -2,11 +2,13 @@ package ca.mcgill.cooperator.model;
 
 import java.util.List;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+@Entity
 public class CourseOffering {
 	@Id
 	@GeneratedValue
@@ -14,9 +16,9 @@ public class CourseOffering {
 	private int year;
 	private Season season;
 
+	@ManyToOne(optional = false)
 	private Course course;
 
-	@ManyToOne(optional = false)
 	public Course getCourse() {
 		return this.course;
 	}
@@ -25,9 +27,9 @@ public class CourseOffering {
 		this.course = course;
 	}
 
+	@OneToMany(mappedBy = "courseOffering")
 	private List<Coop> coops;
 
-	@OneToMany(mappedBy = "coops")
 	public List<Coop> getCoops() {
 		return this.coops;
 	}

@@ -18,9 +18,9 @@ public class Coop {
 	private CoopStatus status;
 	private Season term;
 
+	@ManyToOne(optional = false)
 	private CourseOffering courseOffering;
 
-	@ManyToOne(optional = false)
 	public CourseOffering getCourseOffering() {
 		return this.courseOffering;
 	}
@@ -29,9 +29,9 @@ public class Coop {
 		this.courseOffering = courseOffering;
 	}
 
+	@OneToOne(mappedBy = "coop", optional = true)
 	private CoopDetails details;
 
-	@OneToOne(mappedBy = "coop", optional = true)
 	public CoopDetails getCoop() {
 		return this.details;
 	}
@@ -40,9 +40,9 @@ public class Coop {
 		this.details = details;
 	}
 
+	@ManyToOne(optional = false)
 	private Student student;
 
-	@ManyToOne(optional = false)
 	public Student getStudent() {
 		return this.student;
 	}
@@ -51,9 +51,9 @@ public class Coop {
 		this.student = student;
 	}
 
+	@OneToMany(mappedBy = "coop")
 	private List<StudentReport> studentReports;
 
-	@OneToMany(mappedBy = "studentReports")
 	public List<StudentReport> getStudentReport() {
 		return this.studentReports;
 	}
@@ -62,9 +62,9 @@ public class Coop {
 		this.studentReports = studentReports;
 	}
 
+	@OneToMany(mappedBy = "coop")
 	private List<EmployerReport> employerReports;
 
-	@OneToMany(mappedBy = "studentReports")
 	public List<EmployerReport> getEmployerReports() {
 		return this.employerReports;
 	}

@@ -14,9 +14,9 @@ public class Company {
 	private int id;
 	private String name;
 
+	@OneToMany(mappedBy = "company")
 	private List<EmployerContact> employees;
 
-	@OneToMany(mappedBy = "employees")
 	public List<EmployerContact> getCoops() {
 		return this.employees;
 	}
