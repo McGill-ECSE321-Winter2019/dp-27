@@ -9,6 +9,8 @@ import javax.persistence.OneToOne;
 @Entity
 public class CoopDetails {
     @Id @GeneratedValue private int id;
+    private double payPerHour;
+    private int hoursPerWeek;
 
     @ManyToOne(optional = false)
     private EmployerContact employerContact;
@@ -30,7 +32,4 @@ public class CoopDetails {
     public void setCoop(Coop coop) {
         this.coop = coop;
     }
-
-    private double payPerHour;
-    private int hoursPerWeek;
 }

@@ -9,48 +9,47 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class CooperatorServiceCoopTests {
-	
-	// TODO: add Service and Repository class imports here
 
-	@BeforeEach
-	@AfterEach
-	public void clearDatabase() {
-		// TODO: clear every repository here
-	}
-	
-	@Test
-	public void testCreateCoop() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testCreateCoopNull() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testCreateCoopEmpty() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testCreateCoopSpaces() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testUpdateCoop() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testUpdateCoopInvalid() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testDeleteCoop() {
-		assertTrue(true);
-	}
+    // TODO: add Service and Repository class imports here
 
+    @BeforeEach
+    @AfterEach
+    public void clearDatabase() {
+        // TODO: clear every repository here
+    }
+
+    @Test
+    public void testCreateCoop() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testCreateCoopNull() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testCreateCoopEmpty() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testCreateCoopSpaces() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testUpdateCoop() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testUpdateCoopInvalid() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testDeleteCoop() {
+        assertTrue(true);
+    }
 }
