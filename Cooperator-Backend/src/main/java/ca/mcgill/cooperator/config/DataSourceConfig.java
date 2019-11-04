@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
@@ -16,10 +17,12 @@ public class DataSourceConfig {
     @Bean
     public HikariDataSource getDataSource() {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
-        DataSourceBuilder<HikariDataSource> dataSourceBuilder = DataSourceBuilder.create().type(HikariDataSource.class);
-        dataSourceBuilder.url(dotenv.get("SPRING_DATASOURCE_URL"));
-        dataSourceBuilder.username(dotenv.get("SPRING_DATASOURCE_USERNAME"));
-        dataSourceBuilder.password(dotenv.get("SPRING_DATASOURCE_PASSWORD"));
-        return dataSourceBuilder.build();
+        
+        HikariConfig jdbcConfig = new HikariConfig();
+        jdbcConfig.setJdbcUrl(dotenv.get("SPRING_DATASOURCE_URL"));
+        jdbcConfig.setUsername(dotenv.get("SPRING_DATASOURCE_USERNAME"));
+        jdbcConfig.setPassword(dotenv.get("SPRING_DATASOURCE_PASSWORD"));
+        
+        return new HikariDataSource(jdbcConfig);
     }
 }
