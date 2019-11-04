@@ -13,7 +13,6 @@ public class DataSourceConfig {
     public DataSource getDataSource() {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-        //dataSourceBuilder.driverClassName("org.h2.Driver");
         dataSourceBuilder.url(dotenv.get("SPRING_DATASOURCE_URL"));
         dataSourceBuilder.username(dotenv.get("SPRING_DATASOURCE_USERNAME"));
         dataSourceBuilder.password(dotenv.get("SPRING_DATASOURCE_PASSWORD"));
