@@ -17,7 +17,6 @@ public class DataSourceConfig {
     public HikariDataSource getDataSource() {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
         DataSourceBuilder<HikariDataSource> dataSourceBuilder = DataSourceBuilder.create().type(HikariDataSource.class);
-        dataSourceBuilder.driverClassName("org.postgresql.Driver");
         dataSourceBuilder.url(dotenv.get("SPRING_DATASOURCE_URL"));
         dataSourceBuilder.username(dotenv.get("SPRING_DATASOURCE_USERNAME"));
         dataSourceBuilder.password(dotenv.get("SPRING_DATASOURCE_PASSWORD"));
