@@ -12,23 +12,55 @@ public class Notification {
     private String body;
 
     @ManyToOne private Student student;
-
-    public Student getStudent() {
-        return this.student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
+    
     @ManyToOne(optional = false)
     private Admin sender;
+    
+    /*--- Constructors ---*/
 
+    public Notification(String title, String body, Student student, Admin sender) {
+    	this.title = title;
+    	this.body = body;
+    	this.student = student;
+    	this.sender = sender;
+    }
+    
+    /*--- Setters and Getters ---*/
+    
+    public int getId() {
+    	return this.id;
+    }
+    
+    public String getTitle() {
+    	return this.title;
+    }
+    
+    public void setTitle(String title) {
+    	this.title = title;
+    }
+    
+    public String getBody() {
+    	return this.body;
+    }
+    
+    public void setBody(String body) {
+    	this.body = body;
+    }
+    
+    public Student getStudent() {
+    	return this.student;
+    }
+    
+    public void setStudent(Student student) {
+    	this.student = student;
+    }
+    
     public Admin getSender() {
-        return this.sender;
+    	return this.sender;
     }
-
+    
     public void setSender(Admin sender) {
-        this.sender = sender;
+    	this.sender = sender;
     }
+    
 }

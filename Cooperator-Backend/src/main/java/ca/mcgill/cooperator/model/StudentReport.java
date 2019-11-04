@@ -14,21 +14,44 @@ public class StudentReport {
 
     @ManyToOne private Coop coop;
 
-    public Coop getCoop() {
-        return this.coop;
-    }
-
-    public void setCoop(Coop coop) {
-        this.coop = coop;
-    }
-
     @OneToMany private List<ReportSection> reportSections;
+    
+    /*--- Constructors ---*/
 
+    public StudentReport(Coop coop, List<ReportSection> reportSections, ReportStatus status) {
+    	this.coop = coop;
+    	this.reportSections = reportSections;
+    	this.status = status;
+    }
+    
+    /*--- Getters and Setters ---*/
+    
+    public int getId() {
+    	return this.id;
+    }
+    
+    public ReportStatus getStatus() {
+    	return this.status;
+    }
+    
+    public void setStatus(ReportStatus status) {
+    	this.status = status;
+    }
+    
+    public Coop getCoop() {
+    	return this.coop;
+    }
+    
+    public void setCoop(Coop coop) {
+    	this.coop = coop;
+    }
+    
     public List<ReportSection> getReportSections() {
-        return this.reportSections;
+    	return this.reportSections;
     }
-
+    
     public void setReportSections(List<ReportSection> reportSections) {
-        this.reportSections = reportSections;
+    	this.reportSections = reportSections;
     }
+    
 }
