@@ -14,7 +14,7 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-        <selenium.version>4.0.0</selenium.version>
+        <selenium.version>3.141.59</selenium.version>
         <bonigarcia.version>3.7.1</bonigarcia.version>
         <spring.suite.version>3.0.5.RELEASE</spring.suite.version>
 	</properties>
@@ -48,6 +48,11 @@
             <artifactId>spring-context</artifactId> 
             <version>${spring.suite.version}</version>
        </dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.10</version>
+        </dependency>
+    </dependencies>
 
 </project>
