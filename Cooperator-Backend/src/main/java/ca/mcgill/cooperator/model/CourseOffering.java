@@ -16,6 +16,40 @@ public class CourseOffering {
     @ManyToOne(optional = false)
     private Course course;
 
+    @OneToMany(mappedBy = "courseOffering")
+    private List<Coop> coops;
+
+    /*--- Constructors ---*/
+
+    public CourseOffering(int year, Season season, Course course, List<Coop> coops) {
+        this.year = year;
+        this.season = season;
+        this.course = course;
+        this.coops = coops;
+    }
+
+    /*--- Getters and Setters ---*/
+
+    public int getId() {
+        return this.id;
+    }
+
+    public int getYear() {
+        return this.year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public Season getSeason() {
+        return this.season;
+    }
+
+    public void setSeason(Season season) {
+        this.season = season;
+    }
+
     public Course getCourse() {
         return this.course;
     }
@@ -24,14 +58,11 @@ public class CourseOffering {
         this.course = course;
     }
 
-    @OneToMany(mappedBy = "courseOffering")
-    private List<Coop> coops;
-
     public List<Coop> getCoops() {
         return this.coops;
     }
 
-    public void setCoop(List<Coop> coops) {
+    public void setCoops(List<Coop> coops) {
         this.coops = coops;
     }
 }

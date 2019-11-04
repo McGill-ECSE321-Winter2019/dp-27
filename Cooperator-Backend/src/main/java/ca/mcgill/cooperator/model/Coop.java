@@ -11,12 +11,53 @@ import javax.persistence.OneToOne;
 @Entity
 public class Coop {
     @Id @GeneratedValue private int id;
-    private int year;
     private CoopStatus status;
-    private Season term;
 
     @ManyToOne(optional = false)
     private CourseOffering courseOffering;
+
+    @OneToOne(mappedBy = "coop", optional = true)
+    private CoopDetails details;
+
+    @ManyToOne(optional = false)
+    private Student student;
+
+    @OneToMany(mappedBy = "coop")
+    private List<StudentReport> studentReports;
+
+    @OneToMany(mappedBy = "coop")
+    private List<EmployerReport> employerReports;
+
+    /*--- Constructors ---*/
+
+    public Coop(
+            CoopStatus status,
+            CourseOffering courseOffering,
+            CoopDetails details,
+            Student student,
+            List<StudentReport> studentReports,
+            List<EmployerReport> employerReports) {
+        this.status = status;
+        this.courseOffering = courseOffering;
+        this.details = details;
+        this.student = student;
+        this.studentReports = studentReports;
+        this.employerReports = employerReports;
+    }
+
+    /*--- Getters and Setters ---*/
+
+    public int getId() {
+        return this.id;
+    }
+
+    public CoopStatus getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(CoopStatus status) {
+        this.status = status;
+    }
 
     public CourseOffering getCourseOffering() {
         return this.courseOffering;
@@ -26,19 +67,13 @@ public class Coop {
         this.courseOffering = courseOffering;
     }
 
-    @OneToOne(mappedBy = "coop", optional = true)
-    private CoopDetails details;
-
-    public CoopDetails getCoop() {
+    public CoopDetails getCoopDetails() {
         return this.details;
     }
 
     public void setCoopDetails(CoopDetails details) {
         this.details = details;
     }
-
-    @ManyToOne(optional = false)
-    private Student student;
 
     public Student getStudent() {
         return this.student;
@@ -48,19 +83,13 @@ public class Coop {
         this.student = student;
     }
 
-    @OneToMany(mappedBy = "coop")
-    private List<StudentReport> studentReports;
-
-    public List<StudentReport> getStudentReport() {
+    public List<StudentReport> getStudentReports() {
         return this.studentReports;
     }
 
     public void setStudentReports(List<StudentReport> studentReports) {
         this.studentReports = studentReports;
     }
-
-    @OneToMany(mappedBy = "coop")
-    private List<EmployerReport> employerReports;
 
     public List<EmployerReport> getEmployerReports() {
         return this.employerReports;

@@ -15,6 +15,40 @@ public class CoopDetails {
     @ManyToOne(optional = false)
     private EmployerContact employerContact;
 
+    @OneToOne private Coop coop;
+
+    /*--- Constructors ---*/
+
+    public CoopDetails(
+            double payPerHour, int hoursPerWeek, EmployerContact employerContact, Coop coop) {
+        this.payPerHour = payPerHour;
+        this.hoursPerWeek = hoursPerWeek;
+        this.employerContact = employerContact;
+        this.coop = coop;
+    }
+
+    /*--- Getters and Setters ---*/
+
+    public int getId() {
+        return this.id;
+    }
+
+    public double getPayPerHour() {
+        return this.payPerHour;
+    }
+
+    public void setPayPerHour(double payPerHour) {
+        this.payPerHour = payPerHour;
+    }
+
+    public int getHoursPerWeek() {
+        return this.hoursPerWeek;
+    }
+
+    public void setHoursPerWeek(int hoursPerWeek) {
+        this.hoursPerWeek = hoursPerWeek;
+    }
+
     public EmployerContact getEmployerContact() {
         return this.employerContact;
     }
@@ -22,8 +56,6 @@ public class CoopDetails {
     public void setEmployerContact(EmployerContact employerContact) {
         this.employerContact = employerContact;
     }
-
-    @OneToOne private Coop coop;
 
     public Coop getCoop() {
         return this.coop;
