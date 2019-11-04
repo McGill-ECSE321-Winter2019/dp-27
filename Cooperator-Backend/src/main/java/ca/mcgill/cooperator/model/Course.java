@@ -9,7 +9,6 @@ import javax.persistence.OneToMany;
 @Entity
 public class Course {
     @Id @GeneratedValue private int id;
-    // not really sure about this
     private String name;
 
     @OneToMany(mappedBy = "course")

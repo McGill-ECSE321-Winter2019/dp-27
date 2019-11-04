@@ -1,9 +1,6 @@
 package ca.mcgill.cooperator.dao;
 
+import ca.mcgill.cooperator.model.Notification;
 import org.springframework.data.repository.CrudRepository;
 
-import ca.mcgill.cooperator.model.Notification;
-
-public interface NotificationRepository extends CrudRepository<Notification, Integer>{
-
-}
+public interface NotificationRepository extends CrudRepository<Notification, Integer> {}

@@ -9,48 +9,47 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class CooperatorServiceCourseOfferingTests {
-	
-	// TODO: add Service and Repository class imports here
 
-	@BeforeEach
-	@AfterEach
-	public void clearDatabase() {
-		// TODO: clear every repository here
-	}
-	
-	@Test
-	public void testCreateCourseOffering() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testCreateCourseOfferingNull() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testCreateCourseOfferingEmpty() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testCreateCourseOfferingSpaces() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testUpdateCourseOffering() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testUpdateCourseOfferingInvalid() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testDeleteCourseOffering() {
-		assertTrue(true);
-	}
-	
+    // TODO: add Service and Repository class imports here
+
+    @BeforeEach
+    @AfterEach
+    public void clearDatabase() {
+        // TODO: clear every repository here
+    }
+
+    @Test
+    public void testCreateCourseOffering() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testCreateCourseOfferingNull() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testCreateCourseOfferingEmpty() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testCreateCourseOfferingSpaces() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testUpdateCourseOffering() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testUpdateCourseOfferingInvalid() {
+        assertTrue(true);
+    }
+
+    @Test
+    public void testDeleteCourseOffering() {
+        assertTrue(true);
+    }
 }

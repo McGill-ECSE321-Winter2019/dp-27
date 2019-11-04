@@ -1,9 +1,6 @@
 package ca.mcgill.cooperator.dao;
 
+import ca.mcgill.cooperator.model.Student;
 import org.springframework.data.repository.CrudRepository;
 
-import ca.mcgill.cooperator.model.Student;
-
-public interface StudentRepository extends CrudRepository<Student, Integer>{
-
-}
+public interface StudentRepository extends CrudRepository<Student, Integer> {}

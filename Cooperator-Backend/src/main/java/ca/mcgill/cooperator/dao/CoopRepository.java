@@ -1,9 +1,6 @@
 package ca.mcgill.cooperator.dao;
 
+import ca.mcgill.cooperator.model.Coop;
 import org.springframework.data.repository.CrudRepository;
 
-import ca.mcgill.cooperator.model.Coop;
-
-public interface CoopRepository extends CrudRepository<Coop, Integer>{
-
-}
+public interface CoopRepository extends CrudRepository<Coop, Integer> {}

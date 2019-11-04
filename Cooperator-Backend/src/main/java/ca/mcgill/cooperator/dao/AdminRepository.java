@@ -1,9 +1,6 @@
 package ca.mcgill.cooperator.dao;
 
+import ca.mcgill.cooperator.model.Admin;
 import org.springframework.data.repository.CrudRepository;
 
-import ca.mcgill.cooperator.model.Admin;
-
-public interface AdminRepository extends CrudRepository<Admin, Integer>{
-
-}
+public interface AdminRepository extends CrudRepository<Admin, Integer> {}
