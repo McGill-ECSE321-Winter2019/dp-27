@@ -9,9 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-
 @Configuration
 public class DataSourceConfig {
 
@@ -21,7 +18,6 @@ public class DataSourceConfig {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
         
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
-        dataSourceBuilder.driverClassName("org.postgresql.Driver");
         dataSourceBuilder.url(dotenv.get("SPRING_DATASOURCE_URL"));
         dataSourceBuilder.username(dotenv.get("SPRING_DATASOURCE_USERNAME"));
         dataSourceBuilder.password(dotenv.get("SPRING_DATASOURCE_PASSWORD"));
