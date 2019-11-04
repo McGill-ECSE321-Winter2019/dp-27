@@ -17,6 +17,7 @@
         <selenium.version>3.141.59</selenium.version>
         <bonigarcia.version>3.7.1</bonigarcia.version>
         <spring.suite.version>3.0.5.RELEASE</spring.suite.version>
+		<lombok.version>1.18.10</lombok.version>
 	</properties>
 
 	<build>
@@ -51,7 +52,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.10</version>
+            <version>${lombok.version}</version>
         </dependency>
     </dependencies>
 
