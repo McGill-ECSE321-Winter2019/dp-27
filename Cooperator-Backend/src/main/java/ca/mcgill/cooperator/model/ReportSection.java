@@ -7,32 +7,29 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class ReportSection {
-	@Id
-	@GeneratedValue
-	private int id;
-	private String title;
-	private String content;
+    @Id @GeneratedValue private int id;
+    private String title;
+    private String content;
 
-	@ManyToOne(optional = true)
-	private StudentReport stuReport;
+    @ManyToOne(optional = true)
+    private StudentReport stuReport;
 
-	public StudentReport getStudentReport() {
-		return this.stuReport;
-	}
+    public StudentReport getStudentReport() {
+        return this.stuReport;
+    }
 
-	public void setStudentReport(StudentReport stuReport) {
-		this.stuReport = stuReport;
-	}
+    public void setStudentReport(StudentReport stuReport) {
+        this.stuReport = stuReport;
+    }
 
-	@ManyToOne(optional = true)
-	private EmployerReport emplReport;
+    @ManyToOne(optional = true)
+    private EmployerReport emplReport;
 
-	public EmployerReport getEmployerReport() {
-		return this.emplReport;
-	}
+    public EmployerReport getEmployerReport() {
+        return this.emplReport;
+    }
 
-	public void setEmployerReport(EmployerReport emplReport) {
-		this.emplReport = emplReport;
-	}
-
+    public void setEmployerReport(EmployerReport emplReport) {
+        this.emplReport = emplReport;
+    }
 }

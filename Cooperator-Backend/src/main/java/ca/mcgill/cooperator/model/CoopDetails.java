@@ -8,32 +8,29 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class CoopDetails {
-	@Id
-	@GeneratedValue
-	private int id;
-	
-	@ManyToOne(optional = false)
-	private EmployerContact employerContact;
+    @Id @GeneratedValue private int id;
 
-	public EmployerContact getEmployerContact() {
-		return this.employerContact;
-	}
+    @ManyToOne(optional = false)
+    private EmployerContact employerContact;
 
-	public void setEmployerContact(EmployerContact employerContact) {
-		this.employerContact = employerContact;
-	}
+    public EmployerContact getEmployerContact() {
+        return this.employerContact;
+    }
 
-	@OneToOne
-	private Coop coop;
+    public void setEmployerContact(EmployerContact employerContact) {
+        this.employerContact = employerContact;
+    }
 
-	public Coop getCoop() {
-		return this.coop;
-	}
+    @OneToOne private Coop coop;
 
-	public void setCoop(Coop coop) {
-		this.coop = coop;
-	}
+    public Coop getCoop() {
+        return this.coop;
+    }
 
-	private double payPerHour;
-	private int hoursPerWeek;
+    public void setCoop(Coop coop) {
+        this.coop = coop;
+    }
+
+    private double payPerHour;
+    private int hoursPerWeek;
 }
