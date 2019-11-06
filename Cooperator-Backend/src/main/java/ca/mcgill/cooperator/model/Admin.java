@@ -17,15 +17,6 @@ public class Admin {
     @OneToMany(mappedBy = "sender", fetch = FetchType.EAGER)
     private List<Notification> sent;
 
-    /*--- Constructors ---*/
-
-    public Admin(String firstName, String lastName, String email, List<Notification> sent) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.sent = sent;
-    }
-
     /*--- Getters and Setters ---*/
 
     public int getId() {

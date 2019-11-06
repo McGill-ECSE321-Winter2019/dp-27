@@ -17,16 +17,6 @@ public class ReportSection {
     @ManyToOne(optional = true)
     private EmployerReport employerReport;
 
-    /*--- Constructors ---*/
-
-    public ReportSection(
-            String title, String content, StudentReport stuReport, EmployerReport employerReport) {
-        this.title = title;
-        this.content = content;
-        this.studentReport = stuReport;
-        this.employerReport = employerReport;
-    }
-
     /*--- Getters and Setters ---*/
 
     public int getId() {

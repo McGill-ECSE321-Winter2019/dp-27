@@ -23,25 +23,6 @@ public class EmployerContact {
     @OneToMany(mappedBy = "employerContact")
     private List<EmployerReport> employerReports;
 
-    /*--- Constructors ---*/
-
-    public EmployerContact(
-            String email,
-            String firstName,
-            String lastName,
-            String phoneNumber,
-            Company company,
-            List<CoopDetails> coopDetails,
-            List<EmployerReport> employerReports) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.company = company;
-        this.coopdetails = coopDetails;
-        this.employerReports = employerReports;
-    }
-
     /*--- Getters and Setters ---*/
 
     public int getId() {

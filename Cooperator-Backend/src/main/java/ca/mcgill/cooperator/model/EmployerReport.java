@@ -18,19 +18,6 @@ public class EmployerReport {
 
     @OneToMany private List<ReportSection> reportSections;
 
-    /*--- Constructors ---*/
-
-    public EmployerReport(
-            Coop coop,
-            EmployerContact employerContact,
-            List<ReportSection> reportSections,
-            ReportStatus reportStatus) {
-        this.coop = coop;
-        this.employerContact = employerContact;
-        this.reportSections = reportSections;
-        this.status = reportStatus;
-    }
-
     /*--- Getters and Setters ---*/
 
     public int getId() {
