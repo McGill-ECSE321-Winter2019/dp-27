@@ -17,16 +17,6 @@ public class CoopDetails {
 
     @OneToOne private Coop coop;
 
-    /*--- Constructors ---*/
-
-    public CoopDetails(
-            double payPerHour, int hoursPerWeek, EmployerContact employerContact, Coop coop) {
-        this.payPerHour = payPerHour;
-        this.hoursPerWeek = hoursPerWeek;
-        this.employerContact = employerContact;
-        this.coop = coop;
-    }
-
     /*--- Getters and Setters ---*/
 
     public int getId() {

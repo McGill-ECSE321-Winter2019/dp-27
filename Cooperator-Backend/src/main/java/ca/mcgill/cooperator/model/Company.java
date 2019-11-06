@@ -14,13 +14,6 @@ public class Company {
     @OneToMany(mappedBy = "company")
     private List<EmployerContact> employees;
 
-    /*--- Constructors ---*/
-
-    public Company(String name, List<EmployerContact> employees) {
-        this.name = name;
-        this.employees = employees;
-    }
-
     /*--- Getters and Setters ---*/
 
     public int getId() {

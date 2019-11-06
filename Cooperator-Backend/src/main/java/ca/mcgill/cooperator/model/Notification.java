@@ -16,15 +16,6 @@ public class Notification {
     @ManyToOne(optional = false)
     private Admin sender;
 
-    /*--- Constructors ---*/
-
-    public Notification(String title, String body, Student student, Admin sender) {
-        this.title = title;
-        this.body = body;
-        this.student = student;
-        this.sender = sender;
-    }
-
     /*--- Setters and Getters ---*/
 
     public int getId() {

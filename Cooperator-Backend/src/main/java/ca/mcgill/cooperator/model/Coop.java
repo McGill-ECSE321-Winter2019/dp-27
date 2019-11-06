@@ -28,23 +28,6 @@ public class Coop {
     @OneToMany(mappedBy = "coop")
     private List<EmployerReport> employerReports;
 
-    /*--- Constructors ---*/
-
-    public Coop(
-            CoopStatus status,
-            CourseOffering courseOffering,
-            CoopDetails details,
-            Student student,
-            List<StudentReport> studentReports,
-            List<EmployerReport> employerReports) {
-        this.status = status;
-        this.courseOffering = courseOffering;
-        this.details = details;
-        this.student = student;
-        this.studentReports = studentReports;
-        this.employerReports = employerReports;
-    }
-
     /*--- Getters and Setters ---*/
 
     public int getId() {

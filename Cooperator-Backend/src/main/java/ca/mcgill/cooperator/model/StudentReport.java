@@ -16,14 +16,6 @@ public class StudentReport {
 
     @OneToMany private List<ReportSection> reportSections;
 
-    /*--- Constructors ---*/
-
-    public StudentReport(Coop coop, List<ReportSection> reportSections, ReportStatus status) {
-        this.coop = coop;
-        this.reportSections = reportSections;
-        this.status = status;
-    }
-
     /*--- Getters and Setters ---*/
 
     public int getId() {

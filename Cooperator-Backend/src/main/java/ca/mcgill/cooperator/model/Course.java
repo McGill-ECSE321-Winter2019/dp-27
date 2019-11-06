@@ -14,13 +14,6 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private List<CourseOffering> courseOfferings;
 
-    /*--- Constructors ---*/
-
-    public Course(String name, List<CourseOffering> courseOfferings) {
-        this.name = name;
-        this.courseOfferings = courseOfferings;
-    }
-
     /*--- Getters and Setters ---*/
 
     public int getId() {

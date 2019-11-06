@@ -19,15 +19,6 @@ public class CourseOffering {
     @OneToMany(mappedBy = "courseOffering")
     private List<Coop> coops;
 
-    /*--- Constructors ---*/
-
-    public CourseOffering(int year, Season season, Course course, List<Coop> coops) {
-        this.year = year;
-        this.season = season;
-        this.course = course;
-        this.coops = coops;
-    }
-
     /*--- Getters and Setters ---*/
 
     public int getId() {

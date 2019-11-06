@@ -21,23 +21,6 @@ public class Student {
     @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     private List<Notification> studentReceived;
 
-    /*--- Constructors ---*/
-
-    public Student(
-            String firstName,
-            String lastName,
-            String email,
-            String studentId,
-            List<Coop> coops,
-            List<Notification> notifications) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.studentId = studentId;
-        this.coops = coops;
-        this.studentReceived = notifications;
-    }
-
     /*--- Getters and Setters ---*/
 
     public int getId() {
