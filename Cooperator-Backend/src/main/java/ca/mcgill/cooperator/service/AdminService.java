@@ -2,9 +2,13 @@ package ca.mcgill.cooperator.service;
 
 import ca.mcgill.cooperator.dao.AdminRepository;
 import ca.mcgill.cooperator.model.Admin;
+import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Notification;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,25 +25,26 @@ public class AdminService {
      * @param email
      * @return the newly created Admin
      */
+    @Transactional
     public Admin createAdmin(String firstName, String lastName, String email) {
         StringBuilder error = new StringBuilder();
-        if (firstName == null || firstName.length() == 0) {
+        if (firstName == null || firstName.trim().length() == 0) {
             error.append("Admin first name cannot be empty! ");
         }
-        if (lastName == null || lastName.length() == 0) {
+        if (lastName == null || lastName.trim().length() == 0) {
             error.append("Admin last name cannot be empty! ");
         }
-        if (email == null || email.length() == 0) {
+        if (email == null || email.trim().length() == 0) {
             error.append("Admin email cannot be empty! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString());
+            throw new IllegalArgumentException(error.toString().trim());
         }
 
         Admin a = new Admin();
-        a.setFirstName(firstName);
-        a.setLastName(lastName);
-        a.setEmail(email);
+        a.setFirstName(firstName.trim());
+        a.setLastName(lastName.trim());
+        a.setEmail(email.trim());
         a.setSentNotifications(new ArrayList<Notification>());
 
         return a;
@@ -54,32 +59,33 @@ public class AdminService {
      * @param sentNotifications
      * @return the newly created Admin
      */
+    @Transactional
     public Admin createAdmin(
             String firstName, String lastName, String email, List<Notification> sentNotifications) {
         StringBuilder error = new StringBuilder();
-        if (firstName == null || firstName.length() == 0) {
+        if (firstName == null || firstName.trim().length() == 0) {
             error.append("Admin first name cannot be empty! ");
         }
-        if (lastName == null || lastName.length() == 0) {
+        if (lastName == null || lastName.trim().length() == 0) {
             error.append("Admin last name cannot be empty! ");
         }
-        if (email == null || email.length() == 0) {
+        if (email == null || email.trim().length() == 0) {
             error.append("Admin email cannot be empty! ");
         }
         if (sentNotifications == null) {
             error.append("Admin sent notifications cannot be null!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString());
+            throw new IllegalArgumentException(error.toString().trim());
         }
 
         Admin a = new Admin();
-        a.setFirstName(firstName);
-        a.setLastName(lastName);
-        a.setEmail(email);
+        a.setFirstName(firstName.trim());
+        a.setLastName(lastName.trim());
+        a.setEmail(email.trim());
         a.setSentNotifications(sentNotifications);
 
-        return a;
+        return adminRepository.save(a);
     }
 
     /**
@@ -88,6 +94,7 @@ public class AdminService {
      * @param id
      * @return Admin, if it exists
      */
+    @Transactional
     public Admin getAdmin(int id) {
         Admin a = adminRepository.findById(id).orElse(null);
         if (a == null) {
@@ -103,13 +110,24 @@ public class AdminService {
      * @param email
      * @return Admin, if it exists
      */
+    @Transactional
     public Admin getAdmin(String email) {
-        Admin a = adminRepository.findByEmail(email);
+        Admin a = adminRepository.findByEmail(email.trim());
         if (a == null) {
-            throw new IllegalArgumentException("Admin with email " + email + " does not exist!");
+            throw new IllegalArgumentException("Admin with email " + email.trim() + " does not exist!");
         }
 
         return a;
+    }
+    
+    /**
+     * Returns all Admins that exist
+     * 
+     * @return all Admins
+     */
+    @Transactional
+    public List<Admin> getAllAdmins() {
+    	return ServiceUtils.toList(adminRepository.findAll());
     }
 
     /**
@@ -122,6 +140,7 @@ public class AdminService {
      * @param sentNotifications
      * @return the updated Admin
      */
+    @Transactional
     public Admin updateAdmin(
             Admin a,
             String firstName,
@@ -132,26 +151,28 @@ public class AdminService {
         if (a == null) {
             error.append("Admin to update cannot be null! ");
         }
-        if (lastName == null || lastName.length() == 0) {
+        if (firstName == null || firstName.trim().length() == 0) {
+            error.append("Admin first name cannot be empty! ");
+        }
+        if (lastName == null || lastName.trim().length() == 0) {
             error.append("Admin last name cannot be empty! ");
         }
-        if (email == null || email.length() == 0) {
+        if (email == null || email.trim().length() == 0) {
             error.append("Admin email cannot be empty! ");
         }
         if (sentNotifications == null) {
             error.append("Admin sent notifications cannot be null!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString());
+            throw new IllegalArgumentException(error.toString().trim());
         }
 
-        a.setFirstName(firstName);
-        a.setLastName(lastName);
-        a.setEmail(email);
+        a.setFirstName(firstName.trim());
+        a.setLastName(lastName.trim());
+        a.setEmail(email.trim());
         a.setSentNotifications(sentNotifications);
-        adminRepository.save(a);
 
-        return a;
+        return adminRepository.save(a);
     }
 
     /**
@@ -160,6 +181,7 @@ public class AdminService {
      * @param a
      * @return the deleted Admin
      */
+    @Transactional
     public Admin deleteAdmin(Admin a) {
         if (a == null) {
             throw new IllegalArgumentException("Admin to delete cannot be null!");

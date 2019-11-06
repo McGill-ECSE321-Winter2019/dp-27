@@ -15,7 +15,8 @@ public class EmployerContact {
     private String lastName;
     private String phoneNumber;
 
-    @ManyToOne private Company company;
+    @ManyToOne(optional = false)
+    private Company company;
 
     @OneToMany(mappedBy = "employerContact")
     private List<CoopDetails> coopdetails;
@@ -59,6 +60,14 @@ public class EmployerContact {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+    
+    public Company getCompany() {
+    	return this.company;
+    }
+    
+    public void setCompany(Company company) {
+    	this.company = company;
     }
 
     public List<CoopDetails> getCoopDetails() {
