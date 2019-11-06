@@ -50,23 +50,14 @@ public class CooperatorServiceCompanyTests {
         Company c = null;
         try {
         	c = companyService.createCompany(name, employees);
+        	
+        	companyService.getCompany("Facebook");
+        	companyService.getCompany(c.getId());
         } catch (IllegalArgumentException _e) {
         	fail();
         }
         
         assertEquals(companyService.getAllCompanies().size(), 1);
-        
-        try {
-        	companyService.getCompany("Facebook");
-        } catch (IllegalArgumentException _e) {
-        	fail();
-        }
-        
-        try {
-        	companyService.getCompany(c.getId());
-        } catch (IllegalArgumentException _e) {
-        	fail();
-        }
     }
 
     @Test
@@ -137,16 +128,13 @@ public class CooperatorServiceCompanyTests {
         try {
         	companyService.createCompany(name, employees);
         	c = companyService.getCompany("Facebook");
-        } catch (IllegalArgumentException _e) {
-        	fail();
-        }
-        
-        employees = c.getEmployees();
-        EmployerContact e2 = createTestEmployerContact();
-        e2.setEmail("anotheremail@gmail.com");
-        employees.add(e2);
-
-        try {
+        	
+        	// Add new employee
+            employees = c.getEmployees();
+            EmployerContact e2 = createTestEmployerContact();
+            e2.setEmail("anotheremail@gmail.com");
+            employees.add(e2);
+            
         	companyService.updateCompany(c, "Index Exchange", employees);
         	c = companyService.getCompany("Index Exchange");
         } catch (IllegalArgumentException _e) {
@@ -180,6 +168,7 @@ public class CooperatorServiceCompanyTests {
         }
         
         assertEquals("Company name cannot be empty! Company must have at least one EmployerContact!", error);
+        
         // Original Company should still exist
         assertEquals(1, companyService.getAllCompanies().size());
         try {
@@ -216,6 +205,7 @@ public class CooperatorServiceCompanyTests {
         } catch (IllegalArgumentException e) {
         	error = e.getMessage();
         }
+        
         assertEquals("Company to delete cannot be null!", error);   
     }
     

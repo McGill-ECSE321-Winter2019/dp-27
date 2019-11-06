@@ -37,6 +37,9 @@ public class AdminService {
         if (email == null || email.trim().length() == 0) {
             error.append("Admin email cannot be empty! ");
         }
+        else if (!ServiceUtils.isValidEmail(email)) {
+        	error.append("Admin email must be a valid email!");
+        }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
@@ -46,44 +49,6 @@ public class AdminService {
         a.setLastName(lastName.trim());
         a.setEmail(email.trim());
         a.setSentNotifications(new ArrayList<Notification>());
-
-        return a;
-    }
-
-    /**
-     * Creates an Admin with a name, mail and list of sent Notifications
-     *
-     * @param firstName
-     * @param lastName
-     * @param email
-     * @param sentNotifications
-     * @return the newly created Admin
-     */
-    @Transactional
-    public Admin createAdmin(
-            String firstName, String lastName, String email, List<Notification> sentNotifications) {
-        StringBuilder error = new StringBuilder();
-        if (firstName == null || firstName.trim().length() == 0) {
-            error.append("Admin first name cannot be empty! ");
-        }
-        if (lastName == null || lastName.trim().length() == 0) {
-            error.append("Admin last name cannot be empty! ");
-        }
-        if (email == null || email.trim().length() == 0) {
-            error.append("Admin email cannot be empty! ");
-        }
-        if (sentNotifications == null) {
-            error.append("Admin sent notifications cannot be null!");
-        }
-        if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
-        }
-
-        Admin a = new Admin();
-        a.setFirstName(firstName.trim());
-        a.setLastName(lastName.trim());
-        a.setEmail(email.trim());
-        a.setSentNotifications(sentNotifications);
 
         return adminRepository.save(a);
     }
@@ -160,13 +125,19 @@ public class AdminService {
         if (email == null || email.trim().length() == 0) {
             error.append("Admin email cannot be empty! ");
         }
+        else if (!ServiceUtils.isValidEmail(email)) {
+        	error.append("Admin email must be a valid email! ");
+        }
         if (sentNotifications == null) {
             error.append("Admin sent notifications cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-
+        
+        for (Notification n : sentNotifications) {
+        	n.setSender(a);
+        }
         a.setFirstName(firstName.trim());
         a.setLastName(lastName.trim());
         a.setEmail(email.trim());
