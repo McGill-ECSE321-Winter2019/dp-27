@@ -1,7 +1,6 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +13,11 @@ public class Company {
     @Id @GeneratedValue private int id;
     private String name;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "company",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     private List<EmployerContact> employees;
 
     /*--- Getters and Setters ---*/

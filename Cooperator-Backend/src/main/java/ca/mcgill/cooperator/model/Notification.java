@@ -12,7 +12,7 @@ public class Notification {
     private String title;
     private String body;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL) 
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private Student student;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)

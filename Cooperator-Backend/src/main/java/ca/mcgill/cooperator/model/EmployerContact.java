@@ -61,13 +61,13 @@ public class EmployerContact {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    
+
     public Company getCompany() {
-    	return this.company;
+        return this.company;
     }
-    
+
     public void setCompany(Company company) {
-    	this.company = company;
+        this.company = company;
     }
 
     public List<CoopDetails> getCoopDetails() {

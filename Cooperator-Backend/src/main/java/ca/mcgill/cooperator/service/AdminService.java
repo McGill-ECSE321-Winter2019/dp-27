@@ -2,13 +2,10 @@ package ca.mcgill.cooperator.service;
 
 import ca.mcgill.cooperator.dao.AdminRepository;
 import ca.mcgill.cooperator.model.Admin;
-import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Notification;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +33,8 @@ public class AdminService {
         }
         if (email == null || email.trim().length() == 0) {
             error.append("Admin email cannot be empty! ");
-        }
-        else if (!ServiceUtils.isValidEmail(email)) {
-        	error.append("Admin email must be a valid email!");
+        } else if (!ServiceUtils.isValidEmail(email)) {
+            error.append("Admin email must be a valid email!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
@@ -79,20 +75,21 @@ public class AdminService {
     public Admin getAdmin(String email) {
         Admin a = adminRepository.findByEmail(email.trim());
         if (a == null) {
-            throw new IllegalArgumentException("Admin with email " + email.trim() + " does not exist!");
+            throw new IllegalArgumentException(
+                    "Admin with email " + email.trim() + " does not exist!");
         }
 
         return a;
     }
-    
+
     /**
      * Returns all Admins that exist
-     * 
+     *
      * @return all Admins
      */
     @Transactional
     public List<Admin> getAllAdmins() {
-    	return ServiceUtils.toList(adminRepository.findAll());
+        return ServiceUtils.toList(adminRepository.findAll());
     }
 
     /**
@@ -124,9 +121,8 @@ public class AdminService {
         }
         if (email == null || email.trim().length() == 0) {
             error.append("Admin email cannot be empty! ");
-        }
-        else if (!ServiceUtils.isValidEmail(email)) {
-        	error.append("Admin email must be a valid email! ");
+        } else if (!ServiceUtils.isValidEmail(email)) {
+            error.append("Admin email must be a valid email! ");
         }
         if (sentNotifications == null) {
             error.append("Admin sent notifications cannot be null!");
@@ -134,9 +130,9 @@ public class AdminService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-        
+
         for (Notification n : sentNotifications) {
-        	n.setSender(a);
+            n.setSender(a);
         }
         a.setFirstName(firstName.trim());
         a.setLastName(lastName.trim());

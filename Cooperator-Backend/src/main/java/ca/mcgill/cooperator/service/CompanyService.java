@@ -5,20 +5,16 @@ import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.EmployerContact;
 import java.util.List;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CompanyService {
 
-    @Autowired
-    CompanyRepository companyRepository;
-    
-    @Autowired
-    EmployerContactRepository employerContactRepository;
+    @Autowired CompanyRepository companyRepository;
+
+    @Autowired EmployerContactRepository employerContactRepository;
 
     /**
      * Creates a new Company with specified name and employees
@@ -42,10 +38,10 @@ public class CompanyService {
 
         Company c = new Company();
         c.setName(name.trim());
-        
+
         for (EmployerContact employerContact : employees) {
-        	// We do this in case a new employee does not have the Company field set
-        	employerContact.setCompany(c);
+            // We do this in case a new employee does not have the Company field set
+            employerContact.setCompany(c);
         }
         c.setEmployees(employees);
 
@@ -78,20 +74,21 @@ public class CompanyService {
     public Company getCompany(String name) {
         Company c = companyRepository.findByName(name.trim());
         if (c == null) {
-            throw new IllegalArgumentException("Company with name " + name.trim() + " does not exist!");
+            throw new IllegalArgumentException(
+                    "Company with name " + name.trim() + " does not exist!");
         }
 
         return c;
     }
-    
+
     /**
      * Returns all Companies that exist
-     * 
+     *
      * @return all Companies
      */
     @Transactional
     public List<Company> getAllCompanies() {
-    	return ServiceUtils.toList(companyRepository.findAll());
+        return ServiceUtils.toList(companyRepository.findAll());
     }
 
     /**
@@ -117,10 +114,10 @@ public class CompanyService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-        
+
         for (EmployerContact employerContact : employees) {
-        	// We do this in case a new employee does not have the Company field set
-        	employerContact.setCompany(c);
+            // We do this in case a new employee does not have the Company field set
+            employerContact.setCompany(c);
         }
         c.setName(name.trim());
         c.setEmployees(employees);
