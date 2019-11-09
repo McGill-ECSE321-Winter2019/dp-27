@@ -1,5 +1,6 @@
 package ca.mcgill.cooperator.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,9 +12,10 @@ public class Notification {
     private String title;
     private String body;
 
-    @ManyToOne private Student student;
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    private Student student;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     private Admin sender;
 
     /*--- Setters and Getters ---*/
