@@ -283,7 +283,7 @@ public class CooperatorServiceEmployerContactTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-
+        
         assertEquals(1, employerContactService.getAllEmployerContacts().size());
     }
 
@@ -316,7 +316,6 @@ public class CooperatorServiceEmployerContactTests {
     
     private static CoopDetails createTestCoopDetails() {
     	CoopDetails cd = new CoopDetails();
-    	cd.setCoop(new Coop());
     	cd.setHoursPerWeek(40);
     	cd.setPayPerHour(20);
     	return cd;
