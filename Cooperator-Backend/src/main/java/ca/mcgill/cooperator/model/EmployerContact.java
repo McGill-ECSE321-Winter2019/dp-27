@@ -1,6 +1,8 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,7 +21,10 @@ public class EmployerContact {
     @ManyToOne(optional = false)
     private Company company;
 
-    @OneToMany(mappedBy = "employerContact",
+    @OneToMany(
+    		mappedBy = "employerContact",
+    		cascade = CascadeType.ALL,
+            orphanRemoval = true,
     		fetch = FetchType.EAGER)
     private List<CoopDetails> coopdetails;
 

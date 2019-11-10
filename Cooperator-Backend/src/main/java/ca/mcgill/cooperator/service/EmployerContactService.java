@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
@@ -16,6 +17,7 @@ import ca.mcgill.cooperator.model.EmployerReport;
 public class EmployerContactService {
 
 	@Autowired EmployerContactRepository employerContactRepository;
+	@Autowired CompanyRepository companyRepository;
 	
 	/**
      * Creates an EmployerContact with a name and email
@@ -208,8 +210,18 @@ public class EmployerContactService {
         if (ec == null) {
             throw new IllegalArgumentException("Employer Contact to delete cannot be null!");
         }
+        
+        Company c = ec.getCompany();
+        
+        List <EmployerContact> employers = c.getEmployees();
+        employers.remove(ec);
+        c.setEmployees(employers);
+        
+        companyRepository.save(c);
+        
         employerContactRepository.delete(ec);
 
         return ec;
     }
+    
 }
