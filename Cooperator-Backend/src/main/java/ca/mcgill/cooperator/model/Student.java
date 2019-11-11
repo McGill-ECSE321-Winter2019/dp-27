@@ -1,6 +1,8 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,7 +20,11 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private List<Coop> coops;
 
-    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
+    @OneToMany(
+    		mappedBy = "student", 
+    		cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     private List<Notification> studentReceived;
 
     /*--- Getters and Setters ---*/
