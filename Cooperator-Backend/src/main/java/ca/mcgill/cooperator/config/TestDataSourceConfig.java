@@ -1,15 +1,15 @@
 package ca.mcgill.cooperator.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import javax.sql.DataSource;
-
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
-import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.context.annotation.PropertySource;
 
 @Configuration
+@PropertySource("classpath:application-test.properties")
 public class TestDataSourceConfig {
 
     @Bean
