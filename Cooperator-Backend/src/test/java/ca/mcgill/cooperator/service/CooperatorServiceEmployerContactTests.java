@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Company;
-import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
@@ -169,7 +168,7 @@ public class CooperatorServiceEmployerContactTests {
         EmployerContact ec = null;
         CoopDetails cd = createTestCoopDetails();
         List<CoopDetails> coopDetails = new ArrayList<CoopDetails>();
-        EmployerContact newEC = null;
+        
         try {
             employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
             ec = employerContactService.getEmployerContact(email);
@@ -180,13 +179,13 @@ public class CooperatorServiceEmployerContactTests {
             List<EmployerReport> reports = new ArrayList<EmployerReport>();
             
             employerContactService.updateEmployerContact(ec, firstName, lastName, email, phoneNumber, c, reports, coopDetails);
-            newEC = employerContactService.getEmployerContact(email);
+            ec = employerContactService.getEmployerContact(email);
         } catch (IllegalArgumentException e) {
             fail();
         }
         
-        assertEquals(1, newEC.getCoopDetails().size());
-        assertEquals(lastName, newEC.getLastName());
+        assertEquals(1, ec.getCoopDetails().size());
+        assertEquals(lastName, ec.getLastName());
         assertEquals(2, employerContactService.getAllEmployerContacts().size());
         
     }
@@ -206,6 +205,7 @@ public class CooperatorServiceEmployerContactTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
+        
         firstName = "Emma";
         lastName = "Eagles";
         email = "jeagles@gmail.com";
@@ -258,7 +258,7 @@ public class CooperatorServiceEmployerContactTests {
                 + " Employer Contact coop details cannot be null!",
                 error);
 
-        // Original EmployerContact should still exist (and employer contact created for test company)
+        // original EmployerContact should still exist (and employer contact created for test company)
         assertEquals(2, employerContactService.getAllEmployerContacts().size());
         try {
         	employerContactService.getEmployerContact(email);
