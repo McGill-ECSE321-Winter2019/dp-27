@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("companies")
-public class CompanyController {
+@RequestMapping("coops")
+public class CoopController {
 
     @GetMapping("/{id}")
-    public String getCompanyById(@PathVariable int id) {
+    public String getCoopById(@PathVariable int id) {
         return "Hello World";
     }
 }

@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("companies")
-public class CompanyController {
+@RequestMapping("employer-reports")
+public class EmployerReportController {
 
     @GetMapping("/{id}")
-    public String getCompanyById(@PathVariable int id) {
+    public String getEmployerReportById(@PathVariable int id) {
         return "Hello World";
     }
 }
