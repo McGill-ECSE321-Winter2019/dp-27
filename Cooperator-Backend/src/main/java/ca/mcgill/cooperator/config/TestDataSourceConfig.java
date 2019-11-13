@@ -9,11 +9,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
+@Profile("test")
 @PropertySource("classpath:application-test.properties")
 public class TestDataSourceConfig {
 
     @Bean
-    @Profile("test")
     public DataSource getTestDataSource() {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
