@@ -62,8 +62,9 @@ public class NotificationService {
 		n.setSender(sender);
 		n.setStudent(student);
 		
-		studentRepository.save(student);
+		notificationRepository.save(n);
 		adminRepository.save(sender);
+		studentRepository.save(student);
 		
 		return notificationRepository.save(n);
 		
@@ -137,26 +138,47 @@ public class NotificationService {
             throw new IllegalArgumentException(error.toString().trim());
         }
         
-        List<Notification> student_notifs = student.getNotifications();
-        if (student_notifs.contains(n)){
-        	student_notifs.remove(n);
+        //need to either replace or add notification in sender and student
+        boolean sender_contains = false;
+        boolean student_contains = false;
+        int sender_index = -1;
+        int student_index = -1;
+        
+        List <Notification> sender_notifs = sender.getSentNotifications();
+        List <Notification> student_notifs = student.getNotifications();
+        
+        for (Notification sender_n :sender_notifs) {
+        	if (sender_n.getId() == n.getId()) {
+        		sender_contains = true;
+        		sender_index = sender_notifs.indexOf(sender_n);
+        	}
         }
         
-        List<Notification> sender_notifs = sender.getSentNotifications();
-        if (sender_notifs.contains(n)){
-        	sender_notifs.remove(n);
+        for (Notification student_n :sender_notifs) {
+        	if (student_n.getId() == n.getId()) {
+        		student_contains = true;
+        		student_index = student_notifs.indexOf(student_n);
+        	}
         }
-		
-		n.setTitle(title.trim());
-		n.setBody(body.trim());
-		
-		student_notifs.add(n);
-		sender_notifs.add(n);
-		student.setNotifications(student_notifs);
-		sender.setSentNotifications(sender_notifs);
 
+    	n.setTitle(title.trim());
+		n.setBody(body.trim());
 		n.setSender(sender);
 		n.setStudent(student);
+		
+    	if (sender_contains) {
+    		sender_notifs.set(sender_index, n);
+        } else {
+        	sender_notifs.add(n);
+        }
+    	sender.setSentNotifications(sender_notifs);
+    	
+    	if (student_contains) {
+    		student_notifs.set(student_index, n);
+        } else {
+        	student_notifs.add(n);
+        }
+    	student.setNotifications(student_notifs);
 		
 		studentRepository.save(student);
 		adminRepository.save(sender);

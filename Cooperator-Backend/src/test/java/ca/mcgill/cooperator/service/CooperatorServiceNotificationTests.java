@@ -1,11 +1,7 @@
 package ca.mcgill.cooperator.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import ca.mcgill.cooperator.dao.AdminRepository;
 import ca.mcgill.cooperator.dao.NotificationRepository;
+import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
@@ -24,19 +22,24 @@ import ca.mcgill.cooperator.model.Student;
 public class CooperatorServiceNotificationTests {
 
     @Autowired NotificationService notificationService;
+    @Autowired AdminService adminService;
+    @Autowired StudentService studentService;
     
     @Autowired NotificationRepository notificationRepository;
-    
+    @Autowired AdminRepository adminRepository;
+    @Autowired StudentRepository studentRepository;
 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
         notificationRepository.deleteAll();
+        studentRepository.deleteAll();
+    	adminRepository.deleteAll();
     }
 
     @Test
     public void testCreateNotification() {
-        /*String title = "Hello";
+        String title = "Hello";
         String body = "Please attend meeting.";
         Student student = createTestStudent();
         Admin sender = createTestAdmin();
@@ -48,8 +51,7 @@ public class CooperatorServiceNotificationTests {
         	fail();
         }
         
-        assertEquals(1, notificationService.getAllNotifications().size());*/
-    	assertTrue(true);
+        assertEquals(1, notificationService.getAllNotifications().size());
     }
 
     @Test
@@ -120,13 +122,8 @@ public class CooperatorServiceNotificationTests {
     }
 
     @Test
-    public void testCreateNotificationManyStudents() {
-        assertTrue(true);
-    }
-
-    @Test
     public void testUpdateNotification() {
-    	/*String title = "Hello";
+    	String title = "Hello";
         String body = "Please attend meeting.";
         Student student = createTestStudent();
         Admin sender = createTestAdmin();
@@ -148,40 +145,71 @@ public class CooperatorServiceNotificationTests {
         }
         
         assertEquals("Bye", n.getTitle());
-        assertEquals(1, notificationService.getAllNotifications().size());*/
-    	assertTrue(true);
+        assertEquals("Bye", sender.getSentNotifications().get(0).getTitle());
+        assertEquals(1, notificationService.getAllNotifications().size());
     }
 
     @Test
     public void testUpdateNotificationInvalid() {
-        assertTrue(true);
+    	String title = "Hello";
+        String body = "Please attend meeting.";
+        Student student = createTestStudent();
+        Admin sender = createTestAdmin();
+        
+        Notification n = null;
+        
+        try {
+        	notificationService.createNotification(title, body, student, sender);
+        	n = notificationService.getNotification(title);
+        	
+        	title = "    ";
+        	body = "  ";
+        	
+        	notificationService.updateNotification(n, title, body, null, null);
+        	n = notificationService.getNotification(title);
+        	
+        } catch(IllegalArgumentException e) {
+        	String error = e.getMessage();
+        	assertEquals("Notification title cannot be empty! "
+        			   + "Notification body cannot be empty! "
+        			   + "Notification must have a Student receiver! "
+        			   + "Notification must have an Admin sender!", error);
+        }
+        
     }
 
     @Test
     public void testDeleteNotification() {
-        assertTrue(true);
+    	String title = "Hello";
+        String body = "Please attend meeting.";
+        Student student = createTestStudent();
+        Admin sender = createTestAdmin();
+        
+        Notification n = null;
+        
+        try {
+        	n = notificationService.createNotification(title, body, student, sender);
+        	assertEquals(1, notificationService.getAllNotifications().size());
+        	
+        	notificationService.deleteNotification(n);
+        	
+        } catch(IllegalArgumentException e) {
+        	fail();
+        }
+        
+        assertEquals(0, notificationService.getAllNotifications().size());
     }
     
-    public static Student createTestStudent() {
+    public Student createTestStudent() {
     	Student s = new Student();
-    	s.setFirstName("Susan");
-    	s.setLastName("Matuszewski");
-    	s.setEmail("susan@gmail.com");
-    	s.setStudentId("260719281");
-    	
-    	List<Notification> notifs = new ArrayList<Notification>();
-    	s.setNotifications(notifs);
+    	s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
     	
     	return s;
     }
     
-    public static Admin createTestAdmin() {
+    public Admin createTestAdmin() {
     	Admin a = new Admin();
-    	a.setFirstName("Lorraine");
-    	a.setLastName("Douglas");
-    	a.setEmail("lorraine@gmail.com");
-    	List<Notification> notifs = new ArrayList<Notification>();
-    	a.setSentNotifications(notifs);
+    	a = adminService.createAdmin("Lorraine", "Douglas", "lorraine@gmail.com");
     	
     	return a;
     }
