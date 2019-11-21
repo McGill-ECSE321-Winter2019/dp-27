@@ -41,7 +41,7 @@ public class ServiceUtils {
      * Checks if an phone number is valid (just if all characters are numbers)
      *
      * @param email
-     * @return true if email is valid
+     * @return true if phone number is valid
      */
     public static boolean isValidPhoneNumber(String phoneNumber) {
         String regex = "^[0-9]*$";
