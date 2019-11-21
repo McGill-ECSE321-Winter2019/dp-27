@@ -18,7 +18,7 @@ const routes = [
       { path: '', redirect: '/admin/home' },
       { path: 'home', component: () => import('pages/admin/AdminHome.vue') },
       { path: 'profile', component: () => import('pages/admin/AdminProfile.vue') },
-      { path: 'coops/view', component: () => import('pages/admin/AdminCoops.vue'), props: true },
+      { path: 'coops/view', component: () => import('pages/admin/AdminCoops.vue') },
       { path: 'notifications', component: () => import('pages/admin/AdminNotifications.vue') }
     ]
   }
