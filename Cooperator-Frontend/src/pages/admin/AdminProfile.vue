@@ -1,5 +1,5 @@
 <template>
-  <div>StudentSpecificCoop</div>
+  <div>AdminProfile</div>
 </template>
 
 <script>

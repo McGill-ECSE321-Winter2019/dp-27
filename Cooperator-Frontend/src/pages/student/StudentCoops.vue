@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>StudentCoops</div>
 </template>
 
 <script>
