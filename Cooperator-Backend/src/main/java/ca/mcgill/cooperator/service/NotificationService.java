@@ -21,7 +21,7 @@ public class NotificationService {
 	@Autowired AdminRepository adminRepository;
 	
 	/**
-	 * 
+	 * creates a Notification with title, body, admin sender and student receiver
 	 * @param title
 	 * @param body
 	 * @param student
@@ -71,7 +71,7 @@ public class NotificationService {
 	}
 	
 	/**
-	 * 
+	 * retrieves a notification with specific id from the database
 	 * @param id
 	 * @return notification with given id
 	 */
@@ -86,7 +86,7 @@ public class NotificationService {
 	}
 	
 	/**
-	 * 
+	 * retrieves first notification in database with given title
 	 * @param title
 	 * @return notification with given title
 	 */
@@ -94,14 +94,14 @@ public class NotificationService {
 	public Notification getNotification(String title) {
 		Notification n = notificationRepository.findByTitle(title.trim());
         if (n == null) {
-            throw new IllegalArgumentException("Notification with title * " + title + " * does not exist!");
+            throw new IllegalArgumentException("Notification with title \"" + title + "\" does not exist!");
         }
 
         return n;
 	}
 	
 	/**
-	 * 
+	 * returns all notifications in the database
 	 * @return all notifications
 	 */
 	@Transactional
@@ -110,7 +110,7 @@ public class NotificationService {
 	}
 	
 	/**
-	 * 
+	 * updates an already existing notification
 	 * @param n
 	 * @param title
 	 * @param body
@@ -188,7 +188,7 @@ public class NotificationService {
 	}
 	
 	/**
-	 * 
+	 * deletes a notification from the database
 	 * @param n
 	 * @return deleted notification
 	 */
