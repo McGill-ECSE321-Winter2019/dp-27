@@ -36,4 +36,18 @@ public class ServiceUtils {
 
         return matcher.matches();
     }
+    
+    /**
+     * Checks if an phone number is valid (just if all characters are numbers)
+     *
+     * @param email
+     * @return true if phone number is valid
+     */
+    public static boolean isValidPhoneNumber(String phoneNumber) {
+        String regex = "^[0-9]*$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(phoneNumber);
+
+        return matcher.matches();
+    }
 }
