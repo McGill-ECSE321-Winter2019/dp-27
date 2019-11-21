@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import ca.mcgill.cooperator.dao.AdminRepository;
 import ca.mcgill.cooperator.dao.NotificationRepository;
+import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
@@ -21,10 +22,12 @@ import org.springframework.test.context.ActiveProfiles;
 public class CooperatorServiceAdminTests {
 
     @Autowired AdminService adminService;
+    @Autowired NotificationService notificationService;
+    @Autowired StudentService studentService;
 
     @Autowired AdminRepository adminRepository;
-
     @Autowired NotificationRepository notificationRepository;
+    @Autowired StudentRepository studentRepository;
 
     @BeforeEach
     @AfterEach
@@ -156,7 +159,7 @@ public class CooperatorServiceAdminTests {
             adminService.createAdmin(firstName, lastName, email);
             a = adminService.getAdmin(email);
 
-            Notification n = createTestNotification();
+            Notification n = createTestNotification(a);
             List<Notification> notifications = a.getSentNotifications();
             notifications.add(n);
 
@@ -236,12 +239,14 @@ public class CooperatorServiceAdminTests {
         assertEquals("Admin to delete cannot be null!", error);
     }
 
-    private static Notification createTestNotification() {
-        Notification n = new Notification();
+    private Notification createTestNotification(Admin a) {
+        /*Notification n = new Notification();
         Student s = new Student();
         n.setTitle("Report Due");
         n.setBody("Report Due by April 2020");
-        n.setStudent(s);
+        n.setStudent(s);*/
+    	Student s = studentService.createStudent("Albert", "Kragl", "albert@kragl.com", "12345678");
+    	Notification n = notificationService.createNotification("Report Due", "Report Due by April 2020", s, a);
 
         return n;
     }
