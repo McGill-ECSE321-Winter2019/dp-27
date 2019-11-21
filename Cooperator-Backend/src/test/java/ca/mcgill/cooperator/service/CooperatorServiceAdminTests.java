@@ -240,11 +240,6 @@ public class CooperatorServiceAdminTests {
     }
 
     private Notification createTestNotification(Admin a) {
-        /*Notification n = new Notification();
-        Student s = new Student();
-        n.setTitle("Report Due");
-        n.setBody("Report Due by April 2020");
-        n.setStudent(s);*/
     	Student s = studentService.createStudent("Albert", "Kragl", "albert@kragl.com", "12345678");
     	Notification n = notificationService.createNotification("Report Due", "Report Due by April 2020", s, a);
 
