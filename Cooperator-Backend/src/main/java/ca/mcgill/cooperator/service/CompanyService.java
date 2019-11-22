@@ -4,6 +4,8 @@ import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.EmployerContact;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,21 +31,26 @@ public class CompanyService {
         if (name == null || name.trim().length() == 0) {
             error.append("Company name cannot be empty! ");
         }
-        if (employees == null || employees.isEmpty()) {
-            error.append("Company must have at least one EmployerContact!");
-        }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
         Company c = new Company();
         c.setName(name.trim());
-
-        for (EmployerContact employerContact : employees) {
-            // We do this in case a new employee does not have the Company field set
-            employerContact.setCompany(c);
+        
+        if (employees == null || employees.size() == 0) {
+        	c.setEmployees(new ArrayList<EmployerContact>());
+        	companyRepository.save(c);
         }
-        c.setEmployees(employees);
+        else {
+        	c.setEmployees(employees);
+        	companyRepository.save(c);
+	        for (EmployerContact employerContact : employees) {
+	            // We do this in case a new employee does not have the Company field set
+	            employerContact.setCompany(c);
+	            employerContactRepository.save(employerContact);
+	        }
+        }
 
         return companyRepository.save(c);
     }
@@ -108,9 +115,9 @@ public class CompanyService {
         if (name == null || name.trim().length() == 0) {
             error.append("Company name cannot be empty! ");
         }
-        if (employees == null || employees.isEmpty()) {
+        /*if (employees == null || employees.isEmpty()) {
             error.append("Company must have at least one EmployerContact!");
-        }
+        }*/
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
