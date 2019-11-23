@@ -75,7 +75,11 @@ public class CourseService {
     }
     
     @Transactional
-    public void deleteCourse(Course c) {
-    	
+    public Course deleteCourse(Course c) {
+    	if(c == null) {
+    		throw new IllegalArgumentException("Company to delete cannot be null!");
+    	}
+    	courseRepository.delete(c);
+    	return c;
     }
 }
