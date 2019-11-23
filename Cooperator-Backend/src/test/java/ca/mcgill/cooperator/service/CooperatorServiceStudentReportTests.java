@@ -13,106 +13,91 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
-import ca.mcgill.cooperator.dao.EmployerContactRepository;
-import ca.mcgill.cooperator.dao.EmployerReportRepository;
 import ca.mcgill.cooperator.dao.ReportSectionRepository;
+import ca.mcgill.cooperator.dao.StudentReportRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
-import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
-import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
+import ca.mcgill.cooperator.model.StudentReport;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceEmployerReportTests {
-	
-	@Autowired EmployerReportRepository employerReportRepository;
+public class CooperatorServiceStudentReportTests {
+	@Autowired StudentReportRepository studentReportRepository;
 	@Autowired CoopRepository coopRepository;
 	@Autowired CourseRepository courseRepository;
 	@Autowired CourseOfferingRepository courseOfferingRepository;
-	@Autowired CompanyRepository companyRepository;
-	@Autowired EmployerContactRepository employerContactRepository;
 	@Autowired StudentRepository studentRepository;
 	@Autowired ReportSectionRepository reportSectionRepository;
 	
-	@Autowired EmployerReportService employerReportService;
+	@Autowired StudentReportService studentReportService;
 	@Autowired CoopService coopService;
 	@Autowired CourseService courseService;
 	@Autowired CourseOfferingService courseOfferingService;
-	@Autowired CompanyService companyService;
-	@Autowired EmployerContactService employerContactService;
 	@Autowired StudentService studentService;
 	@Autowired ReportSectionService reportSectionService;
 	
 	@BeforeEach
     @AfterEach
     public void clearDatabase() {
-    	coopRepository.deleteAll();
+		coopRepository.deleteAll();
     	courseOfferingRepository.deleteAll();
     	courseRepository.deleteAll();
-    	employerContactRepository.deleteAll();
-    	companyRepository.deleteAll();
     	studentRepository.deleteAll();
     	reportSectionRepository.deleteAll();
-		employerReportRepository.deleteAll();
+    	studentReportRepository.deleteAll();
 	}
 	
 	@Test
-	public void testCreateEmployerReport() {
+	public void testCreateStudentReport() {
 		Course course = createTestCourse();
 		CourseOffering courseOffering = createTestCourseOffering(course);
 		Student s = createTestStudent();
 		Coop coop = createTestCoop(courseOffering, s);
-		Company company = createTestCompany();
-		EmployerContact ec = createTestEmployerContact(company);
 		
 		try {
-			employerReportService.createEmployerReport(ReportStatus.COMPLETED, coop, ec);
+			studentReportService.createStudentReport(ReportStatus.COMPLETED, coop);
 		} catch  (IllegalArgumentException e){
 			fail();
 		}
 		
-		assertEquals(1, employerReportService.getAllEmployerReports().size());
+		assertEquals(1, studentReportService.getAllStudentReports().size());
 	}
 	
 	@Test
-	public void testCreateEmployerReportNull() {
+	public void testCreateStudentReportNull() {
 		String error = "";
 		try {
-			employerReportService.createEmployerReport(null, null, null);
+			studentReportService.createStudentReport(null, null);
 		} catch  (IllegalArgumentException e){
 			error = e.getMessage();
 		}
 		
 		assertEquals("Report Status cannot be null! "
-				   + "Coop cannot be null! "
-				   + "Employer Contact cannot be null!", error);
+				   + "Coop cannot be null!", error);
+		assertEquals(0, studentReportService.getAllStudentReports().size());
 	}
 	
 	@Test
-	public void testUpdateEmployerReportWithReportSections() {
-		EmployerReport er = null;
+	public void testUpdateStudentReportWithReportSections() {
+		StudentReport sr = null;
 		
 		Course course = createTestCourse();
 		CourseOffering courseOffering = createTestCourseOffering(course);
 		Student s = createTestStudent();
 		Coop coop = createTestCoop(courseOffering, s);
-		Company company = createTestCompany();
-		EmployerContact ec = createTestEmployerContact(company);
 		
 		try {
-			er = employerReportService.createEmployerReport(ReportStatus.COMPLETED, coop, ec);
+			sr = studentReportService.createStudentReport(ReportStatus.COMPLETED, coop);
 		} catch  (IllegalArgumentException e){
 			fail();
 		}
@@ -122,28 +107,26 @@ public class CooperatorServiceEmployerReportTests {
 		sections.add(rs);
 		
 		try {
-			er = employerReportService.updateEmployerReport(er, ReportStatus.COMPLETED, coop, ec, sections);
+			sr = studentReportService.updateStudentReport(sr, ReportStatus.COMPLETED, coop, sections);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 		
-		assertEquals(1, er.getReportSections().size());
-		assertEquals(1, employerReportService.getAllEmployerReports().size());
+		assertEquals(1, sr.getReportSections().size());
+		assertEquals(1, studentReportService.getAllStudentReports().size());
 	}
 	
 	@Test
-	public void testUpdateEmployerReport() {
-		EmployerReport er = null;
+	public void testUpdateStudentrReport() {
+		StudentReport sr = null;
 		
 		Course course = createTestCourse();
 		CourseOffering courseOffering = createTestCourseOffering(course);
 		Student s = createTestStudent();
 		Coop coop = createTestCoop(courseOffering, s);
-		Company company = createTestCompany();
-		EmployerContact ec = createTestEmployerContact(company);
 		
 		try {
-			er = employerReportService.createEmployerReport(ReportStatus.COMPLETED, coop, ec);
+			sr = studentReportService.createStudentReport(ReportStatus.COMPLETED, coop);
 		} catch  (IllegalArgumentException e){
 			fail();
 		}
@@ -153,87 +136,82 @@ public class CooperatorServiceEmployerReportTests {
 		sections.add(rs);
 		
 		try {
-			er = employerReportService.updateEmployerReport(er, ReportStatus.INCOMPLETE, coop, ec, sections);
+			sr = studentReportService.updateStudentReport(sr, ReportStatus.INCOMPLETE, coop, sections);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 		
-		assertEquals(1, er.getReportSections().size());
+		assertEquals(1, sr.getReportSections().size());
 		assertEquals(ReportStatus.INCOMPLETE, 
-				     employerReportService.getEmployerReport(er.getId()).getStatus());
-		assertEquals(1, employerReportService.getAllEmployerReports().size());
+				     studentReportService.getStudentReport(sr.getId()).getStatus());
+		assertEquals(1, studentReportService.getAllStudentReports().size());
 	}
 	
 	@Test
-	public void testUpdateEmployerReportInvalid() {
-		EmployerReport er = null;
+	public void testUpdateStudentReportInvalid() {
+		StudentReport sr = null;
 		
 		Course course = createTestCourse();
 		CourseOffering courseOffering = createTestCourseOffering(course);
 		Student s = createTestStudent();
 		Coop coop = createTestCoop(courseOffering, s);
-		Company company = createTestCompany();
-		EmployerContact ec = createTestEmployerContact(company);
 		
 		try {
-			er = employerReportService.createEmployerReport(ReportStatus.COMPLETED, coop, ec);
+			sr = studentReportService.createStudentReport(ReportStatus.COMPLETED, coop);
 		} catch  (IllegalArgumentException e){
 			fail();
 		}
 		
 		String error = "";
 		try {
-			er = employerReportService.updateEmployerReport(null, null, null, null, null);
+			sr = studentReportService.updateStudentReport(null, null, null, null);
 		} catch (IllegalArgumentException e) {
 			error = e.getMessage();
 		}
 		
-		assertEquals("Employer Report cannot be null! "
+		assertEquals("Student Report cannot be null! "
 				   + "Report Status cannot be null! "
-				   + "Coop cannot be null! "
-				   + "Employer Contact cannot be null!", error);
+				   + "Coop cannot be null!", error);
 		assertEquals(ReportStatus.COMPLETED, 
-			     employerReportService.getEmployerReport(er.getId()).getStatus());
-		assertEquals(1, employerReportService.getAllEmployerReports().size());
+				studentReportService.getStudentReport(sr.getId()).getStatus());
+		assertEquals(1, studentReportService.getAllStudentReports().size());
 	}
 	
 	@Test
-	public void testDeleteEmployerReport() {
-		EmployerReport er = null;
+	public void testDeleteStudentReport() {
+		StudentReport sr = null;
 		Course course = createTestCourse();
 		CourseOffering courseOffering = createTestCourseOffering(course);
 		Student s = createTestStudent();
 		Coop coop = createTestCoop(courseOffering, s);
-		Company company = createTestCompany();
-		EmployerContact ec = createTestEmployerContact(company);
 		
 		try {
-			er = employerReportService.createEmployerReport(ReportStatus.COMPLETED, coop, ec);
+			sr = studentReportService.createStudentReport(ReportStatus.COMPLETED, coop);
 		} catch  (IllegalArgumentException e){
 			fail();
 		}
 		
-		assertEquals(1, employerReportService.getAllEmployerReports().size());
+		assertEquals(1, studentReportService.getAllStudentReports().size());
 		
 		try {
-			employerReportService.deleteEmployerReport(er);
+			studentReportService.deleteStudentReport(sr);
 		} catch (IllegalArgumentException e) {
 			fail();
 		}
 		
-		assertEquals(0, employerReportService.getAllEmployerReports().size());
+		assertEquals(0, studentReportService.getAllStudentReports().size());
 	}
 	
 	@Test
-	public void testDeleteEmployerReportInvalid() {
+	public void testDeleteStudentReportInvalid() {
 		String error = "";
         try {
-        	employerReportService.deleteEmployerReport(null);
+        	studentReportService.deleteStudentReport(null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
-        assertEquals("Employer Report to delete cannot be null!", error);
+        assertEquals("Student Report to delete cannot be null!", error);
 	}
 	
 	private Course createTestCourse() {
@@ -254,20 +232,6 @@ public class CooperatorServiceEmployerReportTests {
     	return coop;
     }
     
-    private Company createTestCompany() {
-        Company c = new Company();
-        c = companyService.createCompany("Facebook", null);
-        
-        return c;
-        
-    }
-    
-    private EmployerContact createTestEmployerContact(Company c) {
-    	EmployerContact ec = new EmployerContact();
-    	ec = employerContactService.createEmployerContact("Emma", "Eags", "eags@gmail.com", "2143546578", c);
-    	return ec;
-    }
-    
     private Student createTestStudent() {
     	Student s = new Student();
     	s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
@@ -280,5 +244,4 @@ public class CooperatorServiceEmployerReportTests {
     	rs = reportSectionService.createReportSection("Hello", "This is a report section");
     	return rs;
     }
-    
 }

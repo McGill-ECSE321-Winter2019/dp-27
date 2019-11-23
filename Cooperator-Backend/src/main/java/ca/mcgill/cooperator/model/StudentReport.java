@@ -1,6 +1,8 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,7 +16,9 @@ public class StudentReport {
 
     @ManyToOne private Coop coop;
 
-    @OneToMany private List<ReportSection> reportSections;
+    @OneToMany(cascade = CascadeType.ALL,
+ 		   	   orphanRemoval = true)
+    private List<ReportSection> reportSections;
 
     /*--- Getters and Setters ---*/
 
