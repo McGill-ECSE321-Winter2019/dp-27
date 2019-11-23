@@ -3,6 +3,8 @@ package ca.mcgill.cooperator.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -381,7 +383,7 @@ public class CooperatorServiceReportSectionTests {
     
     private Company createTestCompany() {
         Company c = new Company();
-        c = companyService.createCompany("Facebook", null);
+        c = companyService.createCompany("Facebook", new ArrayList<EmployerContact>());
         return c;
         
     }

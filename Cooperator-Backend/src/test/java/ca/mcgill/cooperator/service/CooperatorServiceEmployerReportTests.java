@@ -256,7 +256,7 @@ public class CooperatorServiceEmployerReportTests {
     
     private Company createTestCompany() {
         Company c = new Company();
-        c = companyService.createCompany("Facebook", null);
+        c = companyService.createCompany("Facebook", new ArrayList<EmployerContact>());
         
         return c;
         

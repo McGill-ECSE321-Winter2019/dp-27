@@ -40,7 +40,7 @@ public class CooperatorServiceCompanyTests {
 
         Company c = null;
         try {
-        	c = companyService.createCompany(name, null);
+        	c = companyService.createCompany(name, new ArrayList<EmployerContact>());
 
             companyService.getCompany("Facebook");
             companyService.getCompany(c.getId());
@@ -60,9 +60,8 @@ public class CooperatorServiceCompanyTests {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Company name cannot be empty!",
-                error);
+        assertEquals("Company name cannot be empty! "
+                   + "Company employees cannot be null!", error);
         assertEquals(companyService.getAllCompanies().size(), 0);
     }
 
@@ -75,9 +74,8 @@ public class CooperatorServiceCompanyTests {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Company name cannot be empty!",
-                error);
+        assertEquals("Company name cannot be empty! "
+                   + "Company employees cannot be null!", error);
         assertEquals(companyService.getAllCompanies().size(), 0);
     }
 
@@ -121,14 +119,13 @@ public class CooperatorServiceCompanyTests {
 
         String error = "";
         try {
-            companyService.updateCompany(c, "", new ArrayList<EmployerContact>());
+            companyService.updateCompany(c, "", null);
         } catch (IllegalArgumentException err) {
             error = err.getMessage();
         }
 
-        assertEquals(
-                "Company name cannot be empty!",
-                error);
+        assertEquals("Company name cannot be empty! "
+        		   + "Company employees cannot be null!", error);
 
         // Original Company should still exist
         assertEquals(1, companyService.getAllCompanies().size());
