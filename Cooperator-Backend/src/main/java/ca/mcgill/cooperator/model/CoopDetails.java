@@ -15,7 +15,8 @@ public class CoopDetails {
     @ManyToOne(optional = false)
     private EmployerContact employerContact;
 
-    @OneToOne private Coop coop;
+    @OneToOne 
+    private Coop coop;
 
     /*--- Getters and Setters ---*/
 

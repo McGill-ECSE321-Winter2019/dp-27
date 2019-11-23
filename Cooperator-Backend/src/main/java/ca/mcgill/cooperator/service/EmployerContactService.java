@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ca.mcgill.cooperator.dao.CompanyRepository;
+import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
+import ca.mcgill.cooperator.dao.EmployerReportRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
@@ -18,6 +20,8 @@ public class EmployerContactService {
 
 	@Autowired EmployerContactRepository employerContactRepository;
 	@Autowired CompanyRepository companyRepository;
+	@Autowired EmployerReportRepository employerReportRepository;
+	@Autowired CoopDetailsRepository coopDetailsRepository;
 	
 	/**
      * Creates an EmployerContact with a name and email
@@ -61,14 +65,15 @@ public class EmployerContactService {
         ec.setLastName(lastName.trim());
         ec.setEmail(email.trim());
         ec.setPhoneNumber(phoneNumber.trim());
+        ec.setEmployerReports(new ArrayList<EmployerReport>());
+        ec.setCoopDetails(new ArrayList<CoopDetails>());
+        ec.setCompany(company);
         
         List<EmployerContact> employers = company.getEmployees();
         employers.add(ec);
         company.setEmployees(employers);
-        ec.setCompany(company);
         
-        ec.setEmployerReports(new ArrayList<EmployerReport>());
-        ec.setCoopDetails(new ArrayList<CoopDetails>());
+        companyRepository.save(company);
 
         return employerContactRepository.save(ec);
     }
@@ -139,6 +144,7 @@ public class EmployerContactService {
             Company company,
             List<EmployerReport> employerReports,
             List<CoopDetails> coopDetails) {
+    	
         StringBuilder error = new StringBuilder();
         if (ec == null) {
             error.append("Employer Contact to update cannot be null! ");
@@ -172,18 +178,19 @@ public class EmployerContactService {
             throw new IllegalArgumentException(error.toString().trim());
         }
         
-        List<EmployerContact> employers = company.getEmployees();
-        if (employers.contains(ec)) {
-        	employers.remove(ec);
-        }
-
-        for (EmployerReport er : employerReports) {
-            er.setEmployerContact(ec);
+        List<EmployerContact> companyEmployees = company.getEmployees();
+        
+        boolean companyContains = false;
+        int companyIndex = -1;
+        
+        //check if company already has this employer contact, if yes get index
+        for(EmployerContact employee : companyEmployees) {
+        	if (employee.getId() == ec.getId()) {
+        		companyContains = true;
+        		companyIndex = companyEmployees.indexOf(employee);
+        	}
         }
         
-        for (CoopDetails cd : coopDetails) {
-            cd.setEmployerContact(ec);
-        }
         
         ec.setFirstName(firstName.trim());
         ec.setLastName(lastName.trim());
@@ -191,10 +198,28 @@ public class EmployerContactService {
         ec.setPhoneNumber(phoneNumber.trim());
         ec.setEmployerReports(employerReports);
         ec.setCoopDetails(coopDetails);
-        
-        employers.add(ec);
-        company.setEmployees(employers);
         ec.setCompany(company);
+        
+        employerContactRepository.save(ec);
+        
+        for (EmployerReport er : employerReports) {
+            er.setEmployerContact(ec);
+            employerReportRepository.save(er);
+        }
+        
+        for (CoopDetails cd : coopDetails) {
+            cd.setEmployerContact(ec);
+            coopDetailsRepository.save(cd);
+        }
+        
+        if (companyContains == true) {
+        	companyEmployees.set(companyIndex, ec);
+        } else {
+        	companyEmployees.add(ec);
+        }
+        company.setEmployees(companyEmployees);
+        
+        companyRepository.save(company);
 
         return employerContactRepository.save(ec);
     }

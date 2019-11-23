@@ -1,6 +1,7 @@
 package ca.mcgill.cooperator.service;
 
 import ca.mcgill.cooperator.dao.AdminRepository;
+import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class AdminService {
 
     @Autowired AdminRepository adminRepository;
+    @Autowired NotificationRepository notificationRepository;
 
     /**
      * Creates an Admin with a name and email
@@ -130,14 +132,17 @@ public class AdminService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-
-        for (Notification n : sentNotifications) {
-            n.setSender(a);
-        }
+        
         a.setFirstName(firstName.trim());
         a.setLastName(lastName.trim());
         a.setEmail(email.trim());
         a.setSentNotifications(sentNotifications);
+        adminRepository.save(a);
+
+        for (Notification n : sentNotifications) {
+            n.setSender(a);
+            notificationRepository.save(n);
+        }
 
         return adminRepository.save(a);
     }

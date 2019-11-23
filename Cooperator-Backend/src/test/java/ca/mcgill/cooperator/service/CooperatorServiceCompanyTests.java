@@ -21,10 +21,11 @@ import org.springframework.test.context.ActiveProfiles;
 public class CooperatorServiceCompanyTests {
 
     @Autowired CompanyService companyService;
+    @Autowired EmployerContactService employerContactService;
 
     @Autowired CompanyRepository companyRepository;
-
     @Autowired EmployerContactRepository employerContactRepository;
+    
 
     @BeforeEach
     @AfterEach
@@ -36,13 +37,10 @@ public class CooperatorServiceCompanyTests {
     @Test
     public void testCreateCompany() {
         String name = "Facebook";
-        EmployerContact e = createTestEmployerContact();
-        List<EmployerContact> employees = new ArrayList<EmployerContact>();
-        employees.add(e);
 
         Company c = null;
         try {
-            c = companyService.createCompany(name, employees);
+        	c = companyService.createCompany(name, new ArrayList<EmployerContact>());
 
             companyService.getCompany("Facebook");
             companyService.getCompany(c.getId());
@@ -54,37 +52,6 @@ public class CooperatorServiceCompanyTests {
     }
 
     @Test
-    public void testCreateCompanyNoEmployees() {
-        String name = "Facebook";
-        List<EmployerContact> employees = new ArrayList<EmployerContact>();
-
-        String error = "";
-        try {
-            companyService.createCompany(name, employees);
-        } catch (IllegalArgumentException e) {
-            error = e.getMessage();
-        }
-
-        assertEquals("Company must have at least one EmployerContact!", error);
-        assertEquals(companyService.getAllCompanies().size(), 0);
-    }
-
-    @Test
-    public void testCreateCompanyNullEmployees() {
-        String name = "Facebook";
-
-        String error = "";
-        try {
-            companyService.createCompany(name, null);
-        } catch (IllegalArgumentException e) {
-            error = e.getMessage();
-        }
-
-        assertEquals("Company must have at least one EmployerContact!", error);
-        assertEquals(companyService.getAllCompanies().size(), 0);
-    }
-
-    @Test
     public void testCreateCompanyNull() {
         String error = "";
         try {
@@ -93,9 +60,8 @@ public class CooperatorServiceCompanyTests {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Company name cannot be empty! Company must have at least one EmployerContact!",
-                error);
+        assertEquals("Company name cannot be empty! "
+                   + "Company employees cannot be null!", error);
         assertEquals(companyService.getAllCompanies().size(), 0);
     }
 
@@ -108,29 +74,25 @@ public class CooperatorServiceCompanyTests {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Company name cannot be empty! Company must have at least one EmployerContact!",
-                error);
+        assertEquals("Company name cannot be empty! "
+                   + "Company employees cannot be null!", error);
         assertEquals(companyService.getAllCompanies().size(), 0);
     }
 
     @Test
     public void testUpdateCompany() {
         String name = "Facebook";
-        EmployerContact e = createTestEmployerContact();
         List<EmployerContact> employees = new ArrayList<EmployerContact>();
-        employees.add(e);
-
+        
+        EmployerContact ec = null;
         Company c = null;
         try {
             companyService.createCompany(name, employees);
             c = companyService.getCompany("Facebook");
 
             // Add new employee
-            employees = c.getEmployees();
-            EmployerContact e2 = createTestEmployerContact();
-            e2.setEmail("anotheremail@gmail.com");
-            employees.add(e2);
+            ec = createTestEmployerContact(c);
+            employees.add(ec);
 
             companyService.updateCompany(c, "Index Exchange", employees);
             c = companyService.getCompany("Index Exchange");
@@ -139,15 +101,13 @@ public class CooperatorServiceCompanyTests {
         }
 
         assertEquals("Index Exchange", c.getName());
-        assertEquals(2, c.getEmployees().size());
+        assertEquals(1, c.getEmployees().size());
     }
 
     @Test
     public void testUpdateCompanyInvalid() {
         String name = "Facebook";
-        EmployerContact e = createTestEmployerContact();
         List<EmployerContact> employees = new ArrayList<EmployerContact>();
-        employees.add(e);
 
         Company c = null;
         try {
@@ -159,14 +119,13 @@ public class CooperatorServiceCompanyTests {
 
         String error = "";
         try {
-            companyService.updateCompany(c, "", new ArrayList<EmployerContact>());
+            companyService.updateCompany(c, "", null);
         } catch (IllegalArgumentException err) {
             error = err.getMessage();
         }
 
-        assertEquals(
-                "Company name cannot be empty! Company must have at least one EmployerContact!",
-                error);
+        assertEquals("Company name cannot be empty! "
+        		   + "Company employees cannot be null!", error);
 
         // Original Company should still exist
         assertEquals(1, companyService.getAllCompanies().size());
@@ -180,13 +139,16 @@ public class CooperatorServiceCompanyTests {
     @Test
     public void testDeleteCompany() {
         String name = "Facebook";
-        EmployerContact e = createTestEmployerContact();
         List<EmployerContact> employees = new ArrayList<EmployerContact>();
-        employees.add(e);
-
+        
+        EmployerContact ec = null;
         Company c = null;
+        
         try {
-            companyService.createCompany(name, employees);
+            c = companyService.createCompany(name, employees);
+            ec = createTestEmployerContact(c);
+            employees.add(ec);
+            c = companyService.updateCompany(c, name, employees);
             c = companyService.getCompany("Facebook");
             companyService.deleteCompany(c);
         } catch (IllegalArgumentException _e) {
@@ -208,12 +170,10 @@ public class CooperatorServiceCompanyTests {
         assertEquals("Company to delete cannot be null!", error);
     }
 
-    private static EmployerContact createTestEmployerContact() {
+    private EmployerContact createTestEmployerContact(Company c) {
         EmployerContact e = new EmployerContact();
-        e.setEmail("albertkragl@fb.com");
-        e.setFirstName("Albert");
-        e.setFirstName("Kragl");
-        e.setPhoneNumber("+17781234567");
+
+        e = employerContactService.createEmployerContact("Albert", "Kragl", "albert@kragl.com", "123456678", c);
 
         return e;
     }

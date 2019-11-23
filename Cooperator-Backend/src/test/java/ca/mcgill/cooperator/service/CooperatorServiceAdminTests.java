@@ -114,8 +114,9 @@ public class CooperatorServiceAdminTests {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Admin first name cannot be empty! Admin last name cannot be empty! Admin email cannot be empty!",
+        assertEquals("Admin first name cannot be empty! "
+        		   + "Admin last name cannot be empty! "
+        		   + "Admin email cannot be empty!",
                 error);
         assertEquals(0, adminService.getAllAdmins().size());
     }
@@ -196,9 +197,10 @@ public class CooperatorServiceAdminTests {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Admin first name cannot be empty! Admin last name cannot be empty! Admin email cannot be empty! Admin sent notifications cannot be null!",
-                error);
+        assertEquals("Admin first name cannot be empty! "
+        		   + "Admin last name cannot be empty! "
+        		   + "Admin email cannot be empty! "
+        		   + "Admin sent notifications cannot be null!", error);
 
         // Original Admin should still exist
         assertEquals(1, adminService.getAllAdmins().size());

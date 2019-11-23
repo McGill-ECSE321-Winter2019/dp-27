@@ -13,11 +13,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import ca.mcgill.cooperator.dao.CompanyRepository;
+import ca.mcgill.cooperator.dao.CoopDetailsRepository;
+import ca.mcgill.cooperator.dao.CoopRepository;
+import ca.mcgill.cooperator.dao.CourseOfferingRepository;
+import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
+import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Company;
+import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
+import ca.mcgill.cooperator.model.CoopStatus;
+import ca.mcgill.cooperator.model.Course;
+import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.Season;
+import ca.mcgill.cooperator.model.Student;
 
 import org.springframework.test.context.ActiveProfiles;
 
@@ -27,16 +38,36 @@ public class CooperatorServiceEmployerContactTests {
 
 	@Autowired EmployerContactService employerContactService;
 	@Autowired CompanyService companyService;
+	@Autowired CoopDetailsService coopDetailsService;
+	@Autowired CourseService courseService;
+	@Autowired CourseOfferingService courseOfferingService;
+	@Autowired CoopService coopService;
+	@Autowired StudentService studentService;
 
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CompanyRepository companyRepository;
+    @Autowired CoopDetailsRepository coopDetailsRepository;
+    @Autowired CourseRepository courseRepository;
+    @Autowired CourseOfferingRepository courseOfferingRepository;
+    @Autowired CoopRepository coopRepository;
+    @Autowired StudentRepository studentRepository;
 
 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
+    	coopDetailsRepository.deleteAll();
+    	List <CoopDetails> coopDetails = coopDetailsService.getAllCoopDetails();
+    	for(CoopDetails cd : coopDetails) {
+    		coopDetailsService.deleteCoopDetails(cd);
+    	}
+    			
+    	coopRepository.deleteAll();
+    	courseOfferingRepository.deleteAll();
+    	courseRepository.deleteAll();
     	employerContactRepository.deleteAll();
     	companyRepository.deleteAll();
+    	studentRepository.deleteAll();
     }
 
     @Test
@@ -162,31 +193,37 @@ public class CooperatorServiceEmployerContactTests {
     }
 
     @Test
-    public void testCreateEmployerContactWithCoopDetails() {
+    public void testUpdateEmployerContactWithCoopDetails() {
     	String firstName = "Paul";
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "0123456789";
         Company c = createTestCompany();
         EmployerContact ec = null;
-        CoopDetails cd = createTestCoopDetails();
+        
+        //course->course offering->coops->coop details
+        CoopDetails cd = null;
+        Course course = createTestCourse();
+        CourseOffering co = createTestCourseOffering(course);
+        Student s = createTestStudent();
+        Coop coop = createTestCoop(co, s);
         List<CoopDetails> coopDetails = new ArrayList<CoopDetails>();
         
         try {
-            employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
-            ec = employerContactService.getEmployerContact(email);
+            ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
+            ec = employerContactService.getEmployerContact(ec.getId());
             
-            cd = createTestCoopDetails();
+            cd = createTestCoopDetails(ec, coop);
             coopDetails.add(cd);
             
             List<EmployerReport> reports = new ArrayList<EmployerReport>();
             
-            employerContactService.updateEmployerContact(ec, firstName, lastName, email, phoneNumber, c, reports, coopDetails);
-            ec = employerContactService.getEmployerContact(email);
+            ec = employerContactService.updateEmployerContact(ec, firstName, lastName, email, phoneNumber, c, reports, coopDetails);
+            ec = employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException e) {
             fail();
         }
-        
+
         assertEquals(1, ec.getCoopDetails().size());
         assertEquals(lastName, ec.getLastName());
         assertEquals(2, employerContactService.getAllEmployerContacts().size());
@@ -203,8 +240,8 @@ public class CooperatorServiceEmployerContactTests {
         
         EmployerContact ec = null;
         try {
-            employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
-            ec = employerContactService.getEmployerContact(email);
+            ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
+            ec = employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -217,9 +254,9 @@ public class CooperatorServiceEmployerContactTests {
         List<CoopDetails> coopDetails = new ArrayList<CoopDetails>();
         
         try {
-        	employerContactService.updateEmployerContact(ec, firstName, lastName, email, phoneNumber, c, 
+        	ec = employerContactService.updateEmployerContact(ec, firstName, lastName, email, phoneNumber, c, 
         												 reports, coopDetails);
-        	ec = employerContactService.getEmployerContact(email);	
+        	ec = employerContactService.getEmployerContact(ec.getId());	
         } catch (IllegalArgumentException e) {
         	fail();
         }
@@ -238,8 +275,8 @@ public class CooperatorServiceEmployerContactTests {
         
         EmployerContact ec = null;
         try {
-            employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
-            ec = employerContactService.getEmployerContact(email);
+            ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
+            ec = employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -264,7 +301,7 @@ public class CooperatorServiceEmployerContactTests {
         // original EmployerContact should still exist (and employer contact created for test company)
         assertEquals(2, employerContactService.getAllEmployerContacts().size());
         try {
-        	employerContactService.getEmployerContact(email);
+        	employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException _e) {
             fail();
         }
@@ -280,8 +317,8 @@ public class CooperatorServiceEmployerContactTests {
         
         EmployerContact ec = null;
         try {
-        	employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
-        	ec = employerContactService.getEmployerContact(email);
+        	ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
+        	ec = employerContactService.getEmployerContact(ec.getId());
         	employerContactService.deleteEmployerContact(ec);
         } catch (IllegalArgumentException e) {
             fail();
@@ -304,24 +341,40 @@ public class CooperatorServiceEmployerContactTests {
     
     private Company createTestCompany() {
         Company c = new Company();
-        EmployerContact ec = new EmployerContact();
-        ec.setEmail("albert@kragl.com");
-        ec.setFirstName("Albert");
-        ec.setLastName("Kragl");
-        ec.setPhoneNumber("123456789");
+        c = companyService.createCompany("Facebook", new ArrayList<EmployerContact>());
         
-        String name = "Facebook";
-        List<EmployerContact> employers = new ArrayList<EmployerContact>();
-        employers.add(ec);
-        c = companyService.createCompany(name, employers);
         return c;
     }
     
-    private static CoopDetails createTestCoopDetails() {
+    private CoopDetails createTestCoopDetails(EmployerContact ec, Coop c) {
     	CoopDetails cd = new CoopDetails();
-    	cd.setHoursPerWeek(40);
-    	cd.setPayPerHour(20);
+    	cd = coopDetailsService.createCoopDetails(20, 40, ec, c);
     	return cd;
+    }
+    
+    private Course createTestCourse() {
+    	Course c = null;
+    	c = courseService.createCourse("FACC200");
+    	return c;
+    }
+    
+    private CourseOffering createTestCourseOffering(Course c) {
+    	CourseOffering co = null;
+    	co = courseOfferingService.createCourseOffering(2020, Season.WINTER, c);
+    	return co;
+    }
+    
+    private Student createTestStudent() {
+    	Student s = new Student();
+    	s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
+    	
+    	return s;
+    }
+    
+    private Coop createTestCoop(CourseOffering co, Student s) {
+    	Coop coop = new Coop();
+    	coop = coopService.createCoop(CoopStatus.FUTURE, co, s);
+    	return coop;
     }
 
 }

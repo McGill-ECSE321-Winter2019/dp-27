@@ -50,6 +50,9 @@ public class NotificationService {
 		Notification n = new Notification();
 		n.setTitle(title.trim());
 		n.setBody(body.trim());
+		n.setSender(sender);
+		n.setStudent(student);
+		notificationRepository.save(n);
 		
 		List<Notification> notifs = student.getNotifications();
 		notifs.add(n);
@@ -58,11 +61,7 @@ public class NotificationService {
 		notifs = sender.getSentNotifications();
 		notifs.add(n);
 		sender.setSentNotifications(notifs);
-		
-		n.setSender(sender);
-		n.setStudent(student);
-		
-		notificationRepository.save(n);
+
 		adminRepository.save(sender);
 		studentRepository.save(student);
 		
