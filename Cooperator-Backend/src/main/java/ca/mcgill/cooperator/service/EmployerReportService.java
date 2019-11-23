@@ -24,6 +24,13 @@ public class EmployerReportService {
 	@Autowired CoopRepository coopRepository;
 	@Autowired ReportSectionRepository reportSectionRepository;
 	
+	/**
+	 * creates new employer report in database
+	 * @param status
+	 * @param c
+	 * @param ec
+	 * @return created employer report
+	 */
 	@Transactional
 	public EmployerReport createEmployerReport(ReportStatus status, Coop c, EmployerContact ec) {
 		StringBuilder error = new StringBuilder();
@@ -63,6 +70,11 @@ public class EmployerReportService {
 		
 	}
 	
+	/**
+	 * retrieves specified existing employer report from database
+	 * @param id
+	 * @return specific employer report
+	 */
 	@Transactional
 	public EmployerReport getEmployerReport(int id) {
 		EmployerReport er = employerReportRepository.findById(id).orElse(null);
@@ -73,11 +85,24 @@ public class EmployerReportService {
         return er;
 	}
 	
+	/**
+	 * retrieves all employer reports from database
+	 * @return list of empoyer reports
+	 */
 	@Transactional
     public List<EmployerReport> getAllEmployerReports() {
         return ServiceUtils.toList(employerReportRepository.findAll());
     }
 	
+	/**
+	 * update existing employer report in database
+	 * @param er
+	 * @param status
+	 * @param c
+	 * @param ec
+	 * @param sections
+	 * @return updated employer report
+	 */
 	@Transactional
 	public EmployerReport updateEmployerReport(EmployerReport er, ReportStatus status, Coop c, EmployerContact ec, List<ReportSection> sections) {
 		StringBuilder error = new StringBuilder();
@@ -155,6 +180,11 @@ public class EmployerReportService {
         
 	}
 	
+	/**
+	 * deletes specific employer report from database
+	 * @param er
+	 * @return deleted employer report
+	 */
 	@Transactional
 	public EmployerReport deleteEmployerReport(EmployerReport er) {
 		if (er == null) {

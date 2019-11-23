@@ -14,6 +14,11 @@ import ca.mcgill.cooperator.model.CourseOffering;
 public class CourseService {
 	@Autowired CourseRepository courseRepository;
 	
+	/**
+	 * create new course in database
+	 * @param name
+	 * @return created course
+	 */
 	@Transactional
 	public Course createCourse(String name) {
 		StringBuilder error = new StringBuilder();

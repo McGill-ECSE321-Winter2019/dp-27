@@ -19,6 +19,14 @@ public class CoopDetailsService {
 	@Autowired EmployerContactRepository employerContactRepository;
 	@Autowired CoopRepository coopRepository;
 	
+	/**
+	 * creates a new coop details in database
+	 * @param payPerHour
+	 * @param hoursPerWeek
+	 * @param ec
+	 * @param c
+	 * @return coop details
+	 */
 	@Transactional
 	public CoopDetails createCoopDetails(int payPerHour, int hoursPerWeek, EmployerContact ec, Coop c) {
 		StringBuilder error = new StringBuilder();
@@ -59,6 +67,11 @@ public class CoopDetailsService {
         
 	}
 	
+	/**
+	 * retrieves coop details with specific id
+	 * @param id
+	 * @return coop details
+	 */
 	@Transactional
 	public CoopDetails getCoopDetails(int id) {
 		CoopDetails cd = coopDetailsRepository.findById(id).orElse(null);
@@ -69,11 +82,20 @@ public class CoopDetailsService {
         return cd;
 	}
 	
+	/**
+	 * retrieves all coop details entities from database
+	 * @return list of coop details
+	 */
 	@Transactional
 	public List<CoopDetails> getAllCoopDetails() {
 		return ServiceUtils.toList(coopDetailsRepository.findAll());
 	}
 	
+	/**
+	 * delete specific coop details
+	 * @param cd
+	 * @return deleted coop details
+	 */
 	@Transactional
 	public CoopDetails deleteCoopDetails(CoopDetails cd) {
 		if (cd == null) {
@@ -93,6 +115,15 @@ public class CoopDetailsService {
 		return cd;
 	}
 	
+	/**
+	 * update exisitng coop details
+	 * @param cd
+	 * @param payPerHour
+	 * @param hoursPerWeek
+	 * @param ec
+	 * @param c
+	 * @return updated coop details
+	 */
 	@Transactional
 	public CoopDetails updateCoopDetails(CoopDetails cd, int payPerHour, int hoursPerWeek, EmployerContact ec, Coop c) {
 		StringBuilder error = new StringBuilder();

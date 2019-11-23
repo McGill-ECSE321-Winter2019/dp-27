@@ -20,6 +20,12 @@ public class ReportSectionService {
 	@Autowired StudentReportRepository studentReportRepository;
 	@Autowired EmployerReportRepository employerReportRepository;
 	
+	/**
+	 * creates new report section in the database
+	 * @param title
+	 * @param content
+	 * @return created report section
+	 */
 	@Transactional
 	public ReportSection createReportSection(String title, String content) {
 		StringBuilder error = new StringBuilder();
@@ -40,6 +46,11 @@ public class ReportSectionService {
         return reportSectionRepository.save(rs);
 	}
 	
+	/**
+	 * retrieves specified existing report section from database
+	 * @param id
+	 * @return specifed report section
+	 */
 	@Transactional
 	public ReportSection getReportSection(int id) {
 		ReportSection rs = reportSectionRepository.findById(id).orElse(null);
@@ -50,11 +61,24 @@ public class ReportSectionService {
         return rs;
 	}
 	
+	/**
+	 * returns all report sections from the database
+	 * @return list of report sections
+	 */
 	@Transactional
 	public List<ReportSection> getAllReportSections() {
 		return ServiceUtils.toList(reportSectionRepository.findAll());
 	}
 	
+	/**
+	 * updates existing report section in database
+	 * @param rs
+	 * @param title
+	 * @param content
+	 * @param sr
+	 * @param er
+	 * @return updated report section
+	 */
 	@Transactional
 	public ReportSection updateReportSection(ReportSection rs, String title, String content, StudentReport sr, EmployerReport er) {
 		StringBuilder error = new StringBuilder();
@@ -118,6 +142,11 @@ public class ReportSectionService {
         return reportSectionRepository.save(rs);
 	}
 	
+	/**
+	 * delete specified report section from database
+	 * @param rs
+	 * @return deleted report section
+	 */
 	@Transactional
 	public ReportSection deleteReportSection(ReportSection rs) {
 		if (rs == null) {

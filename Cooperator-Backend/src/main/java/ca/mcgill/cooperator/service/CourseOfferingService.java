@@ -19,6 +19,13 @@ public class CourseOfferingService {
 	@Autowired CourseOfferingRepository courseOfferingRepository;
 	@Autowired CourseRepository courseRepository;
 	
+	/**
+	 * create new course offering in database
+	 * @param year
+	 * @param season
+	 * @param c
+	 * @return created course offering
+	 */
 	@Transactional
 	public CourseOffering createCourseOffering(int year, Season season, Course c) {
 		StringBuilder error = new StringBuilder();

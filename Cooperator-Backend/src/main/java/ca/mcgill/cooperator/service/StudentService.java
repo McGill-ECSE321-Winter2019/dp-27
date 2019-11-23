@@ -16,7 +16,7 @@ public class StudentService {
 	@Autowired StudentRepository studentRepository;
 	
 	/**
-	 * 
+	 * create new student in database
 	 * @param firstName
 	 * @param lastName
 	 * @param email

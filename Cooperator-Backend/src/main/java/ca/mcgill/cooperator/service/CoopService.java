@@ -24,6 +24,13 @@ public class CoopService {
 	@Autowired StudentRepository studentRepository;
 	@Autowired CourseOfferingRepository courseOfferingRepository;
 	
+	/**
+	 * create new coop in database
+	 * @param status
+	 * @param courseOffering
+	 * @param s
+	 * @return created coop
+	 */
 	@Transactional
 	public Coop createCoop(CoopStatus status, CourseOffering courseOffering, Student s) {
 		StringBuilder error = new StringBuilder();

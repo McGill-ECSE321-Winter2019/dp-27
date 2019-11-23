@@ -22,6 +22,12 @@ public class StudentReportService {
 	@Autowired CoopRepository coopRepository;
 	@Autowired ReportSectionRepository reportSectionRepository;
 	
+	/**
+	 * creates new student report in database
+	 * @param status
+	 * @param c
+	 * @return created student report
+	 */
 	@Transactional
 	public StudentReport createStudentReport(ReportStatus status, Coop c) {
 		StringBuilder error = new StringBuilder();
@@ -52,6 +58,11 @@ public class StudentReportService {
         return studentReportRepository.save(sr);
 	}
 	
+	/**
+	 * retrieve specified existing student report from database
+	 * @param id
+	 * @return specified student report
+	 */
 	@Transactional
 	public StudentReport getStudentReport(int id) {
 		StudentReport sr = studentReportRepository.findById(id).orElse(null);
@@ -62,11 +73,22 @@ public class StudentReportService {
         return sr;
 	}
 	
+	/**
+	 * retrieves all student reports from database
+	 * @return list of student reports
+	 */
 	@Transactional
     public List<StudentReport> getAllStudentReports() {
         return ServiceUtils.toList(studentReportRepository.findAll());
     }
-	
+	/**
+	 * updates existing student report in database
+	 * @param sr
+	 * @param status
+	 * @param c
+	 * @param sections
+	 * @return updated student report
+	 */
 	@Transactional
 	public StudentReport updateStudentReport(StudentReport sr, ReportStatus status, Coop c, List<ReportSection> sections) {
 		StringBuilder error = new StringBuilder();
@@ -120,6 +142,11 @@ public class StudentReportService {
         
 	}
 	
+	/**
+	 * deletes specified student report from database
+	 * @param sr
+	 * @return deleted student report
+	 */
 	@Transactional
 	public StudentReport deleteStudentReport(StudentReport sr) {
 		if (sr == null) {
