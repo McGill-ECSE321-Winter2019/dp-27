@@ -55,13 +55,13 @@ public class EmployerReportService {
         
         employerReportRepository.save(er);
         
-        List <EmployerReport> coop_reports = c.getEmployerReports();
-        coop_reports.add(er);
-        c.setEmployerReports(coop_reports);
+        List <EmployerReport> coopReports = c.getEmployerReports();
+        coopReports.add(er);
+        c.setEmployerReports(coopReports);
         
-        List <EmployerReport> ec_reports = ec.getEmployerReports();
-        ec_reports.add(er);
-        ec.setEmployerReports(ec_reports);
+        List <EmployerReport> ecReports = ec.getEmployerReports();
+        ecReports.add(er);
+        ec.setEmployerReports(ecReports);
         
         coopRepository.save(c);
         employerContactRepository.save(ec);

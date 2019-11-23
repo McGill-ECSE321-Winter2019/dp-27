@@ -178,16 +178,16 @@ public class EmployerContactService {
             throw new IllegalArgumentException(error.toString().trim());
         }
         
-        List<EmployerContact> company_employees = company.getEmployees();
+        List<EmployerContact> companyEmployees = company.getEmployees();
         
         boolean companyContains = false;
         int companyIndex = -1;
         
         //check if company already has this employer contact, if yes get index
-        for(EmployerContact employee : company_employees) {
+        for(EmployerContact employee : companyEmployees) {
         	if (employee.getId() == ec.getId()) {
         		companyContains = true;
-        		companyIndex = company_employees.indexOf(employee);
+        		companyIndex = companyEmployees.indexOf(employee);
         	}
         }
         
@@ -213,11 +213,11 @@ public class EmployerContactService {
         }
         
         if (companyContains == true) {
-        	company_employees.set(companyIndex, ec);
+        	companyEmployees.set(companyIndex, ec);
         } else {
-        	company_employees.add(ec);
+        	companyEmployees.add(ec);
         }
-        company.setEmployees(company_employees);
+        company.setEmployees(companyEmployees);
         
         companyRepository.save(company);
 
