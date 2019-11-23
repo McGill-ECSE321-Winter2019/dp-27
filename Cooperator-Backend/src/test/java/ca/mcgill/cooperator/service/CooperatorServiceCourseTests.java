@@ -120,6 +120,30 @@ public class CooperatorServiceCourseTests {
 
     @Test
     public void testDeleteCourse() {
-        assertTrue(true);
+    	String name = "ECSE321";
+        try {
+            courseService.createCourse(name);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+        assertEquals(1, courseService.getAllCourses().size());
+        assertEquals(name, courseService.getAllCourses().get(0).getName()); 
+        try {
+            courseService.deleteCourse(courseService.getAllCourses().get(0));
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+        assertEquals(0, courseService.getAllCourses().size());
+    }
+    
+    @Test
+    public void testDeleteCourseNull() {
+    	String error = "";
+        try {
+            courseService.deleteCourse(null);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+        assertEquals(error, "Course to delete cannot be null!");
     }
 }

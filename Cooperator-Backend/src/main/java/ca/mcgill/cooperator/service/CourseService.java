@@ -33,8 +33,8 @@ public class CourseService {
 
         Course c = new Course();
         c.setName(name.trim());
-
         c.setCourseOfferings(new ArrayList<CourseOffering>());
+        
         return courseRepository.save(c);
 	}
     
@@ -77,7 +77,7 @@ public class CourseService {
     @Transactional
     public Course deleteCourse(Course c) {
     	if(c == null) {
-    		throw new IllegalArgumentException("Company to delete cannot be null!");
+    		throw new IllegalArgumentException("Course to delete cannot be null!");
     	}
     	courseRepository.delete(c);
     	return c;
