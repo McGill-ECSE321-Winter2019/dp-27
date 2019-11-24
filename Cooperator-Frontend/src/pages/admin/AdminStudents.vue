@@ -4,7 +4,7 @@
     bordered
     id="card"
   >
-    <q-card-section>All Coops
+    <q-card-section>All Students
     </q-card-section>
 
     <q-separator inset />
@@ -13,36 +13,17 @@
     <q-table
       :data="tableData"
       :columns="columns"
-      row-key="coopTitle"
+      row-key="studentName"
+      @row-click="goToStudentCoop"
     />
     </div>
   </q-card>
 </template>
 <script>
 export default {
-  name: 'AdminAllCoops',
+  name: 'AdminAllStudents',
   data: () => ({
     columns: [
-      {
-        name: 'title',
-        required: true,
-        label: 'Title',
-        align: 'left',
-        field: 'title',
-        sortable: true,
-        classes: 'my-class',
-        style: 'width: 500px'
-      },
-      {
-        name: 'Company',
-        required: true,
-        label: 'Company',
-        align: 'left',
-        field: 'companyName',
-        sortable: true,
-        classes: 'my-class',
-        style: 'width: 500px'
-      },
       {
         name: 'studentName',
         required: true,
@@ -54,36 +35,56 @@ export default {
         style: 'width: 500px'
       },
       {
-        name: 'status',
+        name: 'studentID',
         required: true,
-        label: 'Status',
+        label: 'Student ID',
         align: 'left',
-        field: 'status',
+        field: 'studentID',
+        sortable: true,
+        classes: 'my-class',
+        style: 'width: 500px'
+      },
+      {
+        name: 'year',
+        required: true,
+        label: 'Year',
+        align: 'left',
+        field: 'year',
+        sortable: true,
+        classes: 'my-class',
+        style: 'width: 500px'
+      },
+      {
+        name: 'coopsCompleted',
+        required: true,
+        label: 'Coops Completed',
+        align: 'left',
+        field: 'coopsCompleted',
         sortable: true,
         classes: 'my-class',
         style: 'width: 500px'
       }],
     tableData: [
       {
-        title: 'Backend Intern',
         studentName: 'Emma',
-        companyName: 'Lightspeed',
-        status: 'Complete'
+        studentID: '260709533',
+        year: 'U3',
+        coopsCompleted: '3'
       },
       {
-        title: 'SWE Intern',
         studentName: 'Albert',
-        companyName: 'Facebook',
-        status: 'Future'
-      },
-      {
-        title: 'Dev Intern',
-        studentName: 'Paul',
-        companyName: 'CSA',
-        status: 'In Progress'
+        studentID: '260712312',
+        year: 'U3',
+        coopsCompleted: '2'
       }]
-  })
+  }),
+  methods: {
+    goToStudentCoop () {
+      this.$router.push('/admin/studentcoops')
+    }
+  }
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+</style>
