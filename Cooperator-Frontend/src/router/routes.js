@@ -2,7 +2,7 @@
 const routes = [
   {
     path: '/student',
-    component: () => import('layouts/MyLayout.vue'),
+    component: () => import('layouts/LoggedInLayout.vue'),
     children: [
       { path: '', redirect: 'home' },
       { path: 'home', component: () => import('pages/student/StudentHome.vue') },
@@ -13,9 +13,9 @@ const routes = [
   },
   {
     path: '/admin',
-    component: () => import('layouts/MyLayout.vue'), // might want to use a different layout for the admin view
+    component: () => import('layouts/LoggedInLayout.vue'), // might want to use a different layout for the admin view
     children: [
-      { path: '', redirect: '/admin/home' },
+      { path: '', redirect: 'home' },
       { path: 'home', component: () => import('pages/admin/AdminHome.vue') },
       { path: 'profile', component: () => import('pages/admin/AdminProfile.vue') },
       { path: 'coops/view', component: () => import('pages/admin/AdminCoops.vue') },
