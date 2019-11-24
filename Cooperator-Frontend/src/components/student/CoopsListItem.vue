@@ -31,7 +31,7 @@
             <q-badge
               color="white"
               text-color="yellow-8"
-              :label="'0.40%'"
+              :label="'40.0%'"
             />
           </div>
         </q-linear-progress>
