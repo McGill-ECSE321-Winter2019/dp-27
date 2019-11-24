@@ -29,6 +29,6 @@ export default {
 
 <style scoped lang="scss">
 #container {
-  width: 90%;
+  width: 85%;
 }
 </style>

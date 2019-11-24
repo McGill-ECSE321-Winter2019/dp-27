@@ -20,7 +20,10 @@
         itemName="Employer Evaluation"
         deadline="August 1, 2020"
       />
-
+      <HomeDeadlineItem
+        itemName="Other Report"
+        deadline="August 28, 2020"
+      />
     </q-card-section>
   </q-card>
 </template>

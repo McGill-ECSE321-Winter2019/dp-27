@@ -10,15 +10,15 @@
           v-model="selectedTab"
           shrink
         >
-          <q-tab
+          <q-route-tab
             name="tab1"
             label="My Co-ops"
-            @click="$router.push({path: '/student/coops'})"
+            to="/student/coops"
           />
-          <q-tab
+          <q-route-tab
             name="tab2"
             label="My Reports"
-            @click="$router.push({path: '/student/coops'})"
+            to="/student/reports"
           />
         </q-tabs>
 

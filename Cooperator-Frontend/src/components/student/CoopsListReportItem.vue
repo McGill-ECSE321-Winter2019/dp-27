@@ -15,29 +15,25 @@
         />
       </center>
     </div>
+
     <div class="col">
       <div><strong>{{ itemName }}</strong></div>
-      <div>Due on {{ deadline }}</div>
     </div>
+
     <div class="col">
-      <span style="float: right;">
-        <q-btn
-          flat
-          color="primary"
-          label="Upload"
-          :size="'md'"
-        />
-      </span>
+      <q-badge color="secondary">
+        {{ status }}
+      </q-badge>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HomeDeadlineItem',
+  name: 'CoopsListReportItem',
   props: {
     itemName: String,
-    deadline: String
+    status: String
   }
 }
 </script>

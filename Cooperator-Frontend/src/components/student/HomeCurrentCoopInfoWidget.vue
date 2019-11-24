@@ -11,7 +11,7 @@
     <q-separator inset />
 
     <q-card-section>
-      <div class="text">
+      <div class="space text">
         Status:
         <span style="float: right;">
           <q-badge color="yellow-8">
@@ -19,19 +19,19 @@
           </q-badge>
         </span>
       </div>
-      <div class="text">
+      <div class="space text">
         Employer:
         <span style="float: right;">
           Microsoft
         </span>
       </div>
-      <div class="text">
+      <div class="space text">
         Start Date:
         <span style="float: right;">
           May 11, 2020
         </span>
       </div>
-      <div class="text">
+      <div class="space text">
         End Date:
         <span style="float: right;">
           July 28, 2020
@@ -59,6 +59,11 @@ export default {
 <style scoped lang="scss">
 h6 {
   margin: 10px;
+}
+
+.space {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 #card {

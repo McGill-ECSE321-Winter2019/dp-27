@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.0.1",
   "description": "A Quasar Framework app",
-  "productName": "frontened",
+  "productName": "McGill Co-operator",
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "Emma Eagles <emma.eagles@mail.mcgill.ca>",
