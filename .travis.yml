@@ -1,5 +1,5 @@
 language: java
 before_script:
-  - cd Cooperator-Backend
+  - cd Backend
 script:
   - ./mvnw test
