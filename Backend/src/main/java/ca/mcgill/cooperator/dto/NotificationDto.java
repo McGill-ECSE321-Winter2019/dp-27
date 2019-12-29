@@ -4,21 +4,21 @@ import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Student;
 
 public class NotificationDto {
-	private int id;
+    private int id;
     private String title;
     private String body;
-    
+
     private Student student;
     private Admin sender;
-    
+
     public NotificationDto(int id, String title, String body, Student student, Admin sender) {
-    	this.id = id;
-    	this.title = title;
-    	this.body = body;
-    	this.student = student;
-    	this.sender = sender;
+        this.id = id;
+        this.title = title;
+        this.body = body;
+        this.student = student;
+        this.sender = sender;
     }
-    
+
     /*--- Getters and Setters ---*/
 
     public int getId() {

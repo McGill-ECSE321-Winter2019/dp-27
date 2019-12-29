@@ -1,38 +1,44 @@
 package ca.mcgill.cooperator.dto;
 
-import java.util.List;
-
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
+import java.util.List;
 
 public class CoopDto {
-	
-	private int id;
-	private CoopStatus status;
-	
-	private CourseOffering courseOffering;
-	private CoopDetails details;
-	private Student student;
-	private List<StudentReport> studentReports;
-	private List<EmployerReport> employerReports;
-	
-	public CoopDto(int id, CoopStatus status, CourseOffering courseOffering, CoopDetails details, Student student, List<StudentReport> studentReports, List<EmployerReport> employerReports) {
-		this.id = id;
-		this.status = status;
-		this.courseOffering = courseOffering;
-		this.details = details;
-		this.student = student;
-		this.studentReports = studentReports;
-		this.employerReports = employerReports;
-	}
-	
-	/*--- Getters and Setters ---*/
-	
-	public int getId() {
+
+    private int id;
+    private CoopStatus status;
+
+    private CourseOffering courseOffering;
+    private CoopDetails details;
+    private Student student;
+    private List<StudentReport> studentReports;
+    private List<EmployerReport> employerReports;
+
+    public CoopDto(
+            int id,
+            CoopStatus status,
+            CourseOffering courseOffering,
+            CoopDetails details,
+            Student student,
+            List<StudentReport> studentReports,
+            List<EmployerReport> employerReports) {
+        this.id = id;
+        this.status = status;
+        this.courseOffering = courseOffering;
+        this.details = details;
+        this.student = student;
+        this.studentReports = studentReports;
+        this.employerReports = employerReports;
+    }
+
+    /*--- Getters and Setters ---*/
+
+    public int getId() {
         return this.id;
     }
 
@@ -83,5 +89,4 @@ public class CoopDto {
     public void setEmployerReports(List<EmployerReport> employerReports) {
         this.employerReports = employerReports;
     }
-
 }

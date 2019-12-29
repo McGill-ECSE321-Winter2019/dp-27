@@ -1,30 +1,36 @@
 package ca.mcgill.cooperator.dto;
 
-import java.util.List;
-
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Notification;
+import java.util.List;
 
 public class StudentDto {
-	private int id;
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
     private String studentId;
-    
+
     private List<Coop> coops;
     private List<Notification> studentReceived;
-    
-    public StudentDto(int id, String firstName, String lastName, String email, String studentId, List<Coop> coops, List<Notification> studentReceived) {
-    	this.id = id;
-    	this.firstName = firstName;
-    	this.lastName = lastName;
-    	this.email = email;
-    	this.studentId = studentId;
-    	this.coops = coops;
-    	this.studentReceived = studentReceived;
+
+    public StudentDto(
+            int id,
+            String firstName,
+            String lastName,
+            String email,
+            String studentId,
+            List<Coop> coops,
+            List<Notification> studentReceived) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.studentId = studentId;
+        this.coops = coops;
+        this.studentReceived = studentReceived;
     }
-    
+
     /*--- Getters and Setters ---*/
 
     public int getId() {

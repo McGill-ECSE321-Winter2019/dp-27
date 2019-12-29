@@ -1,28 +1,32 @@
 package ca.mcgill.cooperator.dto;
 
-import java.util.List;
-
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
+import java.util.List;
 
 public class EmployerReportDto {
-	private int id;
+    private int id;
     private ReportStatus status;
 
     private Coop coop;
     private EmployerContact employerContact;
     private List<ReportSection> reportSections;
-    
-    public EmployerReportDto(int id, ReportStatus status, Coop coop, EmployerContact employerContact, List<ReportSection> reportSections) {
-    	this.id = id;
-    	this.status = status;
-    	this.coop = coop;
-    	this.employerContact = employerContact;
-    	this.reportSections = reportSections;
+
+    public EmployerReportDto(
+            int id,
+            ReportStatus status,
+            Coop coop,
+            EmployerContact employerContact,
+            List<ReportSection> reportSections) {
+        this.id = id;
+        this.status = status;
+        this.coop = coop;
+        this.employerContact = employerContact;
+        this.reportSections = reportSections;
     }
-    
+
     /*--- Getters and Setters ---*/
 
     public int getId() {

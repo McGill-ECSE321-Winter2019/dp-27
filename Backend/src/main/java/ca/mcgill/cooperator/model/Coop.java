@@ -1,7 +1,6 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,25 +20,22 @@ public class Coop {
     @ManyToOne(optional = false)
     private CourseOffering courseOffering;
 
-    @OneToOne(mappedBy = "coop", 
-    		  optional = true,
-    		  cascade = CascadeType.ALL,
-    		  orphanRemoval = true,
-    		  fetch = FetchType.EAGER)
+    @OneToOne(
+            mappedBy = "coop",
+            optional = true,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     private CoopDetails details;
 
     @ManyToOne(optional = false)
     private Student student;
 
-    @OneToMany(mappedBy = "coop",
-    		   cascade = CascadeType.ALL,
-    		   orphanRemoval = true)
+    @OneToMany(mappedBy = "coop", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<StudentReport> studentReports;
 
-    @OneToMany(mappedBy = "coop",
-    		   cascade = CascadeType.ALL,
-    		   orphanRemoval = true)
+    @OneToMany(mappedBy = "coop", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmployerReport> employerReports;
 
     /*--- Getters and Setters ---*/

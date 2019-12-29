@@ -4,21 +4,26 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.EmployerContact;
 
 public class CoopDetailsDto {
-	private int id;
+    private int id;
     private double payPerHour;
     private int hoursPerWeek;
-    
+
     private EmployerContact employerContact;
     private Coop coop;
-    
-    public CoopDetailsDto(int id, double payPerHour, int hoursPerWeek, EmployerContact employerContact, Coop coop) {
-    	this.id = id;
-    	this.payPerHour = payPerHour;
-    	this.hoursPerWeek = hoursPerWeek;
-    	this.employerContact = employerContact;
-    	this.coop = coop;
+
+    public CoopDetailsDto(
+            int id,
+            double payPerHour,
+            int hoursPerWeek,
+            EmployerContact employerContact,
+            Coop coop) {
+        this.id = id;
+        this.payPerHour = payPerHour;
+        this.hoursPerWeek = hoursPerWeek;
+        this.employerContact = employerContact;
+        this.coop = coop;
     }
-    
+
     /*--- Getters and Setters ---*/
 
     public int getId() {
@@ -56,5 +61,4 @@ public class CoopDetailsDto {
     public void setCoop(Coop coop) {
         this.coop = coop;
     }
-    
 }

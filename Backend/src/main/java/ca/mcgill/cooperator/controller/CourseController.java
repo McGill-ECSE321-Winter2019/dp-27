@@ -1,5 +1,7 @@
 package ca.mcgill.cooperator.controller;
 
+import ca.mcgill.cooperator.dto.CourseDto;
+import ca.mcgill.cooperator.model.Course;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,5 +16,12 @@ public class CourseController {
     @GetMapping("/{id}")
     public String getCourseById(@PathVariable int id) {
         return "Hello World";
+    }
+
+    private CourseDto convertToDto(Course c) {
+        if (c == null) {
+            throw new IllegalArgumentException("Course does not exist!");
+        }
+        return new CourseDto(c.getId(), c.getName(), c.getCourseOfferings());
     }
 }

@@ -1,7 +1,6 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,10 +20,11 @@ public class CourseOffering {
     @ManyToOne(optional = false)
     private Course course;
 
-    @OneToMany(mappedBy = "courseOffering",
-    		   cascade = CascadeType.ALL,
-    		   orphanRemoval = true,
-    		   fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "courseOffering",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Coop> coops;
 

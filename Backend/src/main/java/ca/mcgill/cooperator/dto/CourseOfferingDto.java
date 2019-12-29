@@ -1,28 +1,27 @@
 package ca.mcgill.cooperator.dto;
 
-import java.util.List;
-
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.Season;
+import java.util.List;
 
 public class CourseOfferingDto {
-	
-	private int id;
+
+    private int id;
     private int year;
     private Season season;
-    
+
     private Course course;
     private List<Coop> coops;
-    
+
     public CourseOfferingDto(int id, int year, Season season, Course course, List<Coop> coops) {
-    	this.id = id;
-    	this.year = year;
-    	this.season = season;
-    	this.course = course;
-    	this.coops = coops;
+        this.id = id;
+        this.year = year;
+        this.season = season;
+        this.course = course;
+        this.coops = coops;
     }
-    
+
     /*--- Getters and Setters ---*/
 
     public int getId() {

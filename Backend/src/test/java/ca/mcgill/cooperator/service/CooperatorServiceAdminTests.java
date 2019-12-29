@@ -114,9 +114,10 @@ public class CooperatorServiceAdminTests {
             error = e.getMessage();
         }
 
-        assertEquals("Admin first name cannot be empty! "
-        		   + "Admin last name cannot be empty! "
-        		   + "Admin email cannot be empty!",
+        assertEquals(
+                "Admin first name cannot be empty! "
+                        + "Admin last name cannot be empty! "
+                        + "Admin email cannot be empty!",
                 error);
         assertEquals(0, adminService.getAllAdmins().size());
     }
@@ -197,10 +198,12 @@ public class CooperatorServiceAdminTests {
             error = e.getMessage();
         }
 
-        assertEquals("Admin first name cannot be empty! "
-        		   + "Admin last name cannot be empty! "
-        		   + "Admin email cannot be empty! "
-        		   + "Admin sent notifications cannot be null!", error);
+        assertEquals(
+                "Admin first name cannot be empty! "
+                        + "Admin last name cannot be empty! "
+                        + "Admin email cannot be empty! "
+                        + "Admin sent notifications cannot be null!",
+                error);
 
         // Original Admin should still exist
         assertEquals(1, adminService.getAllAdmins().size());
@@ -242,8 +245,10 @@ public class CooperatorServiceAdminTests {
     }
 
     private Notification createTestNotification(Admin a) {
-    	Student s = studentService.createStudent("Albert", "Kragl", "albert@kragl.com", "12345678");
-    	Notification n = notificationService.createNotification("Report Due", "Report Due by April 2020", s, a);
+        Student s = studentService.createStudent("Albert", "Kragl", "albert@kragl.com", "12345678");
+        Notification n =
+                notificationService.createNotification(
+                        "Report Due", "Report Due by April 2020", s, a);
 
         return n;
     }

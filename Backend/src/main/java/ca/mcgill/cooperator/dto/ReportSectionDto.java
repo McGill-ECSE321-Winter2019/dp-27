@@ -4,21 +4,26 @@ import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.StudentReport;
 
 public class ReportSectionDto {
-	private int id;
+    private int id;
     private String title;
     private String content;
-    
+
     private StudentReport studentReport;
     private EmployerReport employerReport;
-    
-    public ReportSectionDto(int id, String title, String content, StudentReport studentReport, EmployerReport employerReport) {
-    	this.id = id;
-    	this.title = title;
-    	this.content = content;
-    	this.studentReport = studentReport;
-    	this.employerReport = employerReport;
+
+    public ReportSectionDto(
+            int id,
+            String title,
+            String content,
+            StudentReport studentReport,
+            EmployerReport employerReport) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.studentReport = studentReport;
+        this.employerReport = employerReport;
     }
-    
+
     /*--- Getters and Setters ---*/
 
     public int getId() {

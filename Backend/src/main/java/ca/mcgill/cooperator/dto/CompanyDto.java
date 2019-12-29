@@ -15,7 +15,7 @@ public class CompanyDto {
         this.name = name;
         this.employees = employees;
     }
-    
+
     /*--- Getters and Setters ---*/
 
     public int getId() {

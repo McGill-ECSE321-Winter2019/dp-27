@@ -36,7 +36,7 @@ public class ServiceUtils {
 
         return matcher.matches();
     }
-    
+
     /**
      * Checks if an phone number is valid (just if all characters are numbers)
      *
