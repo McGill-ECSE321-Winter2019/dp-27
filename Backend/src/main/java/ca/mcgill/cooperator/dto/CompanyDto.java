@@ -16,6 +16,8 @@ public class CompanyDto {
         this.employees = employees;
     }
 
+    /*--- Getters and Setters ---*/
+
     public int getId() {
         return this.id;
     }

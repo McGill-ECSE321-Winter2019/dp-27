@@ -1,34 +1,40 @@
-package ca.mcgill.cooperator.model;
+package ca.mcgill.cooperator.dto;
 
+import ca.mcgill.cooperator.model.Company;
+import ca.mcgill.cooperator.model.CoopDetails;
+import ca.mcgill.cooperator.model.EmployerReport;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
-@Entity
-public class EmployerContact {
-    @Id @GeneratedValue private int id;
+public class EmployerContactDto {
+
+    private int id;
     private String email;
     private String firstName;
     private String lastName;
     private String phoneNumber;
 
-    @ManyToOne(optional = false)
     private Company company;
-
-    @OneToMany(
-            mappedBy = "employerContact",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    private List<CoopDetails> coopdetails;
-
-    @OneToMany(mappedBy = "employerContact")
+    private List<CoopDetails> coopDetails;
     private List<EmployerReport> employerReports;
+
+    public EmployerContactDto(
+            int id,
+            String email,
+            String firstName,
+            String lastName,
+            String phoneNumber,
+            Company company,
+            List<CoopDetails> coopDetails,
+            List<EmployerReport> employerReports) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.company = company;
+        this.coopDetails = coopDetails;
+        this.employerReports = employerReports;
+    }
 
     /*--- Getters and Setters ---*/
 
@@ -77,11 +83,11 @@ public class EmployerContact {
     }
 
     public List<CoopDetails> getCoopDetails() {
-        return this.coopdetails;
+        return this.coopDetails;
     }
 
     public void setCoopDetails(List<CoopDetails> coopDetails) {
-        this.coopdetails = coopDetails;
+        this.coopDetails = coopDetails;
     }
 
     public List<EmployerReport> getEmployerReports() {

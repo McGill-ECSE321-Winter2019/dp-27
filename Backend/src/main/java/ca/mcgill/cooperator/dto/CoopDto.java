@@ -1,42 +1,40 @@
-package ca.mcgill.cooperator.model;
+package ca.mcgill.cooperator.dto;
 
+import ca.mcgill.cooperator.model.CoopDetails;
+import ca.mcgill.cooperator.model.CoopStatus;
+import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.Student;
+import ca.mcgill.cooperator.model.StudentReport;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-@Entity
-public class Coop {
-    @Id @GeneratedValue private int id;
+public class CoopDto {
+
+    private int id;
     private CoopStatus status;
 
-    @ManyToOne(optional = false)
     private CourseOffering courseOffering;
-
-    @OneToOne(
-            mappedBy = "coop",
-            optional = true,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
     private CoopDetails details;
-
-    @ManyToOne(optional = false)
     private Student student;
-
-    @OneToMany(mappedBy = "coop", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<StudentReport> studentReports;
-
-    @OneToMany(mappedBy = "coop", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmployerReport> employerReports;
+
+    public CoopDto(
+            int id,
+            CoopStatus status,
+            CourseOffering courseOffering,
+            CoopDetails details,
+            Student student,
+            List<StudentReport> studentReports,
+            List<EmployerReport> employerReports) {
+        this.id = id;
+        this.status = status;
+        this.courseOffering = courseOffering;
+        this.details = details;
+        this.student = student;
+        this.studentReports = studentReports;
+        this.employerReports = employerReports;
+    }
 
     /*--- Getters and Setters ---*/
 

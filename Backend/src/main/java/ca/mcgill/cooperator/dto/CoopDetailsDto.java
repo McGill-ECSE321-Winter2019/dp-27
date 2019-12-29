@@ -1,21 +1,28 @@
-package ca.mcgill.cooperator.model;
+package ca.mcgill.cooperator.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.EmployerContact;
 
-@Entity
-public class CoopDetails {
-    @Id @GeneratedValue private int id;
+public class CoopDetailsDto {
+    private int id;
     private double payPerHour;
     private int hoursPerWeek;
 
-    @ManyToOne(optional = false)
     private EmployerContact employerContact;
+    private Coop coop;
 
-    @OneToOne private Coop coop;
+    public CoopDetailsDto(
+            int id,
+            double payPerHour,
+            int hoursPerWeek,
+            EmployerContact employerContact,
+            Coop coop) {
+        this.id = id;
+        this.payPerHour = payPerHour;
+        this.hoursPerWeek = hoursPerWeek;
+        this.employerContact = employerContact;
+        this.coop = coop;
+    }
 
     /*--- Getters and Setters ---*/
 

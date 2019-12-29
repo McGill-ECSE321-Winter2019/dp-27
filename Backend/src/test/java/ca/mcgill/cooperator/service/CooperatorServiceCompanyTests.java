@@ -25,7 +25,6 @@ public class CooperatorServiceCompanyTests {
 
     @Autowired CompanyRepository companyRepository;
     @Autowired EmployerContactRepository employerContactRepository;
-    
 
     @BeforeEach
     @AfterEach
@@ -40,7 +39,7 @@ public class CooperatorServiceCompanyTests {
 
         Company c = null;
         try {
-        	c = companyService.createCompany(name, new ArrayList<EmployerContact>());
+            c = companyService.createCompany(name, new ArrayList<EmployerContact>());
 
             companyService.getCompany("Facebook");
             companyService.getCompany(c.getId());
@@ -60,8 +59,7 @@ public class CooperatorServiceCompanyTests {
             error = e.getMessage();
         }
 
-        assertEquals("Company name cannot be empty! "
-                   + "Company employees cannot be null!", error);
+        assertEquals("Company name cannot be empty! " + "Company employees cannot be null!", error);
         assertEquals(companyService.getAllCompanies().size(), 0);
     }
 
@@ -74,8 +72,7 @@ public class CooperatorServiceCompanyTests {
             error = e.getMessage();
         }
 
-        assertEquals("Company name cannot be empty! "
-                   + "Company employees cannot be null!", error);
+        assertEquals("Company name cannot be empty! " + "Company employees cannot be null!", error);
         assertEquals(companyService.getAllCompanies().size(), 0);
     }
 
@@ -83,7 +80,7 @@ public class CooperatorServiceCompanyTests {
     public void testUpdateCompany() {
         String name = "Facebook";
         List<EmployerContact> employees = new ArrayList<EmployerContact>();
-        
+
         EmployerContact ec = null;
         Company c = null;
         try {
@@ -124,8 +121,7 @@ public class CooperatorServiceCompanyTests {
             error = err.getMessage();
         }
 
-        assertEquals("Company name cannot be empty! "
-        		   + "Company employees cannot be null!", error);
+        assertEquals("Company name cannot be empty! " + "Company employees cannot be null!", error);
 
         // Original Company should still exist
         assertEquals(1, companyService.getAllCompanies().size());
@@ -140,10 +136,10 @@ public class CooperatorServiceCompanyTests {
     public void testDeleteCompany() {
         String name = "Facebook";
         List<EmployerContact> employees = new ArrayList<EmployerContact>();
-        
+
         EmployerContact ec = null;
         Company c = null;
-        
+
         try {
             c = companyService.createCompany(name, employees);
             ec = createTestEmployerContact(c);
@@ -173,7 +169,9 @@ public class CooperatorServiceCompanyTests {
     private EmployerContact createTestEmployerContact(Company c) {
         EmployerContact e = new EmployerContact();
 
-        e = employerContactService.createEmployerContact("Albert", "Kragl", "albert@kragl.com", "123456678", c);
+        e =
+                employerContactService.createEmployerContact(
+                        "Albert", "Kragl", "albert@kragl.com", "123456678", c);
 
         return e;
     }

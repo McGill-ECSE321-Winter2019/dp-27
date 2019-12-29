@@ -1,24 +1,31 @@
-package ca.mcgill.cooperator.model;
+package ca.mcgill.cooperator.dto;
 
+import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.EmployerContact;
+import ca.mcgill.cooperator.model.ReportSection;
+import ca.mcgill.cooperator.model.ReportStatus;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
-@Entity
-public class EmployerReport {
-    @Id @GeneratedValue private int id;
+public class EmployerReportDto {
+    private int id;
     private ReportStatus status;
 
-    @ManyToOne private Coop coop;
-
-    @ManyToOne private EmployerContact employerContact;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Coop coop;
+    private EmployerContact employerContact;
     private List<ReportSection> reportSections;
+
+    public EmployerReportDto(
+            int id,
+            ReportStatus status,
+            Coop coop,
+            EmployerContact employerContact,
+            List<ReportSection> reportSections) {
+        this.id = id;
+        this.status = status;
+        this.coop = coop;
+        this.employerContact = employerContact;
+        this.reportSections = reportSections;
+    }
 
     /*--- Getters and Setters ---*/
 

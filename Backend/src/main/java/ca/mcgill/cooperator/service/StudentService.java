@@ -1,31 +1,31 @@
 package ca.mcgill.cooperator.service;
 
-import java.util.ArrayList;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
+import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class StudentService {
-	@Autowired StudentRepository studentRepository;
-	
-	/**
-	 * create new student in database
-	 * @param firstName
-	 * @param lastName
-	 * @param email
-	 * @param studentId
-	 * @return newly created student
-	 */
-	@Transactional
-	public Student createStudent(String firstName, String lastName, String email, String studentId) {
-		StringBuilder error = new StringBuilder();
+    @Autowired StudentRepository studentRepository;
+
+    /**
+     * create new student in database
+     *
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param studentId
+     * @return newly created student
+     */
+    @Transactional
+    public Student createStudent(
+            String firstName, String lastName, String email, String studentId) {
+        StringBuilder error = new StringBuilder();
         if (firstName == null || firstName.trim().length() == 0) {
             error.append("Student first name cannot be empty! ");
         }
@@ -52,5 +52,5 @@ public class StudentService {
         s.setCoops(new ArrayList<Coop>());
 
         return studentRepository.save(s);
-	}
+    }
 }

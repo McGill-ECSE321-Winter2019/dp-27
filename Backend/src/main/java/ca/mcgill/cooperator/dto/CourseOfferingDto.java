@@ -1,32 +1,26 @@
-package ca.mcgill.cooperator.model;
+package ca.mcgill.cooperator.dto;
 
+import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.Course;
+import ca.mcgill.cooperator.model.Season;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-@Entity
-public class CourseOffering {
-    @Id @GeneratedValue private int id;
+public class CourseOfferingDto {
+
+    private int id;
     private int year;
     private Season season;
 
-    @ManyToOne(optional = false)
     private Course course;
-
-    @OneToMany(
-            mappedBy = "courseOffering",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Coop> coops;
+
+    public CourseOfferingDto(int id, int year, Season season, Course course, List<Coop> coops) {
+        this.id = id;
+        this.year = year;
+        this.season = season;
+        this.course = course;
+        this.coops = coops;
+    }
 
     /*--- Getters and Setters ---*/
 

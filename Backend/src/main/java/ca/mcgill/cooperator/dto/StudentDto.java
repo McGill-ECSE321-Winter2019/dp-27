@@ -1,33 +1,35 @@
-package ca.mcgill.cooperator.model;
+package ca.mcgill.cooperator.dto;
 
+import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.Notification;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
-@Entity
-public class Student {
-    @Id @GeneratedValue private int id;
+public class StudentDto {
+    private int id;
     private String firstName;
     private String lastName;
     private String email;
     private String studentId;
 
-    @OneToMany(mappedBy = "student")
     private List<Coop> coops;
-
-    @OneToMany(
-            mappedBy = "student",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Notification> studentReceived;
+
+    public StudentDto(
+            int id,
+            String firstName,
+            String lastName,
+            String email,
+            String studentId,
+            List<Coop> coops,
+            List<Notification> studentReceived) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.studentId = studentId;
+        this.coops = coops;
+        this.studentReceived = studentReceived;
+    }
 
     /*--- Getters and Setters ---*/
 
