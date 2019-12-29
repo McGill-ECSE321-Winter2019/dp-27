@@ -1,22 +1,24 @@
-package ca.mcgill.cooperator.model;
+package ca.mcgill.cooperator.dto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import ca.mcgill.cooperator.model.Admin;
+import ca.mcgill.cooperator.model.Student;
 
-@Entity
-public class Notification {
-    @Id @GeneratedValue private int id;
+public class NotificationDto {
+	private int id;
     private String title;
     private String body;
-
-    @ManyToOne(optional = false)
+    
     private Student student;
-
-    @ManyToOne(optional = false)
     private Admin sender;
-
+    
+    public NotificationDto(int id, String title, String body, Student student, Admin sender) {
+    	this.id = id;
+    	this.title = title;
+    	this.body = body;
+    	this.student = student;
+    	this.sender = sender;
+    }
+    
     /*--- Getters and Setters ---*/
 
     public int getId() {
