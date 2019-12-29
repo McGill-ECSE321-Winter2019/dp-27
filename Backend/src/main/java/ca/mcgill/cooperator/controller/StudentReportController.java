@@ -1,6 +1,8 @@
 package ca.mcgill.cooperator.controller;
 
+import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.dto.StudentReportDto;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.StudentReport;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,5 +26,12 @@ public class StudentReportController {
         }
         return new StudentReportDto(
                 sr.getId(), sr.getStatus(), sr.getCoop(), sr.getReportSections());
+    }
+    
+    private ReportSectionDto convertToDto(ReportSection rs) {
+    	if (rs == null) {
+    		throw new IllegalArgumentException("Report section does not exist!");
+    	}
+    	return new ReportSectionDto(rs.getId(), rs.getTitle(), rs.getContent(), rs.getStudentReport(), rs.getEmployerReport());
     }
 }
