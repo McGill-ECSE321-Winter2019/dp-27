@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.mcgill.cooperator</groupId>
-	<artifactId>Cooperator-Backend</artifactId>
+	<artifactId>Backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Cooperator</name>
 	<description>Cooperator Project - DP27</description>
