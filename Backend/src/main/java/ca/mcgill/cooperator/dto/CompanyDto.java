@@ -1,6 +1,5 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.EmployerContact;
 import java.util.List;
 
 public class CompanyDto {
@@ -8,9 +7,9 @@ public class CompanyDto {
     private int id;
     private String name;
 
-    private List<EmployerContact> employees;
+    private List<EmployerContactDto> employees;
 
-    public CompanyDto(int id, String name, List<EmployerContact> employees) {
+    public CompanyDto(int id, String name, List<EmployerContactDto> employees) {
         this.id = id;
         this.name = name;
         this.employees = employees;
@@ -30,11 +29,11 @@ public class CompanyDto {
         this.name = name;
     }
 
-    public List<EmployerContact> getEmployees() {
+    public List<EmployerContactDto> getEmployees() {
         return this.employees;
     }
 
-    public void setEmployees(List<EmployerContact> employees) {
+    public void setEmployees(List<EmployerContactDto> employees) {
         this.employees = employees;
     }
 }

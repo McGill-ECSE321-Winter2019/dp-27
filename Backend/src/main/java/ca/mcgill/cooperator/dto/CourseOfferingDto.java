@@ -1,7 +1,5 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.Season;
 import java.util.List;
 
@@ -11,10 +9,11 @@ public class CourseOfferingDto {
     private int year;
     private Season season;
 
-    private Course course;
-    private List<Coop> coops;
+    private CourseDto course;
+    private List<CoopDto> coops;
 
-    public CourseOfferingDto(int id, int year, Season season, Course course, List<Coop> coops) {
+    public CourseOfferingDto(
+            int id, int year, Season season, CourseDto course, List<CoopDto> coops) {
         this.id = id;
         this.year = year;
         this.season = season;
@@ -44,19 +43,19 @@ public class CourseOfferingDto {
         this.season = season;
     }
 
-    public Course getCourse() {
+    public CourseDto getCourse() {
         return this.course;
     }
 
-    public void setCourse(Course course) {
+    public void setCourse(CourseDto course) {
         this.course = course;
     }
 
-    public List<Coop> getCoops() {
+    public List<CoopDto> getCoops() {
         return this.coops;
     }
 
-    public void setCoops(List<Coop> coops) {
+    public void setCoops(List<CoopDto> coops) {
         this.coops = coops;
     }
 }

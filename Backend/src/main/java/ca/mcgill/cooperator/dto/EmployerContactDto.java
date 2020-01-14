@@ -1,8 +1,5 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.Company;
-import ca.mcgill.cooperator.model.CoopDetails;
-import ca.mcgill.cooperator.model.EmployerReport;
 import java.util.List;
 
 public class EmployerContactDto {
@@ -13,9 +10,9 @@ public class EmployerContactDto {
     private String lastName;
     private String phoneNumber;
 
-    private Company company;
-    private List<CoopDetails> coopDetails;
-    private List<EmployerReport> employerReports;
+    private CompanyDto company;
+    private List<CoopDetailsDto> coopDetails;
+    private List<EmployerReportDto> employerReports;
 
     public EmployerContactDto(
             int id,
@@ -23,9 +20,9 @@ public class EmployerContactDto {
             String firstName,
             String lastName,
             String phoneNumber,
-            Company company,
-            List<CoopDetails> coopDetails,
-            List<EmployerReport> employerReports) {
+            CompanyDto company,
+            List<CoopDetailsDto> coopDetails,
+            List<EmployerReportDto> employerReports) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -74,27 +71,27 @@ public class EmployerContactDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public Company getCompany() {
+    public CompanyDto getCompany() {
         return this.company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(CompanyDto company) {
         this.company = company;
     }
 
-    public List<CoopDetails> getCoopDetails() {
+    public List<CoopDetailsDto> getCoopDetails() {
         return this.coopDetails;
     }
 
-    public void setCoopDetails(List<CoopDetails> coopDetails) {
+    public void setCoopDetails(List<CoopDetailsDto> coopDetails) {
         this.coopDetails = coopDetails;
     }
 
-    public List<EmployerReport> getEmployerReports() {
+    public List<EmployerReportDto> getEmployerReports() {
         return this.employerReports;
     }
 
-    public void setEmployerReports(List<EmployerReport> employerReports) {
+    public void setEmployerReports(List<EmployerReportDto> employerReports) {
         this.employerReports = employerReports;
     }
 }

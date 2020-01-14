@@ -1,6 +1,5 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.Notification;
 import java.util.List;
 
 public class AdminDto {
@@ -10,10 +9,10 @@ public class AdminDto {
     private String lastName;
     private String email;
 
-    private List<Notification> sent;
+    private List<NotificationDto> sent;
 
     public AdminDto(
-            int id, String firstName, String lastName, String email, List<Notification> sent) {
+            int id, String firstName, String lastName, String email, List<NotificationDto> sent) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -49,11 +48,11 @@ public class AdminDto {
         this.email = email;
     }
 
-    public List<Notification> getSentNotifications() {
+    public List<NotificationDto> getSentNotifications() {
         return this.sent;
     }
 
-    public void setSentNotifications(List<Notification> sent) {
+    public void setSentNotifications(List<NotificationDto> sent) {
         this.sent = sent;
     }
 }

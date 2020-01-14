@@ -1,11 +1,6 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
-import ca.mcgill.cooperator.model.CourseOffering;
-import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.Student;
-import ca.mcgill.cooperator.model.StudentReport;
 import java.util.List;
 
 public class CoopDto {
@@ -13,20 +8,20 @@ public class CoopDto {
     private int id;
     private CoopStatus status;
 
-    private CourseOffering courseOffering;
-    private CoopDetails details;
-    private Student student;
-    private List<StudentReport> studentReports;
-    private List<EmployerReport> employerReports;
+    private CourseOfferingDto courseOffering;
+    private CoopDetailsDto details;
+    private StudentDto student;
+    private List<StudentReportDto> studentReports;
+    private List<EmployerReportDto> employerReports;
 
     public CoopDto(
             int id,
             CoopStatus status,
-            CourseOffering courseOffering,
-            CoopDetails details,
-            Student student,
-            List<StudentReport> studentReports,
-            List<EmployerReport> employerReports) {
+            CourseOfferingDto courseOffering,
+            CoopDetailsDto details,
+            StudentDto student,
+            List<StudentReportDto> studentReports,
+            List<EmployerReportDto> employerReports) {
         this.id = id;
         this.status = status;
         this.courseOffering = courseOffering;
@@ -50,43 +45,43 @@ public class CoopDto {
         this.status = status;
     }
 
-    public CourseOffering getCourseOffering() {
+    public CourseOfferingDto getCourseOffering() {
         return this.courseOffering;
     }
 
-    public void setCourseOffering(CourseOffering courseOffering) {
+    public void setCourseOffering(CourseOfferingDto courseOffering) {
         this.courseOffering = courseOffering;
     }
 
-    public CoopDetails getCoopDetails() {
+    public CoopDetailsDto getCoopDetails() {
         return this.details;
     }
 
-    public void setCoopDetails(CoopDetails details) {
+    public void setCoopDetails(CoopDetailsDto details) {
         this.details = details;
     }
 
-    public Student getStudent() {
+    public StudentDto getStudent() {
         return this.student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(StudentDto student) {
         this.student = student;
     }
 
-    public List<StudentReport> getStudentReports() {
+    public List<StudentReportDto> getStudentReports() {
         return this.studentReports;
     }
 
-    public void setStudentReports(List<StudentReport> studentReports) {
+    public void setStudentReports(List<StudentReportDto> studentReports) {
         this.studentReports = studentReports;
     }
 
-    public List<EmployerReport> getEmployerReports() {
+    public List<EmployerReportDto> getEmployerReports() {
         return this.employerReports;
     }
 
-    public void setEmployerReports(List<EmployerReport> employerReports) {
+    public void setEmployerReports(List<EmployerReportDto> employerReports) {
         this.employerReports = employerReports;
     }
 }

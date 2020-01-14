@@ -1,8 +1,5 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import java.util.List;
 
@@ -10,16 +7,16 @@ public class EmployerReportDto {
     private int id;
     private ReportStatus status;
 
-    private Coop coop;
-    private EmployerContact employerContact;
-    private List<ReportSection> reportSections;
+    private CoopDto coop;
+    private EmployerContactDto employerContact;
+    private List<ReportSectionDto> reportSections;
 
     public EmployerReportDto(
             int id,
             ReportStatus status,
-            Coop coop,
-            EmployerContact employerContact,
-            List<ReportSection> reportSections) {
+            CoopDto coop,
+            EmployerContactDto employerContact,
+            List<ReportSectionDto> reportSections) {
         this.id = id;
         this.status = status;
         this.coop = coop;
@@ -41,27 +38,27 @@ public class EmployerReportDto {
         this.status = status;
     }
 
-    public Coop getCoop() {
+    public CoopDto getCoop() {
         return this.coop;
     }
 
-    public void setCoop(Coop coop) {
+    public void setCoop(CoopDto coop) {
         this.coop = coop;
     }
 
-    public EmployerContact getEmployerContact() {
+    public EmployerContactDto getEmployerContact() {
         return this.employerContact;
     }
 
-    public void setEmployerContact(EmployerContact employerContact) {
+    public void setEmployerContact(EmployerContactDto employerContact) {
         this.employerContact = employerContact;
     }
 
-    public List<ReportSection> getReportSections() {
+    public List<ReportSectionDto> getReportSections() {
         return this.reportSections;
     }
 
-    public void setReportSections(List<ReportSection> reportSections) {
+    public void setReportSections(List<ReportSectionDto> reportSections) {
         this.reportSections = reportSections;
     }
 }

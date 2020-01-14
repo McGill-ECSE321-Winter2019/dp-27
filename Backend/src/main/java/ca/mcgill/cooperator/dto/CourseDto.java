@@ -1,6 +1,5 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.CourseOffering;
 import java.util.List;
 
 public class CourseDto {
@@ -8,9 +7,9 @@ public class CourseDto {
     private int id;
     private String name;
 
-    private List<CourseOffering> courseOfferings;
+    private List<CourseOfferingDto> courseOfferings;
 
-    public CourseDto(int id, String name, List<CourseOffering> courseOfferings) {
+    public CourseDto(int id, String name, List<CourseOfferingDto> courseOfferings) {
         this.id = id;
         this.name = name;
         this.courseOfferings = courseOfferings;
@@ -30,11 +29,11 @@ public class CourseDto {
         this.name = name;
     }
 
-    public List<CourseOffering> getCourseOfferings() {
+    public List<CourseOfferingDto> getCourseOfferings() {
         return this.courseOfferings;
     }
 
-    public void setCourseOfferings(List<CourseOffering> courseOfferings) {
+    public void setCourseOfferings(List<CourseOfferingDto> courseOfferings) {
         this.courseOfferings = courseOfferings;
     }
 }

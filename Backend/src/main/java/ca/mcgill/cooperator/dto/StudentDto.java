@@ -1,7 +1,5 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.Notification;
 import java.util.List;
 
 public class StudentDto {
@@ -11,8 +9,8 @@ public class StudentDto {
     private String email;
     private String studentId;
 
-    private List<Coop> coops;
-    private List<Notification> studentReceived;
+    private List<CoopDto> coops;
+    private List<NotificationDto> studentReceived;
 
     public StudentDto(
             int id,
@@ -20,8 +18,8 @@ public class StudentDto {
             String lastName,
             String email,
             String studentId,
-            List<Coop> coops,
-            List<Notification> studentReceived) {
+            List<CoopDto> coops,
+            List<NotificationDto> studentReceived) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -69,19 +67,19 @@ public class StudentDto {
         this.studentId = studentId;
     }
 
-    public List<Coop> getCoops() {
+    public List<CoopDto> getCoops() {
         return this.coops;
     }
 
-    public void setCoops(List<Coop> coops) {
+    public void setCoops(List<CoopDto> coops) {
         this.coops = coops;
     }
 
-    public List<Notification> getNotifications() {
+    public List<NotificationDto> getNotifications() {
         return this.studentReceived;
     }
 
-    public void setNotifications(List<Notification> notifications) {
+    public void setNotifications(List<NotificationDto> notifications) {
         this.studentReceived = notifications;
     }
 }
