@@ -1,22 +1,19 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.EmployerContact;
-
 public class CoopDetailsDto {
     private int id;
     private double payPerHour;
     private int hoursPerWeek;
 
-    private EmployerContact employerContact;
-    private Coop coop;
+    private EmployerContactDto employerContact;
+    private CoopDto coop;
 
     public CoopDetailsDto(
             int id,
             double payPerHour,
             int hoursPerWeek,
-            EmployerContact employerContact,
-            Coop coop) {
+            EmployerContactDto employerContact,
+            CoopDto coop) {
         this.id = id;
         this.payPerHour = payPerHour;
         this.hoursPerWeek = hoursPerWeek;
@@ -46,19 +43,19 @@ public class CoopDetailsDto {
         this.hoursPerWeek = hoursPerWeek;
     }
 
-    public EmployerContact getEmployerContact() {
+    public EmployerContactDto getEmployerContact() {
         return this.employerContact;
     }
 
-    public void setEmployerContact(EmployerContact employerContact) {
+    public void setEmployerContact(EmployerContactDto employerContact) {
         this.employerContact = employerContact;
     }
 
-    public Coop getCoop() {
+    public CoopDto getCoop() {
         return this.coop;
     }
 
-    public void setCoop(Coop coop) {
+    public void setCoop(CoopDto coop) {
         this.coop = coop;
     }
 }

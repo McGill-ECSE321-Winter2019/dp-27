@@ -1,7 +1,5 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import java.util.List;
 
@@ -9,11 +7,11 @@ public class StudentReportDto {
     private int id;
     private ReportStatus status;
 
-    private Coop coop;
-    private List<ReportSection> reportSections;
+    private CoopDto coop;
+    private List<ReportSectionDto> reportSections;
 
     public StudentReportDto(
-            int id, ReportStatus status, Coop coop, List<ReportSection> reportSections) {
+            int id, ReportStatus status, CoopDto coop, List<ReportSectionDto> reportSections) {
         this.id = id;
         this.status = status;
         this.coop = coop;
@@ -34,19 +32,19 @@ public class StudentReportDto {
         this.status = status;
     }
 
-    public Coop getCoop() {
+    public CoopDto getCoop() {
         return this.coop;
     }
 
-    public void setCoop(Coop coop) {
+    public void setCoop(CoopDto coop) {
         this.coop = coop;
     }
 
-    public List<ReportSection> getReportSections() {
+    public List<ReportSectionDto> getReportSections() {
         return this.reportSections;
     }
 
-    public void setReportSections(List<ReportSection> reportSections) {
+    public void setReportSections(List<ReportSectionDto> reportSections) {
         this.reportSections = reportSections;
     }
 }

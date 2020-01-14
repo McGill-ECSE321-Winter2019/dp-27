@@ -1,17 +1,15 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.Admin;
-import ca.mcgill.cooperator.model.Student;
 
 public class NotificationDto {
     private int id;
     private String title;
     private String body;
 
-    private Student student;
-    private Admin sender;
+    private StudentDto student;
+    private AdminDto sender;
 
-    public NotificationDto(int id, String title, String body, Student student, Admin sender) {
+    public NotificationDto(int id, String title, String body, StudentDto student, AdminDto sender) {
         this.id = id;
         this.title = title;
         this.body = body;
@@ -41,19 +39,19 @@ public class NotificationDto {
         this.body = body;
     }
 
-    public Student getStudent() {
+    public StudentDto getStudent() {
         return this.student;
     }
 
-    public void setStudent(Student student) {
+    public void setStudent(StudentDto student) {
         this.student = student;
     }
 
-    public Admin getSender() {
+    public AdminDto getSender() {
         return this.sender;
     }
 
-    public void setSender(Admin sender) {
+    public void setSender(AdminDto sender) {
         this.sender = sender;
     }
 }

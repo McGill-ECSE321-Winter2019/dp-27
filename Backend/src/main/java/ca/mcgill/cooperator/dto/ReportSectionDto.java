@@ -1,22 +1,19 @@
 package ca.mcgill.cooperator.dto;
 
-import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.StudentReport;
-
 public class ReportSectionDto {
     private int id;
     private String title;
     private String content;
 
-    private StudentReport studentReport;
-    private EmployerReport employerReport;
+    private StudentReportDto studentReport;
+    private EmployerReportDto employerReport;
 
     public ReportSectionDto(
             int id,
             String title,
             String content,
-            StudentReport studentReport,
-            EmployerReport employerReport) {
+            StudentReportDto studentReport,
+            EmployerReportDto employerReport) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -46,19 +43,19 @@ public class ReportSectionDto {
         this.content = content;
     }
 
-    public StudentReport getStudentReport() {
+    public StudentReportDto getStudentReport() {
         return this.studentReport;
     }
 
-    public void setStudentReport(StudentReport studentReport) {
+    public void setStudentReport(StudentReportDto studentReport) {
         this.studentReport = studentReport;
     }
 
-    public EmployerReport getEmployerReport() {
+    public EmployerReportDto getEmployerReport() {
         return this.employerReport;
     }
 
-    public void setEmployerReport(EmployerReport employerReport) {
+    public void setEmployerReport(EmployerReportDto employerReport) {
         this.employerReport = employerReport;
     }
 }
