@@ -29,7 +29,7 @@ import java.util.List;
 
 public class ControllerUtils {
 
-    AdminDto convertToDto(Admin a) {
+    static AdminDto convertToDto(Admin a) {
         if (a == null) {
             throw new IllegalArgumentException("Admin does not exist!");
         }
@@ -41,7 +41,7 @@ public class ControllerUtils {
                 convertNotifListToDto(a.getSentNotifications()));
     }
 
-    List<AdminDto> convertAdminListToDto(List<Admin> admins) {
+    static List<AdminDto> convertAdminListToDto(List<Admin> admins) {
         List<AdminDto> adminDtos = new ArrayList<>(admins.size());
 
         for (Admin a : admins) {
@@ -54,7 +54,7 @@ public class ControllerUtils {
         return adminDtos;
     }
 
-    CompanyDto convertToDto(Company c) {
+    static CompanyDto convertToDto(Company c) {
         if (c == null) {
             throw new IllegalArgumentException("Company does not exist!");
         }
@@ -62,7 +62,7 @@ public class ControllerUtils {
                 c.getId(), c.getName(), convertEmployerContactListToDto(c.getEmployees()));
     }
 
-    List<CompanyDto> convertCompanyListToDto(List<Company> companies) {
+    static List<CompanyDto> convertCompanyListToDto(List<Company> companies) {
         List<CompanyDto> companyDtos = new ArrayList<>(companies.size());
 
         for (Company c : companies) {
@@ -74,7 +74,7 @@ public class ControllerUtils {
         return companyDtos;
     }
 
-    CoopDto convertToDto(Coop c) {
+    static CoopDto convertToDto(Coop c) {
         if (c == null) {
             throw new IllegalArgumentException("Coop does not exist!");
         }
@@ -88,7 +88,7 @@ public class ControllerUtils {
                 convertEmployerReportListToDto(c.getEmployerReports()));
     }
 
-    List<CoopDto> convertCoopListToDto(List<Coop> coops) {
+    static List<CoopDto> convertCoopListToDto(List<Coop> coops) {
         List<CoopDto> coopDtos = new ArrayList<>(coops.size());
 
         for (Coop c : coops) {
@@ -100,7 +100,7 @@ public class ControllerUtils {
         return coopDtos;
     }
 
-    CoopDetailsDto convertToDto(CoopDetails cd) {
+    static CoopDetailsDto convertToDto(CoopDetails cd) {
         if (cd == null) {
             throw new IllegalArgumentException("Coop details do not exist!");
         }
@@ -112,7 +112,7 @@ public class ControllerUtils {
                 convertToDto(cd.getCoop()));
     }
 
-    List<CoopDetailsDto> convertCoopDetailsListToDto(List<CoopDetails> coopDetails) {
+    static List<CoopDetailsDto> convertCoopDetailsListToDto(List<CoopDetails> coopDetails) {
         List<CoopDetailsDto> coopDetailsDtos = new ArrayList<>(coopDetails.size());
 
         for (CoopDetails cd : coopDetails) {
@@ -124,7 +124,7 @@ public class ControllerUtils {
         return coopDetailsDtos;
     }
 
-    CourseDto convertToDto(Course c) {
+    static CourseDto convertToDto(Course c) {
         if (c == null) {
             throw new IllegalArgumentException("Course does not exist!");
         }
@@ -132,7 +132,7 @@ public class ControllerUtils {
                 c.getId(), c.getName(), convertCourseOfferingListToDto(c.getCourseOfferings()));
     }
 
-    List<CourseDto> convertCourseListToDto(List<Course> courses) {
+    static List<CourseDto> convertCourseListToDto(List<Course> courses) {
         List<CourseDto> courseDtos = new ArrayList<>(courses.size());
 
         for (Course c : courses) {
@@ -144,7 +144,7 @@ public class ControllerUtils {
         return courseDtos;
     }
 
-    CourseOfferingDto convertToDto(CourseOffering co) {
+    static CourseOfferingDto convertToDto(CourseOffering co) {
         if (co == null) {
             throw new IllegalArgumentException("Course Offering does not exist!");
         }
@@ -156,7 +156,7 @@ public class ControllerUtils {
                 convertCoopListToDto(co.getCoops()));
     }
 
-    List<CourseOfferingDto> convertCourseOfferingListToDto(List<CourseOffering> courseOfferings) {
+    static List<CourseOfferingDto> convertCourseOfferingListToDto(List<CourseOffering> courseOfferings) {
         List<CourseOfferingDto> courseOfferingDtos = new ArrayList<>(courseOfferings.size());
 
         for (CourseOffering co : courseOfferings) {
@@ -168,7 +168,7 @@ public class ControllerUtils {
         return courseOfferingDtos;
     }
 
-    EmployerContactDto convertToDto(EmployerContact e) {
+    static EmployerContactDto convertToDto(EmployerContact e) {
         if (e == null) {
             throw new IllegalArgumentException("Employer Contact does not exist!");
         }
@@ -183,7 +183,7 @@ public class ControllerUtils {
                 convertEmployerReportListToDto(e.getEmployerReports()));
     }
 
-    List<EmployerContactDto> convertEmployerContactListToDto(
+    static List<EmployerContactDto> convertEmployerContactListToDto(
             List<EmployerContact> employerContacts) {
         List<EmployerContactDto> employerContactDtos = new ArrayList<>(employerContacts.size());
 
@@ -197,7 +197,7 @@ public class ControllerUtils {
         return employerContactDtos;
     }
 
-    EmployerReportDto convertToDto(EmployerReport er) {
+    static EmployerReportDto convertToDto(EmployerReport er) {
         if (er == null) {
             throw new IllegalArgumentException("Employer Report does not exist!");
         }
@@ -209,7 +209,7 @@ public class ControllerUtils {
                 convertReportSectionListToDto(er.getReportSections()));
     }
 
-    List<EmployerReportDto> convertEmployerReportListToDto(List<EmployerReport> employerReports) {
+    static List<EmployerReportDto> convertEmployerReportListToDto(List<EmployerReport> employerReports) {
         List<EmployerReportDto> employerReportDtos = new ArrayList<>(employerReports.size());
 
         for (EmployerReport er : employerReports) {
@@ -222,7 +222,7 @@ public class ControllerUtils {
         return employerReportDtos;
     }
 
-    ReportSectionDto convertToDto(ReportSection rs) {
+    static ReportSectionDto convertToDto(ReportSection rs) {
         if (rs == null) {
             throw new IllegalArgumentException("Report section does not exist!");
         }
@@ -234,7 +234,7 @@ public class ControllerUtils {
                 convertToDto(rs.getEmployerReport()));
     }
 
-    List<ReportSectionDto> convertReportSectionListToDto(List<ReportSection> reportSections) {
+    static List<ReportSectionDto> convertReportSectionListToDto(List<ReportSection> reportSections) {
         List<ReportSectionDto> reportSectionDtos = new ArrayList<>(reportSections.size());
 
         for (ReportSection rs : reportSections) {
@@ -246,7 +246,7 @@ public class ControllerUtils {
         return reportSectionDtos;
     }
 
-    NotificationDto convertToDto(Notification n) {
+    static NotificationDto convertToDto(Notification n) {
         if (n == null) {
             throw new IllegalArgumentException("Notification does not exist!");
         }
@@ -258,7 +258,7 @@ public class ControllerUtils {
                 convertToDto(n.getSender()));
     }
 
-    List<NotificationDto> convertNotifListToDto(List<Notification> notifs) {
+    static List<NotificationDto> convertNotifListToDto(List<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<>(notifs.size());
 
         for (Notification n : notifs) {
@@ -270,7 +270,7 @@ public class ControllerUtils {
         return notifDtos;
     }
 
-    StudentDto convertToDto(Student s) {
+    static StudentDto convertToDto(Student s) {
         if (s == null) {
             throw new IllegalArgumentException("Student does not exist!");
         }
@@ -284,7 +284,7 @@ public class ControllerUtils {
                 convertNotifListToDto(s.getNotifications()));
     }
 
-    List<StudentDto> convertToDto(List<Student> students) {
+    static List<StudentDto> convertToDto(List<Student> students) {
         List<StudentDto> studentDtos = new ArrayList<>(students.size());
 
         for (Student s : students) {
@@ -296,7 +296,7 @@ public class ControllerUtils {
         return studentDtos;
     }
 
-    StudentReportDto convertToDto(StudentReport sr) {
+    static StudentReportDto convertToDto(StudentReport sr) {
         if (sr == null) {
             throw new IllegalArgumentException("Student Report does not exist!");
         }
@@ -307,7 +307,7 @@ public class ControllerUtils {
                 convertReportSectionListToDto(sr.getReportSections()));
     }
 
-    List<StudentReportDto> convertStudentReportListToDto(List<StudentReport> studentReports) {
+    static List<StudentReportDto> convertStudentReportListToDto(List<StudentReport> studentReports) {
         List<StudentReportDto> studentReportDtos = new ArrayList<>(studentReports.size());
 
         for (StudentReport sr : studentReports) {
