@@ -68,7 +68,7 @@ public class CourseOfferingService {
             error.append("Season cannot be null! ");
         }
         if (c == null) {
-            error.append("Course cannot be null!");
+            error.append("Course cannot be null! ");
         }
         if (co == null){
         	 error.append("Course Offering cannot be null!");

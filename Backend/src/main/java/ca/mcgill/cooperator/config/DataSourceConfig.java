@@ -14,7 +14,6 @@ public class DataSourceConfig {
     @Bean
     public DataSource getDataSource() {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
-
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.url(dotenv.get("DATASOURCE_URL"));
         dataSourceBuilder.username(dotenv.get("DATASOURCE_USERNAME"));
