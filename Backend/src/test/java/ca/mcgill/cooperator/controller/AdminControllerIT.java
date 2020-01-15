@@ -13,7 +13,6 @@ import ca.mcgill.cooperator.dto.AdminDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +31,10 @@ public class AdminControllerIT {
     @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
-    
+
     @Autowired AdminRepository adminRepository;
     @Autowired NotificationRepository notificationRepository;
-    
+
     @BeforeEach
     public void clearDatabase() {
         adminRepository.deleteAll();
@@ -139,7 +138,7 @@ public class AdminControllerIT {
 
         assertEquals(returnedAdmins.size(), 0);
     }
-    
+
     @Test
     public void testInvalidAdminFlow() throws Exception {
         AdminDto invalidAdmin = new AdminDto(1, "", "", "", null);
@@ -147,12 +146,12 @@ public class AdminControllerIT {
 
         // 1. invalid create
         mvc.perform(
-                            post("/admins")
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsString(invalidAdmin))
-                                    .characterEncoding("utf-8"))
-                    .andExpect(status().is5xxServerError());
-        
+                        post("/admins")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(invalidAdmin))
+                                .characterEncoding("utf-8"))
+                .andExpect(status().is5xxServerError());
+
         // create the Admin with a POST request
         MvcResult mvcResult =
                 mvc.perform(
@@ -162,35 +161,35 @@ public class AdminControllerIT {
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
+
         // get object from response
         AdminDto returnedAdmin =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), AdminDto.class);
-        
+
         // 2. get the Admin by ID, invalid
         mvc.perform(
                         get("/admins/" + (returnedAdmin.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
-        
+
         returnedAdmin.setFirstName("");
         returnedAdmin.setLastName("");
         returnedAdmin.setEmail("");
-        
+
         // 3. invalid update
         mvc.perform(
-                            put("/admins")
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(objectMapper.writeValueAsString(returnedAdmin))
-                                    .characterEncoding("utf-8"))
-                    .andExpect(status().is5xxServerError());
-        
+                        put("/admins")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(returnedAdmin))
+                                .characterEncoding("utf-8"))
+                .andExpect(status().is5xxServerError());
+
         // 4. invalid delete
         mvc.perform(
-                            delete("/admins/" + (returnedAdmin.getId() + 1))
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .characterEncoding("utf-8"))
-                    .andExpect(status().is5xxServerError());
+                        delete("/admins/" + (returnedAdmin.getId() + 1))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8"))
+                .andExpect(status().is5xxServerError());
     }
 }
