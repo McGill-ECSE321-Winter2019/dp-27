@@ -133,16 +133,14 @@ public class AdminService {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        a.setFirstName(firstName.trim());
-        a.setLastName(lastName.trim());
-        a.setEmail(email.trim());
-        a.setSentNotifications(sentNotifications);
-        adminRepository.save(a);
-
         for (Notification n : sentNotifications) {
             n.setSender(a);
             notificationRepository.save(n);
         }
+        a.setFirstName(firstName.trim());
+        a.setLastName(lastName.trim());
+        a.setEmail(email.trim());
+        a.setSentNotifications(sentNotifications);
 
         return adminRepository.save(a);
     }

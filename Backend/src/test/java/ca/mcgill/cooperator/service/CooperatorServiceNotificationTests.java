@@ -149,6 +149,8 @@ public class CooperatorServiceNotificationTests {
             fail();
         }
 
+        sender = adminService.getAdmin(sender.getId());
+
         assertEquals("Bye", n.getTitle());
         assertEquals("Bye", sender.getSentNotifications().get(0).getTitle());
         assertEquals(1, notificationService.getAllNotifications().size());

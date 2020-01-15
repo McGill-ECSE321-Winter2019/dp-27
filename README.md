@@ -2,6 +2,6 @@
 
 ## Backend
 
-To run the backend, run `cd Backend` from the root directory and then run `mvn spring-boot:run`. To run tests, run `mvn test`.
+To run the backend, run `cd Backend` from the root directory and then run `mvn spring-boot:run`. To run tests, run `mvn test` for unit tests, `mvn failsafe:integration-test` for integration tests, or `mvn verify` to run both.
 
 To format all Java files, make sure you're in `Backend` then run `mvn com.coveo:fmt-maven-plugin:format`.

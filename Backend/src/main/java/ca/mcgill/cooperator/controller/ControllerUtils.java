@@ -24,10 +24,18 @@ import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
+import ca.mcgill.cooperator.service.NotificationService;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ControllerUtils {
+
+    @Autowired private static NotificationService notificationService;
+
+    /*
+     * Domain Object to DTO conversion methods
+     */
 
     static AdminDto convertToDto(Admin a) {
         if (a == null) {
@@ -156,7 +164,8 @@ public class ControllerUtils {
                 convertCoopListToDto(co.getCoops()));
     }
 
-    static List<CourseOfferingDto> convertCourseOfferingListToDto(List<CourseOffering> courseOfferings) {
+    static List<CourseOfferingDto> convertCourseOfferingListToDto(
+            List<CourseOffering> courseOfferings) {
         List<CourseOfferingDto> courseOfferingDtos = new ArrayList<>(courseOfferings.size());
 
         for (CourseOffering co : courseOfferings) {
@@ -209,7 +218,8 @@ public class ControllerUtils {
                 convertReportSectionListToDto(er.getReportSections()));
     }
 
-    static List<EmployerReportDto> convertEmployerReportListToDto(List<EmployerReport> employerReports) {
+    static List<EmployerReportDto> convertEmployerReportListToDto(
+            List<EmployerReport> employerReports) {
         List<EmployerReportDto> employerReportDtos = new ArrayList<>(employerReports.size());
 
         for (EmployerReport er : employerReports) {
@@ -234,7 +244,8 @@ public class ControllerUtils {
                 convertToDto(rs.getEmployerReport()));
     }
 
-    static List<ReportSectionDto> convertReportSectionListToDto(List<ReportSection> reportSections) {
+    static List<ReportSectionDto> convertReportSectionListToDto(
+            List<ReportSection> reportSections) {
         List<ReportSectionDto> reportSectionDtos = new ArrayList<>(reportSections.size());
 
         for (ReportSection rs : reportSections) {
@@ -307,7 +318,8 @@ public class ControllerUtils {
                 convertReportSectionListToDto(sr.getReportSections()));
     }
 
-    static List<StudentReportDto> convertStudentReportListToDto(List<StudentReport> studentReports) {
+    static List<StudentReportDto> convertStudentReportListToDto(
+            List<StudentReport> studentReports) {
         List<StudentReportDto> studentReportDtos = new ArrayList<>(studentReports.size());
 
         for (StudentReport sr : studentReports) {
@@ -317,5 +329,19 @@ public class ControllerUtils {
             studentReportDtos.add(convertToDto(sr));
         }
         return studentReportDtos;
+    }
+
+    /*
+     * DTO to Domain Object conversion methods
+     */
+
+    static List<Notification> convertNotificationListToDomainObject(
+            List<NotificationDto> notifDtos) {
+        List<Notification> notifs = new ArrayList<>(notifDtos.size());
+        for (NotificationDto nDto : notifDtos) {
+            Notification n = notificationService.getNotification(nDto.getId());
+            notifs.add(n);
+        }
+        return notifs;
     }
 }
