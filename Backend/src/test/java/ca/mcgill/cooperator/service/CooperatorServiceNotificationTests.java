@@ -148,7 +148,7 @@ public class CooperatorServiceNotificationTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-        
+
         sender = adminService.getAdmin(sender.getId());
 
         assertEquals("Bye", n.getTitle());

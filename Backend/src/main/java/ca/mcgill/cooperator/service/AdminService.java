@@ -133,8 +133,6 @@ public class AdminService {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        //adminRepository.save(a);
-
         for (Notification n : sentNotifications) {
             n.setSender(a);
             notificationRepository.save(n);

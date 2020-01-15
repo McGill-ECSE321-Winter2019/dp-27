@@ -31,7 +31,7 @@ public class AdminControllerIT {
 
     /**
      * Tests the creating, reading, updating and deleting an Admin
-     * 
+     *
      * @throws Exception
      */
     @Test
@@ -63,7 +63,7 @@ public class AdminControllerIT {
                         get("/admins/" + (returnedAdmin.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
-        
+
         // test getting all Admins
         mvcResult =
                 mvc.perform(get("/admins").contentType(MediaType.APPLICATION_JSON))
@@ -77,12 +77,12 @@ public class AdminControllerIT {
                                 mvcResult.getResponse().getContentAsString(), AdminDto[].class));
 
         assertEquals(returnedAdmins.size(), 1);
-        
+
         AdminDto adminToUpdate = returnedAdmins.get(0);
         adminToUpdate.setFirstName("Paul");
         adminToUpdate.setLastName("Hooli");
         adminToUpdate.setEmail("testemail2@gmail.com");
-        
+
         // update the Admin with a PUT request
         mvcResult =
                 mvc.perform(
@@ -95,7 +95,9 @@ public class AdminControllerIT {
 
         // get the Admin by ID
         mvcResult =
-                mvc.perform(get("/admins/" + adminToUpdate.getId()).contentType(MediaType.APPLICATION_JSON))
+                mvc.perform(
+                                get("/admins/" + adminToUpdate.getId())
+                                        .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andReturn();
 
@@ -106,7 +108,7 @@ public class AdminControllerIT {
         assertEquals(returnedAdmin.getFirstName(), "Paul");
         assertEquals(returnedAdmin.getLastName(), "Hooli");
         assertEquals(returnedAdmin.getEmail(), "testemail2@gmail.com");
-        
+
         // delete the Admin with a DELETE request
         mvcResult =
                 mvc.perform(
@@ -115,7 +117,7 @@ public class AdminControllerIT {
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
+
         // test getting all Admins
         mvcResult =
                 mvc.perform(get("/admins").contentType(MediaType.APPLICATION_JSON))
@@ -130,5 +132,4 @@ public class AdminControllerIT {
 
         assertEquals(returnedAdmins.size(), 0);
     }
-
 }
