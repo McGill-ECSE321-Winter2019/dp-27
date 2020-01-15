@@ -1,57 +1,177 @@
 package ca.mcgill.cooperator.service;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import ca.mcgill.cooperator.dao.CourseOfferingRepository;
+import ca.mcgill.cooperator.dao.CourseRepository;
+import ca.mcgill.cooperator.model.Course;
+import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.Season;
 
 @SpringBootTest
 @ActiveProfiles("test")
 public class CooperatorServiceCourseOfferingTests {
+	
+	@Autowired CourseService courseService;
+    @Autowired CourseOfferingService courseOfferingService;
 
-    // TODO: add Service and Repository class imports here
+    @Autowired CourseRepository courseRepository;
+    @Autowired CourseOfferingRepository courseOfferingRepository;
 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-        // TODO: clear every repository here
+    	courseOfferingRepository.deleteAll();
+    	courseRepository.deleteAll();
     }
 
     @Test
     public void testCreateCourseOffering() {
-        assertTrue(true);
+    	String name = "ECSE321";
+    	int year = 2020;
+    	Season season = Season.WINTER;
+        Course c = courseService.createCourse(name);
+        
+        try {
+        	CourseOffering co = courseOfferingService.createCourseOffering(year, season, c);
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+        c = courseRepository.findByName(name);
+        CourseOffering co = courseOfferingRepository.findByCourse(c).get(0);
+        assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
+        assertEquals(co.getSeason(), season);
+        assertEquals(co.getYear(), year);
+        assertEquals(co.getCourse().getId(), c.getId());
     }
 
     @Test
     public void testCreateCourseOfferingNull() {
-        assertTrue(true);
-    }
+    	try {
+        	CourseOffering co = courseOfferingService.createCourseOffering(0, null, null);
 
-    @Test
-    public void testCreateCourseOfferingEmpty() {
-        assertTrue(true);
-    }
-
-    @Test
-    public void testCreateCourseOfferingSpaces() {
-        assertTrue(true);
+        } catch (IllegalArgumentException e) {
+        	assertEquals("Year is invalid! Season cannot be null! Course cannot be null!", e.getMessage());
+        }
+        
+        assertEquals(courseOfferingService.getAllCourseOfferings().size(), 0);
     }
 
     @Test
     public void testUpdateCourseOffering() {
-        assertTrue(true);
+    	String name = "ECSE321";
+    	int year = 2020;
+    	Season season = Season.WINTER;
+        Course c = courseService.createCourse(name);
+        
+        try {
+        	courseOfferingService.createCourseOffering(year, season, c);
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+        
+        CourseOffering co = courseOfferingService.getAllCourseOfferings().get(0);
+        
+        assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
+        assertEquals(co.getSeason(), season);
+        assertEquals(co.getYear(), year);
+        assertEquals(co.getCourse().getId(), c.getId());
+                
+        String name2 = "ECSE223";
+    	int year2 = 2021;
+    	Season season2 = Season.FALL;
+        Course c2 = courseService.createCourse(name);
+        
+        try {
+        	courseOfferingService.updateCourseOffering(co, year2, season2, c2);
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+        
+        co = courseOfferingService.getAllCourseOfferings().get(0);
+        
+        assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
+        assertEquals(co.getSeason(), season2);
+        assertEquals(co.getYear(), year2);
+        assertEquals(co.getCourse().getId(), c2.getId());
     }
 
     @Test
     public void testUpdateCourseOfferingInvalid() {
-        assertTrue(true);
+    	String name = "ECSE321";
+    	int year = 2020;
+    	Season season = Season.WINTER;
+        Course c = courseService.createCourse(name);
+        
+        try {
+        	courseOfferingService.createCourseOffering(year, season, c);
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+        
+        CourseOffering co = courseOfferingService.getAllCourseOfferings().get(0);
+        
+        assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
+        assertEquals(co.getSeason(), season);
+        assertEquals(co.getYear(), year);
+        assertEquals(co.getCourse().getId(), c.getId());
+                
+        String name2 = null;
+    	int year2 = -1;
+    	Season season2 = null;
+        Course c2 = null;
+        
+        try {
+        	courseOfferingService.updateCourseOffering(co, year2, season2, c2);
+
+        } catch (IllegalArgumentException e) {
+        	assertEquals("Year is invalid! Season cannot be null! Course cannot be null!", e.getMessage());
+        }
+        
+        co = courseOfferingService.getAllCourseOfferings().get(0);
+        
+        assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
+        assertEquals(co.getSeason(), season);
+        assertEquals(co.getYear(), year);
+        assertEquals(co.getCourse().getId(), c.getId());
     }
 
     @Test
     public void testDeleteCourseOffering() {
-        assertTrue(true);
+    	String name = "ECSE321";
+    	int year = 2020;
+    	Season season = Season.WINTER;
+        Course c = courseService.createCourse(name);
+        
+        try {
+        	courseOfferingService.createCourseOffering(year, season, c);
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+        
+        CourseOffering co = courseOfferingService.getAllCourseOfferings().get(0);
+
+        assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
+        
+        try {
+        	courseOfferingService.deleteCourseOffering(co);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+        
+        assertEquals(courseOfferingService.getAllCourseOfferings().size(), 0);
     }
 }
