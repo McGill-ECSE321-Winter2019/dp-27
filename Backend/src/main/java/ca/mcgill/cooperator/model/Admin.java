@@ -60,6 +60,11 @@ public class Admin {
     }
 
     public void setSentNotifications(List<Notification> sent) {
-        this.sent = sent;
+    	if (this.sent == null) {
+    		this.sent = sent;
+    	} else {
+        	this.sent.clear();
+            this.sent.addAll(sent);
+    	}
     }
 }

@@ -1,6 +1,5 @@
 package ca.mcgill.cooperator.dto;
 
-
 public class NotificationDto {
     private int id;
     private String title;
