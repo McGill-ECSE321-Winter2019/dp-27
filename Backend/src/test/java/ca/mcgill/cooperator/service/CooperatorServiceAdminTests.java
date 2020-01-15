@@ -34,6 +34,7 @@ public class CooperatorServiceAdminTests {
     public void clearDatabase() {
         adminRepository.deleteAll();
         notificationRepository.deleteAll();
+        studentRepository.deleteAll();
     }
 
     @Test
