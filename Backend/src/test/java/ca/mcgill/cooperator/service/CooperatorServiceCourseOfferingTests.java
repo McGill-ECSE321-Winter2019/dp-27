@@ -51,7 +51,7 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
         assertEquals(co.getSeason(), season);
         assertEquals(co.getYear(), year);
-       // assertEquals(co.getCourse(), c);
+        assertEquals(co.getCourse().getId(), c.getId());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
         assertEquals(co.getSeason(), season);
         assertEquals(co.getYear(), year);
-        //assertEquals(co.getCourse(), c);
+        assertEquals(co.getCourse().getId(), c.getId());
                 
         String name2 = "ECSE223";
     	int year2 = 2021;
@@ -104,7 +104,7 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
         assertEquals(co.getSeason(), season2);
         assertEquals(co.getYear(), year2);
-        //assertEquals(co.getCourse(), c2);
+        assertEquals(co.getCourse().getId(), c2.getId());
     }
 
     @Test
@@ -126,7 +126,7 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
         assertEquals(co.getSeason(), season);
         assertEquals(co.getYear(), year);
-       // assertEquals(co.getCourse(), c);
+        assertEquals(co.getCourse().getId(), c.getId());
                 
         String name2 = null;
     	int year2 = -1;
@@ -145,7 +145,7 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
         assertEquals(co.getSeason(), season);
         assertEquals(co.getYear(), year);
-        //assertEquals(co.getCourse(), c);
+        assertEquals(co.getCourse().getId(), c.getId());
     }
 
     @Test
