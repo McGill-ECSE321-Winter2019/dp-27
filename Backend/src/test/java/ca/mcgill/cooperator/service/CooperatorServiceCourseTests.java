@@ -3,8 +3,12 @@ package ca.mcgill.cooperator.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.ArrayList;
+
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.model.Course;
+import ca.mcgill.cooperator.model.CourseOffering;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,7 +88,7 @@ public class CooperatorServiceCourseTests {
         String name = "ECSE321";
         Course c = courseService.createCourse(name);
         try {
-            courseService.updateCourse(c, "");
+            courseService.updateCourse(c, "", new ArrayList<CourseOffering>());
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -102,13 +106,14 @@ public class CooperatorServiceCourseTests {
         assertEquals(name1, courseService.getAllCourses().get(0).getName());
 
         try {
-            courseService.updateCourse(c, name2);
+            courseService.updateCourse(c, name2, new ArrayList<CourseOffering>());
         } catch (IllegalArgumentException e) {
             fail();
         }
 
         assertEquals(1, courseService.getAllCourses().size());
         assertEquals(name2, courseService.getAllCourses().get(0).getName());
+        assertEquals(0, courseService.getAllCourses().get(0).getCourseOfferings().size());
     }
 
     @Test
