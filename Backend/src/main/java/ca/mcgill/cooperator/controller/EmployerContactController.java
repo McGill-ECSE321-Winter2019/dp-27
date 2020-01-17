@@ -112,5 +112,7 @@ public class EmployerContactController {
     public void deleteEmployerContact(@PathVariable int id) {
         EmployerContact ec = employerContactService.getEmployerContact(id);
         employerContactService.deleteEmployerContact(ec);
+	
     }
+    
 }
