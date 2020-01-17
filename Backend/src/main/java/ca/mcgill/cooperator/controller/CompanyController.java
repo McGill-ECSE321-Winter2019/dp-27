@@ -6,9 +6,9 @@ import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.EmployerContactService;
+
 import java.util.ArrayList;
 import java.util.List;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
