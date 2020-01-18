@@ -89,7 +89,6 @@ public class ControllerUtils {
         }
 
         companyDto.setEmployees(employerContactDtos);
-
         return companyDto;
     }
 
@@ -266,7 +265,6 @@ public class ControllerUtils {
         companyDto.setEmployees(employerContactDtos);
         // now set company that was initially null
         employerContactDto.setCompany(companyDto);
-
         return employerContactDto;
     }
 

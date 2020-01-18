@@ -95,4 +95,5 @@ public class CompanyController {
         Company c = companyService.getCompany(id);
         companyService.deleteCompany(c);
     }
+    
 }
