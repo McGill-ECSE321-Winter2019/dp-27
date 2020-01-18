@@ -28,7 +28,7 @@ public class CourseController {
 	@Autowired private CourseService courseService;
 
 	/**
-     * Get an Course by ID
+     * Get a Course by ID
      *
      * @param id
      * @return CourseDto object
