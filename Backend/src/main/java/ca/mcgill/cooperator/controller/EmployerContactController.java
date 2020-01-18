@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -37,47 +37,69 @@ public class EmployerContactController {
 	@Autowired EmployerReportService employerReportService;
 	@Autowired CoopDetailsService coopDetailsService;
 
-    @GetMapping("/employer/{id}")
+    @GetMapping("/{id}")
     public EmployerContactDto getEmployerContactById(@PathVariable int id) {
     	EmployerContact ec = employerContactService.getEmployerContact(id);
         return ControllerUtils.convertToDto(ec);
     }
     
-    @PostMapping("/employer/create")
-	public EmployerContactDto createEmployerContact(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, 
-			@RequestParam String phoneNumber, CompanyDto companyDto) {
-    	
+    @GetMapping("/all")
+    public List <EmployerContactDto> getAllEmployerContacts() {
+    	List <EmployerContact> employerContacts = employerContactService.getAllEmployerContacts();
+    	return ControllerUtils.convertEmployerContactListToDto(employerContacts);
+    }
+    
+    @PostMapping("")
+	public EmployerContactDto createEmployerContact(@RequestBody EmployerContactDto employerContactDto) {
+    	CompanyDto companyDto = employerContactDto.getCompany();
     	Company company = companyService.getCompany(companyDto.getId());
-		EmployerContact ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, company);
+		EmployerContact ec = employerContactService.createEmployerContact(employerContactDto.getFirstName(), 
+																		  employerContactDto.getLastName(), 
+																		  employerContactDto.getEmail(), 
+																		  employerContactDto.getPhoneNumber(), 
+																		  company);
 		return ControllerUtils.convertToDto(ec);
 	}
     
-    @PutMapping("/employer/update")
-    public EmployerContactDto updateEmployerContact(@RequestParam int id, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, 
-			@RequestParam String phoneNumber, CompanyDto companyDto, List<EmployerReportDto> employerReportDtos, List<CoopDetailsDto> coopDetailsDtos) {
+    @PutMapping("")
+    public EmployerContactDto updateEmployerContact(@RequestBody EmployerContactDto employerContactDto) {
     	
-    	EmployerContact ec = employerContactService.getEmployerContact(id);
+    	EmployerContact ec = employerContactService.getEmployerContact(employerContactDto.getId());
+    	CompanyDto companyDto = employerContactDto.getCompany();
     	Company company = companyService.getCompany(companyDto.getId());
     	
-    	List<EmployerReport> employerReports = new ArrayList<EmployerReport>();
-    	for (EmployerReportDto employerReportDto : employerReportDtos) {
-    		EmployerReport er = employerReportService.getEmployerReport(employerReportDto.getId());
-    		employerReports.add(er);
+    	List <EmployerReportDto> employerReportDtos = employerContactDto.getEmployerReports();
+    	List <EmployerReport> employerReports = new ArrayList<EmployerReport>();
+    	if (employerReportDtos != null) {
+	    	for (EmployerReportDto employerReportDto : employerReportDtos) {
+	    		EmployerReport er = employerReportService.getEmployerReport(employerReportDto.getId());
+	    		employerReports.add(er);
+	    	}
     	}
     	
-    	List<CoopDetails> coopDetails = new ArrayList<CoopDetails>();
-    	for (CoopDetailsDto coopDetailsDto : coopDetailsDtos) {
-    		CoopDetails cd = coopDetailsService.getCoopDetails(coopDetailsDto.getId());
-    		coopDetails.add(cd);
+    	List <CoopDetailsDto> coopDetailsDtos = employerContactDto.getCoopDetails();
+    	List <CoopDetails> coopDetails = new ArrayList<CoopDetails>();
+    	if (coopDetailsDtos != null) {
+	    	for (CoopDetailsDto coopDetailsDto : coopDetailsDtos) {
+	    		CoopDetails cd = coopDetailsService.getCoopDetails(coopDetailsDto.getId());
+	    		coopDetails.add(cd);
+	    	}
     	}
     	
-    	ec = employerContactService.updateEmployerContact(ec, firstName, lastName, email, phoneNumber, company, employerReports, coopDetails);
+    	ec = employerContactService.updateEmployerContact(ec, 
+    													  employerContactDto.getFirstName(), 
+    													  employerContactDto.getLastName(), 
+    													  employerContactDto.getEmail(), 
+    													  employerContactDto.getPhoneNumber(), 
+    													  company, 
+    													  employerReports, 
+    													  coopDetails);
     	
     	return ControllerUtils.convertToDto(ec);
     }
     
-    @DeleteMapping("/employer/delete")
-    public void deleteEmployerContact(@RequestParam int id) {
+    @DeleteMapping("/{id}")
+    public void deleteEmployerContact(@PathVariable int id) {
     	EmployerContact ec = employerContactService.getEmployerContact(id);
     	employerContactService.deleteEmployerContact(ec);
     }

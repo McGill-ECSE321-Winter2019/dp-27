@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
@@ -28,29 +28,32 @@ public class CompanyController {
     @Autowired private CompanyService companyService;
     @Autowired private EmployerContactService employerContactService;
 
-    @GetMapping("/company/{id}")
+    @GetMapping("/{id}")
     public CompanyDto getCompanyById(@PathVariable int id) {
     	Company c = companyService.getCompany(id);
         return ControllerUtils.convertToDto(c);
     }
     
-    @GetMapping("/hello")
-    public String helloWorld() {
-    	
-        return "hello bish";
+    @GetMapping("/all")
+    public List <CompanyDto> getAllCompanies() {
+    	List <Company> companies = companyService.getAllCompanies();
+    	return ControllerUtils.convertCompanyListToDto(companies);
     }
     
-    @PostMapping("/company/create")
-    public CompanyDto createCompany(@RequestParam String name, @RequestParam(required = false)List<EmployerContactDto> employerContactDtos) {
-    	List<EmployerContact> employerContacts = new ArrayList<EmployerContact>();
+    @PostMapping("")
+    public CompanyDto createCompany(@RequestBody CompanyDto companyDto) {
+    	
+    	List <EmployerContact> employerContacts = new ArrayList<EmployerContact>();
+    	List <EmployerContactDto> employerContactDtos = companyDto.getEmployees();
     	if (employerContactDtos != null) {
-	    	for (EmployerContactDto employerContactDto : employerContactDtos) {
-	    		EmployerContact ec = employerContactService.getEmployerContact(employerContactDto.getId());
-	    		employerContacts.add(ec);
-	    	}
+    		for (EmployerContactDto employerContactDto : employerContactDtos) {
+    			EmployerContact employerContact = employerContactService.getEmployerContact(employerContactDto.getId());
+    			employerContacts.add(employerContact);
+    		}
     	}
-    	Company company = companyService.createCompany(name, employerContacts);
+    	Company company = companyService.createCompany(companyDto.getName(), employerContacts);
     	
     	return ControllerUtils.convertToDto(company);
     }
+    
 }
