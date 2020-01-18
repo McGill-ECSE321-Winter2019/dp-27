@@ -258,15 +258,17 @@ public class ControllerUtils {
 
     static List<EmployerContactDto> convertEmployerContactListToDto(
             List<EmployerContact> employerContacts) {
-
-        List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
-
-        for (EmployerContact ec : employerContacts) {
-            if (ec == null) {
-                throw new IllegalArgumentException("Employer Contact does not exist!");
-            }
-            employerContactDtos.add(convertToDto(ec));
-        }
+    	
+	    List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
+	    if (employerContacts != null) {
+	        for (EmployerContact ec : employerContacts) {
+	            if (ec == null) {
+	                throw new IllegalArgumentException("Employer Contact does not exist!");
+	            }
+	            employerContactDtos.add(convertToDto(ec));
+	        }
+    	}
+	    
         return employerContactDtos;
     }
 
