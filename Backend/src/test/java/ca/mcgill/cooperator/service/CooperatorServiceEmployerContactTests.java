@@ -81,7 +81,7 @@ public class CooperatorServiceEmployerContactTests {
             fail();
         }
 
-        assertEquals(2, employerContactService.getAllEmployerContacts().size());
+        assertEquals(1, employerContactService.getAllEmployerContacts().size());
     }
 
     @Test
@@ -212,9 +212,7 @@ public class CooperatorServiceEmployerContactTests {
         List<CoopDetails> coopDetails = new ArrayList<CoopDetails>();
 
         try {
-            ec =
-                    employerContactService.createEmployerContact(
-                            firstName, lastName, email, phoneNumber, c);
+            ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
             ec = employerContactService.getEmployerContact(ec.getId());
 
             cd = createTestCoopDetails(ec, coop);
@@ -222,9 +220,7 @@ public class CooperatorServiceEmployerContactTests {
 
             List<EmployerReport> reports = new ArrayList<EmployerReport>();
 
-            ec =
-                    employerContactService.updateEmployerContact(
-                            ec, firstName, lastName, email, phoneNumber, c, reports, coopDetails);
+            ec = employerContactService.updateEmployerContact(ec, firstName, lastName, email, phoneNumber, c, reports, coopDetails);
             ec = employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException e) {
             fail();
@@ -232,7 +228,7 @@ public class CooperatorServiceEmployerContactTests {
 
         assertEquals(1, ec.getCoopDetails().size());
         assertEquals(lastName, ec.getLastName());
-        assertEquals(2, employerContactService.getAllEmployerContacts().size());
+        assertEquals(1, employerContactService.getAllEmployerContacts().size());
     }
 
     @Test
@@ -245,9 +241,7 @@ public class CooperatorServiceEmployerContactTests {
 
         EmployerContact ec = null;
         try {
-            ec =
-                    employerContactService.createEmployerContact(
-                            firstName, lastName, email, phoneNumber, c);
+            ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
             ec = employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException e) {
             fail();
@@ -261,16 +255,14 @@ public class CooperatorServiceEmployerContactTests {
         List<CoopDetails> coopDetails = new ArrayList<CoopDetails>();
 
         try {
-            ec =
-                    employerContactService.updateEmployerContact(
-                            ec, firstName, lastName, email, phoneNumber, c, reports, coopDetails);
+            ec = employerContactService.updateEmployerContact(ec, firstName, lastName, email, phoneNumber, c, reports, coopDetails);
             ec = employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException e) {
             fail();
         }
 
         assertEquals(firstName, ec.getFirstName());
-        assertEquals(2, employerContactService.getAllEmployerContacts().size());
+        assertEquals(1, employerContactService.getAllEmployerContacts().size());
     }
 
     @Test
@@ -283,9 +275,7 @@ public class CooperatorServiceEmployerContactTests {
 
         EmployerContact ec = null;
         try {
-            ec =
-                    employerContactService.createEmployerContact(
-                            firstName, lastName, email, phoneNumber, c);
+            ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
             ec = employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException e) {
             fail();
@@ -309,9 +299,8 @@ public class CooperatorServiceEmployerContactTests {
                         + " Employer Contact coop details cannot be null!",
                 error);
 
-        // original EmployerContact should still exist (and employer contact created for test
-        // company)
-        assertEquals(2, employerContactService.getAllEmployerContacts().size());
+        // original EmployerContact should still exist 
+        assertEquals(1, employerContactService.getAllEmployerContacts().size());
         try {
             employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException _e) {
@@ -329,16 +318,14 @@ public class CooperatorServiceEmployerContactTests {
 
         EmployerContact ec = null;
         try {
-            ec =
-                    employerContactService.createEmployerContact(
-                            firstName, lastName, email, phoneNumber, c);
+            ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
             ec = employerContactService.getEmployerContact(ec.getId());
             employerContactService.deleteEmployerContact(ec);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(1, employerContactService.getAllEmployerContacts().size());
+        assertEquals(0, employerContactService.getAllEmployerContacts().size());
     }
 
     @Test
