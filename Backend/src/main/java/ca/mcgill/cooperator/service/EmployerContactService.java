@@ -71,7 +71,8 @@ public class EmployerContactService {
         List<EmployerContact> employers = company.getEmployees();
         employers.add(ec);
         company.setEmployees(employers);
-
+        
+        employerContactRepository.save(ec);
         companyRepository.save(company);
 
         return employerContactRepository.save(ec);
