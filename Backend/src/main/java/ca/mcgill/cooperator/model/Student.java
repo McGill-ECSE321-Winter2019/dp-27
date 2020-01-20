@@ -76,19 +76,11 @@ public class Student {
         return this.coops;
     }
 
-<<<<<<< HEAD
     public void setCoops(Set<Coop> coops) {
         if (this.coops == null) {
             this.coops = coops;
         } else {
             this.coops.clear();
-=======
-    public void setCoops(List<Coop> coops) {
-    	if (this.coops == null) {
-      		this.coops = coops;
-       	} else {
-           	this.coops.clear();
->>>>>>> changing lists to sets for some classes and fixed put request for employer contact
             this.coops.addAll(coops);
         }
     }
@@ -97,19 +89,11 @@ public class Student {
         return this.studentReceived;
     }
 
-<<<<<<< HEAD
     public void setNotifications(Set<Notification> notifications) {
         if (this.studentReceived == null) {
             this.studentReceived = notifications;
         } else {
             this.studentReceived.clear();
-=======
-    public void setNotifications(List<Notification> notifications) {
-    	if (this.studentReceived == null) {
-      		this.studentReceived = notifications;
-       	} else {
-           	this.studentReceived.clear();
->>>>>>> changing lists to sets for some classes and fixed put request for employer contact
             this.studentReceived.addAll(notifications);
         }
     }

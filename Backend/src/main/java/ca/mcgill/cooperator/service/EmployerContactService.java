@@ -8,17 +8,10 @@ import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
-<<<<<<< HEAD
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-=======
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
->>>>>>> changing lists to sets for some classes and fixed put request for employer contact
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

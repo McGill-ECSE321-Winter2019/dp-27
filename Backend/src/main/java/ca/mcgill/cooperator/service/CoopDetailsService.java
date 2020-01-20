@@ -8,10 +8,7 @@ import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 import java.util.List;
 import java.util.Set;
-<<<<<<< HEAD
-=======
 
->>>>>>> changing lists to sets for some classes and fixed put request for employer contact
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -163,15 +160,8 @@ public class CoopDetailsService {
         boolean employerContains = false;
         for (CoopDetails coopDetails : employerCoopDetails) {
             if (coopDetails.getId() == cd.getId()) {
-<<<<<<< HEAD
                 employerCoopDetails.remove(coopDetails);
                 employerCoopDetails.add(cd);
-=======
-            	employerCoopDetails.remove(coopDetails);
-            	employerCoopDetails.add(cd);
-                /*int index = employerCoopDetails.indexOf(coopDetails);
-                employerCoopDetails.set(index, cd);*/
->>>>>>> changing lists to sets for some classes and fixed put request for employer contact
                 employerContains = true;
             }
         }

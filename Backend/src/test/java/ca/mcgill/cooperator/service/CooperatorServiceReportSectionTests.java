@@ -29,11 +29,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
-=======
-import java.util.Set;
 
->>>>>>> changing lists to sets for some classes and fixed put request for employer contact
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,7 +65,6 @@ public class CooperatorServiceReportSectionTests {
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-<<<<<<< HEAD
         List<EmployerReport> ers = employerReportService.getAllEmployerReports();
         for (EmployerReport er : ers) {
             er.setCoop(null);
@@ -81,20 +76,6 @@ public class CooperatorServiceReportSectionTests {
             rs.setStudentReport(null);
             reportSectionRepository.save(rs);
         }
-
-=======
-    	List<EmployerReport> ers = employerReportService.getAllEmployerReports();
-    	for (EmployerReport er : ers) {
-    		er.setCoop(null);
-    		employerReportRepository.save(er);
-    	}
-    	List<ReportSection> sections = reportSectionService.getAllReportSections();
-    	for (ReportSection rs : sections) {
-    		rs.setEmployerReport(null);
-    		rs.setStudentReport(null);
-    		reportSectionRepository.save(rs);
-    	}
->>>>>>> changing lists to sets for some classes and fixed put request for employer contact
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();

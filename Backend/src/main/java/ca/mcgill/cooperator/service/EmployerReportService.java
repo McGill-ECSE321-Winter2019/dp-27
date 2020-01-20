@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-<<<<<<< HEAD
-=======
 
->>>>>>> changing lists to sets for some classes and fixed put request for employer contact
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -181,15 +178,8 @@ public class EmployerReportService {
         Set<EmployerReport> coopReports = c.getEmployerReports();
         for (EmployerReport coopEmployerReport : coopReports) {
             if (coopEmployerReport.getId() == er.getId()) {
-<<<<<<< HEAD
                 coopReports.remove(coopEmployerReport);
                 coopReports.add(er);
-=======
-            	coopReports.remove(coopEmployerReport);
-            	coopReports.add(er);
-                /*int index = coopReports.indexOf(coopEmployerReport);
-                coopReports.set(index, er);*/
->>>>>>> changing lists to sets for some classes and fixed put request for employer contact
                 coopContains = true;
             }
         }
@@ -207,15 +197,8 @@ public class EmployerReportService {
         Set<EmployerReport> employerReports = c.getEmployerReports();
         for (EmployerReport employerReport : employerReports) {
             if (employerReport.getId() == er.getId()) {
-<<<<<<< HEAD
                 employerReports.remove(employerReport);
                 employerReports.add(er);
-=======
-            	employerReports.remove(employerReport);
-            	employerReports.add(er);
-                /*int index = employerReports.indexOf(employerReport);
-                employerReports.set(index, er);*/
->>>>>>> changing lists to sets for some classes and fixed put request for employer contact
                 employerContains = true;
             }
         }
