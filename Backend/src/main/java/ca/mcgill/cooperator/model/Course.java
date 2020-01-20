@@ -42,11 +42,10 @@ public class Course {
     }
 
     public void setCourseOfferings(List<CourseOffering> courseOfferings) {
-    	if(this.courseOfferings == null)
-    		this.courseOfferings = courseOfferings;
-    	else {
-    		this.courseOfferings.clear();
-    		this.courseOfferings.addAll(courseOfferings);
-    	}
+        if (this.courseOfferings == null) this.courseOfferings = courseOfferings;
+        else {
+            this.courseOfferings.clear();
+            this.courseOfferings.addAll(courseOfferings);
+        }
     }
 }
