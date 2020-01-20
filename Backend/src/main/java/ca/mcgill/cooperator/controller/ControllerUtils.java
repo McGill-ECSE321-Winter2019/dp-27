@@ -117,8 +117,7 @@ public class ControllerUtils {
                 convertToDto(c.getCoopDetails()),
                 convertToDto(c.getStudent()),
                 convertStudentReportListToDto(c.getStudentReports()),
-                new ArrayList<EmployerReportDto>());
-                //convertEmployerReportListToDto(c.getEmployerReports()));
+                convertEmployerReportListToDto(c.getEmployerReports()));
     }
 
     static List<CoopDto> convertCoopListToDto(Set<Coop> coops) {
@@ -262,6 +261,7 @@ public class ControllerUtils {
             List<EmployerContact> employerContacts) {
     	
 	    List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
+
 	    if (employerContacts != null) {
 	        for (EmployerContact ec : employerContacts) {
 	            if (ec == null) {
@@ -270,7 +270,6 @@ public class ControllerUtils {
 	            employerContactDtos.add(convertToDto(ec));
 	        }
     	}
-	    
         return employerContactDtos;
     }
 
