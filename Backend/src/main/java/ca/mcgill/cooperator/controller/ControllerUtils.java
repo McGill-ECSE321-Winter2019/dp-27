@@ -28,6 +28,10 @@ import ca.mcgill.cooperator.service.NotificationService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+<<<<<<< HEAD
+=======
+
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ControllerUtils {
@@ -127,6 +131,7 @@ public class ControllerUtils {
                 convertToDto(c.getCourseOffering()),
                 coopDetails,
                 convertToDto(c.getStudent()),
+<<<<<<< HEAD
                 studentReports,
                 employerReports);
     }
@@ -141,6 +146,11 @@ public class ControllerUtils {
             coopDtos.add(convertToDto(c));
         }
         return coopDtos;
+=======
+                convertStudentReportListToDto(c.getStudentReports()),
+                new ArrayList<EmployerReportDto>());
+                //convertEmployerReportListToDto(c.getEmployerReports()));
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
     }
 
     static List<CoopDto> convertCoopListToDto(List<Coop> coops) {
@@ -301,6 +311,7 @@ public class ControllerUtils {
     static List<EmployerReportDto> convertEmployerReportListToDto(
             Set<EmployerReport> employerReports) {
         List<EmployerReportDto> employerReportDtos = new ArrayList<EmployerReportDto>();
+<<<<<<< HEAD
 
         if (employerReports != null && employerReports.size() > 0) {
             for (EmployerReport er : employerReports) {
@@ -309,6 +320,16 @@ public class ControllerUtils {
                 }
                 employerReportDtos.add(convertToDto(er));
             }
+=======
+        
+        if (employerReports != null && employerReports.size() > 0) {
+	        for (EmployerReport er : employerReports) {
+	            if (er == null) {
+	                throw new IllegalArgumentException("Employer Report does not exist!");
+	            }
+	            employerReportDtos.add(convertToDto(er));
+	        }
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
         }
 
         return employerReportDtos;
@@ -353,6 +374,7 @@ public class ControllerUtils {
 
     static List<NotificationDto> convertNotifListToDto(List<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
+<<<<<<< HEAD
 
         for (Notification n : notifs) {
             if (n == null) {
@@ -365,6 +387,8 @@ public class ControllerUtils {
 
     static List<NotificationDto> convertNotifListToDto(Set<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
+=======
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
 
         for (Notification n : notifs) {
             if (n == null) {
@@ -414,7 +438,12 @@ public class ControllerUtils {
                 convertReportSectionListToDto(sr.getReportSections()));
     }
 
+<<<<<<< HEAD
     static List<StudentReportDto> convertStudentReportListToDto(Set<StudentReport> studentReports) {
+=======
+    static List<StudentReportDto> convertStudentReportListToDto(
+            List<StudentReport> studentReports) {
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
         List<StudentReportDto> studentReportDtos = new ArrayList<StudentReportDto>();
 
         for (StudentReport sr : studentReports) {

@@ -69,10 +69,17 @@ public class Company {
     }
 
     public void setEmployees(List<EmployerContact> employees) {
+<<<<<<< HEAD
         if (this.employees == null) {
             this.employees = employees;
         } else {
             this.employees.clear();
+=======
+    	if (this.employees == null) {
+      		this.employees = employees;
+       	} else {
+           	this.employees.clear();
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
             this.employees.addAll(employees);
         }
     }

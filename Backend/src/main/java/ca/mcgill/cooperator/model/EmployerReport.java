@@ -75,10 +75,17 @@ public class EmployerReport {
     }
 
     public void setReportSections(List<ReportSection> reportSections) {
+<<<<<<< HEAD
         if (this.reportSections == null) {
             this.reportSections = reportSections;
         } else {
             this.reportSections.clear();
+=======
+    	if (this.reportSections == null) {
+      		this.reportSections = reportSections;
+       	} else {
+           	this.reportSections.clear();
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
             this.reportSections.addAll(reportSections);
         }
     }

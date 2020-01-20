@@ -28,6 +28,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
+=======
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -68,6 +75,7 @@ public class EmployerContactController {
     }
 
     @PutMapping("")
+<<<<<<< HEAD
     public EmployerContactDto updateEmployerContact(
             @RequestBody EmployerContactDto employerContactDto) {
 
@@ -106,6 +114,42 @@ public class EmployerContactController {
                         coopDetails);
 
         return ControllerUtils.convertToDto(ec);
+=======
+    public EmployerContactDto updateEmployerContact(@RequestBody EmployerContactDto employerContactDto) {
+    	
+    	EmployerContact ec = employerContactService.getEmployerContact(employerContactDto.getId());
+    	CompanyDto companyDto = employerContactDto.getCompany();
+    	Company company = companyService.getCompany(companyDto.getId());
+    	
+    	//List <EmployerReportDto> employerReportDtos = employerContactDto.getEmployerReports();
+    	Set <EmployerReport> employerReports = new HashSet<EmployerReport>();
+    	/*if (employerReportDtos != null) {
+	    	for (EmployerReportDto employerReportDto : employerReportDtos) {
+	    		EmployerReport er = employerReportService.getEmployerReport(employerReportDto.getId());
+	    		employerReports.add(er);
+	    	}
+    	}*/
+    	
+    	//List <CoopDetailsDto> coopDetailsDtos = employerContactDto.getCoopDetails();
+    	Set <CoopDetails> coopDetails = new HashSet<CoopDetails>();
+    	/*if (coopDetailsDtos != null) {
+	    	for (CoopDetailsDto coopDetailsDto : coopDetailsDtos) {
+	    		CoopDetails cd = coopDetailsService.getCoopDetails(coopDetailsDto.getId());
+	    		coopDetails.add(cd);
+	    	}
+    	}*/
+    	
+    	ec = employerContactService.updateEmployerContact(ec, 
+    													  employerContactDto.getFirstName(), 
+    													  employerContactDto.getLastName(), 
+    													  employerContactDto.getEmail(), 
+    													  employerContactDto.getPhoneNumber(), 
+    													  company, 
+    													  employerReports, 
+    													  coopDetails);
+    	
+    	return ControllerUtils.convertToDto(ec);
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
     }
 
     @DeleteMapping("/{id}")

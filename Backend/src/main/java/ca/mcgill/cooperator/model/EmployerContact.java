@@ -1,6 +1,12 @@
 package ca.mcgill.cooperator.model;
 
+<<<<<<< HEAD
 import java.util.Set;
+=======
+import java.util.List;
+import java.util.Set;
+
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +14,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class EmployerContact {
@@ -20,6 +29,7 @@ public class EmployerContact {
     @ManyToOne(optional = false)
     private Company company;
 
+<<<<<<< HEAD
     @OneToMany(
             mappedBy = "employerContact",
             cascade = CascadeType.ALL,
@@ -32,6 +42,18 @@ public class EmployerContact {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
+=======
+    @OneToMany(mappedBy = "employerContact",
+               cascade = CascadeType.ALL,
+               orphanRemoval = true,
+               fetch = FetchType.EAGER)
+    private Set<CoopDetails> coopdetails;
+
+    @OneToMany(mappedBy = "employerContact", 
+    		   cascade = CascadeType.ALL,
+    		   orphanRemoval = true,
+    		   fetch = FetchType.EAGER)
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
     private Set<EmployerReport> employerReports;
 
     /*--- Getters and Setters ---*/
@@ -85,10 +107,17 @@ public class EmployerContact {
     }
 
     public void setCoopDetails(Set<CoopDetails> coopDetails) {
+<<<<<<< HEAD
         if (this.coopdetails == null) {
             this.coopdetails = coopDetails;
         } else {
             this.coopdetails.clear();
+=======
+    	if (this.coopdetails == null) {
+      		this.coopdetails = coopDetails;
+       	} else {
+           	this.coopdetails.clear();
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
             this.coopdetails.addAll(coopDetails);
         }
     }
@@ -98,10 +127,17 @@ public class EmployerContact {
     }
 
     public void setEmployerReports(Set<EmployerReport> employerReports) {
+<<<<<<< HEAD
         if (this.employerReports == null) {
             this.employerReports = employerReports;
         } else {
             this.employerReports.clear();
+=======
+    	if (this.employerReports == null) {
+      		this.employerReports = employerReports;
+       	} else {
+           	this.employerReports.clear();
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
             this.employerReports.addAll(employerReports);
         }
     }

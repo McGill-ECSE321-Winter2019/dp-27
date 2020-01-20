@@ -63,10 +63,17 @@ public class CourseOffering {
     }
 
     public void setCoops(List<Coop> coops) {
+<<<<<<< HEAD
         if (this.coops == null) {
             this.coops = coops;
         } else {
             this.coops.clear();
+=======
+    	if (this.coops == null) {
+      		this.coops = coops;
+       	} else {
+           	this.coops.clear();
+>>>>>>> changing lists to sets for some classes and fixed put request for employer contact
             this.coops.addAll(coops);
         }
     }
