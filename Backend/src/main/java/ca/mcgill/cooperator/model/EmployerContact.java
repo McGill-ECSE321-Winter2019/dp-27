@@ -1,6 +1,8 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.List;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class EmployerContact {
@@ -20,15 +25,17 @@ public class EmployerContact {
     @ManyToOne(optional = false)
     private Company company;
 
-    @OneToMany(
-            mappedBy = "employerContact",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    private List<CoopDetails> coopdetails;
+    @OneToMany(mappedBy = "employerContact",
+               cascade = CascadeType.ALL,
+               orphanRemoval = true,
+               fetch = FetchType.EAGER)
+    private Set<CoopDetails> coopdetails;
 
-    @OneToMany(mappedBy = "employerContact")
-    private List<EmployerReport> employerReports;
+    @OneToMany(mappedBy = "employerContact", 
+    		   cascade = CascadeType.ALL,
+    		   orphanRemoval = true,
+    		   fetch = FetchType.EAGER)
+    private Set<EmployerReport> employerReports;
 
     /*--- Getters and Setters ---*/
 
@@ -76,19 +83,29 @@ public class EmployerContact {
         this.company = company;
     }
 
-    public List<CoopDetails> getCoopDetails() {
+    public Set<CoopDetails> getCoopDetails() {
         return this.coopdetails;
     }
 
-    public void setCoopDetails(List<CoopDetails> coopDetails) {
-        this.coopdetails = coopDetails;
+    public void setCoopDetails(Set<CoopDetails> coopDetails) {
+    	if (this.coopdetails == null) {
+      		this.coopdetails = coopDetails;
+       	} else {
+           	this.coopdetails.clear();
+            this.coopdetails.addAll(coopDetails);
+        }
     }
 
-    public List<EmployerReport> getEmployerReports() {
+    public Set<EmployerReport> getEmployerReports() {
         return this.employerReports;
     }
 
-    public void setEmployerReports(List<EmployerReport> employerReports) {
-        this.employerReports = employerReports;
+    public void setEmployerReports(Set<EmployerReport> employerReports) {
+    	if (this.employerReports == null) {
+      		this.employerReports = employerReports;
+       	} else {
+           	this.employerReports.clear();
+            this.employerReports.addAll(employerReports);
+        }
     }
 }

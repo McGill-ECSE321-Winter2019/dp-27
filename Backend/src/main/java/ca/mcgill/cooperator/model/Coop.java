@@ -1,6 +1,8 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.List;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +38,7 @@ public class Coop {
     private List<StudentReport> studentReports;
 
     @OneToMany(mappedBy = "coop", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EmployerReport> employerReports;
+    private Set<EmployerReport> employerReports;
 
     /*--- Getters and Setters ---*/
 
@@ -81,14 +83,24 @@ public class Coop {
     }
 
     public void setStudentReports(List<StudentReport> studentReports) {
-        this.studentReports = studentReports;
+    	if (this.studentReports == null) {
+      		this.studentReports = studentReports;
+       	} else {
+           	this.studentReports.clear();
+            this.studentReports.addAll(studentReports);
+        }
     }
 
-    public List<EmployerReport> getEmployerReports() {
+    public Set<EmployerReport> getEmployerReports() {
         return this.employerReports;
     }
 
-    public void setEmployerReports(List<EmployerReport> employerReports) {
-        this.employerReports = employerReports;
+    public void setEmployerReports(Set<EmployerReport> employerReports) {
+    	if (this.employerReports == null) {
+      		this.employerReports = employerReports;
+       	} else {
+           	this.employerReports.clear();
+            this.employerReports.addAll(employerReports);
+        }
     }
 }

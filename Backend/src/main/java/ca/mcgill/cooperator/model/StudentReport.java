@@ -45,6 +45,11 @@ public class StudentReport {
     }
 
     public void setReportSections(List<ReportSection> reportSections) {
-        this.reportSections = reportSections;
+    	if (this.reportSections == null) {
+      		this.reportSections = reportSections;
+       	} else {
+           	this.reportSections.clear();
+            this.reportSections.addAll(reportSections);
+        }
     }
 }

@@ -10,6 +10,7 @@ import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class CoopService {
         c.setStatus(status);
         c.setCourseOffering(courseOffering);
         c.setStudent(s);
-        c.setEmployerReports(new ArrayList<EmployerReport>());
+        c.setEmployerReports(new HashSet<EmployerReport>());
         c.setStudentReports(new ArrayList<StudentReport>());
 
         coopRepository.save(c);
