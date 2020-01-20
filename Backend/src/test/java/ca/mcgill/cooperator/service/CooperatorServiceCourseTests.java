@@ -95,7 +95,6 @@ public class CooperatorServiceCourseTests {
 
     @Test
     public void testUpdateCourse() {
-        String error = "";
         String name1 = "ECSE321";
         String name2 = "ECSE458";
         Course c = courseService.createCourse(name1);

@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -70,23 +69,23 @@ public class EmployerContactController {
     	CompanyDto companyDto = employerContactDto.getCompany();
     	Company company = companyService.getCompany(companyDto.getId());
     	
-    	//List <EmployerReportDto> employerReportDtos = employerContactDto.getEmployerReports();
+    	List <EmployerReportDto> employerReportDtos = employerContactDto.getEmployerReports();
     	Set <EmployerReport> employerReports = new HashSet<EmployerReport>();
-    	/*if (employerReportDtos != null) {
+    	if (employerReportDtos != null) {
 	    	for (EmployerReportDto employerReportDto : employerReportDtos) {
 	    		EmployerReport er = employerReportService.getEmployerReport(employerReportDto.getId());
 	    		employerReports.add(er);
 	    	}
-    	}*/
+    	}
     	
-    	//List <CoopDetailsDto> coopDetailsDtos = employerContactDto.getCoopDetails();
+    	List <CoopDetailsDto> coopDetailsDtos = employerContactDto.getCoopDetails();
     	Set <CoopDetails> coopDetails = new HashSet<CoopDetails>();
-    	/*if (coopDetailsDtos != null) {
+    	if (coopDetailsDtos != null) {
 	    	for (CoopDetailsDto coopDetailsDto : coopDetailsDtos) {
 	    		CoopDetails cd = coopDetailsService.getCoopDetails(coopDetailsDto.getId());
 	    		coopDetails.add(cd);
 	    	}
-    	}*/
+    	}
     	
     	ec = employerContactService.updateEmployerContact(ec, 
     													  employerContactDto.getFirstName(), 

@@ -162,8 +162,6 @@ public class CoopDetailsService {
             if (coopDetails.getId() == cd.getId()) {
             	employerCoopDetails.remove(coopDetails);
             	employerCoopDetails.add(cd);
-                /*int index = employerCoopDetails.indexOf(coopDetails);
-                employerCoopDetails.set(index, cd);*/
                 employerContains = true;
             }
         }

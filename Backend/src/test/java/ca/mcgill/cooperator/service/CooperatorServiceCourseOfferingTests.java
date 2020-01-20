@@ -41,7 +41,7 @@ public class CooperatorServiceCourseOfferingTests {
         Course c = courseService.createCourse(name);
         
         try {
-        	CourseOffering co = courseOfferingService.createCourseOffering(year, season, c);
+        	courseOfferingService.createCourseOffering(year, season, c);
 
         } catch (IllegalArgumentException e) {
             fail();
@@ -57,7 +57,7 @@ public class CooperatorServiceCourseOfferingTests {
     @Test
     public void testCreateCourseOfferingNull() {
     	try {
-        	CourseOffering co = courseOfferingService.createCourseOffering(0, null, null);
+        	courseOfferingService.createCourseOffering(0, null, null);
 
         } catch (IllegalArgumentException e) {
         	assertEquals("Year is invalid! Season cannot be null! Course cannot be null!", e.getMessage());
@@ -87,7 +87,6 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(co.getYear(), year);
         assertEquals(co.getCourse().getId(), c.getId());
                 
-        String name2 = "ECSE223";
     	int year2 = 2021;
     	Season season2 = Season.FALL;
         Course c2 = courseService.createCourse(name);
@@ -128,7 +127,6 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(co.getYear(), year);
         assertEquals(co.getCourse().getId(), c.getId());
                 
-        String name2 = null;
     	int year2 = -1;
     	Season season2 = null;
         Course c2 = null;

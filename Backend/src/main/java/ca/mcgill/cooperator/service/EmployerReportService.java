@@ -149,8 +149,6 @@ public class EmployerReportService {
             if (coopEmployerReport.getId() == er.getId()) {
             	coopReports.remove(coopEmployerReport);
             	coopReports.add(er);
-                /*int index = coopReports.indexOf(coopEmployerReport);
-                coopReports.set(index, er);*/
                 coopContains = true;
             }
         }
@@ -170,8 +168,6 @@ public class EmployerReportService {
             if (employerReport.getId() == er.getId()) {
             	employerReports.remove(employerReport);
             	employerReports.add(er);
-                /*int index = employerReports.indexOf(employerReport);
-                employerReports.set(index, er);*/
                 employerContains = true;
             }
         }

@@ -26,7 +26,6 @@ import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
