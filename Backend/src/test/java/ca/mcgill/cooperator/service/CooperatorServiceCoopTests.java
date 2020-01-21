@@ -1,7 +1,7 @@
 package ca.mcgill.cooperator.service;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
@@ -81,7 +81,6 @@ public class CooperatorServiceCoopTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-
         assertEquals(1, coopService.getAllCoops().size());
     }
 
@@ -241,7 +240,6 @@ public class CooperatorServiceCoopTests {
                         "California",
                         "USA",
                         new ArrayList<EmployerContact>());
-
         return c;
     }
 }

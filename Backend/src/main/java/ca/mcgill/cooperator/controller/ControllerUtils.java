@@ -143,7 +143,7 @@ public class ControllerUtils {
         }
         return coopDtos;
     }
-
+    
     static List<CoopDto> convertCoopListToDto(List<Coop> coops) {
         List<CoopDto> coopDtos = new ArrayList<CoopDto>();
 
@@ -363,7 +363,7 @@ public class ControllerUtils {
         }
         return notifDtos;
     }
-
+    
     static List<NotificationDto> convertNotifListToDto(Set<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
 
@@ -375,7 +375,7 @@ public class ControllerUtils {
         }
         return notifDtos;
     }
-
+    
     static StudentDto convertToDto(Student s) {
         if (s == null) {
             throw new IllegalArgumentException("Student does not exist!");

@@ -158,7 +158,7 @@ public class CoopService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-
+        
         c.setStatus(status);
         c.setCourseOffering(courseOffering);
         c.setStudent(s);
@@ -245,3 +245,7 @@ public class CoopService {
         return c;
     }
 }
+
+
+
+
