@@ -44,7 +44,7 @@ public class EmployerContactController {
         return ControllerUtils.convertToDto(ec);
     }
     
-    @GetMapping("/all")
+    @GetMapping("")
     public List <EmployerContactDto> getAllEmployerContacts() {
     	List <EmployerContact> employerContacts = employerContactService.getAllEmployerContacts();
     	return ControllerUtils.convertEmployerContactListToDto(employerContacts);

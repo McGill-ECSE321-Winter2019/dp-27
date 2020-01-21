@@ -63,6 +63,17 @@ public class StudentService {
     }
     
     @Transactional
+    public Student getStudentById(int id) {
+    	Student s = studentRepository.findById(id).orElse(null);
+        if (s == null) {
+            throw new IllegalArgumentException(
+                    "Student with ID " + id + " does not exist!");
+        }
+
+        return s;
+    }
+    
+    @Transactional
     public List<Student> getAllStudents() {
     	return ServiceUtils.toList(studentRepository.findAll());
     }
