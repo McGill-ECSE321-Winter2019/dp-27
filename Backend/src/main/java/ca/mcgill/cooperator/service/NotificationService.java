@@ -7,6 +7,8 @@ import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,13 +56,13 @@ public class NotificationService {
         n.setStudent(student);
         notificationRepository.save(n);
 
-        List<Notification> notifs = student.getNotifications();
+        Set<Notification> notifs = student.getNotifications();
         notifs.add(n);
         student.setNotifications(notifs);
-
-        notifs = sender.getSentNotifications();
-        notifs.add(n);
-        sender.setSentNotifications(notifs);
+        
+        List<Notification> senderNotifs = sender.getSentNotifications();
+        senderNotifs.add(n);
+        sender.setSentNotifications(senderNotifs);
 
         adminRepository.save(sender);
         studentRepository.save(student);
@@ -144,23 +146,23 @@ public class NotificationService {
         // need to either replace or add notification in sender and student
         boolean sender_contains = false;
         boolean student_contains = false;
-        int sender_index = -1;
-        int student_index = -1;
 
         List<Notification> sender_notifs = sender.getSentNotifications();
-        List<Notification> student_notifs = student.getNotifications();
+        Set<Notification> student_notifs = student.getNotifications();
 
         for (Notification sender_n : sender_notifs) {
             if (sender_n.getId() == n.getId()) {
                 sender_contains = true;
-                sender_index = sender_notifs.indexOf(sender_n);
+                int sender_index = sender_notifs.indexOf(sender_n);
+                sender_notifs.set(sender_index, n);
             }
         }
 
         for (Notification student_n : sender_notifs) {
             if (student_n.getId() == n.getId()) {
+            	sender_notifs.remove(student_n);
+            	sender_notifs.add(n);
                 student_contains = true;
-                student_index = student_notifs.indexOf(student_n);
             }
         }
 
@@ -169,16 +171,12 @@ public class NotificationService {
         n.setSender(sender);
         n.setStudent(student);
 
-        if (sender_contains) {
-            sender_notifs.set(sender_index, n);
-        } else {
+        if (!sender_contains) {
             sender_notifs.add(n);
         }
         sender.setSentNotifications(sender_notifs);
 
-        if (student_contains) {
-            student_notifs.set(student_index, n);
-        } else {
+        if (!student_contains) {
             student_notifs.add(n);
         }
         student.setNotifications(student_notifs);
@@ -202,15 +200,15 @@ public class NotificationService {
         }
 
         Student s = n.getStudent();
-        List<Notification> notifs = s.getNotifications();
+        Set<Notification> notifs = s.getNotifications();
         notifs.remove(n);
         s.setNotifications(notifs);
         studentRepository.save(s);
 
         Admin a = n.getSender();
-        notifs = a.getSentNotifications();
-        notifs.remove(n);
-        a.setSentNotifications(notifs);
+        List<Notification> adminNotifs = a.getSentNotifications();
+        adminNotifs.remove(n);
+        a.setSentNotifications(adminNotifs);
         adminRepository.save(a);
 
         notificationRepository.delete(n);

@@ -1,10 +1,14 @@
 package ca.mcgill.cooperator.service;
 
+import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class StudentService {
     @Autowired StudentRepository studentRepository;
+    @Autowired CoopRepository coopRepository;
 
     /**
      * create new student in database
@@ -48,9 +53,24 @@ public class StudentService {
         s.setFirstName(firstName.trim());
         s.setLastName(lastName.trim());
         s.setEmail(email.trim());
-        s.setNotifications(new ArrayList<Notification>());
-        s.setCoops(new ArrayList<Coop>());
+        s.setNotifications(new HashSet<Notification>());
+        s.setCoops(new HashSet<Coop>());
 
         return studentRepository.save(s);
+    }
+    
+    @Transactional
+    public List<Student> getAllStudents() {
+    	return ServiceUtils.toList(studentRepository.findAll());
+    }
+    
+    @Transactional
+    public Student deleteStudent(Student s) {
+    	if (s == null) {
+            throw new IllegalArgumentException("Student to delete cannot be null!");
+        }
+    	
+    	studentRepository.delete(s);
+    	return s;
     }
 }

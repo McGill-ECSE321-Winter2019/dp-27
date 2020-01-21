@@ -13,6 +13,7 @@ public class CoopController {
 
     @GetMapping("/{id}")
     public String getCoopById(@PathVariable int id) {
+    	
         return "Hello World";
     }
 }

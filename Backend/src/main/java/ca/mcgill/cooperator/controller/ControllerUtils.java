@@ -120,6 +120,18 @@ public class ControllerUtils {
                 convertEmployerReportListToDto(c.getEmployerReports()));
     }
 
+    static List<CoopDto> convertCoopListToDto(Set<Coop> coops) {
+        List<CoopDto> coopDtos = new ArrayList<CoopDto>();
+
+        for (Coop c : coops) {
+            if (c == null) {
+                throw new IllegalArgumentException("Coop does not exist!");
+            }
+            coopDtos.add(convertToDto(c));
+        }
+        return coopDtos;
+    }
+    
     static List<CoopDto> convertCoopListToDto(List<Coop> coops) {
         List<CoopDto> coopDtos = new ArrayList<CoopDto>();
 
@@ -331,6 +343,18 @@ public class ControllerUtils {
         }
         return notifDtos;
     }
+    
+    static List<NotificationDto> convertNotifListToDto(Set<Notification> notifs) {
+        List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
+
+        for (Notification n : notifs) {
+            if (n == null) {
+                throw new IllegalArgumentException("Notification does not exist!");
+            }
+            notifDtos.add(convertToDto(n));
+        }
+        return notifDtos;
+    }
 
     static StudentDto convertToDto(Student s) {
         if (s == null) {
@@ -370,7 +394,7 @@ public class ControllerUtils {
     }
 
     static List<StudentReportDto> convertStudentReportListToDto(
-            List<StudentReport> studentReports) {
+            Set<StudentReport> studentReports) {
         List<StudentReportDto> studentReportDtos = new ArrayList<StudentReportDto>();
 
         for (StudentReport sr : studentReports) {
