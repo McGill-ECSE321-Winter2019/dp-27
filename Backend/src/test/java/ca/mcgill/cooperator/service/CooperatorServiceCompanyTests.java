@@ -147,6 +147,8 @@ public class CooperatorServiceCompanyTests {
         } catch (IllegalArgumentException _e) {
             fail();
         }
+        
+        assertEquals(1, companyService.getAllCompanies().size());
 
         assertEquals(1, companyService.getAllCompanies().size());
 
