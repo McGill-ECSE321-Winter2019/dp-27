@@ -79,48 +79,18 @@ public class CoopService {
     }
 
     @Transactional
-    public Coop updateCoop(
-            Coop coop,
-            CoopStatus coopStatus,
-            CourseOffering courseOffering,
-            CoopDetails coopDetails) {
-        if (coop == null) {
-            throw new IllegalArgumentException("Coop cannot be null. ");
-        }
-
-        Coop c = coopRepository.findById(coop.getId()).orElse(null);
+    public Coop getCoopById(int id) {
+        Coop c = coopRepository.findById(id).orElse(null);
         if (c == null) {
-            throw new IllegalArgumentException("Coop does not exist.");
+            throw new IllegalArgumentException("Co-op with ID " + id + " does not exist!");
         }
 
-        if (coopStatus != null) {
-            c.setStatus(coopStatus);
-        }
-        if (courseOffering != null) {
-            c.setCourseOffering(courseOffering);
-        }
-        if (coopDetails != null) {
-            c.setCoopDetails(coopDetails);
-        }
+        return c;
+    }
 
-        coopRepository.save(c);
-
-        Student s = coop.getStudent();
-
-        Set<Coop> studentCoops = s.getCoops();
-        studentCoops.remove(coop);
-        studentCoops.add(c);
-        s.setCoops(studentCoops);
-
-        List<Coop> coops = courseOffering.getCoops();
-        coops.remove(coop);
-        coops.add(c);
-        courseOffering.setCoops(coops);
-
-        studentRepository.save(s);
-        courseOfferingRepository.save(courseOffering);
-
-        return coop;
+    @Transactional
+    public List<Coop> getAllCoops() {
+        return ServiceUtils.toList(coopRepository.findAll());
     }
 
     @Transactional
@@ -158,7 +128,7 @@ public class CoopService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-        
+
         c.setStatus(status);
         c.setCourseOffering(courseOffering);
         c.setStudent(s);
@@ -208,21 +178,6 @@ public class CoopService {
     }
 
     @Transactional
-    public Coop getCoopById(int id) {
-        Coop c = coopRepository.findById(id).orElse(null);
-        if (c == null) {
-            throw new IllegalArgumentException("Co-op with ID " + id + " does not exist!");
-        }
-
-        return c;
-    }
-
-    @Transactional
-    public List<Coop> getAllCoops() {
-        return ServiceUtils.toList(coopRepository.findAll());
-    }
-
-    @Transactional
     public Coop deleteCoop(Coop c) {
         if (c == null) {
             throw new IllegalArgumentException("Co-op to delete cannot be null!");
@@ -245,7 +200,3 @@ public class CoopService {
         return c;
     }
 }
-
-
-
-

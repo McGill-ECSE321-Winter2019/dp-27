@@ -1,7 +1,6 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,10 +26,11 @@ public class Student {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Coop> coops;
 
-    @OneToMany(mappedBy = "student",
-               cascade = CascadeType.PERSIST,
-               orphanRemoval = true,
-               fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "student",
+            cascade = CascadeType.PERSIST,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Notification> studentReceived;
 

@@ -9,8 +9,13 @@ import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
+import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.CoopStatus;
+import ca.mcgill.cooperator.model.Course;
+import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.Notification;
+import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import java.util.HashSet;
 import java.util.Set;
@@ -48,7 +53,7 @@ public class CooperatorServiceStudentTests {
     }
 
     @Test
-    public void testCreateStudent() {
+    public void testCreateStudent1() {
         String firstName = "Albert";
         String lastName = "Kragl";
         String email = "frisbeeGod47@gmail.com";
@@ -80,54 +85,84 @@ public class CooperatorServiceStudentTests {
             studentService.createStudent(
                     firstName, lastName, email, studentID, coops, notifications);
         } catch (IllegalArgumentException e) {
-            fail();
+        	fail();
         }
-
         Student s = studentService.getStudentByStudentID(studentID);
         assertEquals(s.getFirstName(), firstName);
         assertEquals(s.getLastName(), lastName);
         assertEquals(s.getEmail(), email);
         assertEquals(s.getStudentId(), studentID);
     }
+    
+	@Test
+	public void testCreateStudent2() {
+        String firstName = "Susan";
+        String lastName = "Matuszewski";
+        String email = "susan@gmail.com";
+        String studentId = "12344566";
+
+        try {
+            studentService.createStudent(firstName, lastName, email, studentId);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+        
+        assertEquals(1, studentService.getAllStudents().size());
+    }
 
     @Test
     public void testCreateStudentNull() {
+    	String error = "";
         try {
             studentService.createStudent(null, null, null, null);
-            fail();
         } catch (IllegalArgumentException e) {
-            assertEquals(
-                    "Student first name cannot be empty. Student last name cannot be empty. Student email cannot be empty. Student ID cannot be empty.",
-                    e.getMessage().trim());
+            error = e.getMessage();
         }
+
+        assertEquals(
+                "Student first name cannot be empty! "
+                        + "Student last name cannot be empty! "
+                        + "Student email cannot be empty! "
+                        + "Student ID cannot be empty!",
+                error);
     }
 
     @Test
     public void testCreateStudentEmpty() {
+        String error = "";
         try {
             studentService.createStudent("", "", "", "");
-            fail();
         } catch (IllegalArgumentException e) {
-            assertEquals(
-                    "Student first name cannot be empty. Student last name cannot be empty. Student email cannot be empty. Student ID cannot be empty.",
-                    e.getMessage().trim());
+            error = e.getMessage();
         }
+
+        assertEquals(
+                "Student first name cannot be empty! "
+                        + "Student last name cannot be empty! "
+                        + "Student email cannot be empty! "
+                        + "Student ID cannot be empty!",
+                error);
     }
 
     @Test
     public void testCreateStudentSpaces() {
+        String error = "";
         try {
-            studentService.createStudent(" ", " ", " ", " ");
-            fail();
+            studentService.createStudent("   ", "     ", " ", "      ");
         } catch (IllegalArgumentException e) {
-            assertEquals(
-                    "Student first name cannot be empty. Student last name cannot be empty. Student email cannot be empty. Student ID cannot be empty.",
-                    e.getMessage().trim());
+            error = e.getMessage();
         }
+
+        assertEquals(
+                "Student first name cannot be empty! "
+                        + "Student last name cannot be empty! "
+                        + "Student email cannot be empty! "
+                        + "Student ID cannot be empty!",
+                error);
     }
 
     @Test
-    public void testUpdateStudent() {
+    public void testUpdateStudent1() {
         String firstName = "Kah";
         String lastName = "Shew";
         String email = "kah.shew@nuts.com";
@@ -158,9 +193,47 @@ public class CooperatorServiceStudentTests {
         assertEquals(s.getEmail(), email);
         assertEquals(s.getStudentId(), studentIDNew);
     }
+    
+	@Test
+	public void testUpdateStudent2() {
+        String firstName = "Susan";
+        String lastName = "Matuszewski";
+        String email = "susan@gmail.com";
+        String studentId = "12344566";
+        Student s = new Student();
+
+        try {
+            s = studentService.createStudent(firstName, lastName, email, studentId);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(1, studentService.getAllStudents().size());
+
+        Course course = createTestCourse();
+        CourseOffering courseOffering = createTestCourseOffering(course);
+        Coop coop = createTestCoop(courseOffering, s);
+        Set<Coop> coops = new HashSet<Coop>();
+        coops.add(coop);
+        Admin a = createTestAdmin();
+        Notification notif = createTestNotification(s, a);
+        Set<Notification> notifs = new HashSet<Notification>();
+        notifs.add(notif);
+
+        try {
+            s =
+                    studentService.updateStudent(
+                            s, firstName, lastName, email, studentId, coops, notifs);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(1, s.getCoops().size());
+        assertEquals(1, studentService.getAllStudents().size());
+    }
 
     @Test
-    public void testUpdateStudentInvalid() {
+    public void testUpdateStudentInvalid1() {
         String firstName = "Kah";
         String lastName = "Shew";
         String email = "kah.shew@nuts.com";
@@ -171,7 +244,6 @@ public class CooperatorServiceStudentTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-
         try {
             Student s = studentService.getStudentByStudentID(studentID);
             studentService.updateStudent(s, "  ", "", "", "", null, null);
@@ -185,9 +257,43 @@ public class CooperatorServiceStudentTests {
         assertEquals(s.getEmail(), email);
         assertEquals(s.getStudentId(), studentID);
     }
+    
+	@Test
+	public void testUpdateStudentInvalid2() {
+        String firstName = "Susan";
+        String lastName = "Matuszewski";
+        String email = "susan@gmail.com";
+        String studentId = "12344566";
+        Student s = new Student();
+
+        try {
+            s = studentService.createStudent(firstName, lastName, email, studentId);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+        
+        assertEquals(1, studentService.getAllStudents().size());
+
+        String error = "";
+        try {
+            studentService.updateStudent(s, null, null, null, null, null, null);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertEquals(
+                "Student first name cannot be empty! "
+                        + "Student last name cannot be empty! "
+                        + "Student email cannot be empty! "
+                        + "Student ID cannot be empty! "
+                        + "Co-ops cannot be null! "
+                        + "Notifs cannot be null!",
+                error);
+        assertEquals(1, studentService.getAllStudents().size());
+    }
 
     @Test
-    public void testDeleteStudent() {
+    public void testDeleteStudent1() {
         String firstName = "Kah";
         String lastName = "Shew";
         String email = "kah.shew@nuts.com";
@@ -198,7 +304,7 @@ public class CooperatorServiceStudentTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-
+        
         Student s = studentService.getStudentByStudentID(studentID);
         assertEquals(s.getFirstName(), firstName);
         assertEquals(s.getLastName(), lastName);
@@ -210,5 +316,78 @@ public class CooperatorServiceStudentTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
+        assertEquals(0, studentService.getAllStudents().size());
+    }
+    
+	@Test
+	public void testDeleteStudent2() {
+        String firstName = "Susan";
+        String lastName = "Matuszewski";
+        String email = "susan@gmail.com";
+        String studentId = "12344566";
+        Student s = new Student();
+        try {
+            s = studentService.createStudent(firstName, lastName, email, studentId);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(1, studentService.getAllStudents().size());
+
+        Course course = createTestCourse();
+        CourseOffering courseOffering = createTestCourseOffering(course);
+        Coop coop = createTestCoop(courseOffering, s);
+        Set<Coop> coops = new HashSet<Coop>();
+        coops.add(coop);
+        Admin a = createTestAdmin();
+        Notification notif = createTestNotification(s, a);
+        Set<Notification> notifs = new HashSet<Notification>();
+        notifs.add(notif);
+
+        try {
+            s =
+                    studentService.updateStudent(
+                            s, firstName, lastName, email, studentId, coops, notifs);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+        
+        try {
+            studentService.deleteStudent(s);
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(0, studentService.getAllStudents().size());
+    }
+
+    private Course createTestCourse() {
+        Course c = null;
+        c = courseService.createCourse("FACC200");
+        return c;
+    }
+
+    private CourseOffering createTestCourseOffering(Course c) {
+        CourseOffering co = null;
+        co = courseOfferingService.createCourseOffering(2020, Season.WINTER, c);
+        return co;
+    }
+
+    private Coop createTestCoop(CourseOffering co, Student s) {
+        Coop coop = new Coop();
+        coop = coopService.createCoop(CoopStatus.FUTURE, co, s);
+        return coop;
+    }
+
+    private Admin createTestAdmin() {
+        Admin a = new Admin();
+        a = adminService.createAdmin("Emma", "Eagles", "emma@gmail.com");
+        return a;
+    }
+
+    private Notification createTestNotification(Student s, Admin a) {
+        Notification notif = new Notification();
+        notif = notificationService.createNotification("title", "body", s, a);
+        return notif;
     }
 }

@@ -28,7 +28,6 @@ import ca.mcgill.cooperator.service.NotificationService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ControllerUtils {
@@ -90,6 +89,7 @@ public class ControllerUtils {
         }
 
         companyDto.setEmployees(employerContactDtos);
+        
         return companyDto;
     }
 
@@ -143,7 +143,7 @@ public class ControllerUtils {
         }
         return coopDtos;
     }
-    
+
     static List<CoopDto> convertCoopListToDto(List<Coop> coops) {
         List<CoopDto> coopDtos = new ArrayList<CoopDto>();
 
@@ -363,7 +363,7 @@ public class ControllerUtils {
         }
         return notifDtos;
     }
-    
+
     static List<NotificationDto> convertNotifListToDto(Set<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
 

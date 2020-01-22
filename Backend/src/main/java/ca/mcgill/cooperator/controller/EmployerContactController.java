@@ -32,11 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("employer-contacts")
 public class EmployerContactController {
-	
-	@Autowired EmployerContactService employerContactService;
-	@Autowired CompanyService companyService;
-	@Autowired EmployerReportService employerReportService;
-	@Autowired CoopDetailsService coopDetailsService;
+
+    @Autowired EmployerContactService employerContactService;
+    @Autowired CompanyService companyService;
+    @Autowired EmployerReportService employerReportService;
+    @Autowired CoopDetailsService coopDetailsService;
 
     @GetMapping("/{id}")
     public EmployerContactDto getEmployerContactById(@PathVariable int id) {
@@ -49,7 +49,6 @@ public class EmployerContactController {
         List<EmployerContact> employerContacts = employerContactService.getAllEmployerContacts();
         return ControllerUtils.convertEmployerContactListToDto(employerContacts);
     }
-    
 
     @PostMapping("")
     public EmployerContactDto createEmployerContact(
@@ -112,5 +111,4 @@ public class EmployerContactController {
         EmployerContact ec = employerContactService.getEmployerContact(id);
         employerContactService.deleteEmployerContact(ec);
     }
-    
 }
