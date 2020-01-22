@@ -21,7 +21,10 @@ import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -81,7 +84,7 @@ public class CooperatorServiceEmployerContactTests {
             fail();
         }
 
-        assertEquals(2, employerContactService.getAllEmployerContacts().size());
+        assertEquals(1, employerContactService.getAllEmployerContacts().size());
     }
 
     @Test
@@ -209,22 +212,18 @@ public class CooperatorServiceEmployerContactTests {
         CourseOffering co = createTestCourseOffering(course);
         Student s = createTestStudent();
         Coop coop = createTestCoop(co, s);
-        List<CoopDetails> coopDetails = new ArrayList<CoopDetails>();
+        Set<CoopDetails> coopDetails = new HashSet<CoopDetails>();
 
         try {
-            ec =
-                    employerContactService.createEmployerContact(
-                            firstName, lastName, email, phoneNumber, c);
+            ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
             ec = employerContactService.getEmployerContact(ec.getId());
 
             cd = createTestCoopDetails(ec, coop);
             coopDetails.add(cd);
 
-            List<EmployerReport> reports = new ArrayList<EmployerReport>();
+            Set<EmployerReport> reports = new HashSet<EmployerReport>();
 
-            ec =
-                    employerContactService.updateEmployerContact(
-                            ec, firstName, lastName, email, phoneNumber, c, reports, coopDetails);
+            ec = employerContactService.updateEmployerContact(ec, firstName, lastName, email, phoneNumber, c, reports, coopDetails);
             ec = employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException e) {
             fail();
@@ -232,7 +231,7 @@ public class CooperatorServiceEmployerContactTests {
 
         assertEquals(1, ec.getCoopDetails().size());
         assertEquals(lastName, ec.getLastName());
-        assertEquals(2, employerContactService.getAllEmployerContacts().size());
+        assertEquals(1, employerContactService.getAllEmployerContacts().size());
     }
 
     @Test
@@ -245,9 +244,7 @@ public class CooperatorServiceEmployerContactTests {
 
         EmployerContact ec = null;
         try {
-            ec =
-                    employerContactService.createEmployerContact(
-                            firstName, lastName, email, phoneNumber, c);
+            ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
             ec = employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException e) {
             fail();
@@ -257,20 +254,18 @@ public class CooperatorServiceEmployerContactTests {
         lastName = "Eagles";
         email = "jeagles@gmail.com";
         phoneNumber = "9876543210";
-        List<EmployerReport> reports = new ArrayList<EmployerReport>();
-        List<CoopDetails> coopDetails = new ArrayList<CoopDetails>();
+        Set<EmployerReport> reports = new HashSet<EmployerReport>();
+        Set<CoopDetails> coopDetails = new HashSet<CoopDetails>();
 
         try {
-            ec =
-                    employerContactService.updateEmployerContact(
-                            ec, firstName, lastName, email, phoneNumber, c, reports, coopDetails);
+            ec = employerContactService.updateEmployerContact(ec, firstName, lastName, email, phoneNumber, c, reports, coopDetails);
             ec = employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException e) {
             fail();
         }
 
         assertEquals(firstName, ec.getFirstName());
-        assertEquals(2, employerContactService.getAllEmployerContacts().size());
+        assertEquals(1, employerContactService.getAllEmployerContacts().size());
     }
 
     @Test
@@ -283,9 +278,7 @@ public class CooperatorServiceEmployerContactTests {
 
         EmployerContact ec = null;
         try {
-            ec =
-                    employerContactService.createEmployerContact(
-                            firstName, lastName, email, phoneNumber, c);
+            ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
             ec = employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException e) {
             fail();
@@ -309,9 +302,8 @@ public class CooperatorServiceEmployerContactTests {
                         + " Employer Contact coop details cannot be null!",
                 error);
 
-        // original EmployerContact should still exist (and employer contact created for test
-        // company)
-        assertEquals(2, employerContactService.getAllEmployerContacts().size());
+        // original EmployerContact should still exist 
+        assertEquals(1, employerContactService.getAllEmployerContacts().size());
         try {
             employerContactService.getEmployerContact(ec.getId());
         } catch (IllegalArgumentException _e) {
@@ -329,16 +321,14 @@ public class CooperatorServiceEmployerContactTests {
 
         EmployerContact ec = null;
         try {
-            ec =
-                    employerContactService.createEmployerContact(
-                            firstName, lastName, email, phoneNumber, c);
+            ec = employerContactService.createEmployerContact(firstName, lastName, email, phoneNumber, c);
             ec = employerContactService.getEmployerContact(ec.getId());
             employerContactService.deleteEmployerContact(ec);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(1, employerContactService.getAllEmployerContacts().size());
+        assertEquals(0, employerContactService.getAllEmployerContacts().size());
     }
 
     @Test

@@ -8,8 +8,10 @@ import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,14 +66,15 @@ public class EmployerContactService {
         ec.setLastName(lastName.trim());
         ec.setEmail(email.trim());
         ec.setPhoneNumber(phoneNumber.trim());
-        ec.setEmployerReports(new ArrayList<EmployerReport>());
-        ec.setCoopDetails(new ArrayList<CoopDetails>());
+        ec.setEmployerReports(new HashSet<EmployerReport>());
+        ec.setCoopDetails(new HashSet<CoopDetails>());
         ec.setCompany(company);
 
         List<EmployerContact> employers = company.getEmployees();
         employers.add(ec);
         company.setEmployees(employers);
-
+        
+        employerContactRepository.save(ec);
         companyRepository.save(company);
 
         return employerContactRepository.save(ec);
@@ -142,8 +145,8 @@ public class EmployerContactService {
             String email,
             String phoneNumber,
             Company company,
-            List<EmployerReport> employerReports,
-            List<CoopDetails> coopDetails) {
+            Set<EmployerReport> employerReports,
+            Set<CoopDetails> coopDetails) {
 
         StringBuilder error = new StringBuilder();
         if (ec == null) {

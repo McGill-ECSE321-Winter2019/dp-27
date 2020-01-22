@@ -11,6 +11,8 @@ import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,11 +56,11 @@ public class EmployerReportService {
 
         employerReportRepository.save(er);
 
-        List<EmployerReport> coopReports = c.getEmployerReports();
+        Set<EmployerReport> coopReports = c.getEmployerReports();
         coopReports.add(er);
         c.setEmployerReports(coopReports);
 
-        List<EmployerReport> ecReports = ec.getEmployerReports();
+        Set<EmployerReport> ecReports = ec.getEmployerReports();
         ecReports.add(er);
         ec.setEmployerReports(ecReports);
 
@@ -142,11 +144,11 @@ public class EmployerReportService {
         // add/set employer report to coop
         boolean coopContains = false;
 
-        List<EmployerReport> coopReports = c.getEmployerReports();
+        Set<EmployerReport> coopReports = c.getEmployerReports();
         for (EmployerReport coopEmployerReport : coopReports) {
             if (coopEmployerReport.getId() == er.getId()) {
-                int index = coopReports.indexOf(coopEmployerReport);
-                coopReports.set(index, er);
+            	coopReports.remove(coopEmployerReport);
+            	coopReports.add(er);
                 coopContains = true;
             }
         }
@@ -161,11 +163,11 @@ public class EmployerReportService {
         // add/set employer report to employer contact
         boolean employerContains = false;
 
-        List<EmployerReport> employerReports = c.getEmployerReports();
+        Set<EmployerReport> employerReports = c.getEmployerReports();
         for (EmployerReport employerReport : employerReports) {
             if (employerReport.getId() == er.getId()) {
-                int index = employerReports.indexOf(employerReport);
-                employerReports.set(index, er);
+            	employerReports.remove(employerReport);
+            	employerReports.add(er);
                 employerContains = true;
             }
         }
@@ -200,13 +202,13 @@ public class EmployerReportService {
 
         // first delete from all parents
         Coop c = er.getCoop();
-        List<EmployerReport> coopReports = c.getEmployerReports();
+        Set<EmployerReport> coopReports = c.getEmployerReports();
         coopReports.remove(er);
         c.setEmployerReports(coopReports);
         coopRepository.save(c);
 
         EmployerContact ec = er.getEmployerContact();
-        List<EmployerReport> employerReports = ec.getEmployerReports();
+        Set<EmployerReport> employerReports = ec.getEmployerReports();
         employerReports.remove(er);
         ec.setEmployerReports(employerReports);
         employerContactRepository.save(ec);

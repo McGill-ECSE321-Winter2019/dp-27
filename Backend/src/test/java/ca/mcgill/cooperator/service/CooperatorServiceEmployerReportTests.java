@@ -56,6 +56,17 @@ public class CooperatorServiceEmployerReportTests {
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
+    	List<EmployerReport> ers = employerReportService.getAllEmployerReports();
+    	for (EmployerReport er : ers) {
+    		er.setCoop(null);
+    		employerReportRepository.save(er);
+    	}
+    	List<ReportSection> sections = reportSectionService.getAllReportSections();
+    	for (ReportSection rs : sections) {
+    		rs.setEmployerReport(null);
+    		rs.setStudentReport(null);
+    		reportSectionRepository.save(rs);
+    	}
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
