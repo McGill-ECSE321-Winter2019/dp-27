@@ -12,11 +12,17 @@ import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.EmployerReportService;
+<<<<<<< HEAD
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+=======
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+>>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +30,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+<<<<<<< HEAD
 
+=======
+>>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

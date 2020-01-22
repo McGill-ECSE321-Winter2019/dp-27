@@ -55,9 +55,15 @@ public class CooperatorServiceCourseOfferingTests {
 
     @Test
     public void testCreateCourseOfferingNull() {
+<<<<<<< HEAD
     	
         try {
             courseOfferingService.createCourseOffering(0, null, null);
+=======
+        try {
+            courseOfferingService.createCourseOffering(0, null, null);
+
+>>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
         } catch (IllegalArgumentException e) {
             assertEquals(
                     "Year is invalid! Season cannot be null! Course cannot be null!",

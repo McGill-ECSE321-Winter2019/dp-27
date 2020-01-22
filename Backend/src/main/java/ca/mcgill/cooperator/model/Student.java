@@ -76,7 +76,11 @@ public class Student {
         return this.coops;
     }
 
+<<<<<<< HEAD
     public void setCoops(Set<Coop> coops) {
+=======
+    public void setCoops(List<Coop> coops) {
+>>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
         if (this.coops == null) {
             this.coops = coops;
         } else {
@@ -89,7 +93,11 @@ public class Student {
         return this.studentReceived;
     }
 
+<<<<<<< HEAD
     public void setNotifications(Set<Notification> notifications) {
+=======
+    public void setNotifications(List<Notification> notifications) {
+>>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
         if (this.studentReceived == null) {
             this.studentReceived = notifications;
         } else {

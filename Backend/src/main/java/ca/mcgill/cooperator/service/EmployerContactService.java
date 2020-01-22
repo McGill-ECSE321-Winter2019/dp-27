@@ -8,7 +8,10 @@ import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
+<<<<<<< HEAD
 
+=======
+>>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
