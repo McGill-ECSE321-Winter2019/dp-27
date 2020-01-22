@@ -28,7 +28,6 @@ import ca.mcgill.cooperator.service.NotificationService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ControllerUtils {
@@ -68,29 +67,29 @@ public class ControllerUtils {
         if (c == null) {
             throw new IllegalArgumentException("Company does not exist!");
         }
-        
-        //create company dto with no employer contacts
-        CompanyDto companyDto = new CompanyDto(c.getId(), 
-        									   c.getName(), 
-        									   null);
-        
-        //create employer contact dtos with no company
-        List <EmployerContact> employerContacts = c.getEmployees();
-        List <EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
+
+        // create company dto with no employer contacts
+        CompanyDto companyDto = new CompanyDto(c.getId(), c.getName(), null);
+
+        // create employer contact dtos with no company
+        List<EmployerContact> employerContacts = c.getEmployees();
+        List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
         for (EmployerContact employerContact : employerContacts) {
-        	EmployerContactDto employerContactDto = new EmployerContactDto(employerContact.getId(),
-        																   employerContact.getEmail(),
-        																   employerContact.getFirstName(),
-        																   employerContact.getLastName(),
-        																   employerContact.getPhoneNumber(),
-        																   null,
-        	                											   convertCoopDetailsListToDto(employerContact.getCoopDetails()),
-        	                											   convertEmployerReportListToDto(employerContact.getEmployerReports()));
-        	employerContactDtos.add(employerContactDto);
+            EmployerContactDto employerContactDto =
+                    new EmployerContactDto(
+                            employerContact.getId(),
+                            employerContact.getEmail(),
+                            employerContact.getFirstName(),
+                            employerContact.getLastName(),
+                            employerContact.getPhoneNumber(),
+                            null,
+                            convertCoopDetailsListToDto(employerContact.getCoopDetails()),
+                            convertEmployerReportListToDto(employerContact.getEmployerReports()));
+            employerContactDtos.add(employerContactDto);
         }
-        
+
         companyDto.setEmployees(employerContactDtos);
-        
+
         return companyDto;
     }
 
@@ -205,47 +204,52 @@ public class ControllerUtils {
         if (e == null) {
             throw new IllegalArgumentException("Employer Contact does not exist!");
         }
-        
-        //create employer contact dto with no company
-        EmployerContactDto employerContactDto = new EmployerContactDto(e.getId(),
-                													   e.getEmail(),
-                													   e.getFirstName(),
-                													   e.getLastName(),
-                													   e.getPhoneNumber(),
-                													   null,
-                													   convertCoopDetailsListToDto(e.getCoopDetails()),
-                													   convertEmployerReportListToDto(e.getEmployerReports()));
-        
-        //create company dto manually with created employer contact dto
+
+        // create employer contact dto with no company
+        EmployerContactDto employerContactDto =
+                new EmployerContactDto(
+                        e.getId(),
+                        e.getEmail(),
+                        e.getFirstName(),
+                        e.getLastName(),
+                        e.getPhoneNumber(),
+                        null,
+                        convertCoopDetailsListToDto(e.getCoopDetails()),
+                        convertEmployerReportListToDto(e.getEmployerReports()));
+
+        // create company dto manually with created employer contact dto
         Company company = e.getCompany();
-        List <EmployerContact> employerContacts = company.getEmployees();
-        List <EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
+        List<EmployerContact> employerContacts = company.getEmployees();
+        List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
         for (EmployerContact employerContact : employerContacts) {
-        	EmployerContactDto tempDto = new EmployerContactDto(employerContact.getId(),
-        														employerContact.getEmail(),
-        														employerContact.getFirstName(),
-        														employerContact.getLastName(),
-        														employerContact.getPhoneNumber(),
-                												null,
-                												convertCoopDetailsListToDto(employerContact.getCoopDetails()),
-                												convertEmployerReportListToDto(employerContact.getEmployerReports()));
-        	employerContactDtos.add(tempDto);
+            EmployerContactDto tempDto =
+                    new EmployerContactDto(
+                            employerContact.getId(),
+                            employerContact.getEmail(),
+                            employerContact.getFirstName(),
+                            employerContact.getLastName(),
+                            employerContact.getPhoneNumber(),
+                            null,
+                            convertCoopDetailsListToDto(employerContact.getCoopDetails()),
+                            convertEmployerReportListToDto(employerContact.getEmployerReports()));
+            employerContactDtos.add(tempDto);
         }
-        
-        
-        CompanyDto companyDto = new CompanyDto(company.getId(), company.getName(), employerContactDtos);
-        
+
+        CompanyDto companyDto =
+                new CompanyDto(company.getId(), company.getName(), employerContactDtos);
+
         companyDto.setEmployees(employerContactDtos);
+        //now set company that was initially null
         employerContactDto.setCompany(companyDto);
-        
+
         return employerContactDto;
     }
 
     static List<EmployerContactDto> convertEmployerContactListToDto(
             List<EmployerContact> employerContacts) {
-    	
-	    List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
-	    
+
+        List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
+
         for (EmployerContact ec : employerContacts) {
             if (ec == null) {
                 throw new IllegalArgumentException("Employer Contact does not exist!");
@@ -270,14 +274,14 @@ public class ControllerUtils {
     static List<EmployerReportDto> convertEmployerReportListToDto(
             Set<EmployerReport> employerReports) {
         List<EmployerReportDto> employerReportDtos = new ArrayList<EmployerReportDto>();
-        
+
         if (employerReports != null && employerReports.size() > 0) {
-	        for (EmployerReport er : employerReports) {
-	            if (er == null) {
-	                throw new IllegalArgumentException("Employer Report does not exist!");
-	            }
-	            employerReportDtos.add(convertToDto(er));
-	        }
+            for (EmployerReport er : employerReports) {
+                if (er == null) {
+                    throw new IllegalArgumentException("Employer Report does not exist!");
+                }
+                employerReportDtos.add(convertToDto(er));
+            }
         }
 
         return employerReportDtos;

@@ -2,7 +2,6 @@ package ca.mcgill.cooperator.model;
 
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -83,10 +82,10 @@ public class Coop {
     }
 
     public void setStudentReports(List<StudentReport> studentReports) {
-    	if (this.studentReports == null) {
-      		this.studentReports = studentReports;
-       	} else {
-           	this.studentReports.clear();
+        if (this.studentReports == null) {
+            this.studentReports = studentReports;
+        } else {
+            this.studentReports.clear();
             this.studentReports.addAll(studentReports);
         }
     }
@@ -96,10 +95,10 @@ public class Coop {
     }
 
     public void setEmployerReports(Set<EmployerReport> employerReports) {
-    	if (this.employerReports == null) {
-      		this.employerReports = employerReports;
-       	} else {
-           	this.employerReports.clear();
+        if (this.employerReports == null) {
+            this.employerReports = employerReports;
+        } else {
+            this.employerReports.clear();
             this.employerReports.addAll(employerReports);
         }
     }

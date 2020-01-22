@@ -8,7 +8,6 @@ import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -160,8 +159,8 @@ public class CoopDetailsService {
         boolean employerContains = false;
         for (CoopDetails coopDetails : employerCoopDetails) {
             if (coopDetails.getId() == cd.getId()) {
-            	employerCoopDetails.remove(coopDetails);
-            	employerCoopDetails.add(cd);
+                employerCoopDetails.remove(coopDetails);
+                employerCoopDetails.add(cd);
                 employerContains = true;
             }
         }

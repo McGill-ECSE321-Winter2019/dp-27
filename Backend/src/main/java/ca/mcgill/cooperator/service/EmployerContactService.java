@@ -11,7 +11,6 @@ import ca.mcgill.cooperator.model.EmployerReport;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,7 +72,7 @@ public class EmployerContactService {
         List<EmployerContact> employers = company.getEmployees();
         employers.add(ec);
         company.setEmployees(employers);
-        
+
         employerContactRepository.save(ec);
         companyRepository.save(company);
 
