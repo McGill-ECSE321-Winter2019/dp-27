@@ -63,10 +63,10 @@ public class CourseOffering {
     }
 
     public void setCoops(List<Coop> coops) {
-    	if (this.coops == null) {
-      		this.coops = coops;
-       	} else {
-           	this.coops.clear();
+        if (this.coops == null) {
+            this.coops = coops;
+        } else {
+            this.coops.clear();
             this.coops.addAll(coops);
         }
     }

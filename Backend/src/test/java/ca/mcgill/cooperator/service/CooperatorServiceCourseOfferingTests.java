@@ -40,7 +40,7 @@ public class CooperatorServiceCourseOfferingTests {
         Course c = courseService.createCourse(name);
 
         try {
-        	courseOfferingService.createCourseOffering(year, season, c);
+            courseOfferingService.createCourseOffering(year, season, c);
 
         } catch (IllegalArgumentException e) {
             fail();
@@ -56,7 +56,7 @@ public class CooperatorServiceCourseOfferingTests {
     @Test
     public void testCreateCourseOfferingNull() {
         try {
-        	courseOfferingService.createCourseOffering(0, null, null);
+            courseOfferingService.createCourseOffering(0, null, null);
 
         } catch (IllegalArgumentException e) {
             assertEquals(
@@ -87,9 +87,9 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(co.getSeason(), season);
         assertEquals(co.getYear(), year);
         assertEquals(co.getCourse().getId(), c.getId());
-       
-    	int year2 = 2021;
-    	Season season2 = Season.FALL;
+
+        int year2 = 2021;
+        Season season2 = Season.FALL;
 
         Course c2 = courseService.createCourse(name);
 
@@ -128,9 +128,9 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(co.getSeason(), season);
         assertEquals(co.getYear(), year);
         assertEquals(co.getCourse().getId(), c.getId());
-                
-    	int year2 = -1;
-    	Season season2 = null;
+
+        int year2 = -1;
+        Season season2 = null;
         Course c2 = null;
 
         try {

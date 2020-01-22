@@ -10,7 +10,6 @@ import ca.mcgill.cooperator.model.StudentReport;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -124,8 +123,8 @@ public class StudentReportService {
         Set<StudentReport> coopReports = c.getStudentReports();
         for (StudentReport coopStudentReport : coopReports) {
             if (coopStudentReport.getId() == sr.getId()) {
-            	coopReports.remove(coopStudentReport);
-            	coopReports.add(sr);
+                coopReports.remove(coopStudentReport);
+                coopReports.add(sr);
                 /*int index = coopReports.indexOf(coopStudentReport);
                 coopReports.set(index, sr);*/
                 coopContains = true;

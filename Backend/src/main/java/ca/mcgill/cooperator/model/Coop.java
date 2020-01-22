@@ -1,8 +1,6 @@
 package ca.mcgill.cooperator.model;
 
-
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,11 +32,19 @@ public class Coop {
     @ManyToOne(optional = false)
     private Student student;
 
-    @OneToMany(mappedBy = "coop", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "coop",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<StudentReport> studentReports;
 
-    @OneToMany(mappedBy = "coop", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "coop",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<EmployerReport> employerReports;
 
@@ -85,10 +91,10 @@ public class Coop {
     }
 
     public void setStudentReports(Set<StudentReport> studentReports) {
-    	if (this.studentReports == null) {
-      		this.studentReports = studentReports;
-       	} else {
-           	this.studentReports.clear();
+        if (this.studentReports == null) {
+            this.studentReports = studentReports;
+        } else {
+            this.studentReports.clear();
             this.studentReports.addAll(studentReports);
         }
     }
@@ -98,10 +104,10 @@ public class Coop {
     }
 
     public void setEmployerReports(Set<EmployerReport> employerReports) {
-    	if (this.employerReports == null) {
-      		this.employerReports = employerReports;
-       	} else {
-           	this.employerReports.clear();
+        if (this.employerReports == null) {
+            this.employerReports = employerReports;
+        } else {
+            this.employerReports.clear();
             this.employerReports.addAll(employerReports);
         }
     }

@@ -42,10 +42,10 @@ public class Company {
     }
 
     public void setEmployees(List<EmployerContact> employees) {
-    	if (this.employees == null) {
-      		this.employees = employees;
-       	} else {
-           	this.employees.clear();
+        if (this.employees == null) {
+            this.employees = employees;
+        } else {
+            this.employees.clear();
             this.employees.addAll(employees);
         }
     }
