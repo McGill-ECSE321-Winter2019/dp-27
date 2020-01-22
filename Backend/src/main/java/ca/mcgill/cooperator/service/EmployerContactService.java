@@ -8,6 +8,7 @@ import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

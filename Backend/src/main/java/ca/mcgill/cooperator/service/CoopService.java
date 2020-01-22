@@ -13,6 +13,7 @@ import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
