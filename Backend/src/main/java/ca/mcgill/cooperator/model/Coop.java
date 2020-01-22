@@ -1,10 +1,5 @@
 package ca.mcgill.cooperator.model;
 
-<<<<<<< HEAD
-
-=======
-import java.util.List;
->>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -45,16 +40,12 @@ public class Coop {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<StudentReport> studentReports;
 
-<<<<<<< HEAD
     @OneToMany(
             mappedBy = "coop",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-=======
-    @OneToMany(mappedBy = "coop", cascade = CascadeType.ALL, orphanRemoval = true)
->>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
     private Set<EmployerReport> employerReports;
 
     /*--- Getters and Setters ---*/
@@ -99,11 +90,7 @@ public class Coop {
         return this.studentReports;
     }
 
-<<<<<<< HEAD
     public void setStudentReports(Set<StudentReport> studentReports) {
-=======
-    public void setStudentReports(List<StudentReport> studentReports) {
->>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
         if (this.studentReports == null) {
             this.studentReports = studentReports;
         } else {

@@ -259,7 +259,6 @@ public class ControllerUtils {
 
     static List<EmployerContactDto> convertEmployerContactListToDto(
             List<EmployerContact> employerContacts) {
-<<<<<<< HEAD
     	
 	    List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
 
@@ -271,17 +270,6 @@ public class ControllerUtils {
 	            employerContactDtos.add(convertToDto(ec));
 	        }
     	}
-=======
-
-        List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
-
-        for (EmployerContact ec : employerContacts) {
-            if (ec == null) {
-                throw new IllegalArgumentException("Employer Contact does not exist!");
-            }
-            employerContactDtos.add(convertToDto(ec));
-        }
->>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
         return employerContactDtos;
     }
 
@@ -352,7 +340,6 @@ public class ControllerUtils {
 
     static List<NotificationDto> convertNotifListToDto(List<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
-<<<<<<< HEAD
 
         for (Notification n : notifs) {
             if (n == null) {
@@ -365,8 +352,6 @@ public class ControllerUtils {
 
     static List<NotificationDto> convertNotifListToDto(Set<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
-=======
->>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
 
         for (Notification n : notifs) {
             if (n == null) {
@@ -414,12 +399,7 @@ public class ControllerUtils {
                 convertReportSectionListToDto(sr.getReportSections()));
     }
 
-<<<<<<< HEAD
     static List<StudentReportDto> convertStudentReportListToDto(Set<StudentReport> studentReports) {
-=======
-    static List<StudentReportDto> convertStudentReportListToDto(
-            List<StudentReport> studentReports) {
->>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
         List<StudentReportDto> studentReportDtos = new ArrayList<StudentReportDto>();
 
         for (StudentReport sr : studentReports) {

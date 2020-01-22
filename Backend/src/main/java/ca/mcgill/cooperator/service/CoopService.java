@@ -13,11 +13,7 @@ import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
-<<<<<<< HEAD
 
-=======
-import java.util.ArrayList;
->>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,11 +60,7 @@ public class CoopService {
         c.setCourseOffering(courseOffering);
         c.setStudent(s);
         c.setEmployerReports(new HashSet<EmployerReport>());
-<<<<<<< HEAD
         c.setStudentReports(new HashSet<StudentReport>());
-=======
-        c.setStudentReports(new ArrayList<StudentReport>());
->>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
 
         coopRepository.save(c);
 

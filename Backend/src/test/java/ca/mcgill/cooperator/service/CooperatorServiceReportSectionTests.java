@@ -70,10 +70,7 @@ public class CooperatorServiceReportSectionTests {
             rs.setStudentReport(null);
             reportSectionRepository.save(rs);
         }
-<<<<<<< HEAD
         
-=======
->>>>>>> f9c224f8f51b9eeaf43bf0b11131e3dde22452b2
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
