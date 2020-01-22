@@ -72,7 +72,12 @@ public class Student {
     }
 
     public void setCoops(List<Coop> coops) {
-        this.coops = coops;
+        if (this.coops == null) {
+        	this.coops = coops;
+        } else {
+        	this.coops.clear();
+        	this.coops.addAll(coops);
+        }
     }
 
     public List<Notification> getNotifications() {
@@ -80,6 +85,12 @@ public class Student {
     }
 
     public void setNotifications(List<Notification> notifications) {
+        if (this.studentReceived == null) {
+        	this.studentReceived = notifications;
+        } else {
+        	this.studentReceived.clear();
+        	this.studentReceived.addAll(notifications);
+        }
         this.studentReceived = notifications;
     }
 }
