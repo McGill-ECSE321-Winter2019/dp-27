@@ -47,6 +47,13 @@ public class CooperatorServiceStudentReportTests {
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
+        List<StudentReport> studentReports = studentReportService.getAllStudentReports();
+        for (StudentReport studentReport : studentReports) {
+            List<ReportSection> reportSections = studentReport.getReportSections();
+            reportSections.clear();
+            studentReport.setReportSections(reportSections);
+            studentReportRepository.save(studentReport);
+        }
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
@@ -116,7 +123,7 @@ public class CooperatorServiceStudentReportTests {
     }
 
     @Test
-    public void testUpdateStudentrReport() {
+    public void testUpdateStudentReport() {
         StudentReport sr = null;
 
         Course course = createTestCourse();

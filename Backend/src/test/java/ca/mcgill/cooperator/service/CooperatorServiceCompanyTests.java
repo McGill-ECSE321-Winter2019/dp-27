@@ -97,6 +97,8 @@ public class CooperatorServiceCompanyTests {
             fail();
         }
 
+        assertEquals(1, companyService.getAllCompanies().size());
+
         assertEquals("Index Exchange", c.getName());
         assertEquals(1, c.getEmployees().size());
     }
