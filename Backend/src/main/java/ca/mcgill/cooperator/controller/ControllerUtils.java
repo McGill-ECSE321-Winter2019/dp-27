@@ -28,7 +28,6 @@ import ca.mcgill.cooperator.service.NotificationService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ControllerUtils {
@@ -252,6 +251,7 @@ public class ControllerUtils {
                 new CompanyDto(company.getId(), company.getName(), employerContactDtos);
 
         companyDto.setEmployees(employerContactDtos);
+        //now set company that was initially null
         employerContactDto.setCompany(companyDto);
 
         return employerContactDto;
@@ -288,14 +288,14 @@ public class ControllerUtils {
     static List<EmployerReportDto> convertEmployerReportListToDto(
             Set<EmployerReport> employerReports) {
         List<EmployerReportDto> employerReportDtos = new ArrayList<EmployerReportDto>();
-        
+
         if (employerReports != null && employerReports.size() > 0) {
-	        for (EmployerReport er : employerReports) {
-	            if (er == null) {
-	                throw new IllegalArgumentException("Employer Report does not exist!");
-	            }
-	            employerReportDtos.add(convertToDto(er));
-	        }
+            for (EmployerReport er : employerReports) {
+                if (er == null) {
+                    throw new IllegalArgumentException("Employer Report does not exist!");
+                }
+                employerReportDtos.add(convertToDto(er));
+            }
         }
 
         return employerReportDtos;
