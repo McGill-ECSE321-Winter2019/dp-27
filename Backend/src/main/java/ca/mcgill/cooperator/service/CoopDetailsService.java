@@ -7,6 +7,8 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +56,7 @@ public class CoopDetailsService {
 
         coopDetailsRepository.save(cd);
 
-        List<CoopDetails> employerCoopDetails = ec.getCoopDetails();
+        Set<CoopDetails> employerCoopDetails = ec.getCoopDetails();
         employerCoopDetails.add(cd);
         ec.setCoopDetails(employerCoopDetails);
 
@@ -108,7 +110,7 @@ public class CoopDetailsService {
         coopRepository.save(c);
 
         EmployerContact ec = cd.getEmployerContact();
-        List<CoopDetails> details = ec.getCoopDetails();
+        Set<CoopDetails> details = ec.getCoopDetails();
         details.remove(cd);
         ec.setCoopDetails(details);
         employerContactRepository.save(ec);
@@ -154,12 +156,12 @@ public class CoopDetailsService {
 
         coopDetailsRepository.save(cd);
 
-        List<CoopDetails> employerCoopDetails = ec.getCoopDetails();
+        Set<CoopDetails> employerCoopDetails = ec.getCoopDetails();
         boolean employerContains = false;
         for (CoopDetails coopDetails : employerCoopDetails) {
             if (coopDetails.getId() == cd.getId()) {
-                int index = employerCoopDetails.indexOf(coopDetails);
-                employerCoopDetails.set(index, cd);
+            	employerCoopDetails.remove(coopDetails);
+            	employerCoopDetails.add(cd);
                 employerContains = true;
             }
         }

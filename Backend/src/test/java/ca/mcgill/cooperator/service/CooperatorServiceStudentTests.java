@@ -1,11 +1,12 @@
 package ca.mcgill.cooperator.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,19 +19,46 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
 
+import ca.mcgill.cooperator.dao.AdminRepository;
+import ca.mcgill.cooperator.dao.CoopRepository;
+import ca.mcgill.cooperator.dao.CourseOfferingRepository;
+import ca.mcgill.cooperator.dao.CourseRepository;
+import ca.mcgill.cooperator.dao.NotificationRepository;
+import ca.mcgill.cooperator.dao.StudentRepository;
+import ca.mcgill.cooperator.model.Admin;
+import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.CoopStatus;
+import ca.mcgill.cooperator.model.Course;
+import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.Notification;
+import ca.mcgill.cooperator.model.Season;
+import ca.mcgill.cooperator.model.Student;
+
 @SpringBootTest
 public class CooperatorServiceStudentTests {
 
-    @Autowired
-    private StudentService studentService;
-
-    @Autowired
-    private StudentRepository studentRepository;
+	@Autowired StudentService studentService;
+	@Autowired CourseService courseService;
+	@Autowired CourseOfferingService courseOfferingService;
+	@Autowired CoopService coopService;
+	@Autowired NotificationService notificationService;
+	@Autowired AdminService adminService;
+	
+	@Autowired StudentRepository studentRepository;
+	@Autowired CourseRepository courseRepository;
+	@Autowired CourseOfferingRepository courseOfferingRepository;
+	@Autowired CoopRepository coopRepository;
+	@Autowired NotificationRepository notificationRepository;
+	@Autowired AdminRepository adminRepository;
 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
         studentRepository.deleteAll();
+        courseRepository.deleteAll();
+        courseOfferingRepository.deleteAll();
+        coopRepository.deleteAll();
+        notificationRepository.deleteAll();
     }
 
     @Test
@@ -59,8 +87,8 @@ public class CooperatorServiceStudentTests {
     	String lastName = "Kragl";
     	String email = "frisbeeGod47@gmail.com";
         String studentID = "260735111";
-        List<Coop> coops = new ArrayList<>();
-    	List<Notification> notifications = new ArrayList<>();
+        Set<Coop> coops = new HashSet<>();
+    	Set<Notification> notifications = new HashSet<>();
     	
     	try {
         studentService.createStudent(firstName, lastName, email, studentID, coops, notifications);
@@ -81,7 +109,7 @@ public class CooperatorServiceStudentTests {
             studentService.createStudent(null, null, null, null);
             fail();
         } catch(IllegalArgumentException e){
-            assertEquals("FirstName is null or invalid. LastName is null or invalid. Email is null or invalid. StudentID is null or invalid.", e.getMessage().trim());
+            assertEquals("Student first name cannot be empty. Student last name cannot be empty. Student email cannot be empty. Student ID cannot be empty.", e.getMessage().trim());
         }
     }
 
@@ -91,7 +119,7 @@ public class CooperatorServiceStudentTests {
             studentService.createStudent("","","","");
             fail();
         } catch(IllegalArgumentException e){
-            assertEquals("FirstName is null or invalid. LastName is null or invalid. Email is null or invalid. StudentID is null or invalid.", e.getMessage().trim());
+            assertEquals("Student first name cannot be empty. Student last name cannot be empty. Student email cannot be empty. Student ID cannot be empty.", e.getMessage().trim());
         }
     }
 
@@ -101,7 +129,7 @@ public class CooperatorServiceStudentTests {
             studentService.createStudent(" "," "," "," ");
             fail();
         } catch(IllegalArgumentException e){
-            assertEquals("FirstName is null or invalid. LastName is null or invalid. Email is null or invalid. StudentID is null or invalid.", e.getMessage().trim());
+            assertEquals("Student first name cannot be empty. Student last name cannot be empty. Student email cannot be empty. Student ID cannot be empty.", e.getMessage().trim());
         }
     }
 
@@ -121,8 +149,8 @@ public class CooperatorServiceStudentTests {
     	lastName = "Nut";
     	email = "p.nut@legume.com";
     	String studentIDNew = "260745100";
-    	List<Coop> coops = new ArrayList<>();
-    	List<Notification> notifications = new ArrayList<>();
+    	Set<Coop> coops = new HashSet<>();
+    	Set<Notification> notifications = new HashSet<>();
     	
         try{
             Student s = studentService.getStudentByStudentID(studentID);
@@ -153,8 +181,9 @@ public class CooperatorServiceStudentTests {
          try{
              Student s = studentService.getStudentByStudentID(studentID);
              studentService.updateStudent(s, "  ", "", "", "", null, null);
-         }catch(IllegalArgumentException e) {
              fail();
+         }catch(IllegalArgumentException e) {
+
          }
          Student s = studentService.getStudentByStudentID(studentID);
          assertEquals(s.getFirstName(), firstName);

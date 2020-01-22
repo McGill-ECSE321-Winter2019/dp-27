@@ -9,6 +9,8 @@ import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.StudentReport;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,7 +50,7 @@ public class StudentReportService {
 
         studentReportRepository.save(sr);
 
-        List<StudentReport> reports = c.getStudentReports();
+        Set<StudentReport> reports = c.getStudentReports();
         reports.add(sr);
         c.setStudentReports(reports);
 
@@ -119,11 +121,13 @@ public class StudentReportService {
         // add/set employer report to coop
         boolean coopContains = false;
 
-        List<StudentReport> coopReports = c.getStudentReports();
+        Set<StudentReport> coopReports = c.getStudentReports();
         for (StudentReport coopStudentReport : coopReports) {
             if (coopStudentReport.getId() == sr.getId()) {
-                int index = coopReports.indexOf(coopStudentReport);
-                coopReports.set(index, sr);
+            	coopReports.remove(coopStudentReport);
+            	coopReports.add(sr);
+                /*int index = coopReports.indexOf(coopStudentReport);
+                coopReports.set(index, sr);*/
                 coopContains = true;
             }
         }
@@ -158,7 +162,7 @@ public class StudentReportService {
 
         // first delete from all parents
         Coop c = sr.getCoop();
-        List<StudentReport> coopReports = c.getStudentReports();
+        Set<StudentReport> coopReports = c.getStudentReports();
         coopReports.remove(sr);
         c.setStudentReports(coopReports);
         coopRepository.save(c);

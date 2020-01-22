@@ -42,6 +42,11 @@ public class Company {
     }
 
     public void setEmployees(List<EmployerContact> employees) {
-        this.employees = employees;
+    	if (this.employees == null) {
+      		this.employees = employees;
+       	} else {
+           	this.employees.clear();
+            this.employees.addAll(employees);
+        }
     }
 }
