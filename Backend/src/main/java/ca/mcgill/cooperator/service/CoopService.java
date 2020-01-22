@@ -16,7 +16,6 @@ import ca.mcgill.cooperator.model.StudentReport;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,36 +76,35 @@ public class CoopService {
 
         return coopRepository.save(c);
     }
-    
+
     @Transactional
     public Coop getCoopById(int id) {
-    	Coop c = coopRepository.findById(id).orElse(null);
+        Coop c = coopRepository.findById(id).orElse(null);
         if (c == null) {
-            throw new IllegalArgumentException(
-                    "Co-op with ID " + id + " does not exist!");
+            throw new IllegalArgumentException("Co-op with ID " + id + " does not exist!");
         }
 
         return c;
     }
-    
-    
+
     @Transactional
     public List<Coop> getAllCoops() {
         return ServiceUtils.toList(coopRepository.findAll());
     }
-    
+
     @Transactional
-    public Coop updateCoop(Coop c, 
-    					   CoopStatus status, 
-    					   CourseOffering courseOffering, 
-    					   Student s,
-    					   CoopDetails cd,
-    					   Set <EmployerReport> employerReports,
-    					   Set <StudentReport> studentReports) {
-    	StringBuilder error = new StringBuilder();
-    	if (c == null) {
-    		error.append("Co-op to update cannot be null! ");
-    	}
+    public Coop updateCoop(
+            Coop c,
+            CoopStatus status,
+            CourseOffering courseOffering,
+            Student s,
+            CoopDetails cd,
+            Set<EmployerReport> employerReports,
+            Set<StudentReport> studentReports) {
+        StringBuilder error = new StringBuilder();
+        if (c == null) {
+            error.append("Co-op to update cannot be null! ");
+        }
         if (status == null) {
             error.append("Co-op Status cannot be null! ");
         }
@@ -119,7 +117,7 @@ public class CoopService {
         if (cd == null) {
             error.append("Co-op Details cannot be null! ");
         }
-        //cannot be null but can be empty
+        // cannot be null but can be empty
         if (employerReports == null) {
             error.append("Employer Reports cannot be null! ");
         }
@@ -129,7 +127,7 @@ public class CoopService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-        
+
         c.setStatus(status);
         c.setCourseOffering(courseOffering);
         c.setStudent(s);
@@ -137,63 +135,58 @@ public class CoopService {
         c.setEmployerReports(employerReports);
         c.setStudentReports(studentReports);
         coopRepository.save(c);
-        
+
         boolean studentContains = false;
-        Set <Coop> studentCoops = s.getCoops();
+        Set<Coop> studentCoops = s.getCoops();
         for (Coop studentCoop : studentCoops) {
-        	if (studentCoop.getId() == c.getId()) {
-        		studentCoops.remove(studentCoop);
-        		studentCoops.add(c);
+            if (studentCoop.getId() == c.getId()) {
+                studentCoops.remove(studentCoop);
+                studentCoops.add(c);
                 studentContains = true;
-        	}
+            }
         }
         if (studentContains == false) {
             studentCoops.add(c);
         }
-        
+
         studentRepository.save(s);
-        
+
         cd.setCoop(c);
         coopDetailsRepository.save(cd);
-        
+
         for (EmployerReport employerReport : employerReports) {
-        	employerReport.setCoop(c);
-        	employerReportRepository.save(employerReport);
+            employerReport.setCoop(c);
+            employerReportRepository.save(employerReport);
         }
-        
+
         for (StudentReport studentReport : studentReports) {
-        	studentReport.setCoop(c);
-        	studentReportRepository.save(studentReport);
+            studentReport.setCoop(c);
+            studentReportRepository.save(studentReport);
         }
-        
-        
+
         return coopRepository.save(c);
     }
-    
+
     @Transactional
     public Coop deleteCoop(Coop c) {
-    	if (c == null) {
+        if (c == null) {
             throw new IllegalArgumentException("Co-op to delete cannot be null!");
         }
-    	
-    	Student s = c.getStudent();
-    	Set<Coop> studentCoops = s.getCoops();
-    	studentCoops.remove(c);
-    	s.setCoops(studentCoops);
-    	studentRepository.save(s);
-    	
-    	CourseOffering courseOffering = c.getCourseOffering();
-    	List<Coop> courseOfferingCoops = courseOffering.getCoops();
-    	courseOfferingCoops.remove(c);
-    	courseOffering.setCoops(courseOfferingCoops);
-    	courseOfferingRepository.save(courseOffering);
-    	
-    	coopRepository.delete(c);
-    	
-    	return c;
+
+        Student s = c.getStudent();
+        Set<Coop> studentCoops = s.getCoops();
+        studentCoops.remove(c);
+        s.setCoops(studentCoops);
+        studentRepository.save(s);
+
+        CourseOffering courseOffering = c.getCourseOffering();
+        List<Coop> courseOfferingCoops = courseOffering.getCoops();
+        courseOfferingCoops.remove(c);
+        courseOffering.setCoops(courseOfferingCoops);
+        courseOfferingRepository.save(courseOffering);
+
+        coopRepository.delete(c);
+
+        return c;
     }
 }
-
-
-
-

@@ -12,7 +12,6 @@ import ca.mcgill.cooperator.model.ReportStatus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -147,8 +146,8 @@ public class EmployerReportService {
         Set<EmployerReport> coopReports = c.getEmployerReports();
         for (EmployerReport coopEmployerReport : coopReports) {
             if (coopEmployerReport.getId() == er.getId()) {
-            	coopReports.remove(coopEmployerReport);
-            	coopReports.add(er);
+                coopReports.remove(coopEmployerReport);
+                coopReports.add(er);
                 coopContains = true;
             }
         }
@@ -166,8 +165,8 @@ public class EmployerReportService {
         Set<EmployerReport> employerReports = c.getEmployerReports();
         for (EmployerReport employerReport : employerReports) {
             if (employerReport.getId() == er.getId()) {
-            	employerReports.remove(employerReport);
-            	employerReports.add(er);
+                employerReports.remove(employerReport);
+                employerReports.add(er);
                 employerContains = true;
             }
         }

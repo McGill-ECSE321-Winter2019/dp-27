@@ -9,7 +9,6 @@ import ca.mcgill.cooperator.model.Student;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,34 +60,34 @@ public class StudentService {
 
         return studentRepository.save(s);
     }
-    
+
     @Transactional
     public Student getStudentById(int id) {
-    	Student s = studentRepository.findById(id).orElse(null);
+        Student s = studentRepository.findById(id).orElse(null);
         if (s == null) {
-            throw new IllegalArgumentException(
-                    "Student with ID " + id + " does not exist!");
+            throw new IllegalArgumentException("Student with ID " + id + " does not exist!");
         }
 
         return s;
     }
-    
+
     @Transactional
     public List<Student> getAllStudents() {
-    	return ServiceUtils.toList(studentRepository.findAll());
+        return ServiceUtils.toList(studentRepository.findAll());
     }
-    
+
     @Transactional
-    public Student updateStudent(Student s, 
-    						     String firstName, 
-    						     String lastName, 
-    						     String email, 
-    						     String studentId, 
-    						     Set<Coop> coops, 
-    						     Set<Notification> notifs) {
-    	
-    	StringBuilder error = new StringBuilder();
-    	if (s == null) {
+    public Student updateStudent(
+            Student s,
+            String firstName,
+            String lastName,
+            String email,
+            String studentId,
+            Set<Coop> coops,
+            Set<Notification> notifs) {
+
+        StringBuilder error = new StringBuilder();
+        if (s == null) {
             error.append("Student to update cannot be null! ");
         }
         if (firstName == null || firstName.trim().length() == 0) {
@@ -114,37 +113,36 @@ public class StudentService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-        
+
         s.setFirstName(firstName.trim());
         s.setLastName(lastName.trim());
         s.setEmail(email.trim());
         s.setStudentId(studentId);
         s.setNotifications(notifs);
         s.setCoops(coops);
-        
+
         studentRepository.save(s);
-        
+
         for (Notification notif : notifs) {
-        	notif.setStudent(s);
-        	notificationRepository.save(notif);
+            notif.setStudent(s);
+            notificationRepository.save(notif);
         }
-        
+
         for (Coop coop : coops) {
-        	coop.setStudent(s);
-        	coopRepository.save(coop);
+            coop.setStudent(s);
+            coopRepository.save(coop);
         }
-        
+
         return studentRepository.save(s);
-    	
     }
-    
+
     @Transactional
     public Student deleteStudent(Student s) {
-    	if (s == null) {
+        if (s == null) {
             throw new IllegalArgumentException("Student to delete cannot be null!");
         }
-    	
-    	studentRepository.delete(s);
-    	return s;
+
+        studentRepository.delete(s);
+        return s;
     }
 }

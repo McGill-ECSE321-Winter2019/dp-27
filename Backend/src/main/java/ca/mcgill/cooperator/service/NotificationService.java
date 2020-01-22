@@ -8,7 +8,6 @@ import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +58,7 @@ public class NotificationService {
         Set<Notification> notifs = student.getNotifications();
         notifs.add(n);
         student.setNotifications(notifs);
-        
+
         List<Notification> senderNotifs = sender.getSentNotifications();
         senderNotifs.add(n);
         sender.setSentNotifications(senderNotifs);
@@ -160,8 +159,8 @@ public class NotificationService {
 
         for (Notification student_n : sender_notifs) {
             if (student_n.getId() == n.getId()) {
-            	sender_notifs.remove(student_n);
-            	sender_notifs.add(n);
+                sender_notifs.remove(student_n);
+                sender_notifs.add(n);
                 student_contains = true;
             }
         }

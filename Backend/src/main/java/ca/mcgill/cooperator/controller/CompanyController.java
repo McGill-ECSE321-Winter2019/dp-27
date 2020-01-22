@@ -1,16 +1,13 @@
 package ca.mcgill.cooperator.controller;
 
-
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.EmployerContactService;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,55 +29,55 @@ public class CompanyController {
 
     @GetMapping("/{id}")
     public CompanyDto getCompanyById(@PathVariable int id) {
-    	Company c = companyService.getCompany(id);
+        Company c = companyService.getCompany(id);
         return ControllerUtils.convertToDto(c);
     }
-    
+
     @GetMapping("")
-    public List <CompanyDto> getAllCompanies() {
-    	List <Company> companies = companyService.getAllCompanies();
-    	return ControllerUtils.convertCompanyListToDto(companies);
+    public List<CompanyDto> getAllCompanies() {
+        List<Company> companies = companyService.getAllCompanies();
+        return ControllerUtils.convertCompanyListToDto(companies);
     }
-    
+
     @PostMapping("")
     public CompanyDto createCompany(@RequestBody CompanyDto companyDto) {
-    	
-    	List <EmployerContact> employerContacts = new ArrayList<EmployerContact>();
-    	List <EmployerContactDto> employerContactDtos = companyDto.getEmployees();
-    	if (employerContactDtos != null) {
-    		for (EmployerContactDto employerContactDto : employerContactDtos) {
-    			EmployerContact employerContact = employerContactService.getEmployerContact(employerContactDto.getId());
-    			employerContacts.add(employerContact);
-    		}
-    	}
-    	Company company = companyService.createCompany(companyDto.getName(), employerContacts);
-    	
-    	return ControllerUtils.convertToDto(company);
+
+        List<EmployerContact> employerContacts = new ArrayList<EmployerContact>();
+        List<EmployerContactDto> employerContactDtos = companyDto.getEmployees();
+        if (employerContactDtos != null) {
+            for (EmployerContactDto employerContactDto : employerContactDtos) {
+                EmployerContact employerContact =
+                        employerContactService.getEmployerContact(employerContactDto.getId());
+                employerContacts.add(employerContact);
+            }
+        }
+        Company company = companyService.createCompany(companyDto.getName(), employerContacts);
+
+        return ControllerUtils.convertToDto(company);
     }
-    
+
     @PutMapping("")
     public CompanyDto updateCompany(@RequestBody CompanyDto companyDto) {
-    	Company company = companyService.getCompany(companyDto.getId());
-    	
-    	List <EmployerContactDto> employerContactDtos = companyDto.getEmployees();
-    	List<EmployerContact> employerContacts = new ArrayList<EmployerContact>();
-    	if (employerContactDtos != null) {
-	    	for (EmployerContactDto employerContactDto : employerContactDtos) {
-	    		EmployerContact employerContact = employerContactService.getEmployerContact(employerContactDto.getId());
-	    		employerContacts.add(employerContact);
-	    	}
-    	}
-    	
-    	
-    	company = companyService.updateCompany(company, companyDto.getName(), employerContacts);
-    	
-    	return ControllerUtils.convertToDto(company);
+        Company company = companyService.getCompany(companyDto.getId());
+
+        List<EmployerContactDto> employerContactDtos = companyDto.getEmployees();
+        List<EmployerContact> employerContacts = new ArrayList<EmployerContact>();
+        if (employerContactDtos != null) {
+            for (EmployerContactDto employerContactDto : employerContactDtos) {
+                EmployerContact employerContact =
+                        employerContactService.getEmployerContact(employerContactDto.getId());
+                employerContacts.add(employerContact);
+            }
+        }
+
+        company = companyService.updateCompany(company, companyDto.getName(), employerContacts);
+
+        return ControllerUtils.convertToDto(company);
     }
-    
+
     @DeleteMapping("/{id}")
     public void deleteCompany(@PathVariable int id) {
-    	Company c = companyService.getCompany(id);
-    	companyService.deleteCompany(c);
+        Company c = companyService.getCompany(id);
+        companyService.deleteCompany(c);
     }
-    
 }

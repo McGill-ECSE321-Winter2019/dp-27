@@ -26,7 +26,6 @@ import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,17 +59,17 @@ public class CooperatorServiceReportSectionTests {
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-    	List<EmployerReport> ers = employerReportService.getAllEmployerReports();
-    	for (EmployerReport er : ers) {
-    		er.setCoop(null);
-    		employerReportRepository.save(er);
-    	}
-    	List<ReportSection> sections = reportSectionService.getAllReportSections();
-    	for (ReportSection rs : sections) {
-    		rs.setEmployerReport(null);
-    		rs.setStudentReport(null);
-    		reportSectionRepository.save(rs);
-    	}
+        List<EmployerReport> ers = employerReportService.getAllEmployerReports();
+        for (EmployerReport er : ers) {
+            er.setCoop(null);
+            employerReportRepository.save(er);
+        }
+        List<ReportSection> sections = reportSectionService.getAllReportSections();
+        for (ReportSection rs : sections) {
+            rs.setEmployerReport(null);
+            rs.setStudentReport(null);
+            reportSectionRepository.save(rs);
+        }
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();

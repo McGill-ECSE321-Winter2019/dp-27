@@ -1,7 +1,6 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,16 +20,18 @@ public class EmployerContact {
     @ManyToOne(optional = false)
     private Company company;
 
-    @OneToMany(mappedBy = "employerContact",
-               cascade = CascadeType.ALL,
-               orphanRemoval = true,
-               fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "employerContact",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     private Set<CoopDetails> coopdetails;
 
-    @OneToMany(mappedBy = "employerContact", 
-    		   cascade = CascadeType.ALL,
-    		   orphanRemoval = true,
-    		   fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "employerContact",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     private Set<EmployerReport> employerReports;
 
     /*--- Getters and Setters ---*/
@@ -84,10 +85,10 @@ public class EmployerContact {
     }
 
     public void setCoopDetails(Set<CoopDetails> coopDetails) {
-    	if (this.coopdetails == null) {
-      		this.coopdetails = coopDetails;
-       	} else {
-           	this.coopdetails.clear();
+        if (this.coopdetails == null) {
+            this.coopdetails = coopDetails;
+        } else {
+            this.coopdetails.clear();
             this.coopdetails.addAll(coopDetails);
         }
     }
@@ -97,10 +98,10 @@ public class EmployerContact {
     }
 
     public void setEmployerReports(Set<EmployerReport> employerReports) {
-    	if (this.employerReports == null) {
-      		this.employerReports = employerReports;
-       	} else {
-           	this.employerReports.clear();
+        if (this.employerReports == null) {
+            this.employerReports = employerReports;
+        } else {
+            this.employerReports.clear();
             this.employerReports.addAll(employerReports);
         }
     }
