@@ -193,12 +193,32 @@ public class ControllerUtils {
         if (co == null) {
             throw new IllegalArgumentException("Course Offering does not exist!");
         }
-        return new CourseOfferingDto(
-                co.getId(),
+        Course c = co.getCourse();
+        CourseDto cDto = new CourseDto(c.getId(), c.getName(), new ArrayList<CourseOfferingDto>());
+
+        int coId =  co.getId();
+        CourseOfferingDto coDto =  new CourseOfferingDto(
+        		coId,
                 co.getYear(),
                 co.getSeason(),
-                convertToDto(co.getCourse()),
-                convertCoopListToDto(co.getCoops()));
+                null);
+                //convertToDto(co.getCourse()));
+        List<CourseOfferingDto> coDtos = new ArrayList<CourseOfferingDto>();
+        coDtos.add(coDto);
+        
+        for(CourseOffering offering : c.getCourseOfferings()){
+        	if(offering.getId() != coId) {
+        		CourseOfferingDto temp =  new CourseOfferingDto(
+                		coId,
+                        co.getYear(),
+                        co.getSeason(),
+                        cDto);
+        		coDtos.add(temp);
+        	}
+        }
+        cDto.setCourseOfferings(coDtos);
+        coDto.setCourse(cDto);
+        return coDto;
     }
 
     static List<CourseOfferingDto> convertCourseOfferingListToDto(
