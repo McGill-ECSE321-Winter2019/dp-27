@@ -10,15 +10,13 @@ public class CourseOfferingDto {
     private Season season;
 
     private CourseDto course;
-    private List<CoopDto> coops;
 
     public CourseOfferingDto(
-            int id, int year, Season season, CourseDto course, List<CoopDto> coops) {
+            int id, int year, Season season, CourseDto course) {
         this.id = id;
         this.year = year;
         this.season = season;
         this.course = course;
-        this.coops = coops;
     }
 
     /*--- Getters and Setters ---*/
@@ -49,13 +47,5 @@ public class CourseOfferingDto {
 
     public void setCourse(CourseDto course) {
         this.course = course;
-    }
-
-    public List<CoopDto> getCoops() {
-        return this.coops;
-    }
-
-    public void setCoops(List<CoopDto> coops) {
-        this.coops = coops;
     }
 }

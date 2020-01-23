@@ -10,6 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
+import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.Season;
+import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.dto.CourseDto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +41,7 @@ public class CourseControllerIT {
 
     @Autowired CourseRepository courseRepository;
     @Autowired CourseOfferingRepository courseOfferingRepository;
+    @Autowired CourseOfferingService courseOfferingService;
 
     @BeforeEach
     public void clearDatabase() {
@@ -89,7 +93,11 @@ public class CourseControllerIT {
         assertEquals(returnedCourses.size(), 1);
 
         CourseDto courseToUpdate = returnedCourses.get(0);
+        CourseOfferingDto testCourseOffering = new CourseOfferingDto(54321, 2020, Season.FALL, courseToUpdate);
         courseToUpdate.setName("ECSE321");
+        List<CourseOfferingDto> coDtos = new ArrayList<>();
+        coDtos.add(testCourseOffering);
+        courseToUpdate.setCourseOfferings(coDtos);
 
         // 4. update the Course with a PUT request
         mvcResult =
