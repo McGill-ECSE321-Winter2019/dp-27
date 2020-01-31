@@ -395,6 +395,8 @@ public class ControllerUtils {
         return new StudentReportDto(
                 sr.getId(),
                 sr.getStatus(),
+                sr.getTitle(),
+                sr.getRawData(),
                 convertToDto(sr.getCoop()),
                 convertReportSectionListToDto(sr.getReportSections()));
     }
