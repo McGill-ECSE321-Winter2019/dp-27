@@ -18,6 +18,8 @@ import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -25,7 +27,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -43,6 +47,8 @@ public class CooperatorServiceStudentReportTests {
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired StudentService studentService;
     @Autowired ReportSectionService reportSectionService;
+
+    File testFile = new File("src/test/resources/Test_Offer_Letter.pdf");
 
     @BeforeEach
     @AfterEach
@@ -70,8 +76,11 @@ public class CooperatorServiceStudentReportTests {
         Coop coop = createTestCoop(courseOffering, s);
 
         try {
-            studentReportService.createStudentReport(ReportStatus.COMPLETED, coop);
-        } catch (IllegalArgumentException e) {
+            MultipartFile multipartFile =
+                    new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
+
+            studentReportService.createStudentReport(ReportStatus.COMPLETED, coop, multipartFile);
+        } catch (Exception e) {
             fail();
         }
 
@@ -82,12 +91,14 @@ public class CooperatorServiceStudentReportTests {
     public void testCreateStudentReportNull() {
         String error = "";
         try {
-            studentReportService.createStudentReport(null, null);
+            studentReportService.createStudentReport(null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
-        assertEquals("Report Status cannot be null! " + "Coop cannot be null!", error);
+        assertEquals(
+                "Report Status cannot be null! " + "Coop cannot be null! " + "File cannot be null!",
+                error);
         assertEquals(0, studentReportService.getAllStudentReports().size());
     }
 
@@ -100,9 +111,15 @@ public class CooperatorServiceStudentReportTests {
         Student s = createTestStudent();
         Coop coop = createTestCoop(courseOffering, s);
 
+        // 1. create Student Report
+        MultipartFile multipartFile = null;
         try {
-            sr = studentReportService.createStudentReport(ReportStatus.COMPLETED, coop);
-        } catch (IllegalArgumentException e) {
+            multipartFile = new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
+
+            sr =
+                    studentReportService.createStudentReport(
+                            ReportStatus.COMPLETED, coop, multipartFile);
+        } catch (Exception e) {
             fail();
         }
 
@@ -110,10 +127,11 @@ public class CooperatorServiceStudentReportTests {
         ReportSection rs = createTestReportSection();
         sections.add(rs);
 
+        // 2. update with valid values
         try {
             sr =
                     studentReportService.updateStudentReport(
-                            sr, ReportStatus.COMPLETED, coop, sections);
+                            sr, ReportStatus.COMPLETED, coop, sections, multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -131,9 +149,15 @@ public class CooperatorServiceStudentReportTests {
         Student s = createTestStudent();
         Coop coop = createTestCoop(courseOffering, s);
 
+        // 1. create Student Report
+        MultipartFile multipartFile = null;
         try {
-            sr = studentReportService.createStudentReport(ReportStatus.COMPLETED, coop);
-        } catch (IllegalArgumentException e) {
+            multipartFile = new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
+
+            sr =
+                    studentReportService.createStudentReport(
+                            ReportStatus.COMPLETED, coop, multipartFile);
+        } catch (Exception e) {
             fail();
         }
 
@@ -141,10 +165,11 @@ public class CooperatorServiceStudentReportTests {
         ReportSection rs = createTestReportSection();
         sections.add(rs);
 
+        // 2. update with valid values
         try {
             sr =
                     studentReportService.updateStudentReport(
-                            sr, ReportStatus.INCOMPLETE, coop, sections);
+                            sr, ReportStatus.INCOMPLETE, coop, sections, multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -165,15 +190,22 @@ public class CooperatorServiceStudentReportTests {
         Student s = createTestStudent();
         Coop coop = createTestCoop(courseOffering, s);
 
+        // 1. create Student Report
+        MultipartFile multipartFile = null;
         try {
-            sr = studentReportService.createStudentReport(ReportStatus.COMPLETED, coop);
-        } catch (IllegalArgumentException e) {
+            multipartFile = new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
+
+            sr =
+                    studentReportService.createStudentReport(
+                            ReportStatus.COMPLETED, coop, multipartFile);
+        } catch (Exception e) {
             fail();
         }
 
+        // 2. try updating with invalid values
         String error = "";
         try {
-            sr = studentReportService.updateStudentReport(null, null, null, null);
+            sr = studentReportService.updateStudentReport(null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -181,7 +213,8 @@ public class CooperatorServiceStudentReportTests {
         assertEquals(
                 "Student Report cannot be null! "
                         + "Report Status cannot be null! "
-                        + "Coop cannot be null!",
+                        + "Coop cannot be null! "
+                        + "File cannot be null!",
                 error);
         assertEquals(
                 ReportStatus.COMPLETED,
@@ -197,14 +230,21 @@ public class CooperatorServiceStudentReportTests {
         Student s = createTestStudent();
         Coop coop = createTestCoop(courseOffering, s);
 
+        // 1. create Student Report
         try {
-            sr = studentReportService.createStudentReport(ReportStatus.COMPLETED, coop);
-        } catch (IllegalArgumentException e) {
+            MultipartFile multipartFile =
+                    new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
+
+            sr =
+                    studentReportService.createStudentReport(
+                            ReportStatus.COMPLETED, coop, multipartFile);
+        } catch (Exception e) {
             fail();
         }
 
         assertEquals(1, studentReportService.getAllStudentReports().size());
 
+        // 2. try deleting the report
         try {
             studentReportService.deleteStudentReport(sr);
         } catch (IllegalArgumentException e) {

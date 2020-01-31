@@ -6,13 +6,17 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
 public class StudentReport {
     @Id @GeneratedValue private int id;
+    private String title;
     private ReportStatus status;
+
+    @Lob private byte[] data;
 
     @ManyToOne private Coop coop;
 
@@ -23,6 +27,14 @@ public class StudentReport {
 
     public int getId() {
         return this.id;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public ReportStatus getStatus() {
@@ -39,6 +51,14 @@ public class StudentReport {
 
     public void setCoop(Coop coop) {
         this.coop = coop;
+    }
+
+    public byte[] getRawData() {
+        return this.data;
+    }
+
+    public void setRawData(byte[] data) {
+        this.data = data;
     }
 
     public List<ReportSection> getReportSections() {

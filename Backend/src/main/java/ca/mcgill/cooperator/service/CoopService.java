@@ -13,7 +13,6 @@ import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -196,23 +195,6 @@ public class CoopService {
         }
 
         return coopRepository.save(c);
-    }
-
-    @Transactional
-    public Coop getCoop(Integer id) {
-        if (id == null || id < 0) {
-            throw new IllegalArgumentException("ID is invalid.");
-        }
-        Coop c = coopRepository.findById(id).orElse(null);
-        if (c == null) {
-            throw new IllegalArgumentException("Coop with that ID does not exist.");
-        }
-        return c;
-    }
-
-    @Transactional
-    public List<Coop> getllCoops() {
-        return ServiceUtils.toList(coopRepository.findAll());
     }
 
     @Transactional

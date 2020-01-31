@@ -55,7 +55,7 @@ public class CooperatorServiceCourseOfferingTests {
 
     @Test
     public void testCreateCourseOfferingNull() {
-    	
+
         try {
             courseOfferingService.createCourseOffering(0, null, null);
         } catch (IllegalArgumentException e) {
