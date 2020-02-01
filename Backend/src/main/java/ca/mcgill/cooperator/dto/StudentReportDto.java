@@ -7,14 +7,19 @@ public class StudentReportDto {
     private int id;
     private ReportStatus status;
     private String title;
-    
+
     private byte[] data;
 
     private CoopDto coop;
     private List<ReportSectionDto> reportSections;
 
     public StudentReportDto(
-            int id, ReportStatus status, String title, byte[] data, CoopDto coop, List<ReportSectionDto> reportSections) {
+            int id,
+            ReportStatus status,
+            String title,
+            byte[] data,
+            CoopDto coop,
+            List<ReportSectionDto> reportSections) {
         this.id = id;
         this.status = status;
         this.title = title;
@@ -36,20 +41,20 @@ public class StudentReportDto {
     public void setStatus(ReportStatus status) {
         this.status = status;
     }
-    
+
     public String getTitle() {
-    	return this.title;
+        return this.title;
     }
-    
+
     public void setTitle(String title) {
-    	this.title = title;
+        this.title = title;
     }
-    
-    public byte[] getRawData() {
+
+    public byte[] getData() {
         return this.data;
     }
 
-    public void setRawData(byte[] data) {
+    public void setData(byte[] data) {
         this.data = data;
     }
 

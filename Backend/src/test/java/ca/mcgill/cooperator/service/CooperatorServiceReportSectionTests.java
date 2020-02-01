@@ -422,7 +422,9 @@ public class CooperatorServiceReportSectionTests {
         try {
             MultipartFile multipartFile = new MockMultipartFile("file", new FileInputStream(file));
 
-            sr = studentReportService.createStudentReport(ReportStatus.COMPLETED, c, multipartFile);
+            sr =
+                    studentReportService.createStudentReport(
+                            ReportStatus.COMPLETED, c, "Offer Letter", multipartFile);
             return sr;
         } catch (IOException e) {
             return null;

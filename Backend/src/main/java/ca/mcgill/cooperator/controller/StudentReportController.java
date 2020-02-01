@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,26 +68,30 @@ public class StudentReportController {
     /**
      * Create a Student Report using multipart form data
      *
-     * @param srDto
      * @param file
+     * @param status
+     * @param title
+     * @param coop_id
      * @return the created Student Report
      */
     @PostMapping("")
     public StudentReportDto createStudentReport(
+            @ModelAttribute("file") MultipartFile file,
             @RequestParam("status") String status,
-            @RequestParam("coop_id") int coopId,
-            @RequestParam("file") MultipartFile file) {
+            @RequestParam("title") String title,
+            @RequestParam("coop_id") int coopId) {
         Coop coop = coopService.getCoopById(coopId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
 
         StudentReport createdReport =
-                studentReportService.createStudentReport(reportStatus, coop, file);
+                studentReportService.createStudentReport(reportStatus, coop, title, file);
 
         return ControllerUtils.convertToDto(createdReport);
     }
 
     @ExceptionHandler(RuntimeException.class)
     public final ResponseEntity<Exception> handleAllExceptions(RuntimeException ex) {
+        ex.printStackTrace();
         return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -33,13 +33,17 @@ public class StudentReportService {
      * @return created student report
      */
     @Transactional
-    public StudentReport createStudentReport(ReportStatus status, Coop c, MultipartFile file) {
+    public StudentReport createStudentReport(
+            ReportStatus status, Coop c, String title, MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (status == null) {
             error.append("Report Status cannot be null! ");
         }
         if (c == null) {
             error.append("Coop cannot be null! ");
+        }
+        if (title == null) {
+            error.append("File title cannot be null! ");
         }
         if (file == null) {
             error.append("File cannot be null!");
@@ -48,15 +52,12 @@ public class StudentReportService {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
         StudentReport sr = new StudentReport();
 
         sr.setStatus(status);
         sr.setCoop(c);
         sr.setReportSections(new ArrayList<ReportSection>());
-        sr.setTitle(fileName);
+        sr.setTitle(title);
         try {
             sr.setRawData(file.getBytes());
         } catch (IOException e) {

@@ -79,7 +79,8 @@ public class CooperatorServiceStudentReportTests {
             MultipartFile multipartFile =
                     new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            studentReportService.createStudentReport(ReportStatus.COMPLETED, coop, multipartFile);
+            studentReportService.createStudentReport(
+                    ReportStatus.COMPLETED, coop, "Offer Letter", multipartFile);
         } catch (Exception e) {
             fail();
         }
@@ -91,7 +92,7 @@ public class CooperatorServiceStudentReportTests {
     public void testCreateStudentReportNull() {
         String error = "";
         try {
-            studentReportService.createStudentReport(null, null, null);
+            studentReportService.createStudentReport(null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -118,7 +119,7 @@ public class CooperatorServiceStudentReportTests {
 
             sr =
                     studentReportService.createStudentReport(
-                            ReportStatus.COMPLETED, coop, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", multipartFile);
         } catch (Exception e) {
             fail();
         }
@@ -156,7 +157,7 @@ public class CooperatorServiceStudentReportTests {
 
             sr =
                     studentReportService.createStudentReport(
-                            ReportStatus.COMPLETED, coop, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", multipartFile);
         } catch (Exception e) {
             fail();
         }
@@ -197,7 +198,7 @@ public class CooperatorServiceStudentReportTests {
 
             sr =
                     studentReportService.createStudentReport(
-                            ReportStatus.COMPLETED, coop, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", multipartFile);
         } catch (Exception e) {
             fail();
         }
@@ -237,7 +238,7 @@ public class CooperatorServiceStudentReportTests {
 
             sr =
                     studentReportService.createStudentReport(
-                            ReportStatus.COMPLETED, coop, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", multipartFile);
         } catch (Exception e) {
             fail();
         }

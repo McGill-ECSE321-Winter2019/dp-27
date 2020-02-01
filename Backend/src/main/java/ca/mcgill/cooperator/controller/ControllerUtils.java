@@ -109,14 +109,27 @@ public class ControllerUtils {
         if (c == null) {
             throw new IllegalArgumentException("Coop does not exist!");
         }
+        CoopDetailsDto coopDetails = null;
+        List<StudentReportDto> studentReports = null;
+        List<EmployerReportDto> employerReports = null;
+        if (c.getCoopDetails() != null) {
+            coopDetails = convertToDto(c.getCoopDetails());
+        }
+        if (c.getStudentReports() != null) {
+            studentReports = convertStudentReportListToDto(c.getStudentReports());
+        }
+        if (c.getEmployerReports() != null) {
+            employerReports = convertEmployerReportListToDto(c.getEmployerReports());
+        }
+
         return new CoopDto(
                 c.getId(),
                 c.getStatus(),
                 convertToDto(c.getCourseOffering()),
-                convertToDto(c.getCoopDetails()),
+                coopDetails,
                 convertToDto(c.getStudent()),
-                convertStudentReportListToDto(c.getStudentReports()),
-                convertEmployerReportListToDto(c.getEmployerReports()));
+                studentReports,
+                employerReports);
     }
 
     static List<CoopDto> convertCoopListToDto(Set<Coop> coops) {
@@ -309,8 +322,8 @@ public class ControllerUtils {
                 rs.getId(),
                 rs.getTitle(),
                 rs.getContent(),
-                convertToDto(rs.getStudentReport()),
-                convertToDto(rs.getEmployerReport()));
+                null, // ignore StudentReport
+                null); // ignore EmployerReport
     }
 
     static List<ReportSectionDto> convertReportSectionListToDto(
@@ -397,7 +410,7 @@ public class ControllerUtils {
                 sr.getStatus(),
                 sr.getTitle(),
                 sr.getRawData(),
-                convertToDto(sr.getCoop()),
+                null, // ignore Coop
                 convertReportSectionListToDto(sr.getReportSections()));
     }
 
