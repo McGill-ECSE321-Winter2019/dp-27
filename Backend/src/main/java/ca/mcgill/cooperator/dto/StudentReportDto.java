@@ -6,14 +6,24 @@ import java.util.List;
 public class StudentReportDto {
     private int id;
     private ReportStatus status;
+    private String title;
+
+    private byte[] data;
 
     private CoopDto coop;
     private List<ReportSectionDto> reportSections;
 
     public StudentReportDto(
-            int id, ReportStatus status, CoopDto coop, List<ReportSectionDto> reportSections) {
+            int id,
+            ReportStatus status,
+            String title,
+            byte[] data,
+            CoopDto coop,
+            List<ReportSectionDto> reportSections) {
         this.id = id;
         this.status = status;
+        this.title = title;
+        this.data = data;
         this.coop = coop;
         this.reportSections = reportSections;
     }
@@ -30,6 +40,22 @@ public class StudentReportDto {
 
     public void setStatus(ReportStatus status) {
         this.status = status;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public byte[] getData() {
+        return this.data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 
     public CoopDto getCoop() {

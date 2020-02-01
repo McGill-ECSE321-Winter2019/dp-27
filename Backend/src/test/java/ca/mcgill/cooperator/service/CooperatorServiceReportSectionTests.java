@@ -24,6 +24,9 @@ import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -31,7 +34,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -70,7 +75,7 @@ public class CooperatorServiceReportSectionTests {
             rs.setStudentReport(null);
             reportSectionRepository.save(rs);
         }
-        
+
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
@@ -413,8 +418,17 @@ public class CooperatorServiceReportSectionTests {
 
     private StudentReport createTestStudentReport(Coop c) {
         StudentReport sr = new StudentReport();
-        sr = studentReportService.createStudentReport(ReportStatus.COMPLETED, c);
-        return sr;
+        File file = new File("src/test/resources/Test_Offer_Letter.pdf");
+        try {
+            MultipartFile multipartFile = new MockMultipartFile("file", new FileInputStream(file));
+
+            sr =
+                    studentReportService.createStudentReport(
+                            ReportStatus.COMPLETED, c, "Offer Letter", multipartFile);
+            return sr;
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     private EmployerReport createTestEmployerReport(Coop c, EmployerContact ec) {

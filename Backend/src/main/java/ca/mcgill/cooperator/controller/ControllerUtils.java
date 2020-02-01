@@ -109,14 +109,27 @@ public class ControllerUtils {
         if (c == null) {
             throw new IllegalArgumentException("Coop does not exist!");
         }
+        CoopDetailsDto coopDetails = null;
+        List<StudentReportDto> studentReports = null;
+        List<EmployerReportDto> employerReports = null;
+        if (c.getCoopDetails() != null) {
+            coopDetails = convertToDto(c.getCoopDetails());
+        }
+        if (c.getStudentReports() != null) {
+            studentReports = convertStudentReportListToDto(c.getStudentReports());
+        }
+        if (c.getEmployerReports() != null) {
+            employerReports = convertEmployerReportListToDto(c.getEmployerReports());
+        }
+
         return new CoopDto(
                 c.getId(),
                 c.getStatus(),
                 convertToDto(c.getCourseOffering()),
-                convertToDto(c.getCoopDetails()),
+                coopDetails,
                 convertToDto(c.getStudent()),
-                convertStudentReportListToDto(c.getStudentReports()),
-                convertEmployerReportListToDto(c.getEmployerReports()));
+                studentReports,
+                employerReports);
     }
 
     static List<CoopDto> convertCoopListToDto(Set<Coop> coops) {
@@ -251,7 +264,7 @@ public class ControllerUtils {
                 new CompanyDto(company.getId(), company.getName(), employerContactDtos);
 
         companyDto.setEmployees(employerContactDtos);
-        //now set company that was initially null
+        // now set company that was initially null
         employerContactDto.setCompany(companyDto);
 
         return employerContactDto;
@@ -259,17 +272,17 @@ public class ControllerUtils {
 
     static List<EmployerContactDto> convertEmployerContactListToDto(
             List<EmployerContact> employerContacts) {
-    	
-	    List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
 
-	    if (employerContacts != null) {
-	        for (EmployerContact ec : employerContacts) {
-	            if (ec == null) {
-	                throw new IllegalArgumentException("Employer Contact does not exist!");
-	            }
-	            employerContactDtos.add(convertToDto(ec));
-	        }
-    	}
+        List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
+
+        if (employerContacts != null) {
+            for (EmployerContact ec : employerContacts) {
+                if (ec == null) {
+                    throw new IllegalArgumentException("Employer Contact does not exist!");
+                }
+                employerContactDtos.add(convertToDto(ec));
+            }
+        }
         return employerContactDtos;
     }
 
@@ -309,8 +322,8 @@ public class ControllerUtils {
                 rs.getId(),
                 rs.getTitle(),
                 rs.getContent(),
-                convertToDto(rs.getStudentReport()),
-                convertToDto(rs.getEmployerReport()));
+                null, // ignore StudentReport
+                null); // ignore EmployerReport
     }
 
     static List<ReportSectionDto> convertReportSectionListToDto(
@@ -395,7 +408,9 @@ public class ControllerUtils {
         return new StudentReportDto(
                 sr.getId(),
                 sr.getStatus(),
-                convertToDto(sr.getCoop()),
+                sr.getTitle(),
+                sr.getData(),
+                null, // ignore Coop
                 convertReportSectionListToDto(sr.getReportSections()));
     }
 

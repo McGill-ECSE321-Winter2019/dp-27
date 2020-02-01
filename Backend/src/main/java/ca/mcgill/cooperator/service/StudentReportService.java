@@ -7,12 +7,15 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.StudentReport;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class StudentReportService {
@@ -22,20 +25,28 @@ public class StudentReportService {
     @Autowired ReportSectionRepository reportSectionRepository;
 
     /**
-     * creates new student report in database
+     * Creates new student report in database
      *
      * @param status
      * @param c
+     * @param file object
      * @return created student report
      */
     @Transactional
-    public StudentReport createStudentReport(ReportStatus status, Coop c) {
+    public StudentReport createStudentReport(
+            ReportStatus status, Coop c, String title, MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (status == null) {
             error.append("Report Status cannot be null! ");
         }
         if (c == null) {
-            error.append("Coop cannot be null!");
+            error.append("Coop cannot be null! ");
+        }
+        if (title == null) {
+            error.append("File title cannot be null! ");
+        }
+        if (file == null) {
+            error.append("File cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
@@ -46,6 +57,12 @@ public class StudentReportService {
         sr.setStatus(status);
         sr.setCoop(c);
         sr.setReportSections(new ArrayList<ReportSection>());
+        sr.setTitle(title);
+        try {
+            sr.setData(file.getBytes());
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
 
         studentReportRepository.save(sr);
 
@@ -59,7 +76,7 @@ public class StudentReportService {
     }
 
     /**
-     * retrieve specified existing student report from database
+     * Retrieves specified existing student report from database
      *
      * @param id
      * @return specified student report
@@ -75,7 +92,7 @@ public class StudentReportService {
     }
 
     /**
-     * retrieves all student reports from database
+     * Retrieves all student reports from database
      *
      * @return list of student reports
      */
@@ -84,7 +101,7 @@ public class StudentReportService {
         return ServiceUtils.toList(studentReportRepository.findAll());
     }
     /**
-     * updates existing student report in database
+     * Updates existing student report in database
      *
      * @param sr
      * @param status
@@ -94,7 +111,12 @@ public class StudentReportService {
      */
     @Transactional
     public StudentReport updateStudentReport(
-            StudentReport sr, ReportStatus status, Coop c, List<ReportSection> sections) {
+            StudentReport sr,
+            ReportStatus status,
+            String title,
+            Coop c,
+            List<ReportSection> sections,
+            MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (sr == null) {
             error.append("Student Report cannot be null! ");
@@ -103,16 +125,28 @@ public class StudentReportService {
             error.append("Report Status cannot be null! ");
         }
         if (c == null) {
-            error.append("Coop cannot be null!");
+            error.append("Coop cannot be null! ");
+        }
+        if (title == null) {
+            error.append("File title cannot be null! ");
+        }
+        if (file == null) {
+            error.append("File cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-
+        
         sr.setStatus(status);
         sr.setCoop(c);
+        sr.setTitle(title);
         if (sections != null) {
             sr.setReportSections(sections);
+        }
+        try {
+            sr.setData(file.getBytes());
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
 
         studentReportRepository.save(sr);
@@ -148,7 +182,7 @@ public class StudentReportService {
     }
 
     /**
-     * deletes specified student report from database
+     * Deletes specified student report from database
      *
      * @param sr
      * @return deleted student report
@@ -164,6 +198,7 @@ public class StudentReportService {
         Set<StudentReport> coopReports = c.getStudentReports();
         coopReports.remove(sr);
         c.setStudentReports(coopReports);
+
         coopRepository.save(c);
 
         studentReportRepository.delete(sr);
