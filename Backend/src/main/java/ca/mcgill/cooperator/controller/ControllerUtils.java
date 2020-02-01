@@ -409,7 +409,7 @@ public class ControllerUtils {
                 sr.getId(),
                 sr.getStatus(),
                 sr.getTitle(),
-                sr.getRawData(),
+                sr.getData(),
                 null, // ignore Coop
                 convertReportSectionListToDto(sr.getReportSections()));
     }

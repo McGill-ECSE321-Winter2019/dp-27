@@ -59,7 +59,7 @@ public class StudentReportService {
         sr.setReportSections(new ArrayList<ReportSection>());
         sr.setTitle(title);
         try {
-            sr.setRawData(file.getBytes());
+            sr.setData(file.getBytes());
         } catch (IOException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
@@ -144,7 +144,7 @@ public class StudentReportService {
             sr.setReportSections(sections);
         }
         try {
-            sr.setRawData(file.getBytes());
+            sr.setData(file.getBytes());
         } catch (IOException e) {
             throw new IllegalArgumentException(e.getMessage());
         }

@@ -53,11 +53,11 @@ public class StudentReport {
         this.coop = coop;
     }
 
-    public byte[] getRawData() {
+    public byte[] getData() {
         return this.data;
     }
 
-    public void setRawData(byte[] data) {
+    public void setData(byte[] data) {
         this.data = data;
     }
 
