@@ -98,7 +98,7 @@ public class CooperatorServiceStudentReportTests {
         }
 
         assertEquals(
-                "Report Status cannot be null! " + "Coop cannot be null! " + "File cannot be null!",
+                "Report Status cannot be null! " + "Coop cannot be null! " + "File title cannot be null! " + "File cannot be null!",
                 error);
         assertEquals(0, studentReportService.getAllStudentReports().size());
     }
@@ -132,7 +132,7 @@ public class CooperatorServiceStudentReportTests {
         try {
             sr =
                     studentReportService.updateStudentReport(
-                            sr, ReportStatus.COMPLETED, coop, sections, multipartFile);
+                            sr, ReportStatus.COMPLETED, "Offer Letter", coop, sections, multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -170,7 +170,7 @@ public class CooperatorServiceStudentReportTests {
         try {
             sr =
                     studentReportService.updateStudentReport(
-                            sr, ReportStatus.INCOMPLETE, coop, sections, multipartFile);
+                            sr, ReportStatus.INCOMPLETE, "Offer Letter", coop, sections, multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -206,7 +206,7 @@ public class CooperatorServiceStudentReportTests {
         // 2. try updating with invalid values
         String error = "";
         try {
-            sr = studentReportService.updateStudentReport(null, null, null, null, null);
+            sr = studentReportService.updateStudentReport(null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -215,6 +215,7 @@ public class CooperatorServiceStudentReportTests {
                 "Student Report cannot be null! "
                         + "Report Status cannot be null! "
                         + "Coop cannot be null! "
+                        + "File title cannot be null! "
                         + "File cannot be null!",
                 error);
         assertEquals(

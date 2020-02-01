@@ -113,6 +113,7 @@ public class StudentReportService {
     public StudentReport updateStudentReport(
             StudentReport sr,
             ReportStatus status,
+            String title,
             Coop c,
             List<ReportSection> sections,
             MultipartFile file) {
@@ -126,19 +127,19 @@ public class StudentReportService {
         if (c == null) {
             error.append("Coop cannot be null! ");
         }
+        if (title == null) {
+            error.append("File title cannot be null! ");
+        }
         if (file == null) {
             error.append("File cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-
-        // Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
+        
         sr.setStatus(status);
         sr.setCoop(c);
-        sr.setTitle(fileName);
+        sr.setTitle(title);
         if (sections != null) {
             sr.setReportSections(sections);
         }
