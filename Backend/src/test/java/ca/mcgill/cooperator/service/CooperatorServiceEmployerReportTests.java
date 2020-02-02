@@ -22,6 +22,8 @@ import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -29,7 +31,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -52,6 +56,8 @@ public class CooperatorServiceEmployerReportTests {
     @Autowired EmployerContactService employerContactService;
     @Autowired StudentService studentService;
     @Autowired ReportSectionService reportSectionService;
+
+    File testFile = new File("src/test/resources/Test_Offer_Letter.pdf");
 
     @BeforeEach
     @AfterEach
@@ -88,8 +94,12 @@ public class CooperatorServiceEmployerReportTests {
         EmployerContact ec = createTestEmployerContact(company);
 
         try {
-            employerReportService.createEmployerReport(ReportStatus.COMPLETED, coop, ec);
-        } catch (IllegalArgumentException e) {
+            MultipartFile multipartFile =
+                    new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
+
+            employerReportService.createEmployerReport(
+                    ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
+        } catch (Exception e) {
             fail();
         }
 
@@ -100,7 +110,7 @@ public class CooperatorServiceEmployerReportTests {
     public void testCreateEmployerReportNull() {
         String error = "";
         try {
-            employerReportService.createEmployerReport(null, null, null);
+            employerReportService.createEmployerReport(null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -108,7 +118,9 @@ public class CooperatorServiceEmployerReportTests {
         assertEquals(
                 "Report Status cannot be null! "
                         + "Coop cannot be null! "
-                        + "Employer Contact cannot be null!",
+                        + "Employer Contact cannot be null! "
+                        + "File title cannot be null! "
+                        + "File cannot be null!",
                 error);
     }
 
@@ -123,9 +135,13 @@ public class CooperatorServiceEmployerReportTests {
         Company company = createTestCompany();
         EmployerContact ec = createTestEmployerContact(company);
 
+        MultipartFile multipartFile = null;
         try {
-            er = employerReportService.createEmployerReport(ReportStatus.COMPLETED, coop, ec);
-        } catch (IllegalArgumentException e) {
+            multipartFile = new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
+
+            er = employerReportService.createEmployerReport(
+                    ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
+        } catch (Exception e) {
             fail();
         }
 
@@ -136,7 +152,13 @@ public class CooperatorServiceEmployerReportTests {
         try {
             er =
                     employerReportService.updateEmployerReport(
-                            er, ReportStatus.COMPLETED, coop, ec, sections);
+                            er,
+                            ReportStatus.COMPLETED,
+                            coop,
+                            "Offer Letter",
+                            ec,
+                            sections,
+                            multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -156,9 +178,14 @@ public class CooperatorServiceEmployerReportTests {
         Company company = createTestCompany();
         EmployerContact ec = createTestEmployerContact(company);
 
+        MultipartFile multipartFile = null;
         try {
-            er = employerReportService.createEmployerReport(ReportStatus.COMPLETED, coop, ec);
-        } catch (IllegalArgumentException e) {
+            multipartFile = new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
+
+            er =
+                    employerReportService.createEmployerReport(
+                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
+        } catch (Exception e) {
             fail();
         }
 
@@ -167,9 +194,8 @@ public class CooperatorServiceEmployerReportTests {
         sections.add(rs);
 
         try {
-            er =
-                    employerReportService.updateEmployerReport(
-                            er, ReportStatus.INCOMPLETE, coop, ec, sections);
+            employerReportService.updateEmployerReport(
+                    er, ReportStatus.INCOMPLETE, coop, "Offer Letter", ec, sections, multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -193,23 +219,32 @@ public class CooperatorServiceEmployerReportTests {
         EmployerContact ec = createTestEmployerContact(company);
 
         try {
-            er = employerReportService.createEmployerReport(ReportStatus.COMPLETED, coop, ec);
-        } catch (IllegalArgumentException e) {
+            MultipartFile multipartFile =
+                    new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
+
+            er =
+                    employerReportService.createEmployerReport(
+                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
+        } catch (Exception e) {
             fail();
         }
 
         String error = "";
         try {
-            er = employerReportService.updateEmployerReport(null, null, null, null, null);
+            er =
+                    employerReportService.updateEmployerReport(
+                            null, null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
         assertEquals(
-                "Employer Report cannot be null! "
-                        + "Report Status cannot be null! "
+        		"Employer Report cannot be null! "
+        				+ "Report Status cannot be null! "
                         + "Coop cannot be null! "
-                        + "Employer Contact cannot be null!",
+                        + "Employer Contact cannot be null! "
+                        + "File title cannot be null! "
+                        + "File cannot be null!",
                 error);
         assertEquals(
                 ReportStatus.COMPLETED,
@@ -228,8 +263,13 @@ public class CooperatorServiceEmployerReportTests {
         EmployerContact ec = createTestEmployerContact(company);
 
         try {
-            er = employerReportService.createEmployerReport(ReportStatus.COMPLETED, coop, ec);
-        } catch (IllegalArgumentException e) {
+            MultipartFile multipartFile =
+                    new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
+
+            er =
+                    employerReportService.createEmployerReport(
+                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
+        } catch (Exception e) {
             fail();
         }
 

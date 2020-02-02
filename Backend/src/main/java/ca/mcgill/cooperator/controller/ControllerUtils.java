@@ -292,9 +292,11 @@ public class ControllerUtils {
         }
         return new EmployerReportDto(
                 er.getId(),
+                er.getTitle(),
                 er.getStatus(),
-                convertToDto(er.getCoop()),
-                convertToDto(er.getEmployerContact()),
+                er.getData(),
+                null, // ignore Coop
+                null, // ignore EmployerContact
                 convertReportSectionListToDto(er.getReportSections()));
     }
 

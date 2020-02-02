@@ -5,7 +5,10 @@ import java.util.List;
 
 public class EmployerReportDto {
     private int id;
+    private String title;
     private ReportStatus status;
+
+    private byte[] data;
 
     private CoopDto coop;
     private EmployerContactDto employerContact;
@@ -13,12 +16,16 @@ public class EmployerReportDto {
 
     public EmployerReportDto(
             int id,
+            String title,
             ReportStatus status,
+            byte[] data,
             CoopDto coop,
             EmployerContactDto employerContact,
             List<ReportSectionDto> reportSections) {
         this.id = id;
+        this.title = title;
         this.status = status;
+        this.data = data;
         this.coop = coop;
         this.employerContact = employerContact;
         this.reportSections = reportSections;
@@ -30,12 +37,28 @@ public class EmployerReportDto {
         return this.id;
     }
 
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public ReportStatus getStatus() {
         return this.status;
     }
 
     public void setStatus(ReportStatus status) {
         this.status = status;
+    }
+
+    public byte[] getData() {
+        return this.data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 
     public CoopDto getCoop() {

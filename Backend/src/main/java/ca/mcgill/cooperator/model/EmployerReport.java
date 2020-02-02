@@ -5,13 +5,17 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
 public class EmployerReport {
     @Id @GeneratedValue private int id;
+    private String title;
     private ReportStatus status;
+
+    @Lob private byte[] data;
 
     @ManyToOne private Coop coop;
 
@@ -26,12 +30,28 @@ public class EmployerReport {
         return this.id;
     }
 
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public ReportStatus getStatus() {
         return this.status;
     }
 
     public void setStatus(ReportStatus status) {
         this.status = status;
+    }
+
+    public byte[] getData() {
+        return this.data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 
     public Coop getCoop() {

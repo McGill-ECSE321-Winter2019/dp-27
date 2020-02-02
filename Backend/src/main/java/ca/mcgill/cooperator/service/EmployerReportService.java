@@ -9,12 +9,14 @@ import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class EmployerReportService {
@@ -24,15 +26,18 @@ public class EmployerReportService {
     @Autowired ReportSectionRepository reportSectionRepository;
 
     /**
-     * creates new employer report in database
+     * Creates new employer report in database
      *
      * @param status
      * @param c
+     * @param title
      * @param ec
+     * @param file
      * @return created employer report
      */
     @Transactional
-    public EmployerReport createEmployerReport(ReportStatus status, Coop c, EmployerContact ec) {
+    public EmployerReport createEmployerReport(
+            ReportStatus status, Coop c, String title, EmployerContact ec, MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (status == null) {
             error.append("Report Status cannot be null! ");
@@ -41,7 +46,13 @@ public class EmployerReportService {
             error.append("Coop cannot be null! ");
         }
         if (ec == null) {
-            error.append("Employer Contact cannot be null!");
+            error.append("Employer Contact cannot be null! ");
+        }
+        if (title == null) {
+            error.append("File title cannot be null! ");
+        }
+        if (file == null) {
+            error.append("File cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
@@ -49,9 +60,15 @@ public class EmployerReportService {
 
         EmployerReport er = new EmployerReport();
         er.setStatus(status);
+        er.setTitle(title);
         er.setCoop(c);
         er.setEmployerContact(ec);
         er.setReportSections(new ArrayList<ReportSection>());
+        try {
+            er.setData(file.getBytes());
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
 
         employerReportRepository.save(er);
 
@@ -70,7 +87,7 @@ public class EmployerReportService {
     }
 
     /**
-     * retrieves specified existing employer report from database
+     * Retrieves specified existing employer report from database
      *
      * @param id
      * @return specific employer report
@@ -87,7 +104,7 @@ public class EmployerReportService {
     }
 
     /**
-     * retrieves all employer reports from database
+     * Retrieves all employer reports from database
      *
      * @return list of empoyer reports
      */
@@ -97,7 +114,7 @@ public class EmployerReportService {
     }
 
     /**
-     * update existing employer report in database
+     * Updates existing employer report in database
      *
      * @param er
      * @param status
@@ -111,8 +128,10 @@ public class EmployerReportService {
             EmployerReport er,
             ReportStatus status,
             Coop c,
+            String title,
             EmployerContact ec,
-            List<ReportSection> sections) {
+            List<ReportSection> sections,
+            MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (er == null) {
             error.append("Employer Report cannot be null! ");
@@ -124,7 +143,13 @@ public class EmployerReportService {
             error.append("Coop cannot be null! ");
         }
         if (ec == null) {
-            error.append("Employer Contact cannot be null!");
+            error.append("Employer Contact cannot be null! ");
+        }
+        if (title == null) {
+            error.append("File title cannot be null! ");
+        }
+        if (file == null) {
+            error.append("File cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
@@ -132,10 +157,16 @@ public class EmployerReportService {
 
         // set all values in employer report
         er.setStatus(status);
+        er.setTitle(title);
         er.setCoop(c);
         er.setEmployerContact(ec);
         if (sections != null) {
             er.setReportSections(sections);
+        }
+        try {
+            er.setData(file.getBytes());
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e.getMessage());
         }
 
         employerReportRepository.save(er);
@@ -188,7 +219,7 @@ public class EmployerReportService {
     }
 
     /**
-     * deletes specific employer report from database
+     * Deletes specific employer report from database
      *
      * @param er
      * @return deleted employer report
