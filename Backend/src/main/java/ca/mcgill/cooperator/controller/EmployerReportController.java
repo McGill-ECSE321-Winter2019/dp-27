@@ -8,9 +8,7 @@ import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.EmployerReportService;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,30 +34,30 @@ public class EmployerReportController {
 
     /**
      * Gets an EmployerReport by ID
-     * 
+     *
      * @param id
      * @return EmployerReportDto
      */
     @GetMapping("/{id}")
     public EmployerReportDto getEmployerReportById(@PathVariable int id) {
-    	EmployerReport er = employerReportService.getEmployerReport(id);
-    	
+        EmployerReport er = employerReportService.getEmployerReport(id);
+
         return ControllerUtils.convertToDto(er);
     }
 
     /**
      * Gets all EmployerReports associated with the specified EmployerContact
-     * 
+     *
      * @param id
      * @return list of EmployerReportDto
      */
     @GetMapping("/employer/{id}")
     public List<EmployerReportDto> getEmployerReportByEmployerContactId(@PathVariable int id) {
         EmployerContact ec = employerContactService.getEmployerContact(id);
-        
+
         return ControllerUtils.convertEmployerReportListToDto(ec.getEmployerReports());
     }
-    
+
     /**
      * Creates a EmployerReport using multipart form data
      *

@@ -139,8 +139,9 @@ public class CooperatorServiceEmployerReportTests {
         try {
             multipartFile = new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            er = employerReportService.createEmployerReport(
-                    ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
+            er =
+                    employerReportService.createEmployerReport(
+                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
         } catch (Exception e) {
             fail();
         }
@@ -239,8 +240,8 @@ public class CooperatorServiceEmployerReportTests {
         }
 
         assertEquals(
-        		"Employer Report cannot be null! "
-        				+ "Report Status cannot be null! "
+                "Employer Report cannot be null! "
+                        + "Report Status cannot be null! "
                         + "Coop cannot be null! "
                         + "Employer Contact cannot be null! "
                         + "File title cannot be null! "
