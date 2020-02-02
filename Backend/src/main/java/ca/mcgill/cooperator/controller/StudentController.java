@@ -43,6 +43,15 @@ public class StudentController {
     public List<StudentDto> getAllStudents() {
         List<Student> s = studentService.getAllStudents();
 
+    /**
+     * Get all students
+     *
+     * @return List<StudentDto>
+     */
+    @GetMapping("")
+    public List<StudentDto> getAllStudents() {
+        List<Student> s = studentService.getAllStudents();
+
         return ControllerUtils.convertToDto(s);
     }
     /**
