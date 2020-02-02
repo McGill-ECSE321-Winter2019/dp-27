@@ -24,9 +24,11 @@ import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
+import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.ReportSectionService;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ public class ControllerUtils {
 
     @Autowired private static NotificationService notificationService;
     @Autowired private static ReportSectionService reportSectionService;
+    @Autowired private static CoopService coopService;
 
     /*
      * Domain Object to DTO conversion methods
@@ -1020,5 +1023,22 @@ public class ControllerUtils {
             reports.add(rs);
         }
         return reports;
+    static Set<Notification> convertNotificationListToDomainObjectSet(
+            List<NotificationDto> notifDtos) {
+        Set<Notification> notifs = new HashSet<>();
+        for (NotificationDto nDto : notifDtos) {
+            Notification n = notificationService.getNotification(nDto.getId());
+            notifs.add(n);
+        }
+        return notifs;
+    }
+
+    static Set<Coop> convertCoopsListToDomainObject(List<CoopDto> coopDto) {
+        Set<Coop> coops = new HashSet<>();
+        for (CoopDto cDto : coopDto) {
+            Coop c = coopService.getCoopById(cDto.getId());
+            coops.add(c);
+        }
+        return coops;
     }
 }
