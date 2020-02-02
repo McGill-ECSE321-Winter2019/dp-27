@@ -66,7 +66,7 @@ public class EmployerReportController {
      * @param title
      * @param coop_id
      * @param employer_id
-     * @return the created Student Report
+     * @return the created EmployerReport
      */
     @PostMapping("")
     public EmployerReportDto createEmployerReport(
