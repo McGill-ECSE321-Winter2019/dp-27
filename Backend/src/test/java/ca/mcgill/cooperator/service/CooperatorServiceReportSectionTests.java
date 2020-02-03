@@ -432,8 +432,16 @@ public class CooperatorServiceReportSectionTests {
     }
 
     private EmployerReport createTestEmployerReport(Coop c, EmployerContact ec) {
-        EmployerReport sr = new EmployerReport();
-        sr = employerReportService.createEmployerReport(ReportStatus.COMPLETED, c, ec);
-        return sr;
+        EmployerReport er = new EmployerReport();
+        File file = new File("src/test/resources/Test_Offer_Letter.pdf");
+        try {
+            MultipartFile multipartFile = new MockMultipartFile("file", new FileInputStream(file));
+            er =
+                    employerReportService.createEmployerReport(
+                            ReportStatus.COMPLETED, c, "Offer Letter", ec, multipartFile);
+        } catch (IOException e) {
+            return null;
+        }
+        return er;
     }
 }

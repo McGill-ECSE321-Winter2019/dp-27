@@ -98,7 +98,10 @@ public class CooperatorServiceStudentReportTests {
         }
 
         assertEquals(
-                "Report Status cannot be null! " + "Coop cannot be null! " + "File title cannot be null! " + "File cannot be null!",
+                "Report Status cannot be null! "
+                        + "Coop cannot be null! "
+                        + "File title cannot be null! "
+                        + "File cannot be null!",
                 error);
         assertEquals(0, studentReportService.getAllStudentReports().size());
     }
@@ -132,7 +135,12 @@ public class CooperatorServiceStudentReportTests {
         try {
             sr =
                     studentReportService.updateStudentReport(
-                            sr, ReportStatus.COMPLETED, "Offer Letter", coop, sections, multipartFile);
+                            sr,
+                            ReportStatus.COMPLETED,
+                            "Offer Letter",
+                            coop,
+                            sections,
+                            multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -170,7 +178,12 @@ public class CooperatorServiceStudentReportTests {
         try {
             sr =
                     studentReportService.updateStudentReport(
-                            sr, ReportStatus.INCOMPLETE, "Offer Letter", coop, sections, multipartFile);
+                            sr,
+                            ReportStatus.INCOMPLETE,
+                            "Offer Letter",
+                            coop,
+                            sections,
+                            multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
