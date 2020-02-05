@@ -100,9 +100,9 @@ public class EmployerReportControllerIT {
         Company c =
                 companyService.createCompany(
                         "Facebook",
-                        "USA",
                         "Menlo Park",
                         "California",
+                        "USA",
                         new ArrayList<EmployerContact>());
         return employerContactService.createEmployerContact(
                 "Albert", "Kragl", "albertkragl@fb.com", "12345678", c);

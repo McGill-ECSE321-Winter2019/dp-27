@@ -20,9 +20,9 @@ public class CompanyService {
      * Creates a new Company with specified name and employees
      *
      * @param name
-     * @param country
      * @param city
      * @param region
+     * @param country
      * @param employees
      * @return the newly created Company
      */
@@ -59,9 +59,9 @@ public class CompanyService {
 
         Company c = new Company();
         c.setName(name.trim());
-        c.setCountry(country);
         c.setCity(city);
         c.setRegion(region);
+        c.setCountry(country);
         c.setEmployees(employees);
         companyRepository.save(c);
 
@@ -168,9 +168,9 @@ public class CompanyService {
         }
 
         c.setName(name.trim());
-        c.setCountry(country);
         c.setCity(city);
         c.setRegion(region);
+        c.setCountry(country);
         c.setEmployees(employees);
 
         companyRepository.save(c);
