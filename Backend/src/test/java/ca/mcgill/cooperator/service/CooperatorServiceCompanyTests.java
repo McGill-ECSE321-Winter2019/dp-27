@@ -36,12 +36,17 @@ public class CooperatorServiceCompanyTests {
     @Test
     public void testCreateCompany() {
         String name = "Facebook";
+        String country = "USA";
+        String city = "Menlo Park";
+        String region = "California";
 
         Company c = null;
         try {
-            c = companyService.createCompany(name, new ArrayList<EmployerContact>());
+            c =
+                    companyService.createCompany(
+                            name, city, region, country, new ArrayList<EmployerContact>());
 
-            companyService.getCompany("Facebook");
+            companyService.getCompany(name, city, region, country);
             companyService.getCompany(c.getId());
         } catch (IllegalArgumentException _e) {
             fail();
@@ -54,45 +59,91 @@ public class CooperatorServiceCompanyTests {
     public void testCreateCompanyNull() {
         String error = "";
         try {
-            companyService.createCompany(null, null);
+            companyService.createCompany(null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
-        assertEquals("Company name cannot be empty! " + "Company employees cannot be null!", error);
+        assertEquals(
+                "Company name cannot be empty! "
+                        + "Company city cannot be empty! "
+                        + "Company region cannot be empty! "
+                        + "Company country cannot be empty! "
+                        + "Company employees cannot be null!",
+                error);
         assertEquals(companyService.getAllCompanies().size(), 0);
     }
 
     @Test
-    public void testCreateCompanySpacesName() {
+    public void testCreateCompanySpaces() {
         String error = "";
         try {
-            companyService.createCompany("  ", null);
+            companyService.createCompany("  ", " ", "       ", "   ", null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
-        assertEquals("Company name cannot be empty! " + "Company employees cannot be null!", error);
+        assertEquals(
+                "Company name cannot be empty! "
+                        + "Company city cannot be empty! "
+                        + "Company region cannot be empty! "
+                        + "Company country cannot be empty! "
+                        + "Company employees cannot be null!",
+                error);
         assertEquals(companyService.getAllCompanies().size(), 0);
+    }
+
+    @Test
+    public void testCreateCompanyDuplicate() {
+        String name = "Facebook";
+        String country = "USA";
+        String city = "Menlo Park";
+        String region = "California";
+
+        try {
+            companyService.createCompany(
+                    name, city, region, country, new ArrayList<EmployerContact>());
+        } catch (IllegalArgumentException _e) {
+            fail();
+        }
+
+        String error = "";
+        try {
+            companyService.createCompany(
+                    name, city, region, country, new ArrayList<EmployerContact>());
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+        assertEquals("Company with this name and location already exists!", error);
+        assertEquals(companyService.getAllCompanies().size(), 1);
     }
 
     @Test
     public void testUpdateCompany() {
         String name = "Facebook";
+        String country = "USA";
+        String city = "Menlo Park";
+        String region = "California";
         List<EmployerContact> employees = new ArrayList<EmployerContact>();
 
         EmployerContact ec = null;
         Company c = null;
         try {
-            companyService.createCompany(name, employees);
-            c = companyService.getCompany("Facebook");
+            companyService.createCompany(name, city, region, country, employees);
+            c = companyService.getCompany(name, city, region, country);
 
             // Add new employee
             ec = createTestEmployerContact(c);
             employees.add(ec);
 
-            companyService.updateCompany(c, "Index Exchange", employees);
-            c = companyService.getCompany("Index Exchange");
+            String updatedName = "Index Exchange";
+            String updatedCountry = "Canada";
+            String updatedCity = "Montreal";
+            String updatedRegion = "Quebec";
+
+            companyService.updateCompany(
+                    c, updatedName, updatedCity, updatedRegion, updatedCountry, employees);
+            c = companyService.getCompany(updatedName, updatedCity, updatedRegion, updatedCountry);
         } catch (IllegalArgumentException _e) {
             fail();
         }
@@ -106,48 +157,78 @@ public class CooperatorServiceCompanyTests {
     @Test
     public void testUpdateCompanyInvalid() {
         String name = "Facebook";
+        String country = "USA";
+        String city = "Menlo Park";
+        String region = "California";
         List<EmployerContact> employees = new ArrayList<EmployerContact>();
 
         Company c = null;
         try {
-            companyService.createCompany(name, employees);
-            c = companyService.getCompany("Facebook");
+            companyService.createCompany(name, city, region, country, employees);
+            c = companyService.getCompany(name, city, region, country);
         } catch (IllegalArgumentException _e) {
             fail();
         }
 
         String error = "";
         try {
-            companyService.updateCompany(c, "", null);
+            companyService.updateCompany(c, "", "    ", " ", "           ", null);
         } catch (IllegalArgumentException err) {
             error = err.getMessage();
         }
 
-        assertEquals("Company name cannot be empty! " + "Company employees cannot be null!", error);
+        assertEquals(
+                "Company name cannot be empty! "
+                        + "Company city cannot be empty! "
+                        + "Company region cannot be empty! "
+                        + "Company country cannot be empty! "
+                        + "Company employees cannot be null!",
+                error);
 
-        // Original Company should still exist
+        // original Company should still exist
         assertEquals(1, companyService.getAllCompanies().size());
         try {
-            companyService.getCompany("Facebook");
+            companyService.getCompany(name, city, region, country);
         } catch (IllegalArgumentException _e) {
             fail();
         }
     }
 
     @Test
-    public void testDeleteCompany() {
+    public void testUpdateCompanyDuplicate() {
         String name = "Facebook";
+        String country = "USA";
+        String city = "Menlo Park";
+        String region = "California";
         List<EmployerContact> employees = new ArrayList<EmployerContact>();
 
         EmployerContact ec = null;
         Company c = null;
+        try {
+            c = companyService.createCompany(name, city, region, country, employees);
+
+            companyService.updateCompany(c, name, city, region, country, employees);
+        } catch (IllegalArgumentException e) {
+            assertEquals("Company with this name and location already exists!", e.getMessage());
+        }
+
+        assertEquals(1, companyService.getAllCompanies().size());
+    }
+
+    @Test
+    public void testDeleteCompany() {
+        String name = "Facebook";
+        String country = "USA";
+        String city = "Menlo Park";
+        String region = "California";
+        List<EmployerContact> employees = new ArrayList<EmployerContact>();
+
+        Company c = null;
 
         try {
-            c = companyService.createCompany(name, employees);
-            ec = createTestEmployerContact(c);
-            employees.add(ec);
-            c = companyService.updateCompany(c, name, employees);
-            c = companyService.getCompany("Facebook");
+            companyService.createCompany(name, city, region, country, employees);
+
+            c = companyService.getCompany(name, city, region, country);
             companyService.deleteCompany(c);
         } catch (IllegalArgumentException _e) {
             fail();

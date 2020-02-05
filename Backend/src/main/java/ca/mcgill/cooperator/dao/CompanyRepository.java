@@ -5,5 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface CompanyRepository extends CrudRepository<Company, Integer> {
 
-    Company findByName(String name);
+    Company findByNameAndCityAndRegionAndCountry(
+            String name, String city, String region, String country);
 }

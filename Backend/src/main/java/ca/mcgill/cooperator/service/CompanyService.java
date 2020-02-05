@@ -20,18 +20,38 @@ public class CompanyService {
      * Creates a new Company with specified name and employees
      *
      * @param name
+     * @param country
+     * @param city
+     * @param region
      * @param employees
      * @return the newly created Company
      */
     @Transactional
-    public Company createCompany(String name, List<EmployerContact> employees) {
+    public Company createCompany(
+            String name,
+            String city,
+            String region,
+            String country,
+            List<EmployerContact> employees) {
         StringBuilder error = new StringBuilder();
         if (name == null || name.trim().length() == 0) {
             error.append("Company name cannot be empty! ");
         }
+        if (city == null || city.trim().length() == 0) {
+            error.append("Company city cannot be empty! ");
+        }
+        if (region == null || region.trim().length() == 0) {
+            error.append("Company region cannot be empty! ");
+        }
+        if (country == null || country.trim().length() == 0) {
+            error.append("Company country cannot be empty! ");
+        }
         // employees cannot be null but can be empty
         if (employees == null) {
-            error.append("Company employees cannot be null!");
+            error.append("Company employees cannot be null! ");
+        }
+        if (companyExists(name, city, region, country)) {
+            error.append("Company with this name and location already exists!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
@@ -39,6 +59,9 @@ public class CompanyService {
 
         Company c = new Company();
         c.setName(name.trim());
+        c.setCountry(country);
+        c.setCity(city);
+        c.setRegion(region);
         c.setEmployees(employees);
         companyRepository.save(c);
 
@@ -68,17 +91,24 @@ public class CompanyService {
     }
 
     /**
-     * Returns the Company with specified name
+     * Returns the Company with specified name and location
      *
      * @param name
      * @return Company, if it exists
      */
     @Transactional
-    public Company getCompany(String name) {
-        Company c = companyRepository.findByName(name.trim());
+    public Company getCompany(String name, String city, String region, String country) {
+        Company c =
+                companyRepository.findByNameAndCityAndRegionAndCountry(
+                        name.trim(), city.trim(), region.trim(), country.trim());
         if (c == null) {
+            String location = city.trim() + ", " + region.trim() + " " + country.trim();
             throw new IllegalArgumentException(
-                    "Company with name " + name.trim() + " does not exist!");
+                    "Company with name "
+                            + name.trim()
+                            + " and location "
+                            + location
+                            + " does not exist!");
         }
 
         return c;
@@ -103,7 +133,13 @@ public class CompanyService {
      * @return the updated Company
      */
     @Transactional
-    public Company updateCompany(Company c, String name, List<EmployerContact> employees) {
+    public Company updateCompany(
+            Company c,
+            String name,
+            String city,
+            String region,
+            String country,
+            List<EmployerContact> employees) {
         StringBuilder error = new StringBuilder();
         if (c == null) {
             error.append("Company to update cannot be null! ");
@@ -111,15 +147,30 @@ public class CompanyService {
         if (name == null || name.trim().length() == 0) {
             error.append("Company name cannot be empty! ");
         }
+        if (city == null || city.trim().length() == 0) {
+            error.append("Company city cannot be empty! ");
+        }
+        if (region == null || region.trim().length() == 0) {
+            error.append("Company region cannot be empty! ");
+        }
+        if (country == null || country.trim().length() == 0) {
+            error.append("Company country cannot be empty! ");
+        }
         // employees cannot be null but can be empty
         if (employees == null) {
-            error.append("Company employees cannot be null!");
+            error.append("Company employees cannot be null! ");
+        }
+        if (companyExists(name, city, region, country)) {
+            error.append("Company with this name and location already exists!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
         c.setName(name.trim());
+        c.setCountry(country);
+        c.setCity(city);
+        c.setRegion(region);
         c.setEmployees(employees);
 
         companyRepository.save(c);
@@ -147,5 +198,10 @@ public class CompanyService {
         companyRepository.delete(c);
 
         return c;
+    }
+
+    private boolean companyExists(String name, String city, String region, String country) {
+        return companyRepository.findByNameAndCityAndRegionAndCountry(name, city, region, country)
+                != null;
     }
 }

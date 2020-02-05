@@ -234,7 +234,13 @@ public class CooperatorServiceCoopTests {
 
     private Company createTestCompany() {
         Company c = new Company();
-        c = companyService.createCompany("Facebook", new ArrayList<EmployerContact>());
+        c =
+                companyService.createCompany(
+                        "Facebook",
+                        "Menlo Park",
+                        "California",
+                        "USA",
+                        new ArrayList<EmployerContact>());
 
         return c;
     }

@@ -51,7 +51,13 @@ public class CompanyController {
                 employerContacts.add(employerContact);
             }
         }
-        Company company = companyService.createCompany(companyDto.getName(), employerContacts);
+        Company company =
+                companyService.createCompany(
+                        companyDto.getName(),
+                        companyDto.getCity(),
+                        companyDto.getRegion(),
+                        companyDto.getCountry(),
+                        employerContacts);
 
         return ControllerUtils.convertToDto(company);
     }
@@ -70,7 +76,14 @@ public class CompanyController {
             }
         }
 
-        company = companyService.updateCompany(company, companyDto.getName(), employerContacts);
+        company =
+                companyService.updateCompany(
+                        company,
+                        companyDto.getName(),
+                        companyDto.getCity(),
+                        companyDto.getRegion(),
+                        companyDto.getCountry(),
+                        employerContacts);
 
         return ControllerUtils.convertToDto(company);
     }
