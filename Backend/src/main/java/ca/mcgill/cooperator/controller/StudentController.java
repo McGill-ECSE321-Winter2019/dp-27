@@ -123,6 +123,7 @@ public class StudentController {
         Student student = studentService.deleteStudent(studentService.getStudentById(id));
         return ControllerUtils.convertToDto(student);
     }
+    
     /**
      * Gets current coop
      *
