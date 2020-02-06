@@ -1,9 +1,16 @@
 package ca.mcgill.cooperator.controller;
 
+import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.StudentDto;
+import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.StudentService;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -96,7 +103,7 @@ public class StudentController {
                 s.getStudentId(),
                 ControllerUtils.convertCoopsListToDomainObject(s.getCoops()),
                 ControllerUtils.convertNotificationListToDomainObjectSet(s.getNotifications()));
-        return null;
+        return ControllerUtils.convertToDto(student);
     }
     /**
      * Deletes an existing student
@@ -108,5 +115,39 @@ public class StudentController {
     public StudentDto deleteStudent(@PathVariable int id) {
         Student student = studentService.deleteStudent(studentService.getStudentById(id));
         return ControllerUtils.convertToDto(student);
+    }
+    /**
+     * Gets current coop
+     * @param id
+     * @return coop or null if not in a coop currently
+     */
+    @GetMapping("/currentCoop/{id}")
+    public CoopDto getCurrentStudentCoop(@PathVariable int id){
+        Student s = studentService.getStudentById(id);
+        Set<Coop> coops = s.getCoops();
+        for(Coop c: coops) {
+        	if(c.getStatus() == CoopStatus.IN_PROGRESS) return ControllerUtils.convertToDto(c);
+        }
+        return null;
+    }
+    /**
+     * Get student coops by status
+     * 
+     * @param id
+     * <p> In request body
+     * @param status
+     * 
+     * @return set of all coops with that status
+     */
+    @GetMapping("/coopList/{id}")
+    public Set<CoopDto> getCoopsByStatus(@PathVariable int id, @RequestBody CoopStatus status){
+        Student s = studentService.getStudentById(id);
+        Set<Coop> coops = s.getCoops();
+        Set<CoopDto> coopDto = new HashSet<>();
+        for(Coop c: coops) {
+        	if(c.getStatus() == status) coopDto.add(ControllerUtils.convertToDto(c));
+        }
+        return coopDto;
+    	
     }
 }
