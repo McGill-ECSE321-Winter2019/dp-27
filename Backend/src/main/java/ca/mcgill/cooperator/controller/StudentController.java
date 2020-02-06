@@ -6,11 +6,9 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.StudentService;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -118,36 +116,35 @@ public class StudentController {
     }
     /**
      * Gets current coop
+     *
      * @param id
      * @return coop or null if not in a coop currently
      */
     @GetMapping("/currentCoop/{id}")
-    public CoopDto getCurrentStudentCoop(@PathVariable int id){
+    public CoopDto getCurrentStudentCoop(@PathVariable int id) {
         Student s = studentService.getStudentById(id);
         Set<Coop> coops = s.getCoops();
-        for(Coop c: coops) {
-        	if(c.getStatus() == CoopStatus.IN_PROGRESS) return ControllerUtils.convertToDto(c);
+        for (Coop c : coops) {
+            if (c.getStatus() == CoopStatus.IN_PROGRESS) return ControllerUtils.convertToDto(c);
         }
         return null;
     }
     /**
      * Get student coops by status
-     * 
+     *
      * @param id
-     * <p> In request body
+     *     <p>In request body
      * @param status
-     * 
      * @return set of all coops with that status
      */
     @GetMapping("/coopList/{id}")
-    public Set<CoopDto> getCoopsByStatus(@PathVariable int id, @RequestBody CoopStatus status){
+    public Set<CoopDto> getCoopsByStatus(@PathVariable int id, @RequestBody CoopStatus status) {
         Student s = studentService.getStudentById(id);
         Set<Coop> coops = s.getCoops();
         Set<CoopDto> coopDto = new HashSet<>();
-        for(Coop c: coops) {
-        	if(c.getStatus() == status) coopDto.add(ControllerUtils.convertToDto(c));
+        for (Coop c : coops) {
+            if (c.getStatus() == status) coopDto.add(ControllerUtils.convertToDto(c));
         }
         return coopDto;
-    	
     }
 }
