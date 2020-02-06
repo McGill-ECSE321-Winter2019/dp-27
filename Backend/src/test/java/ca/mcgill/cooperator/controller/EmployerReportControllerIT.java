@@ -97,7 +97,13 @@ public class EmployerReportControllerIT {
     }
 
     private EmployerContact createTestEmployerContact() {
-        Company c = companyService.createCompany("Facebook", new ArrayList<EmployerContact>());
+        Company c =
+                companyService.createCompany(
+                        "Facebook",
+                        "Menlo Park",
+                        "California",
+                        "USA",
+                        new ArrayList<EmployerContact>());
         return employerContactService.createEmployerContact(
                 "Albert", "Kragl", "albertkragl@fb.com", "12345678", c);
     }
