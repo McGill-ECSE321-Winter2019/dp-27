@@ -1,7 +1,9 @@
 package ca.mcgill.cooperator.controller;
 
+import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.dto.StudentReportDto;
 import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
@@ -15,11 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +39,7 @@ public class StudentReportController {
     @Autowired CoopService coopService;
 
     /**
-     * Get a Student Report by ID
+     * Get a StudentReport by ID
      *
      * @param id
      * @return StudentReportDto object
@@ -48,10 +52,10 @@ public class StudentReportController {
     }
 
     /**
-     * Get Student Reports by Student ID
+     * Get StudentReports by Student ID
      *
      * @param id
-     * @return StudentReportDto object
+     * @return list of StudentReportDtos
      */
     @GetMapping("/student/{id}")
     public List<StudentReportDto> getStudentReportsByStudentId(@PathVariable int id) {
@@ -66,13 +70,13 @@ public class StudentReportController {
     }
 
     /**
-     * Create a Student Report using multipart form data
+     * Creates a StudentReport using multipart form data
      *
      * @param file
      * @param status
      * @param title
      * @param coop_id
-     * @return the created Student Report
+     * @return the created StudentReport
      */
     @PostMapping("")
     public StudentReportDto createStudentReport(
@@ -87,6 +91,52 @@ public class StudentReportController {
                 studentReportService.createStudentReport(reportStatus, coop, title, file);
 
         return ControllerUtils.convertToDto(createdReport);
+    }
+
+    /**
+     * Updates a StudentReport
+     *
+     * @param reportId
+     * @param file
+     * @param status
+     * @param title
+     * @param rsDtos
+     * @param coopId
+     * @return the updated StudentReport
+     */
+    @PutMapping("/{reportId}")
+    public StudentReportDto updateStudentReport(
+            @PathVariable int reportId,
+            @ModelAttribute("file") MultipartFile file,
+            @RequestParam("status") String status,
+            @RequestParam("title") String title,
+            @RequestParam("report_sections") List<ReportSectionDto> rsDtos,
+            @RequestParam("coop_id") int coopId) {
+        StudentReport reportToUpdate = studentReportService.getStudentReport(reportId);
+        List<ReportSection> sections =
+                ControllerUtils.convertReportSectionListToDomainObject(rsDtos);
+        Coop coop = coopService.getCoopById(coopId);
+        ReportStatus reportStatus = ReportStatus.valueOf(status);
+
+        StudentReport updatedReport =
+                studentReportService.updateStudentReport(
+                        reportToUpdate, reportStatus, title, coop, sections, file);
+
+        return ControllerUtils.convertToDto(updatedReport);
+    }
+
+    /**
+     * Deletes a StudentReport
+     *
+     * @param id
+     * @return the deleted StudentReport
+     */
+    @DeleteMapping("/{id}")
+    public StudentReportDto deleteStudentReport(@PathVariable int id) {
+        StudentReport report = studentReportService.getStudentReport(id);
+        report = studentReportService.deleteStudentReport(report);
+
+        return ControllerUtils.convertToDto(report);
     }
 
     @ExceptionHandler(RuntimeException.class)

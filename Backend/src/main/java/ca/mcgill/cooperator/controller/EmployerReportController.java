@@ -1,9 +1,11 @@
 package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.EmployerReportDto;
+import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.EmployerContactService;
@@ -13,11 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,6 +80,7 @@ public class EmployerReportController {
             @RequestParam("coop_id") int coopId,
             @RequestParam("employer_id") int employerId) {
         Coop coop = coopService.getCoopById(coopId);
+
         EmployerContact ec = employerContactService.getEmployerContact(employerId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
 
@@ -83,6 +88,56 @@ public class EmployerReportController {
                 employerReportService.createEmployerReport(reportStatus, coop, title, ec, file);
 
         return ControllerUtils.convertToDto(createdReport);
+    }
+
+    /**
+     * Updates an existing EmployerReport
+     *
+     * @param id
+     * @param file
+     * @param status
+     * @param title
+     * @param coopId
+     * @param rsDtos
+     * @param employerId
+     * @return updated EmployerReport
+     */
+    @PutMapping("/{id}")
+    public EmployerReportDto updateEmployerReport(
+            @PathVariable int id,
+            @ModelAttribute("file") MultipartFile file,
+            @RequestParam("status") String status,
+            @RequestParam("title") String title,
+            @RequestParam("coop_id") int coopId,
+            @RequestParam("report_sections") List<ReportSectionDto> rsDtos,
+            @RequestParam("employer_id") int employerId) {
+        EmployerReport reportToUpdate = employerReportService.getEmployerReport(id);
+
+        Coop coop = coopService.getCoopById(coopId);
+        EmployerContact ec = employerContactService.getEmployerContact(employerId);
+        ReportStatus reportStatus = ReportStatus.valueOf(status);
+        List<ReportSection> sections =
+                ControllerUtils.convertReportSectionListToDomainObject(rsDtos);
+
+        EmployerReport updatedReport =
+                employerReportService.updateEmployerReport(
+                        reportToUpdate, reportStatus, coop, title, ec, sections, file);
+
+        return ControllerUtils.convertToDto(updatedReport);
+    }
+
+    /**
+     * Deletes an EmployerReport
+     *
+     * @param id
+     * @return the deleted EmployerReport
+     */
+    @DeleteMapping("/{id}")
+    public EmployerReportDto deleteEmployerReport(@PathVariable int id) {
+        EmployerReport report = employerReportService.getEmployerReport(id);
+        report = employerReportService.deleteEmployerReport(report);
+
+        return ControllerUtils.convertToDto(report);
     }
 
     @ExceptionHandler(RuntimeException.class)
