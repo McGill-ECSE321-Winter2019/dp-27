@@ -25,6 +25,7 @@ import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.service.NotificationService;
+import ca.mcgill.cooperator.service.ReportSectionService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ControllerUtils {
 
     @Autowired private static NotificationService notificationService;
+    @Autowired private static ReportSectionService reportSectionService;
 
     /*
      * Domain Object to DTO conversion methods
@@ -440,5 +442,15 @@ public class ControllerUtils {
             notifs.add(n);
         }
         return notifs;
+    }
+
+    static List<ReportSection> convertReportSectionListToDomainObject(
+            List<ReportSectionDto> rsDtos) {
+        List<ReportSection> reports = new ArrayList<ReportSection>();
+        for (ReportSectionDto rsDto : rsDtos) {
+            ReportSection rs = reportSectionService.getReportSection(rsDto.getId());
+            reports.add(rs);
+        }
+        return reports;
     }
 }
