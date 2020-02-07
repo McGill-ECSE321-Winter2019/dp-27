@@ -120,10 +120,10 @@ public class CooperatorServiceStudentTests {
         }
 
         assertEquals(
-                "Student first name cannot be empty! "
-                        + "Student last name cannot be empty! "
-                        + "Student email cannot be empty! "
-                        + "Student ID cannot be empty!",
+                "Student first name cannot be empty. "
+                        + "Student last name cannot be empty. "
+                        + "Student email cannot be empty. "
+                        + "Student ID cannot be empty.",
                 error);
     }
 
@@ -137,10 +137,10 @@ public class CooperatorServiceStudentTests {
         }
 
         assertEquals(
-                "Student first name cannot be empty! "
-                        + "Student last name cannot be empty! "
-                        + "Student email cannot be empty! "
-                        + "Student ID cannot be empty!",
+                "Student first name cannot be empty. "
+                        + "Student last name cannot be empty. "
+                        + "Student email cannot be empty. "
+                        + "Student ID cannot be empty.",
                 error);
     }
 
@@ -154,10 +154,10 @@ public class CooperatorServiceStudentTests {
         }
 
         assertEquals(
-                "Student first name cannot be empty! "
-                        + "Student last name cannot be empty! "
-                        + "Student email cannot be empty! "
-                        + "Student ID cannot be empty!",
+                "Student first name cannot be empty. "
+                        + "Student last name cannot be empty. "
+                        + "Student email cannot be empty. "
+                        + "Student ID cannot be empty.",
                 error);
     }
 
@@ -282,12 +282,12 @@ public class CooperatorServiceStudentTests {
         }
 
         assertEquals(
-                "Student first name cannot be empty! "
-                        + "Student last name cannot be empty! "
-                        + "Student email cannot be empty! "
-                        + "Student ID cannot be empty! "
-                        + "Co-ops cannot be null! "
-                        + "Notifs cannot be null!",
+                "Student first name cannot be empty. "
+                        + "Student last name cannot be empty. "
+                        + "Student email cannot be empty. "
+                        + "Student ID cannot be empty. "
+                        + "Co-ops cannot be null. "
+                        + "Notifs cannot be null.",
                 error);
         assertEquals(1, studentService.getAllStudents().size());
     }

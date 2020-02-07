@@ -201,7 +201,6 @@ public class CooperatorServiceCompanyTests {
         String region = "California";
         List<EmployerContact> employees = new ArrayList<EmployerContact>();
 
-        EmployerContact ec = null;
         Company c = null;
         try {
             c = companyService.createCompany(name, city, region, country, employees);
