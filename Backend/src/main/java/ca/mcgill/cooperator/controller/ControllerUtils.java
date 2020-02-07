@@ -69,7 +69,7 @@ public class ControllerUtils {
         }
 
         // create company dto with no employer contacts
-        CompanyDto companyDto = new CompanyDto(c.getId(), c.getName(), null);
+        CompanyDto companyDto = new CompanyDto(c.getId(), c.getName(), c.getCity(), c.getRegion(), c.getCountry(), null);
 
         // create employer contact dtos with no company
         List<EmployerContact> employerContacts = c.getEmployees();
@@ -261,7 +261,7 @@ public class ControllerUtils {
         }
 
         CompanyDto companyDto =
-                new CompanyDto(company.getId(), company.getName(), employerContactDtos);
+                new CompanyDto(company.getId(), company.getName(), company.getCity(), company.getRegion(), company.getCountry(), employerContactDtos);
 
         companyDto.setEmployees(employerContactDtos);
         

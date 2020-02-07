@@ -13,6 +13,8 @@ public class EmployerContactDto {
     private CompanyDto company;
     private List<CoopDetailsDto> coopDetails;
     private List<EmployerReportDto> employerReports;
+    
+    public EmployerContactDto() {}
 
     public EmployerContactDto(
             int id,

@@ -11,10 +11,15 @@ public class CompanyDto {
     private String country;
 
     private List<EmployerContactDto> employees;
+    
+    public CompanyDto() {}
 
-    public CompanyDto(int id, String name, List<EmployerContactDto> employees) {
+    public CompanyDto(int id, String name, String city, String region, String country, List<EmployerContactDto> employees) {
         this.id = id;
         this.name = name;
+        this.city = city;
+        this.region = region;
+        this.country = country;
         this.employees = employees;
     }
 
