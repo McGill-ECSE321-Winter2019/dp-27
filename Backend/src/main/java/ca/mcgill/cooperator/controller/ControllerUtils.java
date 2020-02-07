@@ -89,11 +89,7 @@ public class ControllerUtils {
         }
 
         companyDto.setEmployees(employerContactDtos);
-<<<<<<< HEAD
         
-=======
-
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         return companyDto;
     }
 
@@ -134,18 +130,6 @@ public class ControllerUtils {
                 convertToDto(c.getStudent()),
                 studentReports,
                 employerReports);
-    }
-
-    static List<CoopDto> convertCoopListToDto(Set<Coop> coops) {
-        List<CoopDto> coopDtos = new ArrayList<CoopDto>();
-
-        for (Coop c : coops) {
-            if (c == null) {
-                throw new IllegalArgumentException("Coop does not exist!");
-            }
-            coopDtos.add(convertToDto(c));
-        }
-        return coopDtos;
     }
 
     static List<CoopDto> convertCoopListToDto(Set<Coop> coops) {
@@ -280,23 +264,14 @@ public class ControllerUtils {
                 new CompanyDto(company.getId(), company.getName(), employerContactDtos);
 
         companyDto.setEmployees(employerContactDtos);
-<<<<<<< HEAD
+        
         // now set company that was initially null
         employerContactDto.setCompany(companyDto);
-=======
-        employerContactDto.setCompany(companyDto);
-
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         return employerContactDto;
     }
 
     static List<EmployerContactDto> convertEmployerContactListToDto(
             List<EmployerContact> employerContacts) {
-<<<<<<< HEAD
-=======
-
-        List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
 
         List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
 
@@ -380,9 +355,7 @@ public class ControllerUtils {
 
     static List<NotificationDto> convertNotifListToDto(List<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
-<<<<<<< HEAD
-=======
-
+        
         for (Notification n : notifs) {
             if (n == null) {
                 throw new IllegalArgumentException("Notification does not exist!");
@@ -394,20 +367,7 @@ public class ControllerUtils {
 
     static List<NotificationDto> convertNotifListToDto(Set<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
-
-        for (Notification n : notifs) {
-            if (n == null) {
-                throw new IllegalArgumentException("Notification does not exist!");
-            }
-            notifDtos.add(convertToDto(n));
-        }
-        return notifDtos;
-    }
-
-    static List<NotificationDto> convertNotifListToDto(Set<Notification> notifs) {
-        List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
-
+        
         for (Notification n : notifs) {
             if (n == null) {
                 throw new IllegalArgumentException("Notification does not exist!");

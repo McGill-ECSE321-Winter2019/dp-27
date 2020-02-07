@@ -13,10 +13,7 @@ import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
-<<<<<<< HEAD
 
-=======
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -172,7 +169,6 @@ public class CoopService {
     }
 
     @Transactional
-<<<<<<< HEAD
     public List<Coop> getCoopsByStatus(CoopStatus status) {
         if (status == null) {
             throw new IllegalArgumentException("Status cannot be null.");
@@ -180,10 +176,8 @@ public class CoopService {
         List<Coop> coops = coopRepository.findByStatus(status);
         return coops;
     }
-
+    
     @Transactional
-=======
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
     public Coop deleteCoop(Coop c) {
         if (c == null) {
             throw new IllegalArgumentException("Co-op to delete cannot be null!");

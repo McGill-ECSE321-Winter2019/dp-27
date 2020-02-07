@@ -53,7 +53,6 @@ public class CooperatorServiceStudentTests {
     }
 
     @Test
-<<<<<<< HEAD
     public void testCreateStudent1() {
         String firstName = "Albert";
         String lastName = "Kragl";
@@ -97,9 +96,6 @@ public class CooperatorServiceStudentTests {
     
 	@Test
 	public void testCreateStudent2() {
-=======
-    public void testCreateStudent() {
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         String firstName = "Susan";
         String lastName = "Matuszewski";
         String email = "susan@gmail.com";
@@ -110,21 +106,13 @@ public class CooperatorServiceStudentTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-<<<<<<< HEAD
         
-=======
-
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         assertEquals(1, studentService.getAllStudents().size());
     }
 
     @Test
     public void testCreateStudentNull() {
-<<<<<<< HEAD
     	String error = "";
-=======
-        String error = "";
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         try {
             studentService.createStudent(null, null, null, null);
         } catch (IllegalArgumentException e) {
@@ -174,7 +162,6 @@ public class CooperatorServiceStudentTests {
     }
 
     @Test
-<<<<<<< HEAD
     public void testUpdateStudent1() {
         String firstName = "Kah";
         String lastName = "Shew";
@@ -209,9 +196,6 @@ public class CooperatorServiceStudentTests {
     
 	@Test
 	public void testUpdateStudent2() {
-=======
-    public void testUpdateStudent() {
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         String firstName = "Susan";
         String lastName = "Matuszewski";
         String email = "susan@gmail.com";
@@ -249,7 +233,6 @@ public class CooperatorServiceStudentTests {
     }
 
     @Test
-<<<<<<< HEAD
     public void testUpdateStudentInvalid1() {
         String firstName = "Kah";
         String lastName = "Shew";
@@ -277,9 +260,6 @@ public class CooperatorServiceStudentTests {
     
 	@Test
 	public void testUpdateStudentInvalid2() {
-=======
-    public void testUpdateStudentInvalid() {
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         String firstName = "Susan";
         String lastName = "Matuszewski";
         String email = "susan@gmail.com";
@@ -291,11 +271,7 @@ public class CooperatorServiceStudentTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-<<<<<<< HEAD
         
-=======
-
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         assertEquals(1, studentService.getAllStudents().size());
 
         String error = "";
@@ -317,7 +293,6 @@ public class CooperatorServiceStudentTests {
     }
 
     @Test
-<<<<<<< HEAD
     public void testDeleteStudent1() {
         String firstName = "Kah";
         String lastName = "Shew";
@@ -346,9 +321,6 @@ public class CooperatorServiceStudentTests {
     
 	@Test
 	public void testDeleteStudent2() {
-=======
-    public void testDeleteStudent() {
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         String firstName = "Susan";
         String lastName = "Matuszewski";
         String email = "susan@gmail.com";
@@ -379,11 +351,7 @@ public class CooperatorServiceStudentTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-<<<<<<< HEAD
         
-=======
-
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         try {
             studentService.deleteStudent(s);
         } catch (IllegalArgumentException e) {

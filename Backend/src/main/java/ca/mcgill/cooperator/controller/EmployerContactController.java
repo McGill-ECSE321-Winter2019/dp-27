@@ -12,17 +12,11 @@ import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.EmployerReportService;
-<<<<<<< HEAD
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-=======
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
->>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
