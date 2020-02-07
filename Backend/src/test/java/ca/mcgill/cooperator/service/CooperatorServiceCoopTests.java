@@ -1,7 +1,12 @@
 package ca.mcgill.cooperator.service;
 
+<<<<<<< HEAD
 import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+=======
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+>>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
 
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
@@ -81,6 +86,7 @@ public class CooperatorServiceCoopTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
+<<<<<<< HEAD
         assertEquals(1, coopService.getAllCoops().size());
     }
 
@@ -98,6 +104,26 @@ public class CooperatorServiceCoopTests {
                 "Co-op Status cannot be null. "
                         + "Course Offering cannot be null. "
                         + "Student cannot be null.",
+=======
+
+        assertEquals(1, coopService.getAllCoops().size());
+    }
+
+    @Test
+    public void testCreateCoopNull() {
+        String error = "";
+        try {
+            coopService.createCoop(null, null, null);
+        } catch (IllegalArgumentException e) {
+            error = e.getMessage();
+        }
+
+        assertEquals(0, coopService.getAllCoops().size());
+        assertEquals(
+                "Co-op Status cannot be null! "
+                        + "Course Offering cannot be null! "
+                        + "Student cannot be null!",
+>>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
                 error);
     }
 
@@ -233,6 +259,7 @@ public class CooperatorServiceCoopTests {
 
     private Company createTestCompany() {
         Company c = new Company();
+<<<<<<< HEAD
         c =
                 companyService.createCompany(
                         "Facebook",
@@ -240,6 +267,10 @@ public class CooperatorServiceCoopTests {
                         "California",
                         "USA",
                         new ArrayList<EmployerContact>());
+=======
+        c = companyService.createCompany("Facebook", new ArrayList<EmployerContact>());
+
+>>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         return c;
     }
 }

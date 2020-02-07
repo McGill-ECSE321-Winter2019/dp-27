@@ -83,7 +83,11 @@ public class StudentService {
         if (email == null || email.trim().length() == 0) {
             error.append("Student email cannot be empty. ");
         } else if (!ServiceUtils.isValidEmail(email)) {
+<<<<<<< HEAD
             error.append("Student email must be a valid email. ");
+=======
+            error.append("Student email must be a valid email! ");
+>>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         }
         if (studentId == null || studentId.trim().length() == 0) {
             error.append("Student ID cannot be empty. ");
@@ -104,6 +108,7 @@ public class StudentService {
     }
 
     @Transactional
+<<<<<<< HEAD
     public List<Student> getStudentByFirstAndLast(String firstName, String lastName) {
         StringBuilder error = new StringBuilder();
         if (firstName == null || firstName.trim().length() == 0) {
@@ -177,6 +182,12 @@ public class StudentService {
         Student s = studentRepository.findById(id).orElse(null);
         if (s == null) {
             throw new IllegalArgumentException("Student with ID " + id + " does not exist.");
+=======
+    public Student getStudentById(int id) {
+        Student s = studentRepository.findById(id).orElse(null);
+        if (s == null) {
+            throw new IllegalArgumentException("Student with ID " + id + " does not exist!");
+>>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         }
 
         return s;
@@ -199,6 +210,7 @@ public class StudentService {
 
         StringBuilder error = new StringBuilder();
         if (s == null) {
+<<<<<<< HEAD
             error.append("Student to update cannot be null. ");
         }
         if (firstName == null || firstName.trim().length() == 0) {
@@ -220,6 +232,29 @@ public class StudentService {
         }
         if (notifs == null) {
             error.append("Notifs cannot be null.");
+=======
+            error.append("Student to update cannot be null! ");
+        }
+        if (firstName == null || firstName.trim().length() == 0) {
+            error.append("Student first name cannot be empty! ");
+        }
+        if (lastName == null || lastName.trim().length() == 0) {
+            error.append("Student last name cannot be empty! ");
+        }
+        if (email == null || email.trim().length() == 0) {
+            error.append("Student email cannot be empty! ");
+        } else if (!ServiceUtils.isValidEmail(email)) {
+            error.append("Student email must be a valid email!");
+        }
+        if (studentId == null || studentId.trim().length() == 0) {
+            error.append("Student ID cannot be empty! ");
+        }
+        if (coops == null) {
+            error.append("Co-ops cannot be null! ");
+        }
+        if (notifs == null) {
+            error.append("Notifs cannot be null!");
+>>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
@@ -250,12 +285,17 @@ public class StudentService {
     @Transactional
     public Student deleteStudent(Student s) {
         if (s == null) {
+<<<<<<< HEAD
             throw new IllegalArgumentException("Student to delete cannot be null.");
+=======
+            throw new IllegalArgumentException("Student to delete cannot be null!");
+>>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         }
 
         studentRepository.delete(s);
         return s;
     }
+<<<<<<< HEAD
 
     @Transactional
     public Student deleteStudentByStudentID(String id) {
@@ -269,4 +309,6 @@ public class StudentService {
         studentRepository.delete(s);
         return s;
     }
+=======
+>>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
 }

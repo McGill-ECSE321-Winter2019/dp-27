@@ -150,8 +150,11 @@ public class CooperatorServiceCompanyTests {
 
         assertEquals(1, companyService.getAllCompanies().size());
 
+<<<<<<< HEAD
         assertEquals(1, companyService.getAllCompanies().size());
 
+=======
+>>>>>>> 675cd93665b8adce40daf62d8b12599bf58237bb
         assertEquals("Index Exchange", c.getName());
         assertEquals(1, c.getEmployees().size());
     }
