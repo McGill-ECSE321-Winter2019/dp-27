@@ -94,6 +94,9 @@ public class CompanyService {
      * Returns the Company with specified name and location
      *
      * @param name
+     * @param city
+     * @param region
+     * @param country
      * @return Company, if it exists
      */
     @Transactional
@@ -112,6 +115,24 @@ public class CompanyService {
         }
 
         return c;
+    }
+
+    /**
+     * Returns all Company offices with specified name
+     *
+     * @param name
+     * @return list of Companies
+     */
+    @Transactional
+    public List<Company> getCompanies(String name) {
+        List<Company> companies = companyRepository.findByName(name.trim());
+
+        if (companies == null || companies.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "No offices for company with name " + name.trim() + "!");
+        }
+
+        return companies;
     }
 
     /**
