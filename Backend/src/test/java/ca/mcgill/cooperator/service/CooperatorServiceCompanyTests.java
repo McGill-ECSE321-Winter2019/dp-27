@@ -119,6 +119,35 @@ public class CooperatorServiceCompanyTests {
     }
 
     @Test
+    public void testCreateCompanyWithMultipleLocations() {
+        String name = "Facebook";
+        String country = "USA";
+        String city1 = "Menlo Park";
+        String region1 = "California";
+        String city2 = "Seattle";
+        String region2 = "Washington";
+        // create a different company to make sure the correct ones are returned
+        String otherName = "Google";
+        String otherCountry = "Canada";
+        String otherCity = "Montreal";
+        String otherRegion = "Quebec";
+        
+        try {
+            companyService.createCompany(
+                    name, city1, region1, country, new ArrayList<EmployerContact>());
+            companyService.createCompany(
+                    name, city2, region2, country, new ArrayList<EmployerContact>());
+            companyService.createCompany(
+                    otherName, otherCity, otherRegion, otherCountry, new ArrayList<EmployerContact>());
+        } catch (IllegalArgumentException _e) {
+            fail();
+        }
+
+        assertEquals(companyService.getAllCompanies().size(), 3);
+        assertEquals(companyService.getCompanies(name).size(), 2);
+    }
+
+    @Test
     public void testUpdateCompany() {
         String name = "Facebook";
         String country = "USA";
