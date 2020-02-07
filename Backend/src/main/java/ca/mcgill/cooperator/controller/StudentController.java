@@ -120,7 +120,7 @@ public class StudentController {
      * @param id
      * @return coop or null if not in a coop currently
      */
-    @GetMapping("/currentCoop/{id}")
+    @GetMapping("/{id}/current-coop")
     public CoopDto getCurrentStudentCoop(@PathVariable int id) {
         Student s = studentService.getStudentById(id);
         Set<Coop> coops = s.getCoops();
@@ -137,7 +137,7 @@ public class StudentController {
      * @param status
      * @return set of all coops with that status
      */
-    @GetMapping("/coopList/{id}")
+    @GetMapping("/{id}/coop-list")
     public Set<CoopDto> getCoopsByStatus(@PathVariable int id, @RequestBody CoopStatus status) {
         Student s = studentService.getStudentById(id);
         Set<Coop> coops = s.getCoops();
