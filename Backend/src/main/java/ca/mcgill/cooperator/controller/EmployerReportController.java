@@ -80,7 +80,7 @@ public class EmployerReportController {
             @RequestParam("coop_id") int coopId,
             @RequestParam("employer_id") int employerId) {
         Coop coop = coopService.getCoopById(coopId);
-        
+
         EmployerContact ec = employerContactService.getEmployerContact(employerId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
 
@@ -89,10 +89,10 @@ public class EmployerReportController {
 
         return ControllerUtils.convertToDto(createdReport);
     }
-    
+
     /**
      * Updates an existing EmployerReport
-     * 
+     *
      * @param id
      * @param file
      * @param status
@@ -102,40 +102,42 @@ public class EmployerReportController {
      * @param employerId
      * @return updated EmployerReport
      */
-    @PutMapping("/{id}") 
+    @PutMapping("/{id}")
     public EmployerReportDto updateEmployerReport(
-    		@PathVariable int id,
-    		@ModelAttribute("file") MultipartFile file,
+            @PathVariable int id,
+            @ModelAttribute("file") MultipartFile file,
             @RequestParam("status") String status,
             @RequestParam("title") String title,
             @RequestParam("coop_id") int coopId,
             @RequestParam("report_sections") List<ReportSectionDto> rsDtos,
             @RequestParam("employer_id") int employerId) {
-    	EmployerReport reportToUpdate = employerReportService.getEmployerReport(id);
-    	
-    	Coop coop = coopService.getCoopById(coopId);
+        EmployerReport reportToUpdate = employerReportService.getEmployerReport(id);
+
+        Coop coop = coopService.getCoopById(coopId);
         EmployerContact ec = employerContactService.getEmployerContact(employerId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
-    	List<ReportSection> sections =
+        List<ReportSection> sections =
                 ControllerUtils.convertReportSectionListToDomainObject(rsDtos);
-    	
-    	EmployerReport updatedReport = employerReportService.updateEmployerReport(reportToUpdate, reportStatus, coop, title, ec, sections, file);
-    	
-    	return ControllerUtils.convertToDto(updatedReport);
+
+        EmployerReport updatedReport =
+                employerReportService.updateEmployerReport(
+                        reportToUpdate, reportStatus, coop, title, ec, sections, file);
+
+        return ControllerUtils.convertToDto(updatedReport);
     }
-    
+
     /**
      * Deletes an EmployerReport
-     * 
+     *
      * @param id
      * @return the deleted EmployerReport
      */
     @DeleteMapping("/{id}")
     public EmployerReportDto deleteEmployerReport(@PathVariable int id) {
-    	EmployerReport report = employerReportService.getEmployerReport(id);
-    	report = employerReportService.deleteEmployerReport(report);
-    	
-    	return ControllerUtils.convertToDto(report);
+        EmployerReport report = employerReportService.getEmployerReport(id);
+        report = employerReportService.deleteEmployerReport(report);
+
+        return ControllerUtils.convertToDto(report);
     }
 
     @ExceptionHandler(RuntimeException.class)

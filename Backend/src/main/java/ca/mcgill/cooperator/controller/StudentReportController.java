@@ -95,7 +95,7 @@ public class StudentReportController {
 
     /**
      * Updates a StudentReport
-     * 
+     *
      * @param reportId
      * @param file
      * @param status
@@ -124,19 +124,19 @@ public class StudentReportController {
 
         return ControllerUtils.convertToDto(updatedReport);
     }
-    
+
     /**
      * Deletes a StudentReport
-     * 
+     *
      * @param id
      * @return the deleted StudentReport
      */
     @DeleteMapping("/{id}")
     public StudentReportDto deleteStudentReport(@PathVariable int id) {
-    	StudentReport report = studentReportService.getStudentReport(id);
-    	report = studentReportService.deleteStudentReport(report);
-    	
-    	return ControllerUtils.convertToDto(report);
+        StudentReport report = studentReportService.getStudentReport(id);
+        report = studentReportService.deleteStudentReport(report);
+
+        return ControllerUtils.convertToDto(report);
     }
 
     @ExceptionHandler(RuntimeException.class)
