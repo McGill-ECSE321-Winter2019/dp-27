@@ -101,6 +101,20 @@ public class EmployerContactControllerIT {
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
+        
+        returnedEmployerContact =
+                objectMapper.readValue(
+                        mvcResult.getResponse().getContentAsString(), EmployerContactDto.class);
+        
+        mvcResult =
+                mvc.perform(get("/employer-contacts").contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andReturn();
+        
+        returnedEmployerContacts =
+                Arrays.asList(
+                        objectMapper.readValue(
+                                mvcResult.getResponse().getContentAsString(), EmployerContactDto[].class));
 
         // get the Employer Contact by ID
         mvcResult =

@@ -180,19 +180,6 @@ public class EmployerContactService {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        List<EmployerContact> companyEmployees = company.getEmployees();
-
-        boolean companyContains = false;
-        int companyIndex = -1;
-
-        // check if company already has this employer contact, if yes get index
-        for (EmployerContact employee : companyEmployees) {
-            if (employee.getId() == ec.getId()) {
-                companyContains = true;
-                companyIndex = companyEmployees.indexOf(employee);
-            }
-        }
-
         ec.setFirstName(firstName.trim());
         ec.setLastName(lastName.trim());
         ec.setEmail(email.trim());
@@ -212,15 +199,6 @@ public class EmployerContactService {
             cd.setEmployerContact(ec);
             coopDetailsRepository.save(cd);
         }
-
-        if (companyContains == true) {
-            companyEmployees.set(companyIndex, ec);
-        } else {
-            companyEmployees.add(ec);
-        }
-        company.setEmployees(companyEmployees);
-
-        companyRepository.save(company);
 
         return employerContactRepository.save(ec);
     }
