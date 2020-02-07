@@ -131,14 +131,18 @@ public class CooperatorServiceCompanyTests {
         String otherCountry = "Canada";
         String otherCity = "Montreal";
         String otherRegion = "Quebec";
-        
+
         try {
             companyService.createCompany(
                     name, city1, region1, country, new ArrayList<EmployerContact>());
             companyService.createCompany(
                     name, city2, region2, country, new ArrayList<EmployerContact>());
             companyService.createCompany(
-                    otherName, otherCity, otherRegion, otherCountry, new ArrayList<EmployerContact>());
+                    otherName,
+                    otherCity,
+                    otherRegion,
+                    otherCountry,
+                    new ArrayList<EmployerContact>());
         } catch (IllegalArgumentException _e) {
             fail();
         }
