@@ -3,6 +3,7 @@ package ca.mcgill.cooperator.service;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
+import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.dao.EmployerReportRepository;
 import ca.mcgill.cooperator.dao.StudentReportRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
@@ -10,6 +11,7 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
@@ -30,6 +32,7 @@ public class CoopService {
     @Autowired CoopDetailsRepository coopDetailsRepository;
     @Autowired EmployerReportRepository employerReportRepository;
     @Autowired StudentReportRepository studentReportRepository;
+    @Autowired EmployerContactRepository employerContactRepository;
 
     /**
      * create new coop in database
@@ -194,6 +197,22 @@ public class CoopService {
         courseOfferingCoops.remove(c);
         courseOffering.setCoops(courseOfferingCoops);
         courseOfferingRepository.save(courseOffering);
+        
+        CoopDetails coopDetails = c.getCoopDetails();
+        if (coopDetails != null) {
+        	coopDetails.setCoop(null);
+        	coopDetailsRepository.save(coopDetails);
+        	c.setCoopDetails(null);
+        	coopRepository.save(c);
+        	EmployerContact ec = coopDetails.getEmployerContact();
+            Set<CoopDetails> details = ec.getCoopDetails();
+            details.remove(coopDetails);
+            ec.setCoopDetails(details);
+            employerContactRepository.save(ec);
+        	coopDetailsRepository.delete(coopDetails);
+        }
+        
+        
 
         coopRepository.delete(c);
 

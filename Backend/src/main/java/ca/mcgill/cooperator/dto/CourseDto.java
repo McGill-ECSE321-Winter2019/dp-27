@@ -9,6 +9,8 @@ public class CourseDto {
 
     private List<CourseOfferingDto> courseOfferings;
 
+    public CourseDto() {}
+    
     public CourseDto(int id, String name, List<CourseOfferingDto> courseOfferings) {
         this.id = id;
         this.name = name;

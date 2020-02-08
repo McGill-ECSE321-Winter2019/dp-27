@@ -8,6 +8,8 @@ public class CoopDetailsDto {
     private EmployerContactDto employerContact;
     private CoopDto coop;
 
+    public CoopDetailsDto() {}
+    
     public CoopDetailsDto(
             int id,
             double payPerHour,

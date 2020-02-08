@@ -29,7 +29,7 @@ public class CoopDetailsService {
      */
     @Transactional
     public CoopDetails createCoopDetails(
-            int payPerHour, int hoursPerWeek, EmployerContact ec, Coop c) {
+            double payPerHour, int hoursPerWeek, EmployerContact ec, Coop c) {
         StringBuilder error = new StringBuilder();
         if (payPerHour < 0) {
             error.append("Pay Per Hour is invalid! ");

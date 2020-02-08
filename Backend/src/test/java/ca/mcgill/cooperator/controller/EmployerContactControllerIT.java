@@ -34,7 +34,7 @@ public class EmployerContactControllerIT {
 
     @Autowired private ObjectMapper objectMapper;
 	/**
-     * Tests creating, reading, updating and deleting an Admin
+     * Tests creating, reading, updating and deleting an Employer Contact
      *
      * @throws Exception
      */
@@ -44,7 +44,7 @@ public class EmployerContactControllerIT {
     	String firstName = "Susan";
     	String lastName = "Matuszewski";
     	String phoneNumber = "123456789";
-    	CompanyDto companyDto = createTestCompany("Cisco", "Ottawa", "Ontario", "Canada");
+    	CompanyDto companyDto = createTestCompany();
         EmployerContactDto testEmployerContact = new EmployerContactDto();
         testEmployerContact.setFirstName(firstName);
         testEmployerContact.setLastName(lastName);
@@ -156,12 +156,12 @@ public class EmployerContactControllerIT {
         assertEquals(returnedEmployerContacts.size(), 0);
     }
     
-    public CompanyDto createTestCompany(String name, String city, String region, String country) throws Exception {
+    public CompanyDto createTestCompany() throws Exception {
     	CompanyDto companyDto = new CompanyDto();
-    	companyDto.setName(name);
-    	companyDto.setCity(city);
-    	companyDto.setRegion(region);
-    	companyDto.setCountry(country);
+    	companyDto.setName("Cisco");
+    	companyDto.setCity("Ottawa");
+    	companyDto.setRegion("Ontario");
+    	companyDto.setCountry("Canada");
     	
     	MvcResult mvcResult =
                 mvc.perform(
