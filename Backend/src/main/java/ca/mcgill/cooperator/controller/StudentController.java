@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -149,7 +150,7 @@ public class StudentController {
      * @return set of all coops with that status
      */
     @GetMapping("/{id}/coop-list")
-    public Set<CoopDto> getCoopsByStatus(@PathVariable int id, @RequestBody CoopStatus status) {
+    public Set<CoopDto> getCoopsByStatus(@PathVariable int id, @RequestParam CoopStatus status) {
         Student s = studentService.getStudentById(id);
         Set<Coop> coops = s.getCoops();
         Set<CoopDto> coopDto = new HashSet<>();
