@@ -50,6 +50,19 @@ public class StudentReportController {
 
         return ControllerUtils.convertToDto(sr);
     }
+    
+    /**
+     * Get all StudentReports
+     *
+     * @param id
+     * @return StudentReportDto object
+     */
+    @GetMapping("")
+    public List<StudentReportDto> getAllStudentReports() {
+        Set<StudentReport> reports = new HashSet<>(studentReportService.getAllStudentReports());
+
+        return ControllerUtils.convertStudentReportListToDto(reports);
+    }
 
     /**
      * Get StudentReports by Student ID
@@ -84,11 +97,10 @@ public class StudentReportController {
             @RequestParam("status") String status,
             @RequestParam("title") String title,
             @RequestParam("coop_id") int coopId) {
-        Coop coop = coopService.getCoopById(coopId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
-
-        StudentReport createdReport =
-                studentReportService.createStudentReport(reportStatus, coop, title, file);
+        Coop coop = coopService.getCoopById(coopId);
+    	StudentReport createdReport = 
+    			studentReportService.createStudentReport(reportStatus, coop, title, file);
 
         return ControllerUtils.convertToDto(createdReport);
     }

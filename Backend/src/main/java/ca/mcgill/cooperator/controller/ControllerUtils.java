@@ -43,7 +43,7 @@ public class ControllerUtils {
      * Domain Object to DTO conversion methods
      */
 
-    static AdminDto convertToDto(Admin a) {
+    public static AdminDto convertToDto(Admin a) {
         if (a == null) {
             throw new IllegalArgumentException("Admin does not exist!");
         }
@@ -83,7 +83,7 @@ public class ControllerUtils {
         return adminDto;
     }
 
-    static List<AdminDto> convertAdminListToDto(List<Admin> admins) {
+    public static List<AdminDto> convertAdminListToDto(List<Admin> admins) {
         List<AdminDto> adminDtos = new ArrayList<AdminDto>();
 
         for (Admin a : admins) {
@@ -96,7 +96,7 @@ public class ControllerUtils {
         return adminDtos;
     }
 
-    static CompanyDto convertToDto(Company c) {
+    public static CompanyDto convertToDto(Company c) {
         if (c == null) {
             throw new IllegalArgumentException("Company does not exist!");
         }
@@ -132,7 +132,7 @@ public class ControllerUtils {
         return companyDto;
     }
 
-    static List<CompanyDto> convertCompanyListToDto(List<Company> companies) {
+    public static List<CompanyDto> convertCompanyListToDto(List<Company> companies) {
         List<CompanyDto> companyDtos = new ArrayList<CompanyDto>();
 
         for (Company c : companies) {
@@ -144,7 +144,7 @@ public class ControllerUtils {
         return companyDtos;
     }
 
-    static CoopDto convertToDto(Coop c) {
+    public static CoopDto convertToDto(Coop c) {
         if (c == null) {
             throw new IllegalArgumentException("Coop does not exist!");
         }
@@ -296,7 +296,7 @@ public class ControllerUtils {
         return coopDto;
     }
 
-    static List<CoopDto> convertCoopListToDto(Set<Coop> coops) {
+    public static List<CoopDto> convertCoopListToDto(Set<Coop> coops) {
         List<CoopDto> coopDtos = new ArrayList<CoopDto>();
 
         for (Coop c : coops) {
@@ -308,7 +308,7 @@ public class ControllerUtils {
         return coopDtos;
     }
 
-    static List<CoopDto> convertCoopListToDto(List<Coop> coops) {
+    public static List<CoopDto> convertCoopListToDto(List<Coop> coops) {
         List<CoopDto> coopDtos = new ArrayList<CoopDto>();
 
         for (Coop c : coops) {
@@ -320,7 +320,7 @@ public class ControllerUtils {
         return coopDtos;
     }
 
-    static CoopDetailsDto convertToDto(CoopDetails cd) {
+    public static CoopDetailsDto convertToDto(CoopDetails cd) {
         if (cd == null) {
             throw new IllegalArgumentException("Coop details do not exist!");
         }
@@ -407,7 +407,7 @@ public class ControllerUtils {
         return coopDetailsDto;
     }
 
-    static List<CoopDetailsDto> convertCoopDetailsListToDto(Set<CoopDetails> coopDetails) {
+    public static List<CoopDetailsDto> convertCoopDetailsListToDto(Set<CoopDetails> coopDetails) {
         List<CoopDetailsDto> coopDetailsDtos = new ArrayList<CoopDetailsDto>();
 
         for (CoopDetails cd : coopDetails) {
@@ -418,8 +418,13 @@ public class ControllerUtils {
         }
         return coopDetailsDtos;
     }
+<<<<<<< HEAD
 
     static List<CoopDetailsDto> convertCoopDetailsListToDto(List<CoopDetails> coopDetails) {
+=======
+
+    public static List<CoopDetailsDto> convertCoopDetailsListToDto(List<CoopDetails> coopDetails) {
+>>>>>>> Implement Cucumber test for Student uploading an offer letter
         List<CoopDetailsDto> coopDetailsDtos = new ArrayList<CoopDetailsDto>();
 
         for (CoopDetails cd : coopDetails) {
@@ -431,7 +436,7 @@ public class ControllerUtils {
         return coopDetailsDtos;
     }
 
-    static CourseDto convertToDto(Course c) {
+    public static CourseDto convertToDto(Course c) {
         if (c == null) {
             throw new IllegalArgumentException("Course does not exist!");
         }
@@ -459,7 +464,7 @@ public class ControllerUtils {
         return courseDto;
     }
 
-    static List<CourseDto> convertCourseListToDto(List<Course> courses) {
+    public static List<CourseDto> convertCourseListToDto(List<Course> courses) {
         List<CourseDto> courseDtos = new ArrayList<CourseDto>();
 
         for (Course c : courses) {
@@ -471,7 +476,7 @@ public class ControllerUtils {
         return courseDtos;
     }
 
-    static CourseOfferingDto convertToDto(CourseOffering co) {
+    public static CourseOfferingDto convertToDto(CourseOffering co) {
         if (co == null) {
             throw new IllegalArgumentException("Course Offering does not exist!");
         }
@@ -543,7 +548,7 @@ public class ControllerUtils {
         return courseOfferingDto;
     }
 
-    static List<CourseOfferingDto> convertCourseOfferingListToDto(
+    public static List<CourseOfferingDto> convertCourseOfferingListToDto(
             List<CourseOffering> courseOfferings) {
         List<CourseOfferingDto> courseOfferingDtos = new ArrayList<CourseOfferingDto>();
 
@@ -556,7 +561,7 @@ public class ControllerUtils {
         return courseOfferingDtos;
     }
 
-    static EmployerContactDto convertToDto(EmployerContact e) {
+    public static EmployerContactDto convertToDto(EmployerContact e) {
         if (e == null) {
             throw new IllegalArgumentException("Employer Contact does not exist!");
         }
@@ -659,7 +664,7 @@ public class ControllerUtils {
         return employerContactDto;
     }
 
-    static List<EmployerContactDto> convertEmployerContactListToDto(
+    public static List<EmployerContactDto> convertEmployerContactListToDto(
             List<EmployerContact> employerContacts) {
 
         List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
@@ -675,7 +680,7 @@ public class ControllerUtils {
         return employerContactDtos;
     }
 
-    static EmployerReportDto convertToDto(EmployerReport er) {
+    public static EmployerReportDto convertToDto(EmployerReport er) {
         if (er == null) {
             throw new IllegalArgumentException("Employer Report does not exist!");
         }
@@ -768,7 +773,7 @@ public class ControllerUtils {
         return employerReportDto;
     }
 
-    static List<EmployerReportDto> convertEmployerReportListToDto(
+    public static List<EmployerReportDto> convertEmployerReportListToDto(
             Set<EmployerReport> employerReports) {
         List<EmployerReportDto> employerReportDtos = new ArrayList<EmployerReportDto>();
 
@@ -784,7 +789,7 @@ public class ControllerUtils {
         return employerReportDtos;
     }
 
-    static ReportSectionDto convertToDto(ReportSection rs) {
+    public static ReportSectionDto convertToDto(ReportSection rs) {
         if (rs == null) {
             throw new IllegalArgumentException("Report section does not exist!");
         }
@@ -796,7 +801,7 @@ public class ControllerUtils {
                 null); // ignore EmployerReport
     }
 
-    static List<ReportSectionDto> convertReportSectionListToDto(
+    public static List<ReportSectionDto> convertReportSectionListToDto(
             List<ReportSection> reportSections) {
         List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
 
@@ -809,7 +814,7 @@ public class ControllerUtils {
         return reportSectionDtos;
     }
 
-    static NotificationDto convertToDto(Notification n) {
+    public static NotificationDto convertToDto(Notification n) {
         if (n == null) {
             throw new IllegalArgumentException("Notification does not exist!");
         }
@@ -852,7 +857,7 @@ public class ControllerUtils {
         return notificationDto;
     }
 
-    static List<NotificationDto> convertNotifListToDto(List<Notification> notifs) {
+    public static List<NotificationDto> convertNotifListToDto(List<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
 
         for (Notification n : notifs) {
@@ -864,7 +869,7 @@ public class ControllerUtils {
         return notifDtos;
     }
 
-    static List<NotificationDto> convertNotifListToDto(Set<Notification> notifs) {
+    public static List<NotificationDto> convertNotifListToDto(Set<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
 
         for (Notification n : notifs) {
@@ -876,7 +881,7 @@ public class ControllerUtils {
         return notifDtos;
     }
 
-    static StudentDto convertToDto(Student s) {
+    public static StudentDto convertToDto(Student s) {
         if (s == null) {
             throw new IllegalArgumentException("Student does not exist!");
         }
@@ -972,7 +977,7 @@ public class ControllerUtils {
         return studentDto;
     }
 
-    static List<StudentDto> convertToDto(List<Student> students) {
+    public static List<StudentDto> convertToDto(List<Student> students) {
         List<StudentDto> studentDtos = new ArrayList<StudentDto>();
 
         for (Student s : students) {
@@ -984,7 +989,7 @@ public class ControllerUtils {
         return studentDtos;
     }
 
-    static StudentReportDto convertToDto(StudentReport sr) {
+    public static StudentReportDto convertToDto(StudentReport sr) {
         if (sr == null) {
             throw new IllegalArgumentException("Student Report does not exist!");
         }
@@ -1047,7 +1052,7 @@ public class ControllerUtils {
         return studentReportDto;
     }
 
-    static List<StudentReportDto> convertStudentReportListToDto(Set<StudentReport> studentReports) {
+    public static List<StudentReportDto> convertStudentReportListToDto(Set<StudentReport> studentReports) {
         List<StudentReportDto> studentReportDtos = new ArrayList<StudentReportDto>();
 
         for (StudentReport sr : studentReports) {
@@ -1063,7 +1068,7 @@ public class ControllerUtils {
      * DTO to Domain Object conversion methods
      */
 
-    static List<Notification> convertNotificationListToDomainObject(
+    public static List<Notification> convertNotificationListToDomainObject(
             List<NotificationDto> notifDtos) {
         List<Notification> notifs = new ArrayList<Notification>();
         for (NotificationDto nDto : notifDtos) {
@@ -1073,7 +1078,7 @@ public class ControllerUtils {
         return notifs;
     }
 
-    static List<ReportSection> convertReportSectionListToDomainObject(
+    public static List<ReportSection> convertReportSectionListToDomainObject(
             List<ReportSectionDto> rsDtos) {
         List<ReportSection> reports = new ArrayList<ReportSection>();
         for (ReportSectionDto rsDto : rsDtos) {
