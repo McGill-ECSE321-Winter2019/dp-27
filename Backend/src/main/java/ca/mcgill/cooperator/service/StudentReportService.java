@@ -158,8 +158,6 @@ public class StudentReportService {
             if (coopStudentReport.getId() == sr.getId()) {
                 coopReports.remove(coopStudentReport);
                 coopReports.add(sr);
-                /*int index = coopReports.indexOf(coopStudentReport);
-                coopReports.set(index, sr);*/
                 coopContains = true;
             }
         }

@@ -123,7 +123,7 @@ public class StudentService {
     }
 
     @Transactional
-    public List<Student> getStudentByFistName(String firstName) {
+    public List<Student> getStudentByFirstName(String firstName) {
         if (firstName == null || firstName.trim().length() == 0) {
             throw new IllegalArgumentException("FirstName is null or invalid. ");
         }

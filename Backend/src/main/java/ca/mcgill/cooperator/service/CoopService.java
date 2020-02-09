@@ -3,6 +3,7 @@ package ca.mcgill.cooperator.service;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
+import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.dao.EmployerReportRepository;
 import ca.mcgill.cooperator.dao.StudentReportRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
@@ -10,9 +11,11 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +32,7 @@ public class CoopService {
     @Autowired CoopDetailsRepository coopDetailsRepository;
     @Autowired EmployerReportRepository employerReportRepository;
     @Autowired StudentReportRepository studentReportRepository;
+    @Autowired EmployerContactRepository employerContactRepository;
 
     /**
      * create new coop in database
@@ -78,48 +82,18 @@ public class CoopService {
     }
 
     @Transactional
-    public Coop updateCoop(
-            Coop coop,
-            CoopStatus coopStatus,
-            CourseOffering courseOffering,
-            CoopDetails coopDetails) {
-        if (coop == null) {
-            throw new IllegalArgumentException("Coop cannot be null. ");
-        }
-
-        Coop c = coopRepository.findById(coop.getId()).orElse(null);
+    public Coop getCoopById(int id) {
+        Coop c = coopRepository.findById(id).orElse(null);
         if (c == null) {
-            throw new IllegalArgumentException("Coop does not exist.");
+            throw new IllegalArgumentException("Co-op with ID " + id + " does not exist!");
         }
 
-        if (coopStatus != null) {
-            c.setStatus(coopStatus);
-        }
-        if (courseOffering != null) {
-            c.setCourseOffering(courseOffering);
-        }
-        if (coopDetails != null) {
-            c.setCoopDetails(coopDetails);
-        }
+        return c;
+    }
 
-        coopRepository.save(c);
-
-        Student s = coop.getStudent();
-
-        Set<Coop> studentCoops = s.getCoops();
-        studentCoops.remove(coop);
-        studentCoops.add(c);
-        s.setCoops(studentCoops);
-
-        List<Coop> coops = courseOffering.getCoops();
-        coops.remove(coop);
-        coops.add(c);
-        courseOffering.setCoops(coops);
-
-        studentRepository.save(s);
-        courseOfferingRepository.save(courseOffering);
-
-        return coop;
+    @Transactional
+    public List<Coop> getAllCoops() {
+        return ServiceUtils.toList(coopRepository.findAll());
     }
 
     @Transactional
@@ -205,22 +179,7 @@ public class CoopService {
         List<Coop> coops = coopRepository.findByStatus(status);
         return coops;
     }
-
-    @Transactional
-    public Coop getCoopById(int id) {
-        Coop c = coopRepository.findById(id).orElse(null);
-        if (c == null) {
-            throw new IllegalArgumentException("Co-op with ID " + id + " does not exist!");
-        }
-
-        return c;
-    }
-
-    @Transactional
-    public List<Coop> getAllCoops() {
-        return ServiceUtils.toList(coopRepository.findAll());
-    }
-
+    
     @Transactional
     public Coop deleteCoop(Coop c) {
         if (c == null) {
@@ -238,6 +197,22 @@ public class CoopService {
         courseOfferingCoops.remove(c);
         courseOffering.setCoops(courseOfferingCoops);
         courseOfferingRepository.save(courseOffering);
+        
+        CoopDetails coopDetails = c.getCoopDetails();
+        if (coopDetails != null) {
+        	coopDetails.setCoop(null);
+        	coopDetailsRepository.save(coopDetails);
+        	c.setCoopDetails(null);
+        	coopRepository.save(c);
+        	EmployerContact ec = coopDetails.getEmployerContact();
+            Set<CoopDetails> details = ec.getCoopDetails();
+            details.remove(coopDetails);
+            ec.setCoopDetails(details);
+            employerContactRepository.save(ec);
+        	coopDetailsRepository.delete(coopDetails);
+        }
+        
+        
 
         coopRepository.delete(c);
 

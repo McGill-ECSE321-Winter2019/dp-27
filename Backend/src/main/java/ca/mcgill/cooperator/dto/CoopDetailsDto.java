@@ -2,15 +2,17 @@ package ca.mcgill.cooperator.dto;
 
 public class CoopDetailsDto {
     private int id;
-    private double payPerHour;
+    private int payPerHour;
     private int hoursPerWeek;
 
     private EmployerContactDto employerContact;
     private CoopDto coop;
 
+    public CoopDetailsDto() {}
+    
     public CoopDetailsDto(
             int id,
-            double payPerHour,
+            int payPerHour,
             int hoursPerWeek,
             EmployerContactDto employerContact,
             CoopDto coop) {
@@ -27,11 +29,11 @@ public class CoopDetailsDto {
         return this.id;
     }
 
-    public double getPayPerHour() {
+    public int getPayPerHour() {
         return this.payPerHour;
     }
 
-    public void setPayPerHour(double payPerHour) {
+    public void setPayPerHour(int payPerHour) {
         this.payPerHour = payPerHour;
     }
 

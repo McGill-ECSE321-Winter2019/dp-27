@@ -11,6 +11,8 @@ public class CourseOfferingDto {
 
     private CourseDto course;
     private List<CoopDto> coops;
+    
+    public CourseOfferingDto() {}
 
     public CourseOfferingDto(
             int id, int year, Season season, CourseDto course, List<CoopDto> coops) {

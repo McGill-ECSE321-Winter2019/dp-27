@@ -56,7 +56,7 @@ public class CoopController {
     }
 
     @PostMapping("")
-    public CoopDto createCoop(CoopDto coopDto) {
+    public CoopDto createCoop(@RequestBody CoopDto coopDto) {
         Coop coop = new Coop();
         CourseOfferingDto courseOfferingDto = coopDto.getCourseOffering();
         CourseOffering courseOffering =

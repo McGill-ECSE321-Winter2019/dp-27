@@ -79,6 +79,7 @@ public class CompanyController {
                 employerContacts.add(employerContact);
             }
         }
+        
         Company company =
                 companyService.createCompany(
                         companyDto.getName(),

@@ -12,6 +12,8 @@ public class StudentDto {
     private List<CoopDto> coops;
     private List<NotificationDto> studentReceived;
 
+    public StudentDto() {}
+    
     public StudentDto(
             int id,
             String firstName,

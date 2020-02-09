@@ -182,7 +182,6 @@ public class CooperatorServiceCompanyTests {
         }
 
         assertEquals(1, companyService.getAllCompanies().size());
-
         assertEquals("Index Exchange", c.getName());
         assertEquals(1, c.getEmployees().size());
     }
@@ -235,7 +234,6 @@ public class CooperatorServiceCompanyTests {
         String region = "California";
         List<EmployerContact> employees = new ArrayList<EmployerContact>();
 
-        EmployerContact ec = null;
         Company c = null;
         try {
             c = companyService.createCompany(name, city, region, country, employees);
