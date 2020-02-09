@@ -106,7 +106,7 @@ public class ControllerUtils {
         									   c.getCountry(), 
         									   null);
 
-        // create employer contact dtos]
+        // create employer contact dtos
         List<EmployerContact> employerContacts = c.getEmployees();
         List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
 	    if (employerContacts != null) {

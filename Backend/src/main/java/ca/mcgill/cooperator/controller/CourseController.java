@@ -28,9 +28,7 @@ public class CourseController {
     
     @PostMapping("")
     public CourseDto createCourse(@RequestBody CourseDto courseDto) {
-    	Course course = new Course();
-    	
-    	course = courseService.createCourse(courseDto.getName());
+    	Course course = courseService.createCourse(courseDto.getName());
     	
     	return ControllerUtils.convertToDto(course);
     }

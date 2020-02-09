@@ -9,7 +9,7 @@ import javax.persistence.OneToOne;
 @Entity
 public class CoopDetails {
     @Id @GeneratedValue private int id;
-    private double payPerHour;
+    private int payPerHour;
     private int hoursPerWeek;
 
     @ManyToOne(optional = false)
@@ -23,11 +23,11 @@ public class CoopDetails {
         return this.id;
     }
 
-    public double getPayPerHour() {
+    public int getPayPerHour() {
         return this.payPerHour;
     }
 
-    public void setPayPerHour(double payPerHour) {
+    public void setPayPerHour(int payPerHour) {
         this.payPerHour = payPerHour;
     }
 

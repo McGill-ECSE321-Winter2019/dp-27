@@ -10,6 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,6 +23,13 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ca.mcgill.cooperator.dao.CompanyRepository;
+import ca.mcgill.cooperator.dao.CoopDetailsRepository;
+import ca.mcgill.cooperator.dao.CoopRepository;
+import ca.mcgill.cooperator.dao.CourseOfferingRepository;
+import ca.mcgill.cooperator.dao.CourseRepository;
+import ca.mcgill.cooperator.dao.EmployerContactRepository;
+import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.CoopDetailsDto;
 import ca.mcgill.cooperator.dto.CoopDto;
@@ -28,8 +37,10 @@ import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.StudentDto;
+import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Season;
+import ca.mcgill.cooperator.service.CoopDetailsService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -38,6 +49,34 @@ public class CoopControllerIT {
 	@Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
+    
+    @Autowired CoopRepository coopRepository;
+    @Autowired CourseOfferingRepository courseOfferingRepository;
+    @Autowired StudentRepository studentRepository;
+    @Autowired CourseRepository courseRepository;
+    @Autowired CoopDetailsRepository coopDetailsRepository;
+    @Autowired EmployerContactRepository employerContactRepository;
+    @Autowired CompanyRepository companyRepository;
+    
+    @Autowired CoopDetailsService coopDetailsService;
+    
+    @BeforeEach
+    @AfterEach
+    public void clearDatabase() {
+        List<CoopDetails> coopDetails = coopDetailsService.getAllCoopDetails();
+        for (CoopDetails cd : coopDetails) {
+            cd.setCoop(null);
+            coopDetailsRepository.save(cd);
+        }
+        coopDetailsRepository.deleteAll();
+        courseOfferingRepository.deleteAll();
+        studentRepository.deleteAll();
+        courseRepository.deleteAll();
+        coopRepository.deleteAll();
+        coopDetailsRepository.deleteAll();
+        employerContactRepository.deleteAll();
+        companyRepository.deleteAll();
+    }
     
     @Test
     public void testCoopFlow() throws Exception {

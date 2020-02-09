@@ -70,6 +70,7 @@ public class CooperatorServiceStudentTests {
         assertEquals(s.getLastName(), lastName);
         assertEquals(s.getEmail(), email);
         assertEquals(s.getStudentId(), studentID);
+        assertEquals(1, studentService.getAllStudents().size());
     }
 
     @Test
@@ -92,21 +93,6 @@ public class CooperatorServiceStudentTests {
         assertEquals(s.getLastName(), lastName);
         assertEquals(s.getEmail(), email);
         assertEquals(s.getStudentId(), studentID);
-    }
-    
-	@Test
-	public void testCreateStudent2() {
-        String firstName = "Susan";
-        String lastName = "Matuszewski";
-        String email = "susan@gmail.com";
-        String studentId = "12344566";
-
-        try {
-            studentService.createStudent(firstName, lastName, email, studentId);
-        } catch (IllegalArgumentException e) {
-            fail();
-        }
-        
         assertEquals(1, studentService.getAllStudents().size());
     }
 
