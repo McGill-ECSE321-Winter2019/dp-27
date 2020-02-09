@@ -39,7 +39,7 @@ public class StudentReportController {
     @Autowired CoopService coopService;
 
     /**
-     * Get a StudentReport by ID
+     * Gets a StudentReport by ID
      *
      * @param id
      * @return StudentReportDto object
@@ -50,12 +50,11 @@ public class StudentReportController {
 
         return ControllerUtils.convertToDto(sr);
     }
-    
+
     /**
-     * Get all StudentReports
+     * Gets all StudentReports
      *
-     * @param id
-     * @return StudentReportDto object
+     * @return all StudentReports
      */
     @GetMapping("")
     public List<StudentReportDto> getAllStudentReports() {
@@ -65,7 +64,7 @@ public class StudentReportController {
     }
 
     /**
-     * Get StudentReports by Student ID
+     * Gets StudentReports by Student ID
      *
      * @param id
      * @return list of StudentReportDtos
@@ -99,8 +98,8 @@ public class StudentReportController {
             @RequestParam("coop_id") int coopId) {
         ReportStatus reportStatus = ReportStatus.valueOf(status);
         Coop coop = coopService.getCoopById(coopId);
-    	StudentReport createdReport = 
-    			studentReportService.createStudentReport(reportStatus, coop, title, file);
+        StudentReport createdReport =
+                studentReportService.createStudentReport(reportStatus, coop, title, file);
 
         return ControllerUtils.convertToDto(createdReport);
     }

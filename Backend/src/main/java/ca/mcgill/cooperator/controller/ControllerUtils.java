@@ -418,13 +418,8 @@ public class ControllerUtils {
         }
         return coopDetailsDtos;
     }
-<<<<<<< HEAD
-
-    static List<CoopDetailsDto> convertCoopDetailsListToDto(List<CoopDetails> coopDetails) {
-=======
-
+    
     public static List<CoopDetailsDto> convertCoopDetailsListToDto(List<CoopDetails> coopDetails) {
->>>>>>> Implement Cucumber test for Student uploading an offer letter
         List<CoopDetailsDto> coopDetailsDtos = new ArrayList<CoopDetailsDto>();
 
         for (CoopDetails cd : coopDetails) {
@@ -1052,7 +1047,8 @@ public class ControllerUtils {
         return studentReportDto;
     }
 
-    public static List<StudentReportDto> convertStudentReportListToDto(Set<StudentReport> studentReports) {
+    public static List<StudentReportDto> convertStudentReportListToDto(
+            Set<StudentReport> studentReports) {
         List<StudentReportDto> studentReportDtos = new ArrayList<StudentReportDto>();
 
         for (StudentReport sr : studentReports) {
