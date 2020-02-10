@@ -37,14 +37,19 @@ public class CourseService {
     }
 
     @Transactional
-    public Course updateCourse(Course c, String name) {
+    public Course updateCourse(Course c, String name, List<CourseOffering> offerings) {
         StringBuilder error = new StringBuilder();
         if (name == null || name.trim().length() == 0) {
+            error.append("Course name cannot be empty!");
+        }
+        if (offerings == null) {
             error.append("Course name cannot be empty!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
+
+        c.setCourseOfferings(offerings);
         c.setName(name.trim());
         return courseRepository.save(c);
     }

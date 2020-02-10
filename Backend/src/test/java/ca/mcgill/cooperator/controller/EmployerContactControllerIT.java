@@ -20,20 +20,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MvcResult;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
@@ -44,15 +40,16 @@ import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.EmployerReportService;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class EmployerContactControllerIT {
-	
 
     @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
+
 
     @Autowired private EmployerContactService employerContactService;
     @Autowired private EmployerReportService employerReportService;
@@ -74,34 +71,34 @@ public class EmployerContactControllerIT {
     	employerContactRepository.deleteAll();
     	companyRepository.deleteAll();
     }
-    
-    
-	/**
+
+    /**
      * Tests creating, reading, updating and deleting an Employer Contact
      *
      * @throws Exception
      */
     @Test
     public void testEmployerContactFlow() throws Exception {
-    	String email = "susan@gmail.com";
-    	String firstName = "Susan";
-    	String lastName = "Matuszewski";
-    	String phoneNumber = "123456789";
-    	CompanyDto companyDto = createTestCompany();
+        String email = "susan@gmail.com";
+        String firstName = "Susan";
+        String lastName = "Matuszewski";
+        String phoneNumber = "123456789";
+        CompanyDto companyDto = createTestCompany();
         EmployerContactDto testEmployerContact = new EmployerContactDto();
         testEmployerContact.setFirstName(firstName);
         testEmployerContact.setLastName(lastName);
         testEmployerContact.setEmail(email);
         testEmployerContact.setPhoneNumber(phoneNumber);
         testEmployerContact.setCompany(companyDto);
-        
 
         // 1. create the Employer Contact with a POST request
         MvcResult mvcResult =
                 mvc.perform(
                                 post("/employer-contacts")
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(testEmployerContact))
+                                        .content(
+                                                objectMapper.writeValueAsString(
+                                                        testEmployerContact))
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
@@ -113,7 +110,9 @@ public class EmployerContactControllerIT {
         assertEquals(returnedEmployerContact.getEmail(), "susan@gmail.com");
 
         // 2. get the Employer Contact by ID, valid
-        mvc.perform(get("/employer-contacts/" + returnedEmployerContact.getId()).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(
+                        get("/employer-contacts/" + returnedEmployerContact.getId())
+                                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         // 3. test getting all Employer Contact
@@ -126,7 +125,8 @@ public class EmployerContactControllerIT {
         List<EmployerContactDto> returnedEmployerContacts =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(), EmployerContactDto[].class));
+                                mvcResult.getResponse().getContentAsString(),
+                                EmployerContactDto[].class));
 
         assertEquals(returnedEmployerContacts.size(), 1);
 
@@ -140,15 +140,17 @@ public class EmployerContactControllerIT {
                 mvc.perform(
                                 put("/employer-contacts")
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(employerContactToUpdate))
+                                        .content(
+                                                objectMapper.writeValueAsString(
+                                                        employerContactToUpdate))
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
+
         returnedEmployerContact =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), EmployerContactDto.class);
-        
+
         mvcResult =
                 mvc.perform(get("/employer-contacts").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
@@ -189,19 +191,20 @@ public class EmployerContactControllerIT {
         returnedEmployerContacts =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(), EmployerContactDto[].class));
+                                mvcResult.getResponse().getContentAsString(),
+                                EmployerContactDto[].class));
 
         assertEquals(returnedEmployerContacts.size(), 0);
     }
-    
+
     public CompanyDto createTestCompany() throws Exception {
-    	CompanyDto companyDto = new CompanyDto();
-    	companyDto.setName("Cisco");
-    	companyDto.setCity("Ottawa");
-    	companyDto.setRegion("Ontario");
-    	companyDto.setCountry("Canada");
-    	
-    	MvcResult mvcResult =
+        CompanyDto companyDto = new CompanyDto();
+        companyDto.setName("Cisco");
+        companyDto.setCity("Ottawa");
+        companyDto.setRegion("Ontario");
+        companyDto.setCountry("Canada");
+
+        MvcResult mvcResult =
                 mvc.perform(
                                 post("/companies")
                                         .contentType(MediaType.APPLICATION_JSON)
@@ -214,8 +217,7 @@ public class EmployerContactControllerIT {
         CompanyDto returnedCompanyDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), CompanyDto.class);
-        
+
         return returnedCompanyDto;
-    	
     }
 }

@@ -37,7 +37,6 @@ public class StudentController {
     @GetMapping("")
     public List<StudentDto> getAllStudents() {
         List<Student> s = studentService.getAllStudents();
-
         return ControllerUtils.convertToDto(s);
     }
 
