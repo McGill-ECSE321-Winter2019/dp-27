@@ -71,7 +71,7 @@ public class ControllerUtils {
                                 student.getEmail(),
                                 student.getStudentId(),
                                 null, // null coops, if need coop information look up specific
-                                      // student by id
+                                // student by id
                                 null); // null notifs
                 notificationDto.setStudent(studentDto);
                 notificationDtos.add(notificationDto);
@@ -118,11 +118,11 @@ public class ControllerUtils {
                                 employerContact.getLastName(),
                                 employerContact.getPhoneNumber(),
                                 null, // null company, company is parent so no need for this
-                                      // information to be repeated
+                                // information to be repeated
                                 null, // null list of coop details, look up employer contact by id
-                                      // to get coop details
+                                // to get coop details
                                 null); // null employer reports, look up employer contact by id to
-                                       // get all employer reports
+                // get all employer reports
 
                 employerContactDtos.add(employerContactDto);
             }
@@ -197,7 +197,7 @@ public class ControllerUtils {
                             null, // null company
                             null, // null coop details since parent
                             null); // null employer reports, look up employer contact by id if
-                                   // needed
+            // needed
 
             Company company = employerContact.getCompany();
             CompanyDto companyDto =
@@ -226,7 +226,7 @@ public class ControllerUtils {
                         student.getStudentId(),
                         null, // set coops to null since coop is parent
                         null); // set notifications to null, look up student by id to get all
-                               // notifications
+        // notifications
         coopDto.setStudent(studentDto);
 
         // create student report dtos
@@ -273,7 +273,7 @@ public class ControllerUtils {
                                 employerReport.getData(),
                                 null, // null coop since coop is parent
                                 null, // null employer contact since can find this info from coop
-                                      // details
+                                // details
                                 null); // null report sections
 
                 List<ReportSection> reportSections = employerReport.getReportSections();
@@ -507,9 +507,9 @@ public class ControllerUtils {
                                 null, // null details
                                 null, // null student
                                 null, // null student reports, look up coop by id to get student
-                                      // reports
+                                // reports
                                 null); // null employer reports, look up coop by id to get employer
-                                       // reports
+                // reports
 
                 CoopDetails coopDetails = coop.getCoopDetails();
                 CoopDetailsDto coopDetailsDto =
@@ -518,7 +518,7 @@ public class ControllerUtils {
                                 coopDetails.getPayPerHour(),
                                 coopDetails.getHoursPerWeek(),
                                 null, // null employer contact, look up coop details by id to ge
-                                      // employer contact
+                                // employer contact
                                 null); // null coop since parent
                 coopDto.setCoopDetails(coopDetailsDto);
 
@@ -532,7 +532,7 @@ public class ControllerUtils {
                                 student.getStudentId(),
                                 null, // null coops, look up student by id to get coops
                                 null); // null notifications, look up student by id to get
-                                       // notifications
+                // notifications
                 coopDto.setStudent(studentDto);
 
                 coopDtos.add(coopDto);
@@ -618,7 +618,7 @@ public class ControllerUtils {
                                 null, // null coop
                                 null, // null employer contact since parent
                                 null); // null report sections, look up employer report by id to get
-                                       // sections
+                // sections
 
                 Coop coop = employerReport.getCoop();
                 CoopDto coopDto =
@@ -626,13 +626,13 @@ public class ControllerUtils {
                                 coop.getId(),
                                 coop.getStatus(),
                                 null, // null course offering, look up coop by id to get course
-                                      // offering
+                                // offering
                                 null, // null coop details, look up coop by id to get coop details
                                 null, // null student
                                 null, // null student reports, look up coop by id to get student
-                                      // reports
+                                // reports
                                 null); // null employer reports, look up coop by id to get all
-                                       // employer reports
+                // employer reports
 
                 Student student = coop.getStudent();
                 StudentDto studentDto =
@@ -644,7 +644,7 @@ public class ControllerUtils {
                                 student.getStudentId(),
                                 null, // null coops, look up student by id to get all coops
                                 null); // null notifications, look up student by id to get all
-                                       // notifications
+                // notifications
 
                 coopDto.setStudent(studentDto);
 
@@ -701,7 +701,7 @@ public class ControllerUtils {
                         null, // null student
                         null, // null student reports, look up coop by id to get student reports
                         null); // null employer reports, look up coop by id to get all employer
-                               // reports
+        // reports
 
         Student student = coop.getStudent();
         StudentDto studentDto =
@@ -729,9 +729,9 @@ public class ControllerUtils {
                         employerContact.getPhoneNumber(),
                         null, // null company
                         null, // null coop details, loop up employer contact by id to get coop
-                              // details
+                        // details
                         null); // null employer reports, look up employer contact by id to get all
-                               // employer reports
+        // employer reports
 
         Company company = employerContact.getCompany();
         CompanyDto companyDto =
@@ -845,7 +845,7 @@ public class ControllerUtils {
                         admin.getLastName(),
                         admin.getEmail(),
                         null); // null notifications, look up admin by id to see all notifications
-                               // sent
+        // sent
 
         notificationDto.setSender(adminDto);
 
@@ -904,9 +904,9 @@ public class ControllerUtils {
                                 null, // null coop details
                                 null, // null student since parent
                                 null, // null student reports, look up coop by id to get student
-                                      // reports
+                                // reports
                                 null); // null employer reports, look up coop by id to get employer
-                                       // reports
+                // reports
 
                 CourseOffering courseOffering = coop.getCourseOffering();
                 CourseOfferingDto courseOfferingDto =
@@ -927,7 +927,7 @@ public class ControllerUtils {
                                     coopDetails.getPayPerHour(),
                                     coopDetails.getHoursPerWeek(),
                                     null, // null employer contact, look up coop details by id to
-                                          // get employer contact
+                                    // get employer contact
                                     null); // null coop since parent
 
                     coopDto.setCoopDetails(coopDetailsDto);
@@ -960,7 +960,7 @@ public class ControllerUtils {
                                 admin.getLastName(),
                                 admin.getEmail(),
                                 null); // null sent notifications, look up admin by id to get all
-                                       // notifications sent
+                // notifications sent
 
                 notificationDto.setSender(adminDto);
                 notificationDtos.add(notificationDto);
@@ -1009,7 +1009,7 @@ public class ControllerUtils {
                         null, // null student
                         null, // null student reports, look up coop by to get all student reports
                         null); // null employer reports, look up coop by id to get all employer
-                               // reports
+        // reports
 
         Student student = coop.getStudent();
         StudentDto studentDto =

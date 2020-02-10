@@ -13,9 +13,9 @@ import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.CoopDetailsDto;
+import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.StudentReportDto;
 import ca.mcgill.cooperator.model.Company;
-import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
@@ -26,7 +26,6 @@ import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.CoopDetailsService;
-import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.EmployerContactService;
@@ -66,7 +65,6 @@ public class StudentSubmitOfferLetterIT {
     @Autowired private CoopDetailsRepository coopDetailsRepository;
     @Autowired private CourseOfferingRepository courseOfferingRepository;
 
-    @Autowired private CoopService coopService;
     @Autowired private StudentService studentService;
     @Autowired private EmployerContactService employerContactService;
     @Autowired private CompanyService companyService;
@@ -80,7 +78,7 @@ public class StudentSubmitOfferLetterIT {
     Course course;
     CourseOffering courseOffering;
     EmployerContact employerContact;
-    Coop testCoop;
+    CoopDto testCoop;
 
     @Before
     public void clearDatabase() {
@@ -95,6 +93,7 @@ public class StudentSubmitOfferLetterIT {
         companyRepository.deleteAll();
         courseRepository.deleteAll();
         courseOfferingRepository.deleteAll();
+        coopDetailsRepository.deleteAll();
     }
 
     @When("the Student uploads a copy of their offer letter")
@@ -104,7 +103,7 @@ public class StudentSubmitOfferLetterIT {
         employerContact = createTestEmployerContact();
         course = createTestCourse();
         courseOffering = createTestCourseOffering(course);
-        testCoop = coopService.createCoop(CoopStatus.UNDER_REVIEW, courseOffering, student);
+        testCoop = createTestCoop(CoopStatus.UNDER_REVIEW, courseOffering, student);
 
         // set up file to upload
         File testFile = new File("src/test/resources/Test_Offer_Letter.pdf");
@@ -126,7 +125,7 @@ public class StudentSubmitOfferLetterIT {
     @And("submits the details of their Coop term")
     public void studentSubmitsCoopDetails() throws Exception {
         CoopDetailsDto coopDetails = new CoopDetailsDto();
-        coopDetails.setCoop(ControllerUtils.convertToDto(testCoop));
+        coopDetails.setCoop(testCoop);
         coopDetails.setEmployerContact(ControllerUtils.convertToDto(employerContact));
         coopDetails.setHoursPerWeek(40);
         // pay per hour is in cents, this is $30 per hour
@@ -185,6 +184,30 @@ public class StudentSubmitOfferLetterIT {
                         new ArrayList<EmployerContact>());
         return employerContactService.createEmployerContact(
                 "Albert", "Kragl", "albertkragl@fb.com", "12345678", c);
+    }
+
+    private CoopDto createTestCoop(
+            CoopStatus status, CourseOffering courseOffering, Student student) throws Exception {
+        CoopDto coopDto = new CoopDto();
+        coopDto.setStatus(status);
+        coopDto.setCourseOffering(ControllerUtils.convertToDto(courseOffering));
+        coopDto.setStudent(ControllerUtils.convertToDto(student));
+
+        // 1. create the Co-op with a POST request
+        MvcResult mvcResult =
+                mvc.perform(
+                                post("/coops")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(coopDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
+        // get object from response
+        CoopDto returnedCoop =
+                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CoopDto.class);
+
+        return returnedCoop;
     }
 
     private Course createTestCourse() {
