@@ -32,8 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @RequestMapping("students")
 public class StudentController {
 	
-	@Autowired StudentService studentService;
-
     @Autowired private StudentService studentService;
     /**
      * Get all students
@@ -43,7 +41,9 @@ public class StudentController {
     @GetMapping("")
     public List<StudentDto> getAllStudents() {
         List<Student> s = studentService.getAllStudents();
-
+        
+        return ControllerUtils.convertToDto(s);
+    }
     /**
      * Get Student by id
      *

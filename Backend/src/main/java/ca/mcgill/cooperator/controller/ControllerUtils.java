@@ -1022,7 +1022,9 @@ public class ControllerUtils {
             ReportSection rs = reportSectionService.getReportSection(rsDto.getId());
             reports.add(rs);
         }
-        return reports;
+		return reports;
+	}
+	
     static Set<Notification> convertNotificationListToDomainObjectSet(
             List<NotificationDto> notifDtos) {
         Set<Notification> notifs = new HashSet<>();
