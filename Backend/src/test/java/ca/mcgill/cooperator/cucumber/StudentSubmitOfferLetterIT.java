@@ -114,7 +114,7 @@ public class StudentSubmitOfferLetterIT {
         mvc.perform(
                         multipart("/student-reports")
                                 .file("file", multipartFile.getBytes())
-                                .param("status", "IN_REVIEW")
+                                .param("status", "UNDER_REVIEW")
                                 .param("title", "Offer Letter")
                                 .param("coop_id", String.valueOf(testCoop.getId()))
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -122,7 +122,7 @@ public class StudentSubmitOfferLetterIT {
                 .andExpect(status().isOk());
     }
 
-    @And("submits the details of their Coop term")
+    @And("submits the Coop Details of their Coop term")
     public void studentSubmitsCoopDetails() throws Exception {
         CoopDetailsDto coopDetails = new CoopDetailsDto();
         coopDetails.setCoop(testCoop);
@@ -161,7 +161,7 @@ public class StudentSubmitOfferLetterIT {
 
         StudentReportDto report = returnedReports.get(0);
 
-        assertEquals(ReportStatus.IN_REVIEW, report.getStatus());
+        assertEquals(ReportStatus.UNDER_REVIEW, report.getStatus());
         assertEquals(CoopStatus.UNDER_REVIEW, report.getCoop().getStatus());
         assertEquals("susan@gmail.com", report.getCoop().getStudent().getEmail());
     }
