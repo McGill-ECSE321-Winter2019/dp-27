@@ -28,6 +28,7 @@ public class StudentReportService {
      *
      * @param status
      * @param c
+     * @param title
      * @param file object
      * @return created student report
      */

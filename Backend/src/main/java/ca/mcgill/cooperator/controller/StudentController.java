@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudentController {
 
     @Autowired private StudentService studentService;
+
     /**
      * Get all students
      *
@@ -38,6 +39,7 @@ public class StudentController {
 
         return ControllerUtils.convertToDto(s);
     }
+
     /**
      * Get Student by id
      *
@@ -50,6 +52,7 @@ public class StudentController {
 
         return ControllerUtils.convertToDto(s);
     }
+
     /**
      * Create new Student
      *
@@ -96,6 +99,7 @@ public class StudentController {
                 ControllerUtils.convertNotificationListToDomainObjectSet(s.getNotifications()));
         return ControllerUtils.convertToDto(student);
     }
+
     /**
      * Deletes an existing student
      *

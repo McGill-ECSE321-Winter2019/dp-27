@@ -39,7 +39,7 @@ public class StudentReportController {
     @Autowired CoopService coopService;
 
     /**
-     * Get a StudentReport by ID
+     * Gets a StudentReport by ID
      *
      * @param id
      * @return StudentReportDto object
@@ -52,7 +52,19 @@ public class StudentReportController {
     }
 
     /**
-     * Get StudentReports by Student ID
+     * Gets all StudentReports
+     *
+     * @return all StudentReports
+     */
+    @GetMapping("")
+    public List<StudentReportDto> getAllStudentReports() {
+        Set<StudentReport> reports = new HashSet<>(studentReportService.getAllStudentReports());
+
+        return ControllerUtils.convertStudentReportListToDto(reports);
+    }
+
+    /**
+     * Gets StudentReports by Student ID
      *
      * @param id
      * @return list of StudentReportDtos
@@ -84,9 +96,8 @@ public class StudentReportController {
             @RequestParam("status") String status,
             @RequestParam("title") String title,
             @RequestParam("coop_id") int coopId) {
-        Coop coop = coopService.getCoopById(coopId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
-
+        Coop coop = coopService.getCoopById(coopId);
         StudentReport createdReport =
                 studentReportService.createStudentReport(reportStatus, coop, title, file);
 

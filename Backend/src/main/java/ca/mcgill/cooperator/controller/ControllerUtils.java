@@ -43,7 +43,7 @@ public class ControllerUtils {
      * Domain Object to DTO conversion methods
      */
 
-    static AdminDto convertToDto(Admin a) {
+    public static AdminDto convertToDto(Admin a) {
         if (a == null) {
             throw new IllegalArgumentException("Admin does not exist!");
         }
@@ -71,7 +71,7 @@ public class ControllerUtils {
                                 student.getEmail(),
                                 student.getStudentId(),
                                 null, // null coops, if need coop information look up specific
-                                      // student by id
+                                // student by id
                                 null); // null notifs
                 notificationDto.setStudent(studentDto);
                 notificationDtos.add(notificationDto);
@@ -83,7 +83,7 @@ public class ControllerUtils {
         return adminDto;
     }
 
-    static List<AdminDto> convertAdminListToDto(List<Admin> admins) {
+    public static List<AdminDto> convertAdminListToDto(List<Admin> admins) {
         List<AdminDto> adminDtos = new ArrayList<AdminDto>();
 
         for (Admin a : admins) {
@@ -96,7 +96,7 @@ public class ControllerUtils {
         return adminDtos;
     }
 
-    static CompanyDto convertToDto(Company c) {
+    public static CompanyDto convertToDto(Company c) {
         if (c == null) {
             throw new IllegalArgumentException("Company does not exist!");
         }
@@ -118,11 +118,11 @@ public class ControllerUtils {
                                 employerContact.getLastName(),
                                 employerContact.getPhoneNumber(),
                                 null, // null company, company is parent so no need for this
-                                      // information to be repeated
+                                // information to be repeated
                                 null, // null list of coop details, look up employer contact by id
-                                      // to get coop details
+                                // to get coop details
                                 null); // null employer reports, look up employer contact by id to
-                                       // get all employer reports
+                // get all employer reports
 
                 employerContactDtos.add(employerContactDto);
             }
@@ -132,7 +132,7 @@ public class ControllerUtils {
         return companyDto;
     }
 
-    static List<CompanyDto> convertCompanyListToDto(List<Company> companies) {
+    public static List<CompanyDto> convertCompanyListToDto(List<Company> companies) {
         List<CompanyDto> companyDtos = new ArrayList<CompanyDto>();
 
         for (Company c : companies) {
@@ -144,7 +144,7 @@ public class ControllerUtils {
         return companyDtos;
     }
 
-    static CoopDto convertToDto(Coop c) {
+    public static CoopDto convertToDto(Coop c) {
         if (c == null) {
             throw new IllegalArgumentException("Coop does not exist!");
         }
@@ -197,7 +197,7 @@ public class ControllerUtils {
                             null, // null company
                             null, // null coop details since parent
                             null); // null employer reports, look up employer contact by id if
-                                   // needed
+            // needed
 
             Company company = employerContact.getCompany();
             CompanyDto companyDto =
@@ -226,7 +226,7 @@ public class ControllerUtils {
                         student.getStudentId(),
                         null, // set coops to null since coop is parent
                         null); // set notifications to null, look up student by id to get all
-                               // notifications
+        // notifications
         coopDto.setStudent(studentDto);
 
         // create student report dtos
@@ -273,7 +273,7 @@ public class ControllerUtils {
                                 employerReport.getData(),
                                 null, // null coop since coop is parent
                                 null, // null employer contact since can find this info from coop
-                                      // details
+                                // details
                                 null); // null report sections
 
                 List<ReportSection> reportSections = employerReport.getReportSections();
@@ -296,7 +296,7 @@ public class ControllerUtils {
         return coopDto;
     }
 
-    static List<CoopDto> convertCoopListToDto(Set<Coop> coops) {
+    public static List<CoopDto> convertCoopListToDto(Set<Coop> coops) {
         List<CoopDto> coopDtos = new ArrayList<CoopDto>();
 
         for (Coop c : coops) {
@@ -308,7 +308,7 @@ public class ControllerUtils {
         return coopDtos;
     }
 
-    static List<CoopDto> convertCoopListToDto(List<Coop> coops) {
+    public static List<CoopDto> convertCoopListToDto(List<Coop> coops) {
         List<CoopDto> coopDtos = new ArrayList<CoopDto>();
 
         for (Coop c : coops) {
@@ -320,7 +320,7 @@ public class ControllerUtils {
         return coopDtos;
     }
 
-    static CoopDetailsDto convertToDto(CoopDetails cd) {
+    public static CoopDetailsDto convertToDto(CoopDetails cd) {
         if (cd == null) {
             throw new IllegalArgumentException("Coop details do not exist!");
         }
@@ -407,7 +407,7 @@ public class ControllerUtils {
         return coopDetailsDto;
     }
 
-    static List<CoopDetailsDto> convertCoopDetailsListToDto(Set<CoopDetails> coopDetails) {
+    public static List<CoopDetailsDto> convertCoopDetailsListToDto(Set<CoopDetails> coopDetails) {
         List<CoopDetailsDto> coopDetailsDtos = new ArrayList<CoopDetailsDto>();
 
         for (CoopDetails cd : coopDetails) {
@@ -419,7 +419,7 @@ public class ControllerUtils {
         return coopDetailsDtos;
     }
 
-    static List<CoopDetailsDto> convertCoopDetailsListToDto(List<CoopDetails> coopDetails) {
+    public static List<CoopDetailsDto> convertCoopDetailsListToDto(List<CoopDetails> coopDetails) {
         List<CoopDetailsDto> coopDetailsDtos = new ArrayList<CoopDetailsDto>();
 
         for (CoopDetails cd : coopDetails) {
@@ -431,7 +431,7 @@ public class ControllerUtils {
         return coopDetailsDtos;
     }
 
-    static CourseDto convertToDto(Course c) {
+    public static CourseDto convertToDto(Course c) {
         if (c == null) {
             throw new IllegalArgumentException("Course does not exist!");
         }
@@ -459,7 +459,7 @@ public class ControllerUtils {
         return courseDto;
     }
 
-    static List<CourseDto> convertCourseListToDto(List<Course> courses) {
+    public static List<CourseDto> convertCourseListToDto(List<Course> courses) {
         List<CourseDto> courseDtos = new ArrayList<CourseDto>();
 
         for (Course c : courses) {
@@ -471,7 +471,7 @@ public class ControllerUtils {
         return courseDtos;
     }
 
-    static CourseOfferingDto convertToDto(CourseOffering co) {
+    public static CourseOfferingDto convertToDto(CourseOffering co) {
         if (co == null) {
             throw new IllegalArgumentException("Course Offering does not exist!");
         }
@@ -507,9 +507,9 @@ public class ControllerUtils {
                                 null, // null details
                                 null, // null student
                                 null, // null student reports, look up coop by id to get student
-                                      // reports
+                                // reports
                                 null); // null employer reports, look up coop by id to get employer
-                                       // reports
+                // reports
 
                 CoopDetails coopDetails = coop.getCoopDetails();
                 CoopDetailsDto coopDetailsDto =
@@ -518,7 +518,7 @@ public class ControllerUtils {
                                 coopDetails.getPayPerHour(),
                                 coopDetails.getHoursPerWeek(),
                                 null, // null employer contact, look up coop details by id to ge
-                                      // employer contact
+                                // employer contact
                                 null); // null coop since parent
                 coopDto.setCoopDetails(coopDetailsDto);
 
@@ -532,7 +532,7 @@ public class ControllerUtils {
                                 student.getStudentId(),
                                 null, // null coops, look up student by id to get coops
                                 null); // null notifications, look up student by id to get
-                                       // notifications
+                // notifications
                 coopDto.setStudent(studentDto);
 
                 coopDtos.add(coopDto);
@@ -543,7 +543,7 @@ public class ControllerUtils {
         return courseOfferingDto;
     }
 
-    static List<CourseOfferingDto> convertCourseOfferingListToDto(
+    public static List<CourseOfferingDto> convertCourseOfferingListToDto(
             List<CourseOffering> courseOfferings) {
         List<CourseOfferingDto> courseOfferingDtos = new ArrayList<CourseOfferingDto>();
 
@@ -556,7 +556,7 @@ public class ControllerUtils {
         return courseOfferingDtos;
     }
 
-    static EmployerContactDto convertToDto(EmployerContact e) {
+    public static EmployerContactDto convertToDto(EmployerContact e) {
         if (e == null) {
             throw new IllegalArgumentException("Employer Contact does not exist!");
         }
@@ -618,7 +618,7 @@ public class ControllerUtils {
                                 null, // null coop
                                 null, // null employer contact since parent
                                 null); // null report sections, look up employer report by id to get
-                                       // sections
+                // sections
 
                 Coop coop = employerReport.getCoop();
                 CoopDto coopDto =
@@ -626,13 +626,13 @@ public class ControllerUtils {
                                 coop.getId(),
                                 coop.getStatus(),
                                 null, // null course offering, look up coop by id to get course
-                                      // offering
+                                // offering
                                 null, // null coop details, look up coop by id to get coop details
                                 null, // null student
                                 null, // null student reports, look up coop by id to get student
-                                      // reports
+                                // reports
                                 null); // null employer reports, look up coop by id to get all
-                                       // employer reports
+                // employer reports
 
                 Student student = coop.getStudent();
                 StudentDto studentDto =
@@ -644,7 +644,7 @@ public class ControllerUtils {
                                 student.getStudentId(),
                                 null, // null coops, look up student by id to get all coops
                                 null); // null notifications, look up student by id to get all
-                                       // notifications
+                // notifications
 
                 coopDto.setStudent(studentDto);
 
@@ -659,7 +659,7 @@ public class ControllerUtils {
         return employerContactDto;
     }
 
-    static List<EmployerContactDto> convertEmployerContactListToDto(
+    public static List<EmployerContactDto> convertEmployerContactListToDto(
             List<EmployerContact> employerContacts) {
 
         List<EmployerContactDto> employerContactDtos = new ArrayList<EmployerContactDto>();
@@ -675,7 +675,7 @@ public class ControllerUtils {
         return employerContactDtos;
     }
 
-    static EmployerReportDto convertToDto(EmployerReport er) {
+    public static EmployerReportDto convertToDto(EmployerReport er) {
         if (er == null) {
             throw new IllegalArgumentException("Employer Report does not exist!");
         }
@@ -701,7 +701,7 @@ public class ControllerUtils {
                         null, // null student
                         null, // null student reports, look up coop by id to get student reports
                         null); // null employer reports, look up coop by id to get all employer
-                               // reports
+        // reports
 
         Student student = coop.getStudent();
         StudentDto studentDto =
@@ -729,9 +729,9 @@ public class ControllerUtils {
                         employerContact.getPhoneNumber(),
                         null, // null company
                         null, // null coop details, loop up employer contact by id to get coop
-                              // details
+                        // details
                         null); // null employer reports, look up employer contact by id to get all
-                               // employer reports
+        // employer reports
 
         Company company = employerContact.getCompany();
         CompanyDto companyDto =
@@ -768,7 +768,7 @@ public class ControllerUtils {
         return employerReportDto;
     }
 
-    static List<EmployerReportDto> convertEmployerReportListToDto(
+    public static List<EmployerReportDto> convertEmployerReportListToDto(
             Set<EmployerReport> employerReports) {
         List<EmployerReportDto> employerReportDtos = new ArrayList<EmployerReportDto>();
 
@@ -784,7 +784,7 @@ public class ControllerUtils {
         return employerReportDtos;
     }
 
-    static ReportSectionDto convertToDto(ReportSection rs) {
+    public static ReportSectionDto convertToDto(ReportSection rs) {
         if (rs == null) {
             throw new IllegalArgumentException("Report section does not exist!");
         }
@@ -796,7 +796,7 @@ public class ControllerUtils {
                 null); // ignore EmployerReport
     }
 
-    static List<ReportSectionDto> convertReportSectionListToDto(
+    public static List<ReportSectionDto> convertReportSectionListToDto(
             List<ReportSection> reportSections) {
         List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
 
@@ -809,7 +809,7 @@ public class ControllerUtils {
         return reportSectionDtos;
     }
 
-    static NotificationDto convertToDto(Notification n) {
+    public static NotificationDto convertToDto(Notification n) {
         if (n == null) {
             throw new IllegalArgumentException("Notification does not exist!");
         }
@@ -845,14 +845,14 @@ public class ControllerUtils {
                         admin.getLastName(),
                         admin.getEmail(),
                         null); // null notifications, look up admin by id to see all notifications
-                               // sent
+        // sent
 
         notificationDto.setSender(adminDto);
 
         return notificationDto;
     }
 
-    static List<NotificationDto> convertNotifListToDto(List<Notification> notifs) {
+    public static List<NotificationDto> convertNotifListToDto(List<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
 
         for (Notification n : notifs) {
@@ -864,7 +864,7 @@ public class ControllerUtils {
         return notifDtos;
     }
 
-    static List<NotificationDto> convertNotifListToDto(Set<Notification> notifs) {
+    public static List<NotificationDto> convertNotifListToDto(Set<Notification> notifs) {
         List<NotificationDto> notifDtos = new ArrayList<NotificationDto>();
 
         for (Notification n : notifs) {
@@ -876,7 +876,7 @@ public class ControllerUtils {
         return notifDtos;
     }
 
-    static StudentDto convertToDto(Student s) {
+    public static StudentDto convertToDto(Student s) {
         if (s == null) {
             throw new IllegalArgumentException("Student does not exist!");
         }
@@ -904,9 +904,9 @@ public class ControllerUtils {
                                 null, // null coop details
                                 null, // null student since parent
                                 null, // null student reports, look up coop by id to get student
-                                      // reports
+                                // reports
                                 null); // null employer reports, look up coop by id to get employer
-                                       // reports
+                // reports
 
                 CourseOffering courseOffering = coop.getCourseOffering();
                 CourseOfferingDto courseOfferingDto =
@@ -927,7 +927,7 @@ public class ControllerUtils {
                                     coopDetails.getPayPerHour(),
                                     coopDetails.getHoursPerWeek(),
                                     null, // null employer contact, look up coop details by id to
-                                          // get employer contact
+                                    // get employer contact
                                     null); // null coop since parent
 
                     coopDto.setCoopDetails(coopDetailsDto);
@@ -960,7 +960,7 @@ public class ControllerUtils {
                                 admin.getLastName(),
                                 admin.getEmail(),
                                 null); // null sent notifications, look up admin by id to get all
-                                       // notifications sent
+                // notifications sent
 
                 notificationDto.setSender(adminDto);
                 notificationDtos.add(notificationDto);
@@ -972,7 +972,7 @@ public class ControllerUtils {
         return studentDto;
     }
 
-    static List<StudentDto> convertToDto(List<Student> students) {
+    public static List<StudentDto> convertToDto(List<Student> students) {
         List<StudentDto> studentDtos = new ArrayList<StudentDto>();
 
         for (Student s : students) {
@@ -984,7 +984,7 @@ public class ControllerUtils {
         return studentDtos;
     }
 
-    static StudentReportDto convertToDto(StudentReport sr) {
+    public static StudentReportDto convertToDto(StudentReport sr) {
         if (sr == null) {
             throw new IllegalArgumentException("Student Report does not exist!");
         }
@@ -1009,7 +1009,7 @@ public class ControllerUtils {
                         null, // null student
                         null, // null student reports, look up coop by to get all student reports
                         null); // null employer reports, look up coop by id to get all employer
-                               // reports
+        // reports
 
         Student student = coop.getStudent();
         StudentDto studentDto =
@@ -1047,7 +1047,8 @@ public class ControllerUtils {
         return studentReportDto;
     }
 
-    static List<StudentReportDto> convertStudentReportListToDto(Set<StudentReport> studentReports) {
+    public static List<StudentReportDto> convertStudentReportListToDto(
+            Set<StudentReport> studentReports) {
         List<StudentReportDto> studentReportDtos = new ArrayList<StudentReportDto>();
 
         for (StudentReport sr : studentReports) {
@@ -1063,7 +1064,7 @@ public class ControllerUtils {
      * DTO to Domain Object conversion methods
      */
 
-    static List<Notification> convertNotificationListToDomainObject(
+    public static List<Notification> convertNotificationListToDomainObject(
             List<NotificationDto> notifDtos) {
         List<Notification> notifs = new ArrayList<Notification>();
         for (NotificationDto nDto : notifDtos) {
@@ -1073,7 +1074,7 @@ public class ControllerUtils {
         return notifs;
     }
 
-    static List<ReportSection> convertReportSectionListToDomainObject(
+    public static List<ReportSection> convertReportSectionListToDomainObject(
             List<ReportSectionDto> rsDtos) {
         List<ReportSection> reports = new ArrayList<ReportSection>();
         for (ReportSectionDto rsDto : rsDtos) {
