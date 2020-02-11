@@ -418,7 +418,7 @@ public class ControllerUtils {
         }
         return coopDetailsDtos;
     }
-    
+
     public static List<CoopDetailsDto> convertCoopDetailsListToDto(List<CoopDetails> coopDetails) {
         List<CoopDetailsDto> coopDetailsDtos = new ArrayList<CoopDetailsDto>();
 

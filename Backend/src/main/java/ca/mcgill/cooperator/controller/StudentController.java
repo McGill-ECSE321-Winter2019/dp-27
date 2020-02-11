@@ -99,7 +99,7 @@ public class StudentController {
                 ControllerUtils.convertNotificationListToDomainObjectSet(s.getNotifications()));
         return ControllerUtils.convertToDto(student);
     }
-    
+
     /**
      * Deletes an existing student
      *
