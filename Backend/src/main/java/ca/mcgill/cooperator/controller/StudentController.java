@@ -17,21 +17,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import ca.mcgill.cooperator.dto.StudentDto;
-import ca.mcgill.cooperator.model.Student;
-import ca.mcgill.cooperator.service.StudentService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("students")
 public class StudentController {
-	
+
     @Autowired private StudentService studentService;
     /**
      * Get all students
@@ -41,7 +35,7 @@ public class StudentController {
     @GetMapping("")
     public List<StudentDto> getAllStudents() {
         List<Student> s = studentService.getAllStudents();
-        
+
         return ControllerUtils.convertToDto(s);
     }
     /**
@@ -113,7 +107,7 @@ public class StudentController {
         Student student = studentService.deleteStudent(studentService.getStudentById(id));
         return ControllerUtils.convertToDto(student);
     }
-    
+
     /**
      * Gets current coop
      *
@@ -129,7 +123,7 @@ public class StudentController {
         }
         return null;
     }
-    
+
     /**
      * Get student coops by status
      *

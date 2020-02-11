@@ -15,7 +15,6 @@ import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -179,7 +178,7 @@ public class CoopService {
         List<Coop> coops = coopRepository.findByStatus(status);
         return coops;
     }
-    
+
     @Transactional
     public Coop deleteCoop(Coop c) {
         if (c == null) {
@@ -197,22 +196,20 @@ public class CoopService {
         courseOfferingCoops.remove(c);
         courseOffering.setCoops(courseOfferingCoops);
         courseOfferingRepository.save(courseOffering);
-        
+
         CoopDetails coopDetails = c.getCoopDetails();
         if (coopDetails != null) {
-        	coopDetails.setCoop(null);
-        	coopDetailsRepository.save(coopDetails);
-        	c.setCoopDetails(null);
-        	coopRepository.save(c);
-        	EmployerContact ec = coopDetails.getEmployerContact();
+            coopDetails.setCoop(null);
+            coopDetailsRepository.save(coopDetails);
+            c.setCoopDetails(null);
+            coopRepository.save(c);
+            EmployerContact ec = coopDetails.getEmployerContact();
             Set<CoopDetails> details = ec.getCoopDetails();
             details.remove(coopDetails);
             ec.setCoopDetails(details);
             employerContactRepository.save(ec);
-        	coopDetailsRepository.delete(coopDetails);
+            coopDetailsRepository.delete(coopDetails);
         }
-        
-        
 
         coopRepository.delete(c);
 

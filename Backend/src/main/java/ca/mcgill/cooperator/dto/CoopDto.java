@@ -15,7 +15,7 @@ public class CoopDto {
     private List<EmployerReportDto> employerReports;
 
     public CoopDto() {}
-    
+
     public CoopDto(
             int id,
             CoopStatus status,

@@ -86,7 +86,7 @@ public class CooperatorServiceStudentTests {
             studentService.createStudent(
                     firstName, lastName, email, studentID, coops, notifications);
         } catch (IllegalArgumentException e) {
-        	fail();
+            fail();
         }
         Student s = studentService.getStudentByStudentID(studentID);
         assertEquals(s.getFirstName(), firstName);
@@ -98,7 +98,7 @@ public class CooperatorServiceStudentTests {
 
     @Test
     public void testCreateStudentNull() {
-    	String error = "";
+        String error = "";
         try {
             studentService.createStudent(null, null, null, null);
         } catch (IllegalArgumentException e) {
@@ -179,9 +179,9 @@ public class CooperatorServiceStudentTests {
         assertEquals(s.getEmail(), email);
         assertEquals(s.getStudentId(), studentIDNew);
     }
-    
-	@Test
-	public void testUpdateStudent2() {
+
+    @Test
+    public void testUpdateStudent2() {
         String firstName = "Susan";
         String lastName = "Matuszewski";
         String email = "susan@gmail.com";
@@ -243,9 +243,9 @@ public class CooperatorServiceStudentTests {
         assertEquals(s.getEmail(), email);
         assertEquals(s.getStudentId(), studentID);
     }
-    
-	@Test
-	public void testUpdateStudentInvalid2() {
+
+    @Test
+    public void testUpdateStudentInvalid2() {
         String firstName = "Susan";
         String lastName = "Matuszewski";
         String email = "susan@gmail.com";
@@ -257,7 +257,7 @@ public class CooperatorServiceStudentTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-        
+
         assertEquals(1, studentService.getAllStudents().size());
 
         String error = "";
@@ -290,7 +290,7 @@ public class CooperatorServiceStudentTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-        
+
         Student s = studentService.getStudentByStudentID(studentID);
         assertEquals(s.getFirstName(), firstName);
         assertEquals(s.getLastName(), lastName);
@@ -304,9 +304,9 @@ public class CooperatorServiceStudentTests {
         }
         assertEquals(0, studentService.getAllStudents().size());
     }
-    
-	@Test
-	public void testDeleteStudent2() {
+
+    @Test
+    public void testDeleteStudent2() {
         String firstName = "Susan";
         String lastName = "Matuszewski";
         String email = "susan@gmail.com";
@@ -337,7 +337,7 @@ public class CooperatorServiceStudentTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-        
+
         try {
             studentService.deleteStudent(s);
         } catch (IllegalArgumentException e) {

@@ -7,22 +7,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
@@ -41,15 +25,28 @@ import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.service.CoopDetailsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class CoopControllerIT {
-	@Autowired private MockMvc mvc;
+    @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
-    
+
     @Autowired CoopRepository coopRepository;
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired StudentRepository studentRepository;
@@ -57,9 +54,9 @@ public class CoopControllerIT {
     @Autowired CoopDetailsRepository coopDetailsRepository;
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CompanyRepository companyRepository;
-    
+
     @Autowired CoopDetailsService coopDetailsService;
-    
+
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
@@ -77,21 +74,21 @@ public class CoopControllerIT {
         employerContactRepository.deleteAll();
         companyRepository.deleteAll();
     }
-    
+
     @Test
     public void testCoopFlow() throws Exception {
-    	CoopStatus status = CoopStatus.COMPLETED;
-    	CourseDto courseDto = createTestCourse();
-    	CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
-    	StudentDto studentDto = createTestStudent();
-    	
-    	CoopDto coopDto = new CoopDto();
-    	coopDto.setStatus(status);
-    	coopDto.setCourseOffering(courseOfferingDto);
-    	coopDto.setStudent(studentDto);
-    	
-    	// 1. create the Co-op with a POST request
-    	MvcResult mvcResult =
+        CoopStatus status = CoopStatus.COMPLETED;
+        CourseDto courseDto = createTestCourse();
+        CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
+        StudentDto studentDto = createTestStudent();
+
+        CoopDto coopDto = new CoopDto();
+        coopDto.setStatus(status);
+        coopDto.setCourseOffering(courseOfferingDto);
+        coopDto.setStudent(studentDto);
+
+        // 1. create the Co-op with a POST request
+        MvcResult mvcResult =
                 mvc.perform(
                                 post("/coops")
                                         .contentType(MediaType.APPLICATION_JSON)
@@ -99,17 +96,16 @@ public class CoopControllerIT {
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-    	
-    	// get object from response
+
+        // get object from response
         CoopDto returnedCoop =
-                objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), CoopDto.class);
+                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CoopDto.class);
         assertEquals(returnedCoop.getStatus(), CoopStatus.COMPLETED);
-        
+
         // 2. get the Co-op by ID, valid
         mvc.perform(get("/coops/" + returnedCoop.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        
+
         // 3. test getting all Co-ops
         mvcResult =
                 mvc.perform(get("/coops").contentType(MediaType.APPLICATION_JSON))
@@ -122,16 +118,15 @@ public class CoopControllerIT {
                                 mvcResult.getResponse().getContentAsString(), CoopDto[].class));
 
         assertEquals(returnedCoops.size(), 1);
-        
+
         CoopDto coopToUpdate = returnedCoop;
         coopToUpdate.setStatus(CoopStatus.FUTURE);
-        
+
         CompanyDto companyDto = createTestCompany();
         EmployerContactDto employerContactDto = createTestEmployerContact(companyDto);
         CoopDetailsDto coopDetailsDto = createTestCoopDetails(coopToUpdate, employerContactDto);
         coopToUpdate.setCoopDetails(coopDetailsDto);
-        
-        
+
         // 4. update the co-op with a PUT request
         mvcResult =
                 mvc.perform(
@@ -141,7 +136,7 @@ public class CoopControllerIT {
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
+
         // get the co-op by ID
         mvcResult =
                 mvc.perform(
@@ -150,11 +145,10 @@ public class CoopControllerIT {
                         .andExpect(status().isOk())
                         .andReturn();
         returnedCoop =
-                objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), CoopDto.class);
+                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CoopDto.class);
 
         assertEquals(returnedCoop.getStatus(), CoopStatus.FUTURE);
-        
+
         // 5. delete the co-op with a DELETE request
         mvcResult =
                 mvc.perform(
@@ -177,7 +171,7 @@ public class CoopControllerIT {
                                 mvcResult.getResponse().getContentAsString(), CoopDto[].class));
 
         assertEquals(returnedCoops.size(), 0);
-        
+
         mvcResult =
                 mvc.perform(get("/coop-details").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
@@ -187,15 +181,16 @@ public class CoopControllerIT {
         List<CoopDetailsDto> coopDetailsDtos =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(), CoopDetailsDto[].class));
+                                mvcResult.getResponse().getContentAsString(),
+                                CoopDetailsDto[].class));
 
         assertEquals(coopDetailsDtos.size(), 0);
     }
-    
+
     public CourseDto createTestCourse() throws Exception {
-    	CourseDto courseDto = new CourseDto();
-    	courseDto.setName("FACC200");
-    	MvcResult mvcResult =
+        CourseDto courseDto = new CourseDto();
+        courseDto.setName("FACC200");
+        MvcResult mvcResult =
                 mvc.perform(
                                 post("/courses")
                                         .contentType(MediaType.APPLICATION_JSON)
@@ -208,18 +203,17 @@ public class CoopControllerIT {
         courseDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), CourseDto.class);
-        
-    	
-    	return courseDto;
+
+        return courseDto;
     }
-    
-    public CourseOfferingDto createTestCourseOffering(CourseDto courseDto) throws Exception{
-    	CourseOfferingDto courseOfferingDto = new CourseOfferingDto();
-    	courseOfferingDto.setYear(2020);
-    	courseOfferingDto.setSeason(Season.FALL);
-    	courseOfferingDto.setCourse(courseDto);
-    	
-    	MvcResult mvcResult =
+
+    public CourseOfferingDto createTestCourseOffering(CourseDto courseDto) throws Exception {
+        CourseOfferingDto courseOfferingDto = new CourseOfferingDto();
+        courseOfferingDto.setYear(2020);
+        courseOfferingDto.setSeason(Season.FALL);
+        courseOfferingDto.setCourse(courseDto);
+
+        MvcResult mvcResult =
                 mvc.perform(
                                 post("/course-offerings")
                                         .contentType(MediaType.APPLICATION_JSON)
@@ -232,17 +226,17 @@ public class CoopControllerIT {
         courseOfferingDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), CourseOfferingDto.class);
-    	
-    	return courseOfferingDto;
+
+        return courseOfferingDto;
     }
-    
-    public StudentDto createTestStudent() throws Exception{
-    	StudentDto studentDto = new StudentDto();
-    	studentDto.setEmail("susan@gmail.com");
-    	studentDto.setFirstName("Susan");
-    	studentDto.setLastName("Matuszewski");
-    	studentDto.setStudentId("12345678");
-    	MvcResult mvcResult =
+
+    public StudentDto createTestStudent() throws Exception {
+        StudentDto studentDto = new StudentDto();
+        studentDto.setEmail("susan@gmail.com");
+        studentDto.setFirstName("Susan");
+        studentDto.setLastName("Matuszewski");
+        studentDto.setStudentId("12345678");
+        MvcResult mvcResult =
                 mvc.perform(
                                 post("/students")
                                         .contentType(MediaType.APPLICATION_JSON)
@@ -255,19 +249,19 @@ public class CoopControllerIT {
         studentDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), StudentDto.class);
-        
+
         return studentDto;
-    	
     }
-    
-    public CoopDetailsDto createTestCoopDetails(CoopDto coopDto, EmployerContactDto employerContactDto) throws Exception {
-    	CoopDetailsDto coopDetailsDto = new CoopDetailsDto();
-    	coopDetailsDto.setPayPerHour(20);
-    	coopDetailsDto.setHoursPerWeek(40);
-    	coopDetailsDto.setCoop(coopDto);
-    	coopDetailsDto.setEmployerContact(employerContactDto);
-    	
-    	MvcResult mvcResult =
+
+    public CoopDetailsDto createTestCoopDetails(
+            CoopDto coopDto, EmployerContactDto employerContactDto) throws Exception {
+        CoopDetailsDto coopDetailsDto = new CoopDetailsDto();
+        coopDetailsDto.setPayPerHour(20);
+        coopDetailsDto.setHoursPerWeek(40);
+        coopDetailsDto.setCoop(coopDto);
+        coopDetailsDto.setEmployerContact(employerContactDto);
+
+        MvcResult mvcResult =
                 mvc.perform(
                                 post("/coop-details")
                                         .contentType(MediaType.APPLICATION_JSON)
@@ -275,22 +269,22 @@ public class CoopControllerIT {
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-    	// get object from response
+        // get object from response
         coopDetailsDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), CoopDetailsDto.class);
-    	
-    	return coopDetailsDto;
+
+        return coopDetailsDto;
     }
-    
+
     public CompanyDto createTestCompany() throws Exception {
-    	CompanyDto companyDto = new CompanyDto();
-    	companyDto.setName("Cisco");
-    	companyDto.setCity("Ottawa");
-    	companyDto.setRegion("Ontario");
-    	companyDto.setCountry("Canada");
-    	
-    	MvcResult mvcResult =
+        CompanyDto companyDto = new CompanyDto();
+        companyDto.setName("Cisco");
+        companyDto.setCity("Ottawa");
+        companyDto.setRegion("Ontario");
+        companyDto.setCountry("Canada");
+
+        MvcResult mvcResult =
                 mvc.perform(
                                 post("/companies")
                                         .contentType(MediaType.APPLICATION_JSON)
@@ -303,33 +297,33 @@ public class CoopControllerIT {
         companyDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), CompanyDto.class);
-        
+
         return companyDto;
-    	
     }
-    
-    public EmployerContactDto createTestEmployerContact(CompanyDto companyDto) throws Exception{
-    	EmployerContactDto employerContactDto = new EmployerContactDto();
-    	employerContactDto.setFirstName("Emma");
-    	employerContactDto.setLastName("Eags");
-    	employerContactDto.setEmail("emma@gmail.com");
-    	employerContactDto.setPhoneNumber("213435566");
-    	employerContactDto.setCompany(companyDto);
-    	
-    	MvcResult mvcResult =
+
+    public EmployerContactDto createTestEmployerContact(CompanyDto companyDto) throws Exception {
+        EmployerContactDto employerContactDto = new EmployerContactDto();
+        employerContactDto.setFirstName("Emma");
+        employerContactDto.setLastName("Eags");
+        employerContactDto.setEmail("emma@gmail.com");
+        employerContactDto.setPhoneNumber("213435566");
+        employerContactDto.setCompany(companyDto);
+
+        MvcResult mvcResult =
                 mvc.perform(
                                 post("/employer-contacts")
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(employerContactDto))
+                                        .content(
+                                                objectMapper.writeValueAsString(employerContactDto))
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
         // get object from response
-    	employerContactDto =
+        employerContactDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), EmployerContactDto.class);
-    	
-    	return employerContactDto;
+
+        return employerContactDto;
     }
 }
