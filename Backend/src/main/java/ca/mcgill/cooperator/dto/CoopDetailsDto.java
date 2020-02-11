@@ -9,7 +9,7 @@ public class CoopDetailsDto {
     private CoopDto coop;
 
     public CoopDetailsDto() {}
-    
+
     public CoopDetailsDto(
             int id,
             int payPerHour,
