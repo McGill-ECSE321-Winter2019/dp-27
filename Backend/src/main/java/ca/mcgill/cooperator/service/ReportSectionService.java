@@ -6,7 +6,10 @@ import ca.mcgill.cooperator.dao.StudentReportRepository;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.StudentReport;
+
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,11 +111,12 @@ public class ReportSectionService {
             rs.setStudentReport(sr);
             reportSectionRepository.save(rs);
             boolean contains = false;
-            List<ReportSection> sections = sr.getReportSections();
+            Set<ReportSection> sections = sr.getReportSections();
             for (ReportSection section : sections) {
                 if (section.getId() == rs.getId()) {
-                    int index = sections.indexOf(section);
-                    sections.set(index, rs);
+                    sections.remove(section);
+                	sections.add(section);
+                    contains = true;
                     contains = true;
                 }
             }
@@ -127,11 +131,11 @@ public class ReportSectionService {
             rs.setEmployerReport(er);
             reportSectionRepository.save(rs);
             boolean contains = false;
-            List<ReportSection> sections = er.getReportSections();
+            Set<ReportSection> sections = er.getReportSections();
             for (ReportSection section : sections) {
                 if (section.getId() == rs.getId()) {
-                    int index = sections.indexOf(section);
-                    sections.set(index, rs);
+                	sections.remove(section);
+                	sections.add(section);
                     contains = true;
                 }
             }
@@ -160,7 +164,7 @@ public class ReportSectionService {
         // first delete from all parents
         StudentReport sr = rs.getStudentReport();
         if (sr != null) {
-            List<ReportSection> sections = sr.getReportSections();
+            Set<ReportSection> sections = sr.getReportSections();
             sections.remove(rs);
             sr.setReportSections(sections);
             studentReportRepository.save(sr);
@@ -168,7 +172,7 @@ public class ReportSectionService {
 
         EmployerReport er = rs.getEmployerReport();
         if (er != null) {
-            List<ReportSection> sections = er.getReportSections();
+            Set<ReportSection> sections = er.getReportSections();
             sections.remove(rs);
             er.setReportSections(sections);
             employerReportRepository.save(er);

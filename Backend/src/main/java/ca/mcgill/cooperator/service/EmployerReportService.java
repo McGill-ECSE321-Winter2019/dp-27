@@ -11,6 +11,7 @@ import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,7 @@ public class EmployerReportService {
         er.setTitle(title);
         er.setCoop(c);
         er.setEmployerContact(ec);
-        er.setReportSections(new ArrayList<ReportSection>());
+        er.setReportSections(new HashSet<ReportSection>());
         try {
             er.setData(file.getBytes());
         } catch (IOException e) {
@@ -130,7 +131,7 @@ public class EmployerReportService {
             Coop c,
             String title,
             EmployerContact ec,
-            List<ReportSection> sections,
+            Set<ReportSection> sections,
             MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (er == null) {

@@ -21,7 +21,10 @@ import ca.mcgill.cooperator.model.StudentReport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,11 +58,15 @@ public class CooperatorServiceStudentReportTests {
     public void clearDatabase() {
         List<StudentReport> studentReports = studentReportService.getAllStudentReports();
         for (StudentReport studentReport : studentReports) {
-            List<ReportSection> reportSections = studentReport.getReportSections();
-            reportSections.clear();
-            studentReport.setReportSections(reportSections);
+            studentReport.setReportSections(new HashSet<ReportSection>());
             studentReportRepository.save(studentReport);
         }
+//        List<ReportSection> sections = reportSectionService.getAllReportSections();
+//        for (ReportSection rs : sections) {
+//            rs.setEmployerReport(null);
+//            rs.setStudentReport(null);
+//            reportSectionRepository.save(rs);
+//        }
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
@@ -127,7 +134,7 @@ public class CooperatorServiceStudentReportTests {
             fail();
         }
 
-        List<ReportSection> sections = new ArrayList<ReportSection>();
+        Set<ReportSection> sections = new HashSet<ReportSection>();
         ReportSection rs = createTestReportSection();
         sections.add(rs);
 
@@ -170,7 +177,7 @@ public class CooperatorServiceStudentReportTests {
             fail();
         }
 
-        List<ReportSection> sections = new ArrayList<ReportSection>();
+        Set<ReportSection> sections = new HashSet<ReportSection>();
         ReportSection rs = createTestReportSection();
         sections.add(rs);
 
@@ -303,7 +310,7 @@ public class CooperatorServiceStudentReportTests {
         Student s = new Student();
         s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
 
-        return s;
+        return s; 
     }
 
     private ReportSection createTestReportSection() {

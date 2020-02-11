@@ -121,11 +121,11 @@ public class StudentReportController {
             @ModelAttribute("file") MultipartFile file,
             @RequestParam("status") String status,
             @RequestParam("title") String title,
-            @RequestParam("report_sections") List<ReportSectionDto> rsDtos,
+            @RequestParam("report_sections") Set<ReportSectionDto> rsDtos,
             @RequestParam("coop_id") int coopId) {
         StudentReport reportToUpdate = studentReportService.getStudentReport(reportId);
-        List<ReportSection> sections =
-                ControllerUtils.convertReportSectionListToDomainObject(rsDtos);
+        Set<ReportSection> sections =
+                ControllerUtils.convertReportSectionSetToDomainObject(rsDtos);
         Coop coop = coopService.getCoopById(coopId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
 

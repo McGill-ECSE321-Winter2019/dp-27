@@ -11,6 +11,8 @@ import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.EmployerReportService;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,15 +111,15 @@ public class EmployerReportController {
             @RequestParam("status") String status,
             @RequestParam("title") String title,
             @RequestParam("coop_id") int coopId,
-            @RequestParam("report_sections") List<ReportSectionDto> rsDtos,
+            @RequestParam("report_sections") Set<ReportSectionDto> rsDtos,
             @RequestParam("employer_id") int employerId) {
         EmployerReport reportToUpdate = employerReportService.getEmployerReport(id);
 
         Coop coop = coopService.getCoopById(coopId);
         EmployerContact ec = employerContactService.getEmployerContact(employerId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
-        List<ReportSection> sections =
-                ControllerUtils.convertReportSectionListToDomainObject(rsDtos);
+        Set<ReportSection> sections =
+                ControllerUtils.convertReportSectionSetToDomainObject(rsDtos);
 
         EmployerReport updatedReport =
                 employerReportService.updateEmployerReport(
