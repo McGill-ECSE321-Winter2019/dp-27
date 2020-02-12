@@ -4,6 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.cooperator.dao.CompanyRepository;
+import ca.mcgill.cooperator.dao.CoopRepository;
+import ca.mcgill.cooperator.dao.CourseOfferingRepository;
+import ca.mcgill.cooperator.dao.CourseRepository;
+import ca.mcgill.cooperator.dao.EmployerContactRepository;
+import ca.mcgill.cooperator.dao.EmployerReportRepository;
+import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.EmployerReportDto;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Coop;
@@ -11,6 +18,7 @@ import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
+import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.CompanyService;
@@ -18,11 +26,16 @@ import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.EmployerContactService;
+import ca.mcgill.cooperator.service.EmployerReportService;
 import ca.mcgill.cooperator.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -49,7 +62,34 @@ public class EmployerReportControllerIT {
     @Autowired private CourseOfferingService courseOfferingService;
     @Autowired private CompanyService companyService;
     @Autowired private EmployerContactService employerContactService;
+    @Autowired private EmployerReportService employerReportService;
 
+    @Autowired private CoopRepository coopRepository;
+    @Autowired private CourseOfferingRepository courseOfferingRepository;
+    @Autowired private StudentRepository studentRepository;
+    @Autowired private CourseRepository courseRepository;
+    @Autowired private EmployerContactRepository employerContactRepository;
+    @Autowired private CompanyRepository companyRepository;
+    @Autowired private EmployerReportRepository employerReportRepository;
+
+    
+    @BeforeEach @AfterEach
+    public void clearDatabase() {
+    	List<EmployerReport> ecs = employerReportService.getAllEmployerReports();
+        for (EmployerReport ec : ecs) {
+            ec.setEmployerContact(null);
+            employerReportRepository.save(ec);
+        }
+        employerReportRepository.deleteAll();
+        coopRepository.deleteAll();
+        employerContactRepository.deleteAll();
+        companyRepository.deleteAll();
+        courseOfferingRepository.deleteAll();
+        courseRepository.deleteAll();
+        studentRepository.deleteAll();
+    }
+    
+    
     /**
      * Tests creating an EmployerReport
      *
