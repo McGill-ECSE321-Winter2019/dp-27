@@ -12,9 +12,11 @@ import ca.mcgill.cooperator.service.EmployerContactService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,5 +57,33 @@ public class CoopDetailsController {
                         coop);
 
         return ControllerUtils.convertToDto(coopDetails);
+    }
+    
+    @PutMapping("")
+    public CoopDetailsDto updateCoopDetails(@RequestBody CoopDetailsDto coopDetailsDto) {
+    	EmployerContactDto employerContactDto = coopDetailsDto.getEmployerContact();
+        EmployerContact employerContact =
+                employerContactService.getEmployerContact(employerContactDto.getId());
+
+        CoopDto coopDto = coopDetailsDto.getCoop();
+        Coop coop = coopService.getCoopById(coopDto.getId());
+        
+        CoopDetails coopDetails = coopDetailsService.getCoopDetails(coopDetailsDto.getId());
+        
+        coopDetails =
+                coopDetailsService.updateCoopDetails(
+                		coopDetails,
+                        coopDetailsDto.getPayPerHour(),
+                        coopDetailsDto.getHoursPerWeek(),
+                        employerContact,
+                        coop);
+
+        return ControllerUtils.convertToDto(coopDetails);
+    }
+    
+    @DeleteMapping("/{id}")
+    public void deleteCoopDetails(@PathVariable int id) {
+    	CoopDetails cd = coopDetailsService.getCoopDetails(id);
+    	coopDetailsService.deleteCoopDetails(cd);
     }
 }
