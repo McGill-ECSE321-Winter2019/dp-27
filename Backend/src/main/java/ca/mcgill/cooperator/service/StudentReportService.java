@@ -9,6 +9,7 @@ import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.StudentReport;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,7 @@ public class StudentReportService {
 
         sr.setStatus(status);
         sr.setCoop(c);
-        sr.setReportSections(new ArrayList<ReportSection>());
+        sr.setReportSections(new HashSet<ReportSection>());
         sr.setTitle(title);
         try {
             sr.setData(file.getBytes());
@@ -115,7 +116,7 @@ public class StudentReportService {
             ReportStatus status,
             String title,
             Coop c,
-            List<ReportSection> sections,
+            Set<ReportSection> sections,
             MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (sr == null) {

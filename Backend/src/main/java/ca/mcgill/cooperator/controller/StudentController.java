@@ -1,5 +1,6 @@
 package ca.mcgill.cooperator.controller;
 
+
 import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.model.Coop;
@@ -25,8 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("students")
 public class StudentController {
-
-    @Autowired private StudentService studentService;
+	
+	@Autowired private StudentService studentService;
 
     /**
      * Get all students
@@ -64,14 +65,18 @@ public class StudentController {
      * @param studentId
      * @return created Student
      */
-    @PostMapping("")
-    public StudentDto createStudent(@RequestBody StudentDto s) {
-        Student student =
-                studentService.createStudent(
-                        s.getFirstName(), s.getLastName(), s.getEmail(), s.getStudentId());
-
-        return ControllerUtils.convertToDto(student);
-    }
+	@PostMapping("")
+	public StudentDto createStudent(@RequestBody StudentDto studentDto) {
+	    Student student = new Student();
+	    student =
+	            studentService.createStudent(
+	                    studentDto.getFirstName(),
+	                    studentDto.getLastName(),
+	                    studentDto.getEmail(),
+	                    studentDto.getStudentId());
+	
+	    return ControllerUtils.convertToDto(student);
+	}
 
     /**
      * Update student
@@ -146,4 +151,5 @@ public class StudentController {
         }
         return coopDto;
     }
+   
 }

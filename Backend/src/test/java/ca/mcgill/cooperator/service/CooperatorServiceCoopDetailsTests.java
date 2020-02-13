@@ -51,11 +51,12 @@ public class CooperatorServiceCoopDetailsTests {
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-        coopDetailsRepository.deleteAll();
         List<CoopDetails> coopDetails = coopDetailsService.getAllCoopDetails();
         for (CoopDetails cd : coopDetails) {
-            coopDetailsService.deleteCoopDetails(cd);
+            cd.setCoop(null);
+            coopDetailsRepository.save(cd);
         }
+        coopDetailsRepository.deleteAll();
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();

@@ -243,7 +243,7 @@ public class ControllerUtils {
                                 null, // null coop since coop is parent
                                 null); // null report sections
 
-                List<ReportSection> reportSections = studentReport.getReportSections();
+                Set<ReportSection> reportSections = studentReport.getReportSections();
                 List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
                 for (ReportSection reportSection : reportSections) {
                     ReportSectionDto reportSectionDto =
@@ -276,7 +276,7 @@ public class ControllerUtils {
                                 // details
                                 null); // null report sections
 
-                List<ReportSection> reportSections = employerReport.getReportSections();
+                Set<ReportSection> reportSections = employerReport.getReportSections();
                 List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
                 for (ReportSection reportSection : reportSections) {
                     ReportSectionDto reportSectionDto =
@@ -748,7 +748,7 @@ public class ControllerUtils {
         employerReportDto.setEmployerContact(employerContactDto);
 
         // create report section dtos
-        List<ReportSection> reportSections = er.getReportSections();
+        Set<ReportSection> reportSections = er.getReportSections();
         List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
         if (reportSections != null) {
             for (ReportSection reportSection : reportSections) {
@@ -1027,7 +1027,7 @@ public class ControllerUtils {
         studentReportDto.setCoop(coopDto);
 
         // create report section dtos
-        List<ReportSection> reportSections = sr.getReportSections();
+        Set<ReportSection> reportSections = sr.getReportSections();
         List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
         if (reportSections != null) {
             for (ReportSection reportSection : reportSections) {
@@ -1074,9 +1074,9 @@ public class ControllerUtils {
         return notifs;
     }
 
-    public static List<ReportSection> convertReportSectionListToDomainObject(
-            List<ReportSectionDto> rsDtos) {
-        List<ReportSection> reports = new ArrayList<ReportSection>();
+    public static Set<ReportSection> convertReportSectionSetToDomainObject(
+            Set<ReportSectionDto> rsDtos) {
+        Set<ReportSection> reports = new HashSet<ReportSection>();
         for (ReportSectionDto rsDto : rsDtos) {
             ReportSection rs = reportSectionService.getReportSection(rsDto.getId());
             reports.add(rs);

@@ -4,6 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.cooperator.dao.CoopRepository;
+import ca.mcgill.cooperator.dao.CourseOfferingRepository;
+import ca.mcgill.cooperator.dao.CourseRepository;
+import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.StudentReportDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopStatus;
@@ -18,6 +22,8 @@ import ca.mcgill.cooperator.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -42,6 +48,20 @@ public class StudentReportControllerIT {
     @Autowired private StudentService studentService;
     @Autowired private CourseService courseService;
     @Autowired private CourseOfferingService courseOfferingService;
+
+    @Autowired private CoopRepository coopRepository;
+    @Autowired private CourseOfferingRepository courseOfferingRepository;
+    @Autowired private StudentRepository studentRepository;
+    @Autowired private CourseRepository courseRepository;
+
+    @BeforeEach
+    @AfterEach
+    public void clearDatabase() {
+        coopRepository.deleteAll();
+        courseOfferingRepository.deleteAll();
+        courseRepository.deleteAll();
+        studentRepository.deleteAll();
+    }
 
     /**
      * Tests creating a StudentReport

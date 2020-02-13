@@ -1,6 +1,8 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.List;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,7 +23,7 @@ public class StudentReport {
     @ManyToOne private Coop coop;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<ReportSection> reportSections;
+    private Set<ReportSection> reportSections;
 
     /*--- Getters and Setters ---*/
 
@@ -61,11 +63,11 @@ public class StudentReport {
         this.data = data;
     }
 
-    public List<ReportSection> getReportSections() {
+    public Set<ReportSection> getReportSections() {
         return this.reportSections;
     }
 
-    public void setReportSections(List<ReportSection> reportSections) {
+    public void setReportSections(Set<ReportSection> reportSections) {
         if (this.reportSections == null) {
             this.reportSections = reportSections;
         } else {
