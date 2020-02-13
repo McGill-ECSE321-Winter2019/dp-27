@@ -3,15 +3,6 @@ package ca.mcgill.cooperator.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.CoopDetailsDto;
 import ca.mcgill.cooperator.dto.CoopDto;
@@ -19,19 +10,20 @@ import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.StudentDto;
-import ca.mcgill.cooperator.model.Company;
-import ca.mcgill.cooperator.model.Course;
-import ca.mcgill.cooperator.model.CourseOffering;
-import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.Season;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 public class ControllerIT {
-	
+
     @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
-	
-	public CourseDto createTestCourse() throws Exception {
+
+    public CourseDto createTestCourse() throws Exception {
         CourseDto courseDto = new CourseDto();
         courseDto.setName("FACC200");
         MvcResult mvcResult =
@@ -170,5 +162,4 @@ public class ControllerIT {
 
         return employerContactDto;
     }
-    
 }

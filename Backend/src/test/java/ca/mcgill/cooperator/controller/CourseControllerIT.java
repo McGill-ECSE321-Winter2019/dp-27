@@ -9,10 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
-import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
-import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
@@ -93,7 +91,7 @@ public class CourseControllerIT extends ControllerIT {
         assertEquals(returnedCourses.size(), 1);
 
         CourseDto courseToUpdate = returnedCourses.get(0);
-      
+
         courseToUpdate.setName("ECSE321");
         List<CourseOfferingDto> coDtos = new ArrayList<>();
         CourseOfferingDto coDto = createTestCourseOffering(courseToUpdate);

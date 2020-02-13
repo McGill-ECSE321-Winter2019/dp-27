@@ -6,9 +6,12 @@ import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> 18354b5a... i hope this reformat saves me from merge conflicts
 import java.util.ArrayList;
 >>>>>>> cf9e7401... course controller and IT tests and centralized helper methods ffor controller IT tests
 import java.util.List;
@@ -34,7 +37,6 @@ public class CourseController {
 
     @Autowired private CourseService courseService;
     @Autowired private CourseOfferingService courseOfferingService;
-
 
     /**
      * Get a Course by ID
@@ -116,15 +118,15 @@ public class CourseController {
     public final ResponseEntity<Exception> handleAllExceptions(RuntimeException ex) {
         return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
+
     private List<CourseOffering> convertCourseOfferingListToDomainObject(
             List<CourseOfferingDto> coDtos) {
         List<CourseOffering> cos = new ArrayList<>(coDtos.size());
         for (CourseOfferingDto coDto : coDtos) {
-        	if(coDto != null) {
-	            CourseOffering co = courseOfferingService.getCourseOfferingById(coDto.getId());
-	            cos.add(co);
-        	}
+            if (coDto != null) {
+                CourseOffering co = courseOfferingService.getCourseOfferingById(coDto.getId());
+                cos.add(co);
+            }
         }
         return cos;
     }

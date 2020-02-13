@@ -41,6 +41,7 @@ public class ControllerUtils {
     @Autowired private static CoopService coopService;
     @Autowired private static CourseOfferingService courseOfferingService;
 
+
     /*
      * Domain Object to DTO conversion methods
      */
@@ -73,7 +74,7 @@ public class ControllerUtils {
                                 student.getEmail(),
                                 student.getStudentId(),
                                 null, // null coops, if need coop information look up specific
-                                      // student by id
+                                // student by id
                                 null); // null notifs
                 notificationDto.setStudent(studentDto);
                 notificationDtos.add(notificationDto);
@@ -125,6 +126,7 @@ public class ControllerUtils {
                                 // to get coop details
                                 null); // null employer reports, look up employer contact by id to
                 // get all employer reports
+
                 employerContactDtos.add(employerContactDto);
             }
         }
@@ -511,6 +513,7 @@ public class ControllerUtils {
                                 // reports
                                 null); // null employer reports, look up coop by id to get employer
                 // reports
+
                 CoopDetails coopDetails = coop.getCoopDetails();
                 CoopDetailsDto coopDetailsDto =
                         new CoopDetailsDto(
@@ -633,6 +636,7 @@ public class ControllerUtils {
                                 // reports
                                 null); // null employer reports, look up coop by id to get all
                 // employer reports
+
                 Student student = coop.getStudent();
                 StudentDto studentDto =
                         new StudentDto(
