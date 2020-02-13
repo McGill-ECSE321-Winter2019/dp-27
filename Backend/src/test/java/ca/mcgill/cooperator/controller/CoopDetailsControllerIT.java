@@ -74,8 +74,13 @@ public class CoopDetailsControllerIT {
         companyRepository.deleteAll();
     }
 
+    /**
+     * Tests creating CoopDetails
+     *
+     * @throws Exception
+     */
     @Test
-    public void testCoopFlow() throws Exception {
+    public void testCoopDetailsFlow() throws Exception {
         CourseDto courseDto = createTestCourse();
         CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
         StudentDto studentDto = createTestStudent();
@@ -89,7 +94,7 @@ public class CoopDetailsControllerIT {
         coopDetailsDto.setHoursPerWeek(40);
         coopDetailsDto.setPayPerHour(300);
 
-        // 1. create the Co-op with a POST request
+        // 1. create the Co-op Details with a POST request
         MvcResult mvcResult =
                 mvc.perform(
                                 post("/coop-details")
@@ -105,13 +110,13 @@ public class CoopDetailsControllerIT {
                         mvcResult.getResponse().getContentAsString(), CoopDetailsDto.class);
         assertEquals(returnedCoopDetails.getPayPerHour(), 300);
 
-        // 2. get the Co-op by ID, valid
+        // 2. get the Co-op Details by ID, valid
         mvc.perform(
                         get("/coop-details/" + returnedCoopDetails.getId())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        // 3. test getting all Co-ops
+        // 3. test getting all Co-op Details
         mvcResult =
                 mvc.perform(get("/coop-details").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
@@ -128,7 +133,7 @@ public class CoopDetailsControllerIT {
         CoopDetailsDto coopDetailsToUpdate = returnedCoopDetails;
         coopDetailsToUpdate.setPayPerHour(500);
 
-        // 4. update the co-op with a PUT request
+        // 4. update the Co-op Details with a PUT request
         mvcResult =
                 mvc.perform(
                                 put("/coop-details")
@@ -140,7 +145,7 @@ public class CoopDetailsControllerIT {
                         .andExpect(status().isOk())
                         .andReturn();
 
-        // get the co-op by ID
+        // get the Co-op Details by ID
         mvcResult =
                 mvc.perform(
                                 get("/coop-details/" + coopDetailsToUpdate.getId())
@@ -153,7 +158,7 @@ public class CoopDetailsControllerIT {
 
         assertEquals(returnedCoopDetails.getPayPerHour(), 500);
 
-        // 5. delete the co-op with a DELETE request
+        // 5. delete the Co-op Details with a DELETE request
         mvcResult =
                 mvc.perform(
                                 delete("/coop-details/" + returnedCoopDetails.getId())
@@ -162,7 +167,7 @@ public class CoopDetailsControllerIT {
                         .andExpect(status().isOk())
                         .andReturn();
 
-        // test getting all co-ops
+        // test getting all Co-op Details
         mvcResult =
                 mvc.perform(get("/coop-details").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
