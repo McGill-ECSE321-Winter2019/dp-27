@@ -44,7 +44,7 @@ import ca.mcgill.cooperator.service.EmployerReportService;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class EmployerContactControllerIT extends ControllerITUtils {
+public class EmployerContactControllerIT extends ControllerIT {
 
     @Autowired private MockMvc mvc;
 

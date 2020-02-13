@@ -25,7 +25,7 @@ import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.Season;
 
-public class ControllerITUtils {
+public class ControllerIT {
 	
     @Autowired private MockMvc mvc;
 
