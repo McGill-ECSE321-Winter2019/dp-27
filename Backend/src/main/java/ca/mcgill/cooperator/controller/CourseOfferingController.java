@@ -6,11 +6,15 @@ import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,17 +31,33 @@ public class CourseOfferingController {
     public CourseOfferingDto getCourseOfferingById(@PathVariable int id) {
         return ControllerUtils.convertToDto(courseOfferingService.getCourseOfferingById(id));
     }
+    
+    @GetMapping("/")
+    public List<CourseOfferingDto> getCourseOfferings(@PathVariable int id) {
+        return ControllerUtils.convertCourseOfferingListToDto(courseOfferingService.getAllCourseOfferings());
+    }
 
     @PostMapping("")
     public CourseOfferingDto createCourseOfferingDto(
             @RequestBody CourseOfferingDto courseOfferingDto) {
-        CourseOffering courseOffering = new CourseOffering();
         CourseDto courseDto = courseOfferingDto.getCourse();
         Course course = courseService.getCourseById(courseDto.getId());
 
-        courseOffering =
+        CourseOffering courseOffering =
                 courseOfferingService.createCourseOffering(
                         courseOfferingDto.getYear(), courseOfferingDto.getSeason(), course);
+        return ControllerUtils.convertToDto(courseOffering);
+    }
+    
+    @PutMapping("")
+    public CourseOfferingDto updateCourseOfferingDto(
+            @RequestBody CourseOfferingDto coDto) {
+    	CourseOffering co = courseOfferingService.getCourseOfferingById(coDto.getId());
+        Course course = courseService.getCourseById(coDto.getCourse().getId());
+
+        CourseOffering courseOffering =
+                courseOfferingService.updateCourseOffering(
+                		co, coDto.getYear(), coDto.getSeason(), course);
         return ControllerUtils.convertToDto(courseOffering);
     }
 }
