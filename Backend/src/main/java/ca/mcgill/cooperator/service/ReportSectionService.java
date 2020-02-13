@@ -117,7 +117,6 @@ public class ReportSectionService {
                     sections.remove(section);
                 	sections.add(section);
                     contains = true;
-                    contains = true;
                 }
             }
             if (contains == false) {
