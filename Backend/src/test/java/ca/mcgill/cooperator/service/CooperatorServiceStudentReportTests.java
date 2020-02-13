@@ -61,12 +61,7 @@ public class CooperatorServiceStudentReportTests {
             studentReport.setReportSections(new HashSet<ReportSection>());
             studentReportRepository.save(studentReport);
         }
-//        List<ReportSection> sections = reportSectionService.getAllReportSections();
-//        for (ReportSection rs : sections) {
-//            rs.setEmployerReport(null);
-//            rs.setStudentReport(null);
-//            reportSectionRepository.save(rs);
-//        }
+
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
