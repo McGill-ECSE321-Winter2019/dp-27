@@ -33,7 +33,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,10 +71,10 @@ public class EmployerReportControllerIT {
     @Autowired private CompanyRepository companyRepository;
     @Autowired private EmployerReportRepository employerReportRepository;
 
-    
-    @BeforeEach @AfterEach
+    @BeforeEach
+    @AfterEach
     public void clearDatabase() {
-    	List<EmployerReport> ecs = employerReportService.getAllEmployerReports();
+        List<EmployerReport> ecs = employerReportService.getAllEmployerReports();
         for (EmployerReport ec : ecs) {
             ec.setEmployerContact(null);
             employerReportRepository.save(ec);
@@ -88,8 +87,7 @@ public class EmployerReportControllerIT {
         courseRepository.deleteAll();
         studentRepository.deleteAll();
     }
-    
-    
+
     /**
      * Tests creating an EmployerReport
      *
