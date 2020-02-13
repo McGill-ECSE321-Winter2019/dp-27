@@ -34,6 +34,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 @SpringBootTest
+@ActiveProfiles("test")
 public class CooperatorServiceCoopTests {
 
     // TODO: add Service and Repository class imports here
