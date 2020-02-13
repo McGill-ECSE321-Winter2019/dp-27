@@ -58,21 +58,21 @@ public class CoopDetailsController {
 
         return ControllerUtils.convertToDto(coopDetails);
     }
-    
+
     @PutMapping("")
     public CoopDetailsDto updateCoopDetails(@RequestBody CoopDetailsDto coopDetailsDto) {
-    	EmployerContactDto employerContactDto = coopDetailsDto.getEmployerContact();
+        EmployerContactDto employerContactDto = coopDetailsDto.getEmployerContact();
         EmployerContact employerContact =
                 employerContactService.getEmployerContact(employerContactDto.getId());
 
         CoopDto coopDto = coopDetailsDto.getCoop();
         Coop coop = coopService.getCoopById(coopDto.getId());
-        
+
         CoopDetails coopDetails = coopDetailsService.getCoopDetails(coopDetailsDto.getId());
-        
+
         coopDetails =
                 coopDetailsService.updateCoopDetails(
-                		coopDetails,
+                        coopDetails,
                         coopDetailsDto.getPayPerHour(),
                         coopDetailsDto.getHoursPerWeek(),
                         employerContact,
@@ -80,10 +80,10 @@ public class CoopDetailsController {
 
         return ControllerUtils.convertToDto(coopDetails);
     }
-    
+
     @DeleteMapping("/{id}")
     public void deleteCoopDetails(@PathVariable int id) {
-    	CoopDetails cd = coopDetailsService.getCoopDetails(id);
-    	coopDetailsService.deleteCoopDetails(cd);
+        CoopDetails cd = coopDetailsService.getCoopDetails(id);
+        coopDetailsService.deleteCoopDetails(cd);
     }
 }
