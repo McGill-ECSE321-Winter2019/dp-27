@@ -96,6 +96,8 @@ public class CourseControllerIT extends ControllerIT {
       
         courseToUpdate.setName("ECSE321");
         List<CourseOfferingDto> coDtos = new ArrayList<>();
+        CourseOfferingDto coDto = createTestCourseOffering(courseToUpdate);
+        coDtos.add(coDto);
         courseToUpdate.setCourseOfferings(coDtos);
 
         // 4. update the Course with a PUT request
@@ -121,6 +123,8 @@ public class CourseControllerIT extends ControllerIT {
                         mvcResult.getResponse().getContentAsString(), CourseDto.class);
 
         assertEquals(returnedCourse.getName(), "ECSE321");
+        assertEquals(returnedCourse.getCourseOfferings().size(), 1);
+        assertEquals(returnedCourse.getCourseOfferings().get(0).getId(), coDto.getId());
 
         // 5. delete the Course with a DELETE request
         mvcResult =
