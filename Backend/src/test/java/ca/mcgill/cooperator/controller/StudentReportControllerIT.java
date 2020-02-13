@@ -37,11 +37,6 @@ public class StudentReportControllerIT extends ControllerIT {
 
     @Autowired private ObjectMapper objectMapper;
 
-    @Autowired private CoopService coopService;
-    @Autowired private StudentService studentService;
-    @Autowired private CourseService courseService;
-    @Autowired private CourseOfferingService courseOfferingService;
-
     @Autowired private CoopRepository coopRepository;
     @Autowired private CourseOfferingRepository courseOfferingRepository;
     @Autowired private StudentRepository studentRepository;

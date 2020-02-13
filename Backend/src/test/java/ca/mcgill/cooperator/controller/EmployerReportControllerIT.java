@@ -54,7 +54,7 @@ import org.springframework.web.multipart.MultipartFile;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class EmployerReportControllerIT extends  {
+public class EmployerReportControllerIT extends  ControllerIT{
 
     @Autowired private MockMvc mvc;
 

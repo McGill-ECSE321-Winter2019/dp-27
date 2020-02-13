@@ -6,14 +6,8 @@ import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 18354b5a... i hope this reformat saves me from merge conflicts
 import java.util.ArrayList;
->>>>>>> cf9e7401... course controller and IT tests and centralized helper methods ffor controller IT tests
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,12 +84,7 @@ public class CourseController {
                 courseService.updateCourse(
                         course,
                         c.getName(),
-<<<<<<< HEAD
-                        convertCourseOfferingListToDomainObject(
-                                c.getCourseOfferings()));
-=======
                         convertCourseOfferingListToDomainObject(c.getCourseOfferings()));
->>>>>>> cf9e7401... course controller and IT tests and centralized helper methods ffor controller IT tests
 
         return ControllerUtils.convertToDto(updatedCourse);
     }
