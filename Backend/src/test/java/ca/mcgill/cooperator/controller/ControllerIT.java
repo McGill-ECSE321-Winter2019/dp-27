@@ -10,6 +10,7 @@ import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.StudentDto;
+import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Season;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,29 @@ public class ControllerIT {
                         mvcResult.getResponse().getContentAsString(), StudentDto.class);
 
         return studentDto;
+    }
+    
+    public CoopDto createTestCoop(CourseOfferingDto courseOfferingDto, StudentDto studentDto)
+            throws Exception {
+        CoopDto coopDto = new CoopDto();
+        coopDto.setStatus(CoopStatus.IN_PROGRESS);
+        coopDto.setCourseOffering(courseOfferingDto);
+        coopDto.setStudent(studentDto);
+
+         MvcResult mvcResult =
+                mvc.perform(
+                                post("/coops")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(coopDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
+         // get object from response
+        coopDto =
+                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CoopDto.class);
+
+         return coopDto;
     }
 
     public CoopDetailsDto createTestCoopDetails(

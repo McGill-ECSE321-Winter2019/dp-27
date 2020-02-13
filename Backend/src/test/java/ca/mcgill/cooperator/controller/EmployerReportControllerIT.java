@@ -11,6 +11,11 @@ import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.dao.EmployerReportRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
+import ca.mcgill.cooperator.dto.CompanyDto;
+import ca.mcgill.cooperator.dto.CoopDto;
+import ca.mcgill.cooperator.dto.CourseDto;
+import ca.mcgill.cooperator.dto.CourseOfferingDto;
+import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.EmployerReportDto;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Coop;
@@ -49,7 +54,7 @@ import org.springframework.web.multipart.MultipartFile;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class EmployerReportControllerIT {
+public class EmployerReportControllerIT extends  {
 
     @Autowired private MockMvc mvc;
 
@@ -100,12 +105,11 @@ public class EmployerReportControllerIT {
         MultipartFile multipartFile =
                 new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Coop testCoop =
-                coopService.createCoop(CoopStatus.IN_PROGRESS, courseOffering, createTestStudent());
-
-        EmployerContact ec = createTestEmployerContact();
+        CourseDto courseDto = createTestCourse();
+        CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
+        CoopDto coopDto = createTestCoop(courseOfferingDto, createTestStudent());
+        CompanyDto companyDto = createTestCompany();
+        EmployerContactDto ecDto = createTestEmployerContact(companyDto);
 
         // 1. create the EmployerReport with a POST request
         MvcResult mvcResult =
@@ -114,8 +118,8 @@ public class EmployerReportControllerIT {
                                         .file("file", multipartFile.getBytes())
                                         .param("status", "INCOMPLETE")
                                         .param("title", "Offer Letter")
-                                        .param("coop_id", String.valueOf(testCoop.getId()))
-                                        .param("employer_id", String.valueOf(ec.getId()))
+                                        .param("coop_id", String.valueOf(coopDto.getId()))
+                                        .param("employer_id", String.valueOf(ecDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
@@ -126,31 +130,5 @@ public class EmployerReportControllerIT {
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), EmployerReportDto.class);
         assertEquals(returnedReport.getTitle(), "Offer Letter");
-    }
-
-    /* Helper methods */
-
-    private Student createTestStudent() {
-        return studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
-    }
-
-    private EmployerContact createTestEmployerContact() {
-        Company c =
-                companyService.createCompany(
-                        "Facebook",
-                        "Menlo Park",
-                        "California",
-                        "USA",
-                        new ArrayList<EmployerContact>());
-        return employerContactService.createEmployerContact(
-                "Albert", "Kragl", "albertkragl@fb.com", "12345678", c);
-    }
-
-    private Course createTestCourse() {
-        return courseService.createCourse("FACC200");
-    }
-
-    private CourseOffering createTestCourseOffering(Course c) {
-        return courseOfferingService.createCourseOffering(2020, Season.WINTER, c);
     }
 }
