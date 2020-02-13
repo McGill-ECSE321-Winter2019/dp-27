@@ -1,9 +1,16 @@
 package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.CourseDto;
+import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.model.Course;
+import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 
+<<<<<<< HEAD
+=======
+import java.util.ArrayList;
+>>>>>>> cf9e7401... course controller and IT tests and centralized helper methods ffor controller IT tests
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseController {
 
     @Autowired private CourseService courseService;
+    @Autowired private CourseOfferingService courseOfferingService;
+
 
     /**
      * Get a Course by ID
@@ -79,8 +88,12 @@ public class CourseController {
                 courseService.updateCourse(
                         course,
                         c.getName(),
+<<<<<<< HEAD
                         convertCourseOfferingListToDomainObject(
                                 c.getCourseOfferings()));
+=======
+                        convertCourseOfferingListToDomainObject(c.getCourseOfferings()));
+>>>>>>> cf9e7401... course controller and IT tests and centralized helper methods ffor controller IT tests
 
         return ControllerUtils.convertToDto(updatedCourse);
     }
@@ -102,5 +115,17 @@ public class CourseController {
     @ExceptionHandler(RuntimeException.class)
     public final ResponseEntity<Exception> handleAllExceptions(RuntimeException ex) {
         return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    
+    private List<CourseOffering> convertCourseOfferingListToDomainObject(
+            List<CourseOfferingDto> coDtos) {
+        List<CourseOffering> cos = new ArrayList<>(coDtos.size());
+        for (CourseOfferingDto coDto : coDtos) {
+        	if(coDto != null) {
+	            CourseOffering co = courseOfferingService.getCourseOfferingById(coDto.getId());
+	            cos.add(co);
+        	}
+        }
+        return cos;
     }
 }

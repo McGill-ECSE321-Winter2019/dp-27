@@ -44,7 +44,7 @@ import ca.mcgill.cooperator.service.EmployerReportService;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class EmployerContactControllerIT {
+public class EmployerContactControllerIT extends ControllerITUtils {
 
     @Autowired private MockMvc mvc;
 
@@ -195,29 +195,5 @@ public class EmployerContactControllerIT {
                                 EmployerContactDto[].class));
 
         assertEquals(returnedEmployerContacts.size(), 0);
-    }
-
-    public CompanyDto createTestCompany() throws Exception {
-        CompanyDto companyDto = new CompanyDto();
-        companyDto.setName("Cisco");
-        companyDto.setCity("Ottawa");
-        companyDto.setRegion("Ontario");
-        companyDto.setCountry("Canada");
-
-        MvcResult mvcResult =
-                mvc.perform(
-                                post("/companies")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(companyDto))
-                                        .characterEncoding("utf-8"))
-                        .andExpect(status().isOk())
-                        .andReturn();
-
-        // get object from response
-        CompanyDto returnedCompanyDto =
-                objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), CompanyDto.class);
-
-        return returnedCompanyDto;
     }
 }

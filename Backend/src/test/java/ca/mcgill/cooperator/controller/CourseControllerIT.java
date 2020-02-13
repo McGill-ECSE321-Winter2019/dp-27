@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class CourseControllerIT {
+public class CourseControllerIT extends ControllerITUtils {
 
     @Autowired private MockMvc mvc;
 
@@ -93,12 +93,9 @@ public class CourseControllerIT {
         assertEquals(returnedCourses.size(), 1);
 
         CourseDto courseToUpdate = returnedCourses.get(0);
-        CourseOfferingDto testCourseOffering =
-                new CourseOfferingDto(
-                        54321, 2020, Season.FALL, courseToUpdate, new ArrayList<CoopDto>());
+      
         courseToUpdate.setName("ECSE321");
         List<CourseOfferingDto> coDtos = new ArrayList<>();
-        coDtos.add(testCourseOffering);
         courseToUpdate.setCourseOfferings(coDtos);
 
         // 4. update the Course with a PUT request
@@ -150,7 +147,7 @@ public class CourseControllerIT {
     }
 
     @Test
-    public void testInvalidAdminFlow() throws Exception {
+    public void testInvalidCourseFlow() throws Exception {
         CourseDto invalidCourse = new CourseDto(1, "", null);
         CourseDto testCourse = new CourseDto(1, "Test", null);
 
