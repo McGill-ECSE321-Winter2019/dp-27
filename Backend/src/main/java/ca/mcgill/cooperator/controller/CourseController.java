@@ -48,7 +48,7 @@ public class CourseController {
      * @return List of CourseDto objects
      */
     @GetMapping("")
-    public List<CourseDto> getAllAdmins() {
+    public List<CourseDto> getAllCourses() {
         List<Course> courses = courseService.getAllCourses();
 
         return ControllerUtils.convertCourseListToDto(courses);
@@ -59,7 +59,8 @@ public class CourseController {
      *
      * <p>In request body:
      *
-     * @param course name
+     * @param CourseDto object
+     * @return CourseDto object
      */
     @PostMapping("")
     public CourseDto createCourse(@RequestBody CourseDto c) {
@@ -73,7 +74,8 @@ public class CourseController {
      *
      * <p>In request body:
      *
-     * @param name
+     * @param CourseDto object
+     * @return CourseDto object
      */
     @PutMapping("")
     public CourseDto updateCourse(@RequestBody CourseDto c) {
@@ -91,7 +93,7 @@ public class CourseController {
      * Delete an existing Course
      *
      * @param id
-     * @return deleted course
+     * @return deleted CourseDto object
      */
     @DeleteMapping("/{id}")
     public CourseDto deleteCourse(@PathVariable int id) {
@@ -106,6 +108,13 @@ public class CourseController {
         return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+
+    /**
+     * Delete an existing Course
+     *
+     * @param list of CourseOfferingDto objects
+     * @return list of CourseOffering objects
+     */
     private List<CourseOffering> convertCourseOfferingListToDomainObject(
             List<CourseOfferingDto> coDtos) {
         List<CourseOffering> cos = new ArrayList<>(coDtos.size());
