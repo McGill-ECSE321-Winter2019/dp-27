@@ -41,7 +41,6 @@ public class ControllerUtils {
     @Autowired private static CoopService coopService;
     @Autowired private static CourseOfferingService courseOfferingService;
 
-
     /*
      * Domain Object to DTO conversion methods
      */
@@ -880,7 +879,7 @@ public class ControllerUtils {
     }
 
     public static StudentDto convertToDto(Student s) {
-    	if (s == null) {
+        if (s == null) {
             throw new IllegalArgumentException("Student does not exist!");
         }
 

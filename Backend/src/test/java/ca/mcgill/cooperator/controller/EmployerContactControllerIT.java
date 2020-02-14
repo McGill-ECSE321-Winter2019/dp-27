@@ -9,16 +9,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
-
+import ca.mcgill.cooperator.dao.EmployerReportRepository;
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
-import ca.mcgill.cooperator.dao.EmployerReportRepository;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.EmployerReportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,16 +29,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import ca.mcgill.cooperator.dao.CompanyRepository;
-import ca.mcgill.cooperator.dao.EmployerContactRepository;
-import ca.mcgill.cooperator.dao.EmployerReportRepository;
-import ca.mcgill.cooperator.dto.CompanyDto;
-import ca.mcgill.cooperator.dto.EmployerContactDto;
-import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.service.EmployerContactService;
-import ca.mcgill.cooperator.service.EmployerReportService;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -50,26 +38,24 @@ public class EmployerContactControllerIT extends ControllerIT {
 
     @Autowired private ObjectMapper objectMapper;
 
-
     @Autowired private EmployerContactService employerContactService;
     @Autowired private EmployerReportService employerReportService;
 
-    
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CompanyRepository companyRepository;
     @Autowired EmployerReportRepository employerReportRepository;
 
-
-    @BeforeEach @AfterEach
+    @BeforeEach
+    @AfterEach
     public void clearDatabase() {
-  	List<EmployerReport> ecs = employerReportService.getAllEmployerReports();
-      for (EmployerReport ec : ecs) {
-      	ec.setEmployerContact(null);
-      	employerReportRepository.save(ec);
-      }
-      employerReportRepository.deleteAll();
-    	employerContactRepository.deleteAll();
-    	companyRepository.deleteAll();
+        List<EmployerReport> ecs = employerReportService.getAllEmployerReports();
+        for (EmployerReport ec : ecs) {
+            ec.setEmployerContact(null);
+            employerReportRepository.save(ec);
+        }
+        employerReportRepository.deleteAll();
+        employerContactRepository.deleteAll();
+        companyRepository.deleteAll();
     }
 
     /**

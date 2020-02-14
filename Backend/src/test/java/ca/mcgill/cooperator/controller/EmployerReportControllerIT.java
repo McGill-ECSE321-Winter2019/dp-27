@@ -17,15 +17,7 @@ import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.EmployerReportDto;
-import ca.mcgill.cooperator.model.Company;
-import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.CoopStatus;
-import ca.mcgill.cooperator.model.Course;
-import ca.mcgill.cooperator.model.CourseOffering;
-import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.Season;
-import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
@@ -36,7 +28,6 @@ import ca.mcgill.cooperator.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class EmployerReportControllerIT extends  ControllerIT{
+public class EmployerReportControllerIT extends ControllerIT {
 
     @Autowired private MockMvc mvc;
 

@@ -89,7 +89,7 @@ public class ControllerIT {
 
         return studentDto;
     }
-    
+
     public CoopDto createTestCoop(CourseOfferingDto courseOfferingDto, StudentDto studentDto)
             throws Exception {
         CoopDto coopDto = new CoopDto();
@@ -97,7 +97,7 @@ public class ControllerIT {
         coopDto.setCourseOffering(courseOfferingDto);
         coopDto.setStudent(studentDto);
 
-         MvcResult mvcResult =
+        MvcResult mvcResult =
                 mvc.perform(
                                 post("/coops")
                                         .contentType(MediaType.APPLICATION_JSON)
@@ -106,11 +106,11 @@ public class ControllerIT {
                         .andExpect(status().isOk())
                         .andReturn();
 
-         // get object from response
+        // get object from response
         coopDto =
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CoopDto.class);
 
-         return coopDto;
+        return coopDto;
     }
 
     public CoopDetailsDto createTestCoopDetails(
