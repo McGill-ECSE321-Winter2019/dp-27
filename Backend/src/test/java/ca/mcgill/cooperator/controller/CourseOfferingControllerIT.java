@@ -14,10 +14,8 @@ import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,10 +40,10 @@ public class CourseOfferingControllerIT extends ControllerIT {
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired CourseOfferingService courseOfferingService;
 
-    @BeforeEach 
+    @BeforeEach
     @AfterEach
     public void clearDatabase() {
-    	courseOfferingRepository.deleteAll();
+        courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
     }
 
@@ -58,7 +56,7 @@ public class CourseOfferingControllerIT extends ControllerIT {
     public void testCourseOfferingFlow() throws Exception {
         // 1. create the Course with the helper method
         CourseDto courseDto = createTestCourse();
-        
+
         // 2. create the CourseOffering with a post request
         CourseOfferingDto courseOfferingDto = new CourseOfferingDto();
         courseOfferingDto.setYear(2020);
@@ -79,7 +77,6 @@ public class CourseOfferingControllerIT extends ControllerIT {
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), CourseOfferingDto.class);
 
-
         // 2. get the courseOffering by ID, valid
         mvc.perform(
                         get("/course-offerings/" + courseOfferingDto.getId())
@@ -96,13 +93,16 @@ public class CourseOfferingControllerIT extends ControllerIT {
         List<CourseOfferingDto> returnedCourseOfferings =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(), CourseOfferingDto[].class));
+                                mvcResult.getResponse().getContentAsString(),
+                                CourseOfferingDto[].class));
 
         assertEquals(returnedCourseOfferings.size(), 1);
-        
+
         // 4. test getting all CourseOfferings by course
         mvcResult =
-                mvc.perform(get("/course-offerings/by-course/" + courseDto.getId()).contentType(MediaType.APPLICATION_JSON))
+                mvc.perform(
+                                get("/course-offerings/by-course/" + courseDto.getId())
+                                        .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andReturn();
 
@@ -110,16 +110,16 @@ public class CourseOfferingControllerIT extends ControllerIT {
         returnedCourseOfferings =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(), CourseOfferingDto[].class));
+                                mvcResult.getResponse().getContentAsString(),
+                                CourseOfferingDto[].class));
 
         assertEquals(returnedCourseOfferings.size(), 1);
 
         CourseOfferingDto coToUpdate = returnedCourseOfferings.get(0);
 
-        
         // 4. update the Course with a PUT request
         coToUpdate.setYear(2021);
-   
+
         mvcResult =
                 mvc.perform(
                                 put("/course-offerings")
@@ -144,7 +144,6 @@ public class CourseOfferingControllerIT extends ControllerIT {
         assertEquals(courseOfferingDto.getCourse().getId(), courseDto.getId());
         assertEquals(courseOfferingDto.getYear(), 2021);
 
-
         // 5. delete the Course with a DELETE request
         mvcResult =
                 mvc.perform(
@@ -164,7 +163,8 @@ public class CourseOfferingControllerIT extends ControllerIT {
         returnedCourseOfferings =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(), CourseOfferingDto[].class));
+                                mvcResult.getResponse().getContentAsString(),
+                                CourseOfferingDto[].class));
 
         assertEquals(returnedCourseOfferings.size(), 0);
     }

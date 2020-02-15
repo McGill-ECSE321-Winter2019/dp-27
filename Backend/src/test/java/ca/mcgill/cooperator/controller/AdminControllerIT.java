@@ -13,7 +13,6 @@ import ca.mcgill.cooperator.dto.AdminDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +36,7 @@ public class AdminControllerIT {
     @Autowired AdminRepository adminRepository;
     @Autowired NotificationRepository notificationRepository;
 
-    @BeforeEach 
+    @BeforeEach
     @AfterEach
     public void clearDatabase() {
         adminRepository.deleteAll();

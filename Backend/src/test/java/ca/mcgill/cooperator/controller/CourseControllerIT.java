@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +40,7 @@ public class CourseControllerIT extends ControllerIT {
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired CourseOfferingService courseOfferingService;
 
-    @BeforeEach 
+    @BeforeEach
     @AfterEach
     public void clearDatabase() {
         courseRepository.deleteAll();

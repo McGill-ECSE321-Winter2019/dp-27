@@ -46,16 +46,16 @@ public class CompanyController {
      * @param name
      * @return Companies that match filter
      */
-    @GetMapping("")		
-    public List<CompanyDto> getAllCompanies(@RequestParam(required=false) String name) {		     
+    @GetMapping("")
+    public List<CompanyDto> getAllCompanies(@RequestParam(required = false) String name) {
         if (name == null) {
-            // return all companies		      
-            List<Company> companies = companyService.getAllCompanies();		         
+            // return all companies
+            List<Company> companies = companyService.getAllCompanies();
             return ControllerUtils.convertCompanyListToDto(companies);
-        } else {		
-             // filter by name	
-            List<Company> companies = companyService.getCompanies(name);		     
-            return ControllerUtils.convertCompanyListToDto(companies);		      
+        } else {
+            // filter by name
+            List<Company> companies = companyService.getCompanies(name);
+            return ControllerUtils.convertCompanyListToDto(companies);
         }
     }
 
