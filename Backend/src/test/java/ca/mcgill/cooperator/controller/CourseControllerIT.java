@@ -16,6 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,8 @@ public class CourseControllerIT extends ControllerIT {
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired CourseOfferingService courseOfferingService;
 
-    @BeforeEach
+    @BeforeEach 
+    @AfterEach
     public void clearDatabase() {
         courseRepository.deleteAll();
         courseOfferingRepository.deleteAll();
@@ -178,7 +181,7 @@ public class CourseControllerIT extends ControllerIT {
 
         // 2. get the Course by ID, invalid
         mvc.perform(
-                        get("/admins/" + (returnedCourse.getId() + 1))
+                        get("/courses/" + (returnedCourse.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is5xxServerError());
 
@@ -194,7 +197,7 @@ public class CourseControllerIT extends ControllerIT {
 
         // 4. invalid delete
         mvc.perform(
-                        delete("/admins/" + (returnedCourse.getId() + 1))
+                        delete("/courses/" + (returnedCourse.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8"))
                 .andExpect(status().is5xxServerError());

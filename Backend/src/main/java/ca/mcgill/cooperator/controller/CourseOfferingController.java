@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,9 +33,16 @@ public class CourseOfferingController {
         return ControllerUtils.convertToDto(courseOfferingService.getCourseOfferingById(id));
     }
     
-    @GetMapping("/")
-    public List<CourseOfferingDto> getCourseOfferings(@PathVariable int id) {
+    @GetMapping("")
+    public List<CourseOfferingDto> getCourseOfferings() {
         return ControllerUtils.convertCourseOfferingListToDto(courseOfferingService.getAllCourseOfferings());
+    }
+    
+    @GetMapping("/by-course/{id}")
+    public List<CourseOfferingDto> getCourseOfferingsByCourse(@PathVariable int id) {
+    	Course course = courseService.getCourseById(id);
+    	List<CourseOffering> cos = courseOfferingService.getCourseOfferingsByCourse(course);
+    	return ControllerUtils.convertCourseOfferingListToDto(cos);
     }
 
     @PostMapping("")
@@ -60,4 +68,11 @@ public class CourseOfferingController {
                 		co, coDto.getYear(), coDto.getSeason(), course);
         return ControllerUtils.convertToDto(courseOffering);
     }
+    
+    @DeleteMapping("/{id}")
+    public CourseOfferingDto deleteCourseOfferingDto(@PathVariable int id){
+    	CourseOffering co = courseOfferingService.getCourseOfferingById(id);
+    	return ControllerUtils.convertToDto(courseOfferingService.deleteCourseOffering(co));
+    }
+    
 }
