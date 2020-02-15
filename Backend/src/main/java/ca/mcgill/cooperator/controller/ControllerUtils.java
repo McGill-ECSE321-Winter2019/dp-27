@@ -1089,6 +1089,9 @@ public class ControllerUtils {
     static Set<Notification> convertNotificationListToDomainObjectSet(
             List<NotificationDto> notifDtos) {
         Set<Notification> notifs = new HashSet<>();
+        if(notifDtos == null) {
+        	return notifs;
+        }
         for (NotificationDto nDto : notifDtos) {
             Notification n = notificationService.getNotification(nDto.getId());
             notifs.add(n);
@@ -1098,6 +1101,7 @@ public class ControllerUtils {
 
     static Set<Coop> convertCoopsListToDomainObject(List<CoopDto> coopDto) {
         Set<Coop> coops = new HashSet<>();
+        if(coopDto == null) return coops;
         for (CoopDto cDto : coopDto) {
             Coop c = coopService.getCoopById(cDto.getId());
             coops.add(c);

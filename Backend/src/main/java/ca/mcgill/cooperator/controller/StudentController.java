@@ -65,8 +65,8 @@ public class StudentController {
      */
     @PostMapping("")
     public StudentDto createStudent(@RequestBody StudentDto studentDto) {
-        Student student = new Student();
-        student =
+        
+        Student student =
                 studentService.createStudent(
                         studentDto.getFirstName(),
                         studentDto.getLastName(),
@@ -91,7 +91,7 @@ public class StudentController {
      */
     @PutMapping("")
     public StudentDto updateStudent(@RequestBody StudentDto s) {
-        Student student = studentService.getStudentById(s.getId());
+        Student student = studentService.getStudentByStudentID(s.getStudentId());
         studentService.updateStudent(
                 student,
                 s.getFirstName(),
