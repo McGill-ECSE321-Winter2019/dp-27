@@ -6,10 +6,8 @@ import ca.mcgill.cooperator.dao.StudentReportRepository;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.StudentReport;
-
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,7 +113,7 @@ public class ReportSectionService {
             for (ReportSection section : sections) {
                 if (section.getId() == rs.getId()) {
                     sections.remove(section);
-                	sections.add(section);
+                    sections.add(section);
                     contains = true;
                 }
             }
@@ -133,8 +131,8 @@ public class ReportSectionService {
             Set<ReportSection> sections = er.getReportSections();
             for (ReportSection section : sections) {
                 if (section.getId() == rs.getId()) {
-                	sections.remove(section);
-                	sections.add(section);
+                    sections.remove(section);
+                    sections.add(section);
                     contains = true;
                 }
             }

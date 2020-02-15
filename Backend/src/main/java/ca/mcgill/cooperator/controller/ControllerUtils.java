@@ -25,6 +25,7 @@ import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.service.CoopService;
+import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.ReportSectionService;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class ControllerUtils {
     @Autowired private static NotificationService notificationService;
     @Autowired private static ReportSectionService reportSectionService;
     @Autowired private static CoopService coopService;
+    @Autowired private static CourseOfferingService courseOfferingService;
 
     /*
      * Domain Object to DTO conversion methods

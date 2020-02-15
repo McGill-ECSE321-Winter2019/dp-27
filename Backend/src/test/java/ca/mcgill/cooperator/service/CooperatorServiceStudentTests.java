@@ -52,6 +52,7 @@ public class CooperatorServiceStudentTests {
         courseOfferingRepository.deleteAll();
         coopRepository.deleteAll();
         notificationRepository.deleteAll();
+        adminRepository.deleteAll();
     }
 
     @Test

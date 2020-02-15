@@ -124,8 +124,7 @@ public class StudentReportController {
             @RequestParam("report_sections") Set<ReportSectionDto> rsDtos,
             @RequestParam("coop_id") int coopId) {
         StudentReport reportToUpdate = studentReportService.getStudentReport(reportId);
-        Set<ReportSection> sections =
-                ControllerUtils.convertReportSectionSetToDomainObject(rsDtos);
+        Set<ReportSection> sections = ControllerUtils.convertReportSectionSetToDomainObject(rsDtos);
         Coop coop = coopService.getCoopById(coopId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
 

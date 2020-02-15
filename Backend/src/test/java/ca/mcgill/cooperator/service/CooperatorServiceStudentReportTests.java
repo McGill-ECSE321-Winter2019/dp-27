@@ -20,11 +20,9 @@ import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -305,7 +303,7 @@ public class CooperatorServiceStudentReportTests {
         Student s = new Student();
         s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
 
-        return s; 
+        return s;
     }
 
     private ReportSection createTestReportSection() {
