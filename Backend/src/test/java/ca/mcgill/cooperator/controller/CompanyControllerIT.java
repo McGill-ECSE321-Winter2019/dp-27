@@ -53,7 +53,7 @@ public class CompanyControllerIT extends ControllerIT {
         companyDto.setRegion("Washington");
         companyDto.setCountry("United States");
 
-        // 1. create the Co-op Details with a POST request
+        // 1. create the Company with a POST request
         MvcResult mvcResult =
                 mvc.perform(
                                 post("/companies")
@@ -69,11 +69,11 @@ public class CompanyControllerIT extends ControllerIT {
                         mvcResult.getResponse().getContentAsString(), CompanyDto.class);
         assertEquals(companyDto.getName(), "Facebook");
 
-        // 2. get the Co-op Details by ID, valid
+        // 2. get the Company by ID, valid
         mvc.perform(get("/companies/" + companyDto.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        // 3. test getting all Co-op Details
+        // 3. test getting all Companies
         mvcResult =
                 mvc.perform(get("/companies").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
@@ -92,7 +92,7 @@ public class CompanyControllerIT extends ControllerIT {
         companyDto.setEmployees(employerContactDtos);
         companyDto.setName("Cisco");
 
-        // 4. update the Co-op Details with a PUT request
+        // 4. update the Company with a PUT request
         mvcResult =
                 mvc.perform(
                                 put("/companies")
@@ -110,7 +110,7 @@ public class CompanyControllerIT extends ControllerIT {
 
         assertEquals(companyDto.getEmployees().size(), 1);
 
-        // 5. delete the Co-op Details with a DELETE request
+        // 5. delete the Company with a DELETE request
         mvcResult =
                 mvc.perform(
                                 delete("/companies/" + companyDto.getId())
@@ -119,7 +119,7 @@ public class CompanyControllerIT extends ControllerIT {
                         .andExpect(status().isOk())
                         .andReturn();
 
-        // test getting all Co-op Details
+        // test getting all Companies
         mvcResult =
                 mvc.perform(get("/companies").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
@@ -133,7 +133,7 @@ public class CompanyControllerIT extends ControllerIT {
 
         assertEquals(companyDtos.size(), 0);
 
-        // test getting all Co-op Details
+        // test getting all employer contacts
         mvcResult =
                 mvc.perform(get("/employer-contacts").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
