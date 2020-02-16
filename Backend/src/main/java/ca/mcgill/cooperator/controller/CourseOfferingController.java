@@ -37,7 +37,7 @@ public class CourseOfferingController {
                 courseOfferingService.getAllCourseOfferings());
     }
 
-    @GetMapping("/by-course/{id}")
+    @GetMapping("/course/{id}")
     public List<CourseOfferingDto> getCourseOfferingsByCourse(@PathVariable int id) {
         Course course = courseService.getCourseById(id);
         List<CourseOffering> cos = courseOfferingService.getCourseOfferingsByCourse(course);

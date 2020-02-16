@@ -97,6 +97,8 @@ public class CourseOfferingControllerIT extends ControllerIT {
                                 CourseOfferingDto[].class));
 
         assertEquals(returnedCourseOfferings.size(), 1);
+        assertEquals(returnedCourseOfferings.get(0).getId(), courseOfferingDto.getId());
+
 
         // 4. test getting all CourseOfferings by course
         mvcResult =

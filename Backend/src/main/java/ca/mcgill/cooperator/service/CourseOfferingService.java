@@ -81,7 +81,6 @@ public class CourseOfferingService {
         co.setYear(year);
         co.setSeason(season);
         co.setCourse(c);
-        courseOfferingRepository.save(co);
 
         return courseOfferingRepository.save(co);
     }
