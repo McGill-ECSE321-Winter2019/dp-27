@@ -18,13 +18,7 @@ import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.EmployerReportDto;
 import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.service.CompanyService;
-import ca.mcgill.cooperator.service.CoopService;
-import ca.mcgill.cooperator.service.CourseOfferingService;
-import ca.mcgill.cooperator.service.CourseService;
-import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.EmployerReportService;
-import ca.mcgill.cooperator.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,13 +44,7 @@ public class EmployerReportControllerIT extends ControllerIT {
     @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
-
-    @Autowired private CoopService coopService;
-    @Autowired private StudentService studentService;
-    @Autowired private CourseService courseService;
-    @Autowired private CourseOfferingService courseOfferingService;
-    @Autowired private CompanyService companyService;
-    @Autowired private EmployerContactService employerContactService;
+    
     @Autowired private EmployerReportService employerReportService;
 
     @Autowired private CoopRepository coopRepository;
@@ -83,7 +71,7 @@ public class EmployerReportControllerIT extends ControllerIT {
         courseRepository.deleteAll();
         studentRepository.deleteAll();
     }
-
+    
     /**
      * Tests creating an EmployerReport
      *
