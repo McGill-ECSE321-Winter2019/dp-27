@@ -13,7 +13,6 @@ import ca.mcgill.cooperator.dao.EmployerReportRepository;
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.EmployerReportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
@@ -38,7 +37,6 @@ public class EmployerContactControllerIT extends ControllerIT {
 
     @Autowired private ObjectMapper objectMapper;
 
-    @Autowired private EmployerContactService employerContactService;
     @Autowired private EmployerReportService employerReportService;
 
     @Autowired EmployerContactRepository employerContactRepository;

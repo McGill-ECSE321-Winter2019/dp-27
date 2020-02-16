@@ -25,7 +25,6 @@ import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.service.CoopService;
-import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.ReportSectionService;
 import java.util.ArrayList;
@@ -39,7 +38,6 @@ public class ControllerUtils {
     @Autowired private static NotificationService notificationService;
     @Autowired private static ReportSectionService reportSectionService;
     @Autowired private static CoopService coopService;
-    @Autowired private static CourseOfferingService courseOfferingService;
 
     /*
      * Domain Object to DTO conversion methods
@@ -1089,8 +1087,8 @@ public class ControllerUtils {
     static Set<Notification> convertNotificationListToDomainObjectSet(
             List<NotificationDto> notifDtos) {
         Set<Notification> notifs = new HashSet<>();
-        if(notifDtos == null) {
-        	return notifs;
+        if (notifDtos == null) {
+            return notifs;
         }
         for (NotificationDto nDto : notifDtos) {
             Notification n = notificationService.getNotification(nDto.getId());
@@ -1101,7 +1099,7 @@ public class ControllerUtils {
 
     static Set<Coop> convertCoopsListToDomainObject(List<CoopDto> coopDto) {
         Set<Coop> coops = new HashSet<>();
-        if(coopDto == null) return coops;
+        if (coopDto == null) return coops;
         for (CoopDto cDto : coopDto) {
             Coop c = coopService.getCoopById(cDto.getId());
             coops.add(c);

@@ -65,7 +65,7 @@ public class StudentController {
      */
     @PostMapping("")
     public StudentDto createStudent(@RequestBody StudentDto studentDto) {
-        
+
         Student student =
                 studentService.createStudent(
                         studentDto.getFirstName(),
