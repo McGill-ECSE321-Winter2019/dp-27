@@ -108,7 +108,6 @@ public class CourseController {
         return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-
     /**
      * Delete an existing Course
      *

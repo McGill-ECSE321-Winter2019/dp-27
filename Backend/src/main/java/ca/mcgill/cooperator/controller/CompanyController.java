@@ -47,7 +47,7 @@ public class CompanyController {
      * @return Companies that match filter
      */
     @GetMapping("")
-    public List<CompanyDto> getAllCompanies(@RequestParam String name) {
+    public List<CompanyDto> getAllCompanies(@RequestParam(required = false) String name) {
         if (name == null) {
             // return all companies
             List<Company> companies = companyService.getAllCompanies();
