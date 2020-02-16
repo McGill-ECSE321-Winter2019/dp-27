@@ -99,11 +99,10 @@ public class CourseOfferingControllerIT extends ControllerIT {
         assertEquals(returnedCourseOfferings.size(), 1);
         assertEquals(returnedCourseOfferings.get(0).getId(), courseOfferingDto.getId());
 
-
         // 4. test getting all CourseOfferings by course
         mvcResult =
                 mvc.perform(
-                                get("/course-offerings/by-course/" + courseDto.getId())
+                                get("/course-offerings/course/" + courseDto.getId())
                                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andReturn();

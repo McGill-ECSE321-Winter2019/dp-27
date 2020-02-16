@@ -22,8 +22,6 @@ import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.model.CoopDetails;
-import ca.mcgill.cooperator.model.CoopStatus;
-import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
@@ -42,7 +40,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class CoopDetailsControllerIT {
+public class CoopDetailsControllerIT extends ControllerIT {
     @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
@@ -75,11 +73,11 @@ public class CoopDetailsControllerIT {
     }
 
     /**
-     * Tests creating CoopDetails:
-     * 1. creates coop details
-     * 2. gets created coop details by id
-     * 3. get all coop details
-     * 4. update coop details
+     * Tests creating CoopDetails: 
+     * 1. creates coop details 
+     * 2. gets created coop details by id 
+     * 3. get all coop details 
+     * 4. update coop details 
      * 5. delete coop details
      *
      * @throws Exception
@@ -186,144 +184,5 @@ public class CoopDetailsControllerIT {
                                 CoopDetailsDto[].class));
 
         assertEquals(returnedCoopDetailsList.size(), 0);
-    }
-
-    public CourseDto createTestCourse() throws Exception {
-        CourseDto courseDto = new CourseDto();
-        courseDto.setName("FACC200");
-        MvcResult mvcResult =
-                mvc.perform(
-                                post("/courses")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(courseDto))
-                                        .characterEncoding("utf-8"))
-                        .andExpect(status().isOk())
-                        .andReturn();
-
-        // get object from response
-        courseDto =
-                objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), CourseDto.class);
-
-        return courseDto;
-    }
-
-    public CourseOfferingDto createTestCourseOffering(CourseDto courseDto) throws Exception {
-        CourseOfferingDto courseOfferingDto = new CourseOfferingDto();
-        courseOfferingDto.setYear(2020);
-        courseOfferingDto.setSeason(Season.FALL);
-        courseOfferingDto.setCourse(courseDto);
-
-        MvcResult mvcResult =
-                mvc.perform(
-                                post("/course-offerings")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(courseOfferingDto))
-                                        .characterEncoding("utf-8"))
-                        .andExpect(status().isOk())
-                        .andReturn();
-
-        // get object from response
-        courseOfferingDto =
-                objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), CourseOfferingDto.class);
-
-        return courseOfferingDto;
-    }
-
-    public StudentDto createTestStudent() throws Exception {
-        StudentDto studentDto = new StudentDto();
-        studentDto.setEmail("susan@gmail.com");
-        studentDto.setFirstName("Susan");
-        studentDto.setLastName("Matuszewski");
-        studentDto.setStudentId("12345678");
-        MvcResult mvcResult =
-                mvc.perform(
-                                post("/students")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(studentDto))
-                                        .characterEncoding("utf-8"))
-                        .andExpect(status().isOk())
-                        .andReturn();
-
-        // get object from response
-        studentDto =
-                objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), StudentDto.class);
-
-        return studentDto;
-    }
-
-    public CoopDto createTestCoop(CourseOfferingDto courseOfferingDto, StudentDto studentDto)
-            throws Exception {
-        CoopDto coopDto = new CoopDto();
-        coopDto.setStatus(CoopStatus.IN_PROGRESS);
-        coopDto.setCourseOffering(courseOfferingDto);
-        coopDto.setStudent(studentDto);
-
-        MvcResult mvcResult =
-                mvc.perform(
-                                post("/coops")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(coopDto))
-                                        .characterEncoding("utf-8"))
-                        .andExpect(status().isOk())
-                        .andReturn();
-
-        // get object from response
-        coopDto =
-                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CoopDto.class);
-
-        return coopDto;
-    }
-
-    public CompanyDto createTestCompany() throws Exception {
-        CompanyDto companyDto = new CompanyDto();
-        companyDto.setName("Cisco");
-        companyDto.setCity("Ottawa");
-        companyDto.setRegion("Ontario");
-        companyDto.setCountry("Canada");
-
-        MvcResult mvcResult =
-                mvc.perform(
-                                post("/companies")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(companyDto))
-                                        .characterEncoding("utf-8"))
-                        .andExpect(status().isOk())
-                        .andReturn();
-
-        // get object from response
-        companyDto =
-                objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), CompanyDto.class);
-
-        return companyDto;
-    }
-
-    public EmployerContactDto createTestEmployerContact(CompanyDto companyDto) throws Exception {
-        EmployerContactDto employerContactDto = new EmployerContactDto();
-        employerContactDto.setFirstName("Emma");
-        employerContactDto.setLastName("Eags");
-        employerContactDto.setEmail("emma@gmail.com");
-        employerContactDto.setPhoneNumber("213435566");
-        employerContactDto.setCompany(companyDto);
-
-        MvcResult mvcResult =
-                mvc.perform(
-                                post("/employer-contacts")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(
-                                                objectMapper.writeValueAsString(employerContactDto))
-                                        .characterEncoding("utf-8"))
-                        .andExpect(status().isOk())
-                        .andReturn();
-
-        // get object from response
-        employerContactDto =
-                objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), EmployerContactDto.class);
-
-        return employerContactDto;
     }
 }
