@@ -44,7 +44,7 @@ public class EmployerReportControllerIT extends ControllerIT {
     @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
-
+    
     @Autowired private EmployerReportService employerReportService;
 
     @Autowired private CoopRepository coopRepository;
