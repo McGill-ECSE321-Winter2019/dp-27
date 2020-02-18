@@ -31,17 +31,29 @@ const routes = [
   {
     path: "/admin",
     component: () => import("layouts/AdminLoggedInLayout.vue"),
-    meta: { requiresAdminAuth: true },
     children: [
       { path: "", redirect: "home" },
       { path: "home", component: () => import("pages/admin/AdminHome.vue") },
       {
+        path: "studentCoops",
+        component: () => import("pages/admin/AdminStudentCoops.vue")
+      },
+      {
         path: "profile",
         component: () => import("pages/admin/AdminProfile.vue")
       },
+      { path: "coops", component: () => import("pages/admin/AdminCoops.vue") },
       {
-        path: "coops/view",
-        component: () => import("pages/admin/AdminCoops.vue")
+        path: "students",
+        component: () => import("pages/admin/AdminStudents.vue")
+      },
+      {
+        path: "student",
+        component: () => import("pages/admin/AdminStudent.vue")
+      },
+      {
+        path: "companies",
+        component: () => import("pages/admin/AdminCompanies.vue")
       },
       {
         path: "notifications",
@@ -50,7 +62,6 @@ const routes = [
     ]
   }
 ];
-
 // Always leave this as last one
 if (process.env.MODE !== "ssr") {
   routes.push({

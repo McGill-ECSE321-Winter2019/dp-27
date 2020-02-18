@@ -4,31 +4,36 @@
     bordered
     id="card"
   >
-    <q-card-section>All Coops
+    <q-card-section>
+      <div class="text-h6">Welcome, Admin!</div>
     </q-card-section>
 
     <q-separator inset />
 
     <div class="q-pa-md">
     <q-table
+      title="Current Coop Students"
       :data="tableData"
       :columns="columns"
-      row-key="coopTitle"
+      row-key="studentName"
+      @row-click="goToStudentCoop"
     />
     </div>
   </q-card>
 </template>
+
 <script>
+// import HomeCurrentCoopStudentItem from 'components/admin/HomeCurrentCoopStudentItem.vue'
 export default {
-  name: 'AdminAllCoops',
+  name: 'HomeMainInfo',
   data: () => ({
     columns: [
       {
-        name: 'title',
+        name: 'studentName',
         required: true,
-        label: 'Title',
+        label: 'Student Name',
         align: 'left',
-        field: 'title',
+        field: 'studentName',
         sortable: true,
         classes: 'my-class',
         style: 'width: 500px'
@@ -39,16 +44,6 @@ export default {
         label: 'Company',
         align: 'left',
         field: 'companyName',
-        sortable: true,
-        classes: 'my-class',
-        style: 'width: 500px'
-      },
-      {
-        name: 'studentName',
-        required: true,
-        label: 'Student Name',
-        align: 'left',
-        field: 'studentName',
         sortable: true,
         classes: 'my-class',
         style: 'width: 500px'
@@ -65,25 +60,41 @@ export default {
       }],
     tableData: [
       {
-        title: 'Backend Intern',
         studentName: 'Emma',
         companyName: 'Lightspeed',
-        status: 'Complete'
+        status: 'Good'
       },
       {
-        title: 'SWE Intern',
         studentName: 'Albert',
         companyName: 'Facebook',
-        status: 'Future'
+        status: 'Has Missing Documents'
       },
       {
-        title: 'Dev Intern',
         studentName: 'Paul',
         companyName: 'CSA',
-        status: 'In Progress'
+        status: 'Good'
+      },
+      {
+        studentName: 'Susan',
+        companyName: 'Cisco',
+        status: 'Good'
       }]
-  })
+  }),
+  methods: {
+    goToStudentCoop () {
+      this.$router.push('/admin/studentcoops')
+    }
+  }
 }
 </script>
 
-<style lang="scss"></style>
+<style scoped lang="scss">
+h6 {
+  margin: 10px;
+}
+#card {
+  width: 100%;
+  margin-top: 25px;
+  margin-right: 10px;
+}
+</style>
