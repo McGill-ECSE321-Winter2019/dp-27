@@ -2,6 +2,7 @@ const routes = [
   {
     path: "/student",
     component: () => import("layouts/StudentLoggedInLayout.vue"),
+    meta: { requiresStudentAuth: true },
     children: [
       { path: "", redirect: "home" },
       {
@@ -30,6 +31,7 @@ const routes = [
   {
     path: "/admin",
     component: () => import("layouts/AdminLoggedInLayout.vue"),
+    meta: { requiresAdminAuth: true },
     children: [
       { path: "", redirect: "home" },
       { path: "home", component: () => import("pages/admin/AdminHome.vue") },
