@@ -30,7 +30,7 @@
                   label="Course year"
                   :rules="[
                     val =>
-                      (val && val > 2000 && val < 3000) ||
+                      (val && val > 2010 && val < 2100) ||
                       'Please enter a valid course year'
                   ]"
                 />
@@ -69,6 +69,7 @@
                 flat
                 class="q-ml-sm"
               />
+              <q-spinner v-if="submitting" color="primary" size="3em" />
             </q-card-section>
           </q-form>
         </q-card>
@@ -85,7 +86,8 @@ export default {
       offerLetterFile: null,
       courseTerm: "",
       courseTermOptions: ["Winter", "Summer", "Fall"],
-      courseYear: new Date().getFullYear()
+      courseYear: new Date().getFullYear(),
+      submitting: false
     };
   },
   methods: {
@@ -100,11 +102,33 @@ export default {
         student: this.$store.state.currentUser
       };
 
+      this.submitting = true;
+      // POST request to create coop
       this.$axios
         .post("/coops", coop)
         .then(resp => {
           console.log(resp);
-          console.log("SUCCESS");
+          console.log("Coop created");
+
+          // after coop is created, POST request for offer letter
+          const formData = new FormData();
+          formData.append("file", this.offerLetterFile);
+          formData.append("status", "UNDER_REVIEW");
+          formData.append("title", "Offer Letter");
+          formData.append("coop_id", resp.data.id.toString());
+
+          this.$axios
+            .post("/student-reports", formData, {
+              headers: { "Content-Type": "multipart/form-data" }
+            })
+            .then(resp => {
+              console.log(resp);
+              console.log("Report (offer letter) created");
+              this.submitting = false;
+
+              this.$router.push({ path: "/student/home" });
+            })
+            .catch(err => console.log(err));
         })
         .catch(err => console.log(err));
     },

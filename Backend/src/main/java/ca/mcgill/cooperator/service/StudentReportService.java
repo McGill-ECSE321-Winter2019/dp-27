@@ -64,9 +64,10 @@ public class StudentReportService {
             throw new IllegalArgumentException(e.getMessage());
         }
 
-        studentReportRepository.save(sr);
+        sr = studentReportRepository.save(sr);
 
-        Set<StudentReport> reports = c.getStudentReports();
+        Set<StudentReport> reports = new HashSet<>();
+        reports.addAll(c.getStudentReports());
         reports.add(sr);
         c.setStudentReports(reports);
 
