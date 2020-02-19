@@ -47,6 +47,12 @@
       <q-list>
         <q-item-label header class="text-grey-8">Navigation</q-item-label>
         <SidebarLink
+          title="Add New Co-op"
+          caption="Add a new co-op term"
+          link="/student/new-coop"
+          icon="add"
+        />
+        <SidebarLink
           title="My Co-ops"
           caption="View current and past co-ops"
           link="/student/coops"
@@ -68,19 +74,19 @@
 </template>
 
 <script>
-import SidebarLink from '../components/SidebarLink.vue'
+import SidebarLink from "../components/SidebarLink.vue";
 
 export default {
-  name: 'LoggedInLayout',
+  name: "LoggedInLayout",
   components: {
     SidebarLink
   },
-  data () {
+  data() {
     return {
       leftDrawerOpen: false
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

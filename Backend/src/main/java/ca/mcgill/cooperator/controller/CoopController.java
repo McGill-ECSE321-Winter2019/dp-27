@@ -8,6 +8,7 @@ import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.dto.StudentReportDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
+import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
@@ -15,6 +16,7 @@ import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
+import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.EmployerReportService;
 import ca.mcgill.cooperator.service.StudentReportService;
 import ca.mcgill.cooperator.service.StudentService;
@@ -37,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("coops")
 public class CoopController {
     @Autowired CoopService coopService;
+    @Autowired CourseService courseService;
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired StudentService studentService;
     @Autowired CoopDetailsService coopDetailsService;
@@ -58,12 +61,34 @@ public class CoopController {
     @PostMapping("")
     public CoopDto createCoop(@RequestBody CoopDto coopDto) {
         Coop coop = new Coop();
-        CourseOfferingDto courseOfferingDto = coopDto.getCourseOffering();
-        CourseOffering courseOffering =
-                courseOfferingService.getCourseOfferingById(courseOfferingDto.getId());
 
         StudentDto studentDto = coopDto.getStudent();
         Student student = studentService.getStudentById(studentDto.getId());
+
+        CourseOfferingDto courseOfferingDto = coopDto.getCourseOffering();
+        
+        CourseOffering courseOffering;
+        if (courseOfferingDto.getId() != 0) {
+            courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingDto.getId());
+        } else {
+            // we need to derive the Course Offering if ID is not given
+
+            // this is a bit hacky, but if they have 0 co-ops already (for example) then this
+            // is their first co-op term and they should be taking FACC 200
+            String courseName = "FACC 20" + student.getCoops().size();
+            // all courses (FACC 200-205) should always exist
+            Course course = courseService.getCourseByName(courseName);
+
+            courseOffering =
+                    courseOfferingService.getCourseOfferingByCourseAndTerm(
+                            course, courseOfferingDto.getYear(), courseOfferingDto.getSeason());
+
+            if (courseOffering == null) {
+                courseOffering =
+                        courseOfferingService.createCourseOffering(
+                                courseOfferingDto.getYear(), courseOfferingDto.getSeason(), course);
+            }
+        }
 
         coop = coopService.createCoop(coopDto.getStatus(), courseOffering, student);
 
@@ -119,8 +144,9 @@ public class CoopController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCoop(@PathVariable int id) {
+    public CoopDto deleteCoop(@PathVariable int id) {
         Coop coop = coopService.getCoopById(id);
-        coopService.deleteCoop(coop);
+
+        return ControllerUtils.convertToDto(coopService.deleteCoop(coop));
     }
 }

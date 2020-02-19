@@ -48,7 +48,13 @@ public class CourseOfferingController {
     public CourseOfferingDto createCourseOfferingDto(
             @RequestBody CourseOfferingDto courseOfferingDto) {
         CourseDto courseDto = courseOfferingDto.getCourse();
-        Course course = courseService.getCourseById(courseDto.getId());
+
+        Course course;
+        if (courseDto.getId() != 0) {
+            course = courseService.getCourseById(courseDto.getId());
+        } else {
+            course = courseService.getCourseByName(courseDto.getName());
+        }
 
         CourseOffering courseOffering =
                 courseOfferingService.createCourseOffering(

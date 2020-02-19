@@ -256,6 +256,7 @@ public class ControllerUtils {
                     reportSectionDtos.add(reportSectionDto);
                 }
                 studentReportDto.setReportSections(reportSectionDtos);
+                studentReportDtos.add(studentReportDto);
             }
             coopDto.setStudentReports(studentReportDtos);
         }
@@ -289,6 +290,7 @@ public class ControllerUtils {
                     reportSectionDtos.add(reportSectionDto);
                 }
                 employerReportDto.setReportSections(reportSectionDtos);
+                employerReportDtos.add(employerReportDto);
             }
             coopDto.setEmployerReports(employerReportDtos);
         }

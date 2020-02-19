@@ -23,6 +23,10 @@ const routes = [
         component: () => import("pages/student/StudentCoops.vue")
       },
       {
+        path: "new-coop",
+        component: () => import("pages/student/StudentAddNewCoop.vue")
+      },
+      {
         path: "reports",
         component: () => import("pages/student/StudentReports.vue")
       }
@@ -31,6 +35,7 @@ const routes = [
   {
     path: "/admin",
     component: () => import("layouts/AdminLoggedInLayout.vue"),
+    meta: { requiresAdminAuth: true },
     children: [
       { path: "", redirect: "home" },
       { path: "home", component: () => import("pages/admin/AdminHome.vue") },
