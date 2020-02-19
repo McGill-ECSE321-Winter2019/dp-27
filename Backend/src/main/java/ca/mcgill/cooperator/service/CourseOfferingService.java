@@ -106,6 +106,13 @@ public class CourseOfferingService {
     }
 
     @Transactional
+    public CourseOffering getCourseOfferingByCourseAndTerm(Course c, int year, Season season) {
+        CourseOffering co = courseOfferingRepository.findByCourseAndYearAndSeason(c, year, season);
+        // no need to throw an exception, just return null
+        return co;
+    }
+
+    @Transactional
     public List<CourseOffering> getAllCourseOfferings() {
         List<CourseOffering> co = ServiceUtils.toList(courseOfferingRepository.findAll());
         if (co == null) {
