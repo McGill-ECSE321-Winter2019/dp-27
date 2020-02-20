@@ -70,6 +70,13 @@ import CoopReviewPageNewCoopItem from "../../components/admin/CoopReviewPageNewC
 
 export default {
   name: "AdminCoopReviewPage",
+  props: {
+    currentTab_p: {
+      type: String,
+      required: false,
+      default: "new_coops"
+    }
+  },
   components: {
     CoopReviewPageNewCoopItem
   },
@@ -83,6 +90,7 @@ export default {
     };
   },
   created: function() {
+    this.currentTab = this.currentTab_p;
     this.$axios
       .get("/coops", { params: { status: "UNDER_REVIEW" } })
       .then(resp => {

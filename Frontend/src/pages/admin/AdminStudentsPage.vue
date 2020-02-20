@@ -23,8 +23,8 @@
         style="width:25%"
       />
       <q-select
-        v-model="season"
-        :options="seasons"
+        v-model="term"
+        :options="terms"
         label="Term"
         style="width:25%"
       />
@@ -46,6 +46,28 @@
 </template>
 <script>
 export default {
+  props: {
+    course_name_p: {
+      type: String,
+      required: false,
+      default: ""
+    },
+    year_p: {
+      type: String,
+      required: false,
+      default: ""
+    },
+    status_p: {
+      type: String,
+      required: false,
+      default: ""
+    },
+    term_p: {
+      type: String,
+      required: false,
+      default: ""
+    }
+  },
   name: "AdminStudentsPage",
   data: () => ({
     students: [],
@@ -53,8 +75,8 @@ export default {
     course_name: "",
     statusOptions: [],
     status: "",
-    seasons: [],
-    season: "",
+    terms: [],
+    term: "",
     years: [],
     year: "",
     columns: [
@@ -101,12 +123,27 @@ export default {
     ]
   }),
   created: function() {
+    this.course_name = this.course_name_p;
+    this.year = this.year_p;
+    this.term = this.term_p;
+    this.status = this.status_p;
+
     this.$axios
-      .get("/students", {
-        headers: {
-          Authorization: this.$store.state.token
+      .get(
+        "/students?season=" +
+          this.term +
+          "&year=" +
+          this.year +
+          "&name=" +
+          this.course_name_p +
+          "&status=" +
+          this.status,
+        {
+          headers: {
+            Authorization: this.$store.state.token
+          }
         }
-      })
+      )
       .then(resp => {
         this.students = resp.data;
       });
@@ -120,7 +157,6 @@ export default {
         this.statusOptions = resp.data;
       });
     this.years = this.$common.getYears();
-    console.log(this.$common.getYears());
     this.$axios
       .get("/course-offerings/seasons", {
         headers: {
@@ -128,7 +164,7 @@ export default {
         }
       })
       .then(resp => {
-        this.seasons = resp.data;
+        this.terms = resp.data;
       });
     this.$axios.get("/courses/names", {}).then(resp => {
       this.course_names = resp.data;
@@ -140,7 +176,7 @@ export default {
     },
     clearFilter() {
       this.course_name = "";
-      this.season = "";
+      this.term = "";
       this.year = "";
       this.status = "";
       this.$axios
@@ -157,7 +193,7 @@ export default {
       this.$axios
         .get(
           "/students?season=" +
-            this.season +
+            this.term +
             "&year=" +
             this.year +
             "&name=" +

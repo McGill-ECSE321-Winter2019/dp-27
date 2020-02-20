@@ -7,13 +7,13 @@
 </template>
 
 <script>
-import NotifsList from 'components/student/NotificationsList.vue'
+import NotifsList from "components/student/NotificationsList.vue";
 
 export default {
   components: {
     NotifsList
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
