@@ -68,7 +68,7 @@ public class CoopController {
         CourseOfferingDto courseOfferingDto = coopDto.getCourseOffering();
         
         CourseOffering courseOffering;
-        if (courseOfferingDto.getId() != 0) {
+        if (courseOfferingDto.getId() > 0) {
             courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingDto.getId());
         } else {
             // we need to derive the Course Offering if ID is not given
