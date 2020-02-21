@@ -71,11 +71,13 @@ public class EmployerReportService {
 
         er = employerReportRepository.save(er);
 
-        Set<EmployerReport> coopReports = c.getEmployerReports();
+        Set<EmployerReport> coopReports = new HashSet<EmployerReport>();
+        coopReports.addAll(c.getEmployerReports());
         coopReports.add(er);
         c.setEmployerReports(coopReports);
 
-        Set<EmployerReport> ecReports = ec.getEmployerReports();
+        Set<EmployerReport> ecReports = new HashSet<EmployerReport>();
+        ecReports.addAll(ec.getEmployerReports());
         ecReports.add(er);
         ec.setEmployerReports(ecReports);
 
@@ -170,7 +172,7 @@ public class EmployerReportService {
         if (c != null) {
             boolean coopContains = false;
 
-            Set<EmployerReport> coopReports = new HashSet<>();
+            Set<EmployerReport> coopReports = new HashSet<EmployerReport>();
             coopReports.addAll(c.getEmployerReports());
             for (EmployerReport coopEmployerReport : coopReports) {
                 if (coopEmployerReport.getId() == er.getId()) {
@@ -192,7 +194,8 @@ public class EmployerReportService {
         if (ec != null) {
             boolean employerContains = false;
 
-            Set<EmployerReport> employerReports = c.getEmployerReports();
+            Set<EmployerReport> employerReports = new HashSet<EmployerReport>();
+            employerReports.addAll(c.getEmployerReports());
             for (EmployerReport employerReport : employerReports) {
                 if (employerReport.getId() == er.getId()) {
                     employerReports.remove(employerReport);

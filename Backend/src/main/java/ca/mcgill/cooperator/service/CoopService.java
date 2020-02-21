@@ -15,6 +15,8 @@ import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -66,11 +68,13 @@ public class CoopService {
 
         c = coopRepository.save(c);
 
-        Set<Coop> studentCoops = s.getCoops();
+        Set<Coop> studentCoops = new HashSet<Coop>();
+        studentCoops.addAll(s.getCoops());
         studentCoops.add(c);
         s.setCoops(studentCoops);
 
-        List<Coop> coops = courseOffering.getCoops();
+        List<Coop> coops = new ArrayList<Coop>();
+        coops.addAll(courseOffering.getCoops());
         coops.add(c);
         courseOffering.setCoops(coops);
 
@@ -140,7 +144,8 @@ public class CoopService {
 
         if (s != null) {
             boolean studentContains = false;
-            Set<Coop> studentCoops = s.getCoops();
+            Set<Coop> studentCoops = new HashSet<Coop>();
+            studentCoops.addAll(s.getCoops());
             for (Coop studentCoop : studentCoops) {
                 if (studentCoop.getId() == c.getId()) {
                     studentCoops.remove(studentCoop);

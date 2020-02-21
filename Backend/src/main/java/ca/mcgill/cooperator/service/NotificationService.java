@@ -6,6 +6,9 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +58,13 @@ public class NotificationService {
         n.setStudent(student);
         n = notificationRepository.save(n);
 
-        Set<Notification> notifs = student.getNotifications();
+        Set<Notification> notifs = new HashSet<Notification>();
+        notifs.addAll(student.getNotifications());
         notifs.add(n);
         student.setNotifications(notifs);
 
-        List<Notification> senderNotifs = sender.getSentNotifications();
+        List<Notification> senderNotifs = new ArrayList<Notification>();
+        senderNotifs.addAll(sender.getSentNotifications());
         senderNotifs.add(n);
         sender.setSentNotifications(senderNotifs);
 
@@ -149,8 +154,10 @@ public class NotificationService {
         boolean sender_contains = false;
         boolean student_contains = false;
 
-        List<Notification> sender_notifs = sender.getSentNotifications();
-        Set<Notification> student_notifs = student.getNotifications();
+        List<Notification> sender_notifs = new ArrayList<Notification>();
+        sender_notifs.addAll(sender.getSentNotifications());
+        Set<Notification> student_notifs = new HashSet<Notification>();
+        student_notifs.addAll(student.getNotifications());
 
         for (Notification sender_n : sender_notifs) {
             if (sender_n.getId() == n.getId()) {
