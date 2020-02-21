@@ -61,7 +61,9 @@ public class ControllerUtils {
                                 notification.getTitle(),
                                 notification.getBody(),
                                 null, // null student
-                                null); // null admin
+                                null, // null admin
+                                notification.getSeen(),
+                                notification.getTimeStamp());
                 Student student = notification.getStudent();
                 StudentDto studentDto =
                         new StudentDto(
@@ -826,7 +828,9 @@ public class ControllerUtils {
                         n.getTitle(),
                         n.getBody(),
                         null, // null student
-                        null); // null admin
+                        null, // null admin
+                        n.getSeen(),
+                        n.getTimeStamp());
 
         // create student dto
         Student student = n.getStudent();
@@ -956,7 +960,9 @@ public class ControllerUtils {
                                 notification.getTitle(),
                                 notification.getBody(),
                                 null, // null student since parent
-                                null); // null admin
+                                null,// null admin
+                                notification.getSeen(),
+                                notification.getTimeStamp()); 
 
                 Admin admin = notification.getSender();
                 AdminDto adminDto =

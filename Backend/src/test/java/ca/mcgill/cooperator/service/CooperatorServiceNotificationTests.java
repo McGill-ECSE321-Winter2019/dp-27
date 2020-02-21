@@ -1,6 +1,8 @@
 package ca.mcgill.cooperator.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import ca.mcgill.cooperator.dao.AdminRepository;
@@ -52,6 +54,34 @@ public class CooperatorServiceNotificationTests {
         }
 
         assertEquals(1, notificationService.getAllNotifications().size());
+    }
+    
+    @Test
+    public void testCreateNotificationSetSeen() {
+        String title = "Hello";
+        String body = "Please attend meeting.";
+        Student student = createTestStudent();
+        Admin sender = createTestAdmin();
+
+        try {
+            notificationService.createNotification(title, body, student, sender);
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(1, notificationService.getAllNotifications().size());
+        assertFalse(notificationService.getAllNotifications().get(0).getSeen());
+        
+        try {
+            notificationService.markAsRead(notificationService.getAllNotifications().get(0));
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(1, notificationService.getAllNotifications().size());
+        assertTrue(notificationService.getAllNotifications().get(0).getSeen());
     }
 
     @Test
