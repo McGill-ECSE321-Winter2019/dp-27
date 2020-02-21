@@ -63,20 +63,20 @@ public class CourseOfferingService {
             CourseOffering co, int year, Season season, Course c) {
         StringBuilder error = new StringBuilder();
         if (co == null) {
-        	error.append("Course Offering to update cannot be null!");
+            error.append("Course Offering to update cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-        
+
         if (year > 0) {
-        	co.setYear(year);
+            co.setYear(year);
         }
         if (season != null) {
-        	co.setSeason(season);
+            co.setSeason(season);
         }
         if (c != null) {
-        	co.setCourse(c);
+            co.setCourse(c);
         }
 
         return courseOfferingRepository.save(co);

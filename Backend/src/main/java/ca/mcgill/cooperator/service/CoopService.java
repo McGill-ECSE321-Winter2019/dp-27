@@ -94,10 +94,10 @@ public class CoopService {
     public List<Coop> getAllCoops() {
         return ServiceUtils.toList(coopRepository.findAll());
     }
-    
+
     @Transactional
     public List<Coop> getAllCoopsByStudent(Student s) {
-    	return ServiceUtils.toList(coopRepository.findByStudent(s));
+        return ServiceUtils.toList(coopRepository.findByStudent(s));
     }
 
     @Transactional
@@ -118,60 +118,60 @@ public class CoopService {
         }
 
         if (status != null) {
-        	c.setStatus(status);
+            c.setStatus(status);
         }
         if (courseOffering != null) {
-        	c.setCourseOffering(courseOffering);
+            c.setCourseOffering(courseOffering);
         }
         if (s != null) {
-        	c.setStudent(s);
+            c.setStudent(s);
         }
         if (cd != null) {
-        	c.setCoopDetails(cd);
+            c.setCoopDetails(cd);
         }
         if (employerReports != null) {
-        	c.setEmployerReports(employerReports);
+            c.setEmployerReports(employerReports);
         }
         if (studentReports != null) {
-        	c.setStudentReports(studentReports);
+            c.setStudentReports(studentReports);
         }
-        
+
         coopRepository.save(c);
 
         if (s != null) {
-	        boolean studentContains = false;
-	        Set<Coop> studentCoops = s.getCoops();
-	        for (Coop studentCoop : studentCoops) {
-	            if (studentCoop.getId() == c.getId()) {
-	                studentCoops.remove(studentCoop);
-	                studentCoops.add(c);
-	                studentContains = true;
-	            }
-	        }
-	        if (studentContains == false) {
-	            studentCoops.add(c);
-	        }
-	
-	        studentRepository.save(s);
+            boolean studentContains = false;
+            Set<Coop> studentCoops = s.getCoops();
+            for (Coop studentCoop : studentCoops) {
+                if (studentCoop.getId() == c.getId()) {
+                    studentCoops.remove(studentCoop);
+                    studentCoops.add(c);
+                    studentContains = true;
+                }
+            }
+            if (studentContains == false) {
+                studentCoops.add(c);
+            }
+
+            studentRepository.save(s);
         }
-        
+
         if (cd != null) {
-	        cd.setCoop(c);
-	        coopDetailsRepository.save(cd);
+            cd.setCoop(c);
+            coopDetailsRepository.save(cd);
         }
 
         if (employerReports != null) {
-	        for (EmployerReport employerReport : employerReports) {
-	            employerReport.setCoop(c);
-	            employerReportRepository.save(employerReport);
-	        }
+            for (EmployerReport employerReport : employerReports) {
+                employerReport.setCoop(c);
+                employerReportRepository.save(employerReport);
+            }
         }
 
         if (studentReports != null) {
-	        for (StudentReport studentReport : studentReports) {
-	            studentReport.setCoop(c);
-	            studentReportRepository.save(studentReport);
-	        }
+            for (StudentReport studentReport : studentReports) {
+                studentReport.setCoop(c);
+                studentReportRepository.save(studentReport);
+            }
         }
 
         return coopRepository.save(c);

@@ -74,12 +74,8 @@ public class CoopDetailsControllerIT extends ControllerIT {
     }
 
     /**
-     * Tests creating CoopDetails: 
-     * 1. creates coop details 
-     * 2. gets created coop details by id 
-     * 3. get all coop details 
-     * 4. update coop details 
-     * 5. delete coop details
+     * Tests creating CoopDetails: 1. creates coop details 2. gets created coop details by id 3. get
+     * all coop details 4. update coop details 5. delete coop details
      *
      * @throws Exception
      */

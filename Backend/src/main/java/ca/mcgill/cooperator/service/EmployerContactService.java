@@ -172,41 +172,43 @@ public class EmployerContactService {
         }
 
         if (firstName != null && firstName.trim().length() > 0) {
-        	ec.setFirstName(firstName.trim());
+            ec.setFirstName(firstName.trim());
         }
         if (lastName != null && lastName.trim().length() > 0) {
-        	ec.setLastName(lastName.trim());
+            ec.setLastName(lastName.trim());
         }
         if (email != null && email.trim().length() > 0 && ServiceUtils.isValidEmail(email)) {
-        	ec.setEmail(email.trim());
+            ec.setEmail(email.trim());
         }
-        if (phoneNumber != null && phoneNumber.trim().length() > 0 && ServiceUtils.isValidPhoneNumber(phoneNumber)) {
-        	ec.setPhoneNumber(phoneNumber.trim());
+        if (phoneNumber != null
+                && phoneNumber.trim().length() > 0
+                && ServiceUtils.isValidPhoneNumber(phoneNumber)) {
+            ec.setPhoneNumber(phoneNumber.trim());
         }
         if (employerReports != null) {
-        	ec.setEmployerReports(employerReports);
+            ec.setEmployerReports(employerReports);
         }
         if (coopDetails != null) {
-        	ec.setCoopDetails(coopDetails);
+            ec.setCoopDetails(coopDetails);
         }
         if (company != null) {
-        	ec.setCompany(company);
+            ec.setCompany(company);
         }
 
         ec = employerContactRepository.save(ec);
 
         if (employerReports != null) {
-	        for (EmployerReport er : employerReports) {
-	            er.setEmployerContact(ec);
-	            employerReportRepository.save(er);
-	        }
+            for (EmployerReport er : employerReports) {
+                er.setEmployerContact(ec);
+                employerReportRepository.save(er);
+            }
         }
 
         if (coopDetails != null) {
-	        for (CoopDetails cd : coopDetails) {
-	            cd.setEmployerContact(ec);
-	            coopDetailsRepository.save(cd);
-	        }
+            for (CoopDetails cd : coopDetails) {
+                cd.setEmployerContact(ec);
+                coopDetailsRepository.save(cd);
+            }
         }
 
         return employerContactRepository.save(ec);

@@ -168,16 +168,16 @@ public class NotificationService {
             }
         }
 
-        //title and body can be optionally null 
-        //but student and sender cannot be null since its 
-        //too difficult to separate the two above
+        // title and body can be optionally null
+        // but student and sender cannot be null since its
+        // too difficult to separate the two above
         if (title != null && title.trim().length() > 0) {
-        	n.setTitle(title.trim());
+            n.setTitle(title.trim());
         }
         if (body != null && body.trim().length() > 0) {
-        	n.setBody(body.trim());
+            n.setBody(body.trim());
         }
-        
+
         n.setSender(sender);
         n.setStudent(student);
 

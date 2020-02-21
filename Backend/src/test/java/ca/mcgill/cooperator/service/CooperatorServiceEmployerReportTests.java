@@ -240,9 +240,7 @@ public class CooperatorServiceEmployerReportTests {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Employer Report cannot be null!",
-                error);
+        assertEquals("Employer Report cannot be null!", error);
         assertEquals(
                 ReportStatus.COMPLETED,
                 employerReportService.getEmployerReport(er.getId()).getStatus());

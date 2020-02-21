@@ -223,9 +223,7 @@ public class CooperatorServiceStudentReportTests {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Student Report cannot be null!",
-                error);
+        assertEquals("Student Report cannot be null!", error);
         assertEquals(
                 ReportStatus.COMPLETED,
                 studentReportService.getStudentReport(sr.getId()).getStatus());

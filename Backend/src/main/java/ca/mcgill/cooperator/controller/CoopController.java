@@ -54,10 +54,10 @@ public class CoopController {
         List<Coop> coops = coopService.getAllCoops();
         return ControllerUtils.convertCoopListToDto(coops);
     }
-    
+
     @GetMapping("/student/{id}")
     public List<CoopDto> getCoopByStudentId(@PathVariable int id) {
-    	Student s = studentService.getStudentById(id);
+        Student s = studentService.getStudentById(id);
         List<Coop> coops = coopService.getAllCoopsByStudent(s);
         return ControllerUtils.convertCoopListToDto(coops);
     }

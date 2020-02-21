@@ -129,25 +129,25 @@ public class AdminService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-        //set fields if they're not null
-        
+        // set fields if they're not null
+
         if (firstName != null && firstName.trim().length() > 0) {
-        	a.setFirstName(firstName.trim());
+            a.setFirstName(firstName.trim());
         }
         if (lastName != null && lastName.trim().length() > 0) {
-        	a.setLastName(lastName.trim());
+            a.setLastName(lastName.trim());
         }
         if (email != null && email.trim().length() > 0 && ServiceUtils.isValidEmail(email)) {
-        	a.setEmail(email.trim());
+            a.setEmail(email.trim());
         }
 
         if (sentNotifications != null) {
-	        for (Notification n : sentNotifications) {
-	            n.setSender(a);
-	            notificationRepository.save(n);
-	        }
-	       
-	        a.setSentNotifications(sentNotifications);
+            for (Notification n : sentNotifications) {
+                n.setSender(a);
+                notificationRepository.save(n);
+            }
+
+            a.setSentNotifications(sentNotifications);
         }
 
         return adminRepository.save(a);

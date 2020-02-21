@@ -48,14 +48,14 @@ public class CourseService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-        
+
         if (offerings != null) {
-        	c.setCourseOfferings(offerings);
+            c.setCourseOfferings(offerings);
         }
         if (name != null && name.trim().length() > 0) {
-        	c.setName(name.trim());
+            c.setName(name.trim());
         }
-        
+
         return courseRepository.save(c);
     }
 

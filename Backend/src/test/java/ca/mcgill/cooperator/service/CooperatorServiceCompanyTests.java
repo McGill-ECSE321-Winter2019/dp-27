@@ -211,10 +211,10 @@ public class CooperatorServiceCompanyTests {
 
         assertEquals(
                 "Company to update cannot be null! "
-                + "Company name cannot be empty! "
-                + "Company city cannot be empty! "
-                + "Company region cannot be empty! "
-                + "Company country cannot be empty!",
+                        + "Company name cannot be empty! "
+                        + "Company city cannot be empty! "
+                        + "Company region cannot be empty! "
+                        + "Company country cannot be empty!",
                 error);
 
         // original Company should still exist

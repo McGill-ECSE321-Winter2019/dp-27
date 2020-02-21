@@ -90,8 +90,7 @@ public class CooperatorServiceCourseTests {
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
-        assertEquals("Course to update cannot be null! "
-        		   + "Course name cannot be empty!", error);
+        assertEquals("Course to update cannot be null! " + "Course name cannot be empty!", error);
         assertEquals(1, courseService.getAllCourses().size());
         assertEquals(name, courseService.getAllCourses().get(0).getName());
     }

@@ -17,7 +17,6 @@ import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.dto.StudentReportDto;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.ReportStatus;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +24,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,7 +78,8 @@ public class StudentReportControllerIT extends ControllerIT {
 
         CourseDto courseDto = createTestCourse();
         CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
-        CoopDto coopDto = createTestCoop(courseOfferingDto, createTestStudent(), CoopStatus.IN_PROGRESS);
+        CoopDto coopDto =
+                createTestCoop(courseOfferingDto, createTestStudent(), CoopStatus.IN_PROGRESS);
 
         // 1. create the StudentReport with a POST request
         MvcResult mvcResult =
@@ -100,39 +99,42 @@ public class StudentReportControllerIT extends ControllerIT {
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), StudentReportDto.class);
         assertEquals(returnedReport.getTitle(), "Offer Letter");
-        
-        //3. update file
-        
+
+        // 3. update file
+
         Set<ReportSectionDto> rdtos = new HashSet<ReportSectionDto>();
-        
+
         MockMultipartHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/student-reports/" + returnedReport.getId());
-        builder.with(new RequestPostProcessor() {
-            @Override
-            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-                request.setMethod("PUT");
-                return request;
-            }
-        });
-        mvcResult = mvc.perform(builder
-                .file("file", multipartFile.getBytes())
-                .param("status", "COMPLETED")
-                .param("title", "Offer Letter")
-                .param("coop_id", String.valueOf(coopDto.getId()))
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(rdtos))
-                .characterEncoding("utf-8"))
-                .andExpect(status().isOk())
-                .andReturn();
-        
+        builder.with(
+                new RequestPostProcessor() {
+                    @Override
+                    public MockHttpServletRequest postProcessRequest(
+                            MockHttpServletRequest request) {
+                        request.setMethod("PUT");
+                        return request;
+                    }
+                });
+        mvcResult =
+                mvc.perform(
+                                builder.file("file", multipartFile.getBytes())
+                                        .param("status", "COMPLETED")
+                                        .param("title", "Offer Letter")
+                                        .param("coop_id", String.valueOf(coopDto.getId()))
+                                        .contentType(MediaType.MULTIPART_FORM_DATA)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(rdtos))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
         returnedReport =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), StudentReportDto.class);
         assertEquals("Offer Letter", returnedReport.getTitle());
-        
+
         assertEquals(ReportStatus.COMPLETED, returnedReport.getStatus());
-        
+
         // 4. delete file
         mvcResult =
                 mvc.perform(
@@ -141,7 +143,7 @@ public class StudentReportControllerIT extends ControllerIT {
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
+
         // test getting all Employer Contacts
         mvcResult =
                 mvc.perform(get("/student-reports").contentType(MediaType.APPLICATION_JSON))
@@ -156,6 +158,5 @@ public class StudentReportControllerIT extends ControllerIT {
                                 StudentReportDto[].class));
 
         assertEquals(studentReportDtos.size(), 0);
-        
     }
 }

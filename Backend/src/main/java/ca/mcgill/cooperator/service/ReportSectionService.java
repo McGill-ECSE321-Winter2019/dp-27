@@ -103,10 +103,10 @@ public class ReportSectionService {
         }
 
         if (title != null && title.trim().length() > 0) {
-	        rs.setTitle(title.trim());
+            rs.setTitle(title.trim());
         }
         if (content != null && content.trim().length() > 0) {
-        	rs.setContent(content.trim());
+            rs.setContent(content.trim());
         }
 
         if (sr != null) {
@@ -178,7 +178,7 @@ public class ReportSectionService {
             er.setReportSections(sections);
             employerReportRepository.save(er);
         }
-        
+
         rs.setEmployerReport(null);
         rs.setStudentReport(null);
         reportSectionRepository.save(rs);

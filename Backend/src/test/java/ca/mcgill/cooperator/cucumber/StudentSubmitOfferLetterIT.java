@@ -32,9 +32,7 @@ import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.ReportSectionService;
 import ca.mcgill.cooperator.service.StudentService;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -86,19 +84,20 @@ public class StudentSubmitOfferLetterIT {
     EmployerContact employerContact;
     CoopDto testCoop;
 
-    @Before @After
+    @Before
+    @After
     public void clearDatabase() {
         List<CoopDetails> coopDetails = coopDetailsService.getAllCoopDetails();
         for (CoopDetails cd : coopDetails) {
             cd.setCoop(null);
             coopDetailsRepository.save(cd);
         }
-        
+
         List<ReportSection> reportSections = reportSectionService.getAllReportSections();
         for (ReportSection reportSection : reportSections) {
             reportSectionService.deleteReportSection(reportSection);
         }
-        
+
         // deleting all students will also delete all coops
         studentRepository.deleteAll();
         // deleting all companies will also delete all employer contacts

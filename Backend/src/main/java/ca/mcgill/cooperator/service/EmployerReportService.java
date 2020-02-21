@@ -62,11 +62,11 @@ public class EmployerReportService {
         er.setEmployerContact(ec);
         er.setReportSections(new HashSet<ReportSection>());
         if (file != null) {
-	        try {
-	            er.setData(file.getBytes());
-	        } catch (IOException e) {
-	            throw new IllegalArgumentException(e.getMessage());
-	        }
+            try {
+                er.setData(file.getBytes());
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
         }
 
         er = employerReportRepository.save(er);
@@ -144,16 +144,16 @@ public class EmployerReportService {
 
         // set all values in employer report if they're not null
         if (status != null) {
-        	er.setStatus(status);
+            er.setStatus(status);
         }
         if (title != null && title.trim().length() > 0) {
-        	er.setTitle(title);
+            er.setTitle(title);
         }
         if (c != null) {
-        	er.setCoop(c);
+            er.setCoop(c);
         }
         if (ec != null) {
-        	er.setEmployerContact(ec);
+            er.setEmployerContact(ec);
         }
         if (sections != null) {
             er.setReportSections(sections);
@@ -168,53 +168,53 @@ public class EmployerReportService {
 
         // add/set employer report to coop
         if (c != null) {
-	        boolean coopContains = false;
-	
-	        Set<EmployerReport> coopReports = new HashSet<>();
-	        coopReports.addAll(c.getEmployerReports());
-	        for (EmployerReport coopEmployerReport : coopReports) {
-	            if (coopEmployerReport.getId() == er.getId()) {
-	                coopReports.remove(coopEmployerReport);
-	                coopReports.add(er);
-	                coopContains = true;
-	            }
-	        }
-	
-	        if (coopContains == false) {
-	            coopReports.add(er);
-	        }
-	        c.setEmployerReports(coopReports);
-	
-	        coopRepository.save(c);
+            boolean coopContains = false;
+
+            Set<EmployerReport> coopReports = new HashSet<>();
+            coopReports.addAll(c.getEmployerReports());
+            for (EmployerReport coopEmployerReport : coopReports) {
+                if (coopEmployerReport.getId() == er.getId()) {
+                    coopReports.remove(coopEmployerReport);
+                    coopReports.add(er);
+                    coopContains = true;
+                }
+            }
+
+            if (coopContains == false) {
+                coopReports.add(er);
+            }
+            c.setEmployerReports(coopReports);
+
+            coopRepository.save(c);
         }
 
         // add/set employer report to employer contact
         if (ec != null) {
-	        boolean employerContains = false;
-	
-	        Set<EmployerReport> employerReports = c.getEmployerReports();
-	        for (EmployerReport employerReport : employerReports) {
-	            if (employerReport.getId() == er.getId()) {
-	                employerReports.remove(employerReport);
-	                employerReports.add(er);
-	                employerContains = true;
-	            }
-	        }
-	
-	        if (employerContains == false) {
-	            employerReports.add(er);
-	        }
-	        ec.setEmployerReports(employerReports);
-	
-	        employerContactRepository.save(ec);
+            boolean employerContains = false;
+
+            Set<EmployerReport> employerReports = c.getEmployerReports();
+            for (EmployerReport employerReport : employerReports) {
+                if (employerReport.getId() == er.getId()) {
+                    employerReports.remove(employerReport);
+                    employerReports.add(er);
+                    employerContains = true;
+                }
+            }
+
+            if (employerContains == false) {
+                employerReports.add(er);
+            }
+            ec.setEmployerReports(employerReports);
+
+            employerContactRepository.save(ec);
         }
 
         if (sections != null) {
-	        // set employer report as parent for all report sections
-	        for (ReportSection section : sections) {
-	            section.setEmployerReport(er);
-	            reportSectionRepository.save(section);
-	        }
+            // set employer report as parent for all report sections
+            for (ReportSection section : sections) {
+                section.setEmployerReport(er);
+                reportSectionRepository.save(section);
+            }
         }
 
         return employerReportRepository.save(er);

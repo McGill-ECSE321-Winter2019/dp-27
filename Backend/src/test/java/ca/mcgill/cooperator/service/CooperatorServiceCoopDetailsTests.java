@@ -177,9 +177,7 @@ public class CooperatorServiceCoopDetailsTests {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Co-op Details to update cannot be null!",
-                error);
+        assertEquals("Co-op Details to update cannot be null!", error);
         assertEquals(1, coopDetailsService.getAllCoopDetails().size());
     }
 

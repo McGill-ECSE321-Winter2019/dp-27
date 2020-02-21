@@ -136,9 +136,7 @@ public class CooperatorServiceCourseOfferingTests {
             courseOfferingService.updateCourseOffering(null, year2, season2, c2);
 
         } catch (IllegalArgumentException e) {
-            assertEquals(
-                    "Course Offering to update cannot be null!",
-                    e.getMessage());
+            assertEquals("Course Offering to update cannot be null!", e.getMessage());
         }
 
         co = courseOfferingService.getAllCourseOfferings().get(0);
