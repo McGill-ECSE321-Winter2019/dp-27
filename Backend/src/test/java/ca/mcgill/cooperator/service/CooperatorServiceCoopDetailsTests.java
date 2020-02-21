@@ -96,7 +96,7 @@ public class CooperatorServiceCoopDetailsTests {
             error = e.getMessage();
         }
 
-        assertEquals("Employer Contact cannot be null! " + "Coop cannot be null!", error);
+        assertEquals("Employer Contact cannot be null! " + "Co-op cannot be null!", error);
         assertEquals(0, coopDetailsService.getAllCoopDetails().size());
     }
 
@@ -115,7 +115,7 @@ public class CooperatorServiceCoopDetailsTests {
                 "Pay Per Hour is invalid! "
                         + "Hours Per Week is invalid! "
                         + "Employer Contact cannot be null! "
-                        + "Coop cannot be null!",
+                        + "Co-op cannot be null!",
                 error);
         assertEquals(0, coopDetailsService.getAllCoopDetails().size());
     }
@@ -163,7 +163,7 @@ public class CooperatorServiceCoopDetailsTests {
         Coop coop = createTestCoop(courseOffering, s);
 
         try {
-            cd = coopDetailsService.createCoopDetails(payPerHour, hoursPerWeek, ec, coop);
+            coopDetailsService.createCoopDetails(payPerHour, hoursPerWeek, ec, coop);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -172,16 +172,13 @@ public class CooperatorServiceCoopDetailsTests {
 
         String error = "";
         try {
-            cd = coopDetailsService.updateCoopDetails(cd, -1, -222, null, null);
+            coopDetailsService.updateCoopDetails(cd, -1, -222, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
         assertEquals(
-                "Pay Per Hour is invalid! "
-                        + "Hours Per Week is invalid! "
-                        + "Employer Contact cannot be null! "
-                        + "Coop cannot be null!",
+                "Co-op Details to update cannot be null!",
                 error);
         assertEquals(1, coopDetailsService.getAllCoopDetails().size());
     }
@@ -224,7 +221,7 @@ public class CooperatorServiceCoopDetailsTests {
             error = e.getMessage();
         }
 
-        assertEquals("Coop Details to delete cannot be null!", error);
+        assertEquals("Co-op Details to delete cannot be null!", error);
     }
 
     private Course createTestCourse() {

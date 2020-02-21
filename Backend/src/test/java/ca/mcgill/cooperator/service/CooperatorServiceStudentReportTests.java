@@ -100,8 +100,7 @@ public class CooperatorServiceStudentReportTests {
         assertEquals(
                 "Report Status cannot be null! "
                         + "Coop cannot be null! "
-                        + "File title cannot be null! "
-                        + "File cannot be null!",
+                        + "File title cannot be empty!",
                 error);
         assertEquals(0, studentReportService.getAllStudentReports().size());
     }
@@ -225,11 +224,7 @@ public class CooperatorServiceStudentReportTests {
         }
 
         assertEquals(
-                "Student Report cannot be null! "
-                        + "Report Status cannot be null! "
-                        + "Coop cannot be null! "
-                        + "File title cannot be null! "
-                        + "File cannot be null!",
+                "Student Report cannot be null!",
                 error);
         assertEquals(
                 ReportStatus.COMPLETED,

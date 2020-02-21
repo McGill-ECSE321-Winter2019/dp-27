@@ -53,7 +53,7 @@ public class NotificationService {
         n.setBody(body.trim());
         n.setSender(sender);
         n.setStudent(student);
-        notificationRepository.save(n);
+        n = notificationRepository.save(n);
 
         Set<Notification> notifs = student.getNotifications();
         notifs.add(n);
@@ -126,10 +126,13 @@ public class NotificationService {
     public Notification updateNotification(
             Notification n, String title, String body, Student student, Admin sender) {
         StringBuilder error = new StringBuilder();
-        if (title == null || title.trim().length() == 0) {
+        if (n == null) {
+            error.append("Notification to update cannot be null! ");
+        }
+        if (title != null && title.trim().length() == 0) {
             error.append("Notification title cannot be empty! ");
         }
-        if (body == null || body.trim().length() == 0) {
+        if (body != null && body.trim().length() == 0) {
             error.append("Notification body cannot be empty! ");
         }
         if (student == null) {
@@ -165,8 +168,16 @@ public class NotificationService {
             }
         }
 
-        n.setTitle(title.trim());
-        n.setBody(body.trim());
+        //title and body can be optionally null 
+        //but student and sender cannot be null since its 
+        //too difficult to separate the two above
+        if (title != null && title.trim().length() > 0) {
+        	n.setTitle(title.trim());
+        }
+        if (body != null && body.trim().length() > 0) {
+        	n.setBody(body.trim());
+        }
+        
         n.setSender(sender);
         n.setStudent(student);
 

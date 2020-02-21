@@ -48,11 +48,8 @@ public class EmployerReportService {
         if (ec == null) {
             error.append("Employer Contact cannot be null! ");
         }
-        if (title == null) {
-            error.append("File title cannot be null! ");
-        }
-        if (file == null) {
-            error.append("File cannot be null!");
+        if (title == null || title.trim().length() == 0) {
+            error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
@@ -64,13 +61,15 @@ public class EmployerReportService {
         er.setCoop(c);
         er.setEmployerContact(ec);
         er.setReportSections(new HashSet<ReportSection>());
-        try {
-            er.setData(file.getBytes());
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        if (file != null) {
+	        try {
+	            er.setData(file.getBytes());
+	        } catch (IOException e) {
+	            throw new IllegalArgumentException(e.getMessage());
+	        }
         }
 
-        employerReportRepository.save(er);
+        er = employerReportRepository.save(er);
 
         Set<EmployerReport> coopReports = c.getEmployerReports();
         coopReports.add(er);
@@ -136,30 +135,26 @@ public class EmployerReportService {
         if (er == null) {
             error.append("Employer Report cannot be null! ");
         }
-        if (status == null) {
-            error.append("Report Status cannot be null! ");
-        }
-        if (c == null) {
-            error.append("Coop cannot be null! ");
-        }
-        if (ec == null) {
-            error.append("Employer Contact cannot be null! ");
-        }
-        if (title == null) {
-            error.append("File title cannot be null! ");
-        }
-        if (file == null) {
-            error.append("File cannot be null!");
+        if (title != null && title.trim().length() == 0) {
+            error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        // set all values in employer report
-        er.setStatus(status);
-        er.setTitle(title);
-        er.setCoop(c);
-        er.setEmployerContact(ec);
+        // set all values in employer report if they're not null
+        if (status != null) {
+        	er.setStatus(status);
+        }
+        if (title != null && title.trim().length() > 0) {
+        	er.setTitle(title);
+        }
+        if (c != null) {
+        	er.setCoop(c);
+        }
+        if (ec != null) {
+        	er.setEmployerContact(ec);
+        }
         if (sections != null) {
             er.setReportSections(sections);
         }
@@ -169,50 +164,57 @@ public class EmployerReportService {
             throw new IllegalArgumentException(e.getMessage());
         }
 
-        employerReportRepository.save(er);
+        er = employerReportRepository.save(er);
 
         // add/set employer report to coop
-        boolean coopContains = false;
-
-        Set<EmployerReport> coopReports = c.getEmployerReports();
-        for (EmployerReport coopEmployerReport : coopReports) {
-            if (coopEmployerReport.getId() == er.getId()) {
-                coopReports.remove(coopEmployerReport);
-                coopReports.add(er);
-                coopContains = true;
-            }
+        if (c != null) {
+	        boolean coopContains = false;
+	
+	        Set<EmployerReport> coopReports = new HashSet<>();
+	        coopReports.addAll(c.getEmployerReports());
+	        for (EmployerReport coopEmployerReport : coopReports) {
+	            if (coopEmployerReport.getId() == er.getId()) {
+	                coopReports.remove(coopEmployerReport);
+	                coopReports.add(er);
+	                coopContains = true;
+	            }
+	        }
+	
+	        if (coopContains == false) {
+	            coopReports.add(er);
+	        }
+	        c.setEmployerReports(coopReports);
+	
+	        coopRepository.save(c);
         }
-
-        if (coopContains == false) {
-            coopReports.add(er);
-        }
-        c.setEmployerReports(coopReports);
-
-        coopRepository.save(c);
 
         // add/set employer report to employer contact
-        boolean employerContains = false;
-
-        Set<EmployerReport> employerReports = c.getEmployerReports();
-        for (EmployerReport employerReport : employerReports) {
-            if (employerReport.getId() == er.getId()) {
-                employerReports.remove(employerReport);
-                employerReports.add(er);
-                employerContains = true;
-            }
+        if (ec != null) {
+	        boolean employerContains = false;
+	
+	        Set<EmployerReport> employerReports = c.getEmployerReports();
+	        for (EmployerReport employerReport : employerReports) {
+	            if (employerReport.getId() == er.getId()) {
+	                employerReports.remove(employerReport);
+	                employerReports.add(er);
+	                employerContains = true;
+	            }
+	        }
+	
+	        if (employerContains == false) {
+	            employerReports.add(er);
+	        }
+	        ec.setEmployerReports(employerReports);
+	
+	        employerContactRepository.save(ec);
         }
 
-        if (employerContains == false) {
-            employerReports.add(er);
-        }
-        ec.setEmployerReports(employerReports);
-
-        employerContactRepository.save(ec);
-
-        // set employer report as parent for all report sections
-        for (ReportSection section : sections) {
-            section.setEmployerReport(er);
-            reportSectionRepository.save(section);
+        if (sections != null) {
+	        // set employer report as parent for all report sections
+	        for (ReportSection section : sections) {
+	            section.setEmployerReport(er);
+	            reportSectionRepository.save(section);
+	        }
         }
 
         return employerReportRepository.save(er);

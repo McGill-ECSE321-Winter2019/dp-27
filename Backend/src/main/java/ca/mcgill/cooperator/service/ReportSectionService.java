@@ -30,10 +30,10 @@ public class ReportSectionService {
     public ReportSection createReportSection(String title, String content) {
         StringBuilder error = new StringBuilder();
         if (title == null || title.trim().length() == 0) {
-            error.append("Title cannot be null! ");
+            error.append("Title cannot be empty! ");
         }
         if (content == null || content.trim().length() == 0) {
-            error.append("Content cannot be null! ");
+            error.append("Content cannot be empty! ");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
@@ -89,11 +89,11 @@ public class ReportSectionService {
         if (rs == null) {
             error.append("Report Section cannot be null! ");
         }
-        if (title == null || title.trim().length() == 0) {
-            error.append("Title cannot be null! ");
+        if (title != null && title.trim().length() == 0) {
+            error.append("Title cannot be empty! ");
         }
-        if (content == null || content.trim().length() == 0) {
-            error.append("Content cannot be null! ");
+        if (content != null && content.trim().length() == 0) {
+            error.append("Content cannot be empty! ");
         }
         if (sr != null && er != null) {
             error.append("Cannot add to both Student Report and Employer Report!");
@@ -102,12 +102,16 @@ public class ReportSectionService {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        rs.setTitle(title.trim());
-        rs.setContent(content.trim());
+        if (title != null && title.trim().length() > 0) {
+	        rs.setTitle(title.trim());
+        }
+        if (content != null && content.trim().length() > 0) {
+        	rs.setContent(content.trim());
+        }
 
         if (sr != null) {
             rs.setStudentReport(sr);
-            reportSectionRepository.save(rs);
+            rs = reportSectionRepository.save(rs);
             boolean contains = false;
             Set<ReportSection> sections = sr.getReportSections();
             for (ReportSection section : sections) {
@@ -126,7 +130,7 @@ public class ReportSectionService {
 
         if (er != null) {
             rs.setEmployerReport(er);
-            reportSectionRepository.save(rs);
+            rs = reportSectionRepository.save(rs);
             boolean contains = false;
             Set<ReportSection> sections = er.getReportSections();
             for (ReportSection section : sections) {
@@ -174,6 +178,10 @@ public class ReportSectionService {
             er.setReportSections(sections);
             employerReportRepository.save(er);
         }
+        
+        rs.setEmployerReport(null);
+        rs.setStudentReport(null);
+        reportSectionRepository.save(rs);
 
         reportSectionRepository.delete(rs);
         return rs;

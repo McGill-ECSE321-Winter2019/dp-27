@@ -64,7 +64,7 @@ public class CoopService {
         c.setEmployerReports(new HashSet<EmployerReport>());
         c.setStudentReports(new HashSet<StudentReport>());
 
-        coopRepository.save(c);
+        c = coopRepository.save(c);
 
         Set<Coop> studentCoops = s.getCoops();
         studentCoops.add(c);
@@ -94,6 +94,11 @@ public class CoopService {
     public List<Coop> getAllCoops() {
         return ServiceUtils.toList(coopRepository.findAll());
     }
+    
+    @Transactional
+    public List<Coop> getAllCoopsByStudent(Student s) {
+    	return ServiceUtils.toList(coopRepository.findByStudent(s));
+    }
 
     @Transactional
     public Coop updateCoop(
@@ -108,63 +113,65 @@ public class CoopService {
         if (c == null) {
             error.append("Co-op to update cannot be null! ");
         }
-        if (status == null) {
-            error.append("Co-op Status cannot be null! ");
-        }
-        if (courseOffering == null) {
-            error.append("Course Offering cannot be null! ");
-        }
-        if (s == null) {
-            error.append("Student cannot be null! ");
-        }
-        if (cd == null) {
-            error.append("Co-op Details cannot be null! ");
-        }
-        // cannot be null but can be empty
-        if (employerReports == null) {
-            error.append("Employer Reports cannot be null! ");
-        }
-        if (studentReports == null) {
-            error.append("Student Reports cannot be null!");
-        }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        c.setStatus(status);
-        c.setCourseOffering(courseOffering);
-        c.setStudent(s);
-        c.setCoopDetails(cd);
-        c.setEmployerReports(employerReports);
-        c.setStudentReports(studentReports);
+        if (status != null) {
+        	c.setStatus(status);
+        }
+        if (courseOffering != null) {
+        	c.setCourseOffering(courseOffering);
+        }
+        if (s != null) {
+        	c.setStudent(s);
+        }
+        if (cd != null) {
+        	c.setCoopDetails(cd);
+        }
+        if (employerReports != null) {
+        	c.setEmployerReports(employerReports);
+        }
+        if (studentReports != null) {
+        	c.setStudentReports(studentReports);
+        }
+        
         coopRepository.save(c);
 
-        boolean studentContains = false;
-        Set<Coop> studentCoops = s.getCoops();
-        for (Coop studentCoop : studentCoops) {
-            if (studentCoop.getId() == c.getId()) {
-                studentCoops.remove(studentCoop);
-                studentCoops.add(c);
-                studentContains = true;
-            }
+        if (s != null) {
+	        boolean studentContains = false;
+	        Set<Coop> studentCoops = s.getCoops();
+	        for (Coop studentCoop : studentCoops) {
+	            if (studentCoop.getId() == c.getId()) {
+	                studentCoops.remove(studentCoop);
+	                studentCoops.add(c);
+	                studentContains = true;
+	            }
+	        }
+	        if (studentContains == false) {
+	            studentCoops.add(c);
+	        }
+	
+	        studentRepository.save(s);
         }
-        if (studentContains == false) {
-            studentCoops.add(c);
+        
+        if (cd != null) {
+	        cd.setCoop(c);
+	        coopDetailsRepository.save(cd);
         }
 
-        studentRepository.save(s);
-
-        cd.setCoop(c);
-        coopDetailsRepository.save(cd);
-
-        for (EmployerReport employerReport : employerReports) {
-            employerReport.setCoop(c);
-            employerReportRepository.save(employerReport);
+        if (employerReports != null) {
+	        for (EmployerReport employerReport : employerReports) {
+	            employerReport.setCoop(c);
+	            employerReportRepository.save(employerReport);
+	        }
         }
 
-        for (StudentReport studentReport : studentReports) {
-            studentReport.setCoop(c);
-            studentReportRepository.save(studentReport);
+        if (studentReports != null) {
+	        for (StudentReport studentReport : studentReports) {
+	            studentReport.setCoop(c);
+	            studentReportRepository.save(studentReport);
+	        }
         }
 
         return coopRepository.save(c);

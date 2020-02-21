@@ -26,50 +26,8 @@ public class StudentService {
      * @param lastName
      * @param email
      * @param studentId
-     * @param coops
-     * @param notifications
      * @return newly created student
      */
-    @Transactional
-    public Student createStudent(
-            String firstName,
-            String lastName,
-            String email,
-            String studentID,
-            Set<Coop> coops,
-            Set<Notification> notifications) {
-        StringBuilder error = new StringBuilder();
-        if (firstName == null || firstName.trim().length() == 0) {
-            error.append("FirstName is null or invalid. ");
-        }
-        if (lastName == null || lastName.trim().length() == 0) {
-            error.append("LastName is null or invalid. ");
-        }
-        if (!ServiceUtils.isValidEmail(email)) {
-            error.append("Email is null or invalid. ");
-        }
-        if (studentID == null || studentID.trim().length() != 9) {
-            error.append("StudentID is null or invalid. ");
-        }
-        if (coops == null) {
-            error.append("List of Coops is null. ");
-        }
-        if (notifications == null) {
-            error.append("List of Notifications is null. ");
-        }
-        if (error.length() != 0) {
-            throw new IllegalArgumentException(error.toString().trim());
-        }
-        Student s = new Student();
-        s.setFirstName(firstName);
-        s.setLastName(lastName);
-        s.setEmail(email);
-        s.setStudentId(studentID);
-        s.setCoops(coops);
-        studentRepository.save(s);
-        return s;
-    }
-
     @Transactional
     public Student createStudent(
             String firstName, String lastName, String email, String studentId) {
@@ -85,8 +43,8 @@ public class StudentService {
         } else if (!ServiceUtils.isValidEmail(email)) {
             error.append("Student email must be a valid email. ");
         }
-        if (studentId == null || studentId.trim().length() == 0) {
-            error.append("Student ID cannot be empty. ");
+        if (studentId == null || studentId.trim().length() != 9) {
+            error.append("Student ID cannot be null or invalid.");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
@@ -201,47 +159,58 @@ public class StudentService {
         if (s == null) {
             error.append("Student to update cannot be null. ");
         }
-        if (firstName == null || firstName.trim().length() == 0) {
+        if (firstName != null && firstName.trim().length() == 0) {
             error.append("Student first name cannot be empty. ");
         }
-        if (lastName == null || lastName.trim().length() == 0) {
+        if (lastName != null && lastName.trim().length() == 0) {
             error.append("Student last name cannot be empty. ");
+        } 
+        if (email != null && email.trim().length() == 0) {
+        	error.append("Student email cannot be empty. ");
         }
-        if (email == null || email.trim().length() == 0) {
-            error.append("Student email cannot be empty. ");
-        } else if (!ServiceUtils.isValidEmail(email)) {
-            error.append("Student email must be a valid email.");
+        else if (email != null && !ServiceUtils.isValidEmail(email)) {
+            error.append("Student email is invalid. ");
         }
-        if (studentId == null || studentId.trim().length() == 0) {
-            error.append("Student ID cannot be empty. ");
-        }
-        if (coops == null) {
-            error.append("Co-ops cannot be null. ");
-        }
-        if (notifs == null) {
-            error.append("Notifs cannot be null.");
+        if (studentId != null && studentId.trim().length() != 9) {
+            error.append("Student ID is invalid.");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        s.setFirstName(firstName.trim());
-        s.setLastName(lastName.trim());
-        s.setEmail(email.trim());
-        s.setStudentId(studentId);
-        s.setNotifications(notifs);
-        s.setCoops(coops);
-
-        studentRepository.save(s);
-
-        for (Notification notif : notifs) {
-            notif.setStudent(s);
-            notificationRepository.save(notif);
+        if (firstName != null && firstName.trim().length() > 0) {
+        	s.setFirstName(firstName.trim());
+        }
+        if (lastName != null && lastName.trim().length() > 0) {
+        	s.setLastName(lastName.trim());
+        }
+        if (email != null && email.trim().length() > 0 && ServiceUtils.isValidEmail(email)) {
+        	s.setEmail(email.trim());
+        }
+        if (studentId != null) {
+        	s.setStudentId(studentId);
+        }
+        if (notifs != null) {
+        	s.setNotifications(notifs);
+        }
+        if (coops != null) {
+        	s.setCoops(coops);
         }
 
-        for (Coop coop : coops) {
-            coop.setStudent(s);
-            coopRepository.save(coop);
+        s = studentRepository.save(s);
+
+        if (notifs != null) {
+	        for (Notification notif : notifs) {
+	            notif.setStudent(s);
+	            notificationRepository.save(notif);
+	        }
+        }
+
+        if (coops != null) {
+	        for (Coop coop : coops) {
+	            coop.setStudent(s);
+	            coopRepository.save(coop);
+	        }
         }
 
         return studentRepository.save(s);
