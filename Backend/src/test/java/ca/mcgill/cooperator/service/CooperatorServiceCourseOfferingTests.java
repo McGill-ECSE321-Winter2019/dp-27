@@ -133,11 +133,11 @@ public class CooperatorServiceCourseOfferingTests {
         Course c2 = null;
 
         try {
-            courseOfferingService.updateCourseOffering(co, year2, season2, c2);
+            courseOfferingService.updateCourseOffering(null, year2, season2, c2);
 
         } catch (IllegalArgumentException e) {
             assertEquals(
-                    "Year is invalid! Season cannot be null! Course cannot be null!",
+                    "Course Offering to update cannot be null!",
                     e.getMessage());
         }
 

@@ -82,12 +82,10 @@ public class CooperatorServiceStudentTests {
         String lastName = "Kragl";
         String email = "frisbeeGod47@gmail.com";
         String studentID = "260735111";
-        Set<Coop> coops = new HashSet<>();
-        Set<Notification> notifications = new HashSet<>();
 
         try {
             studentService.createStudent(
-                    firstName, lastName, email, studentID, coops, notifications);
+                    firstName, lastName, email, studentID);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -112,7 +110,7 @@ public class CooperatorServiceStudentTests {
                 "Student first name cannot be empty. "
                         + "Student last name cannot be empty. "
                         + "Student email cannot be empty. "
-                        + "Student ID cannot be empty.",
+                        + "Student ID cannot be null or invalid.",
                 error);
     }
 
@@ -129,7 +127,7 @@ public class CooperatorServiceStudentTests {
                 "Student first name cannot be empty. "
                         + "Student last name cannot be empty. "
                         + "Student email cannot be empty. "
-                        + "Student ID cannot be empty.",
+                        + "Student ID cannot be null or invalid.",
                 error);
     }
 
@@ -146,7 +144,7 @@ public class CooperatorServiceStudentTests {
                 "Student first name cannot be empty. "
                         + "Student last name cannot be empty. "
                         + "Student email cannot be empty. "
-                        + "Student ID cannot be empty.",
+                        + "Student ID cannot be null or invalid.",
                 error);
     }
 
@@ -188,7 +186,7 @@ public class CooperatorServiceStudentTests {
         String firstName = "Susan";
         String lastName = "Matuszewski";
         String email = "susan@gmail.com";
-        String studentId = "12344566";
+        String studentId = "123445660";
         Student s = new Student();
 
         try {
@@ -252,11 +250,10 @@ public class CooperatorServiceStudentTests {
         String firstName = "Susan";
         String lastName = "Matuszewski";
         String email = "susan@gmail.com";
-        String studentId = "12344566";
-        Student s = new Student();
+        String studentId = "123445660";
 
         try {
-            s = studentService.createStudent(firstName, lastName, email, studentId);
+            studentService.createStudent(firstName, lastName, email, studentId);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -265,18 +262,12 @@ public class CooperatorServiceStudentTests {
 
         String error = "";
         try {
-            studentService.updateStudent(s, null, null, null, null, null, null);
+            studentService.updateStudent(null, null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Student first name cannot be empty. "
-                        + "Student last name cannot be empty. "
-                        + "Student email cannot be empty. "
-                        + "Student ID cannot be empty. "
-                        + "Co-ops cannot be null. "
-                        + "Notifs cannot be null.",
+        assertEquals("Student to update cannot be null.", 
                 error);
         assertEquals(1, studentService.getAllStudents().size());
     }
@@ -313,7 +304,7 @@ public class CooperatorServiceStudentTests {
         String firstName = "Susan";
         String lastName = "Matuszewski";
         String email = "susan@gmail.com";
-        String studentId = "12344566";
+        String studentId = "123445660";
         Student s = new Student();
         try {
             s = studentService.createStudent(firstName, lastName, email, studentId);

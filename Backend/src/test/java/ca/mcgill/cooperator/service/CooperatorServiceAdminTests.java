@@ -187,7 +187,7 @@ public class CooperatorServiceAdminTests {
 
         try {
             adminService.createAdmin(firstName, lastName, email);
-            a = adminService.getAdmin(email);
+            adminService.getAdmin(email);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -200,10 +200,10 @@ public class CooperatorServiceAdminTests {
         }
 
         assertEquals(
-                "Admin first name cannot be empty! "
-                        + "Admin last name cannot be empty! "
-                        + "Admin email cannot be empty! "
-                        + "Admin sent notifications cannot be null!",
+                "Admin to update cannot be null! "
+                + "Admin first name cannot be empty! "
+                + "Admin last name cannot be empty! "
+                + "Admin email cannot be empty!",
                 error);
 
         // Original Admin should still exist
@@ -246,7 +246,7 @@ public class CooperatorServiceAdminTests {
     }
 
     private Notification createTestNotification(Admin a) {
-        Student s = studentService.createStudent("Albert", "Kragl", "albert@kragl.com", "12345678");
+        Student s = studentService.createStudent("Albert", "Kragl", "albert@kragl.com", "123456789");
         Notification n =
                 notificationService.createNotification(
                         "Report Due", "Report Due by April 2020", s, a);

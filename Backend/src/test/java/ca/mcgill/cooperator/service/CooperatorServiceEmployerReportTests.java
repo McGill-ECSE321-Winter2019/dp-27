@@ -121,8 +121,7 @@ public class CooperatorServiceEmployerReportTests {
                 "Report Status cannot be null! "
                         + "Coop cannot be null! "
                         + "Employer Contact cannot be null! "
-                        + "File title cannot be null! "
-                        + "File cannot be null!",
+                        + "File title cannot be empty!",
                 error);
     }
 
@@ -242,12 +241,7 @@ public class CooperatorServiceEmployerReportTests {
         }
 
         assertEquals(
-                "Employer Report cannot be null! "
-                        + "Report Status cannot be null! "
-                        + "Coop cannot be null! "
-                        + "Employer Contact cannot be null! "
-                        + "File title cannot be null! "
-                        + "File cannot be null!",
+                "Employer Report cannot be null!",
                 error);
         assertEquals(
                 ReportStatus.COMPLETED,

@@ -47,7 +47,7 @@ public class CourseOfferingService {
         co.setCourse(c);
         co.setCoops(new ArrayList<Coop>());
 
-        courseOfferingRepository.save(co);
+        co = courseOfferingRepository.save(co);
 
         List<CourseOffering> offerings = c.getCourseOfferings();
         offerings.add(co);
@@ -62,25 +62,22 @@ public class CourseOfferingService {
     public CourseOffering updateCourseOffering(
             CourseOffering co, int year, Season season, Course c) {
         StringBuilder error = new StringBuilder();
-        if (year <= 0) {
-            error.append("Year is invalid! ");
-        }
-        if (season == null) {
-            error.append("Season cannot be null! ");
-        }
-        if (c == null) {
-            error.append("Course cannot be null! ");
-        }
         if (co == null) {
-            error.append("Course Offering cannot be null!");
+        	error.append("Course Offering to update cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-
-        co.setYear(year);
-        co.setSeason(season);
-        co.setCourse(c);
+        
+        if (year > 0) {
+        	co.setYear(year);
+        }
+        if (season != null) {
+        	co.setSeason(season);
+        }
+        if (c != null) {
+        	co.setCourse(c);
+        }
 
         return courseOfferingRepository.save(co);
     }

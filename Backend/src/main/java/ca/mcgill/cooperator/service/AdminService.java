@@ -115,32 +115,40 @@ public class AdminService {
         if (a == null) {
             error.append("Admin to update cannot be null! ");
         }
-        if (firstName == null || firstName.trim().length() == 0) {
+        if (firstName != null && firstName.trim().length() == 0) {
             error.append("Admin first name cannot be empty! ");
         }
-        if (lastName == null || lastName.trim().length() == 0) {
+        if (lastName != null && lastName.trim().length() == 0) {
             error.append("Admin last name cannot be empty! ");
         }
-        if (email == null || email.trim().length() == 0) {
+        if (email != null && email.trim().length() == 0) {
             error.append("Admin email cannot be empty! ");
-        } else if (!ServiceUtils.isValidEmail(email)) {
-            error.append("Admin email must be a valid email! ");
-        }
-        if (sentNotifications == null) {
-            error.append("Admin sent notifications cannot be null!");
+        } else if (email != null && !ServiceUtils.isValidEmail(email)) {
+            error.append("Admin email must be a valid email!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-
-        for (Notification n : sentNotifications) {
-            n.setSender(a);
-            notificationRepository.save(n);
+        //set fields if they're not null
+        
+        if (firstName != null && firstName.trim().length() > 0) {
+        	a.setFirstName(firstName.trim());
         }
-        a.setFirstName(firstName.trim());
-        a.setLastName(lastName.trim());
-        a.setEmail(email.trim());
-        a.setSentNotifications(sentNotifications);
+        if (lastName != null && lastName.trim().length() > 0) {
+        	a.setLastName(lastName.trim());
+        }
+        if (email != null && email.trim().length() > 0 && ServiceUtils.isValidEmail(email)) {
+        	a.setEmail(email.trim());
+        }
+
+        if (sentNotifications != null) {
+	        for (Notification n : sentNotifications) {
+	            n.setSender(a);
+	            notificationRepository.save(n);
+	        }
+	       
+	        a.setSentNotifications(sentNotifications);
+        }
 
         return adminRepository.save(a);
     }

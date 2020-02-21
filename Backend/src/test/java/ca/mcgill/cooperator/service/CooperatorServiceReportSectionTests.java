@@ -113,7 +113,7 @@ public class CooperatorServiceReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals("Title cannot be null! " + "Content cannot be null!", error);
+        assertEquals("Title cannot be empty! " + "Content cannot be empty!", error);
         assertEquals(0, reportSectionService.getAllReportSections().size());
     }
 
@@ -129,7 +129,7 @@ public class CooperatorServiceReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals("Title cannot be null! " + "Content cannot be null!", error);
+        assertEquals("Title cannot be empty! " + "Content cannot be empty!", error);
         assertEquals(0, reportSectionService.getAllReportSections().size());
     }
 
@@ -145,7 +145,7 @@ public class CooperatorServiceReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals("Title cannot be null! " + "Content cannot be null!", error);
+        assertEquals("Title cannot be empty! " + "Content cannot be empty!", error);
         assertEquals(0, reportSectionService.getAllReportSections().size());
     }
 
@@ -259,9 +259,7 @@ public class CooperatorServiceReportSectionTests {
         }
 
         assertEquals(
-                "Report Section cannot be null! "
-                        + "Title cannot be null! "
-                        + "Content cannot be null!",
+                "Report Section cannot be null!",
                 error);
     }
 

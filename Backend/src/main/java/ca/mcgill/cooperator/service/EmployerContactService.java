@@ -73,7 +73,7 @@ public class EmployerContactService {
         employers.add(ec);
         company.setEmployees(employers);
 
-        employerContactRepository.save(ec);
+        ec = employerContactRepository.save(ec);
         companyRepository.save(company);
 
         return employerContactRepository.save(ec);
@@ -151,53 +151,62 @@ public class EmployerContactService {
         if (ec == null) {
             error.append("Employer Contact to update cannot be null! ");
         }
-        if (firstName == null || firstName.trim().length() == 0) {
+        if (firstName != null && firstName.trim().length() == 0) {
             error.append("Employer Contact first name cannot be empty! ");
         }
-        if (lastName == null || lastName.trim().length() == 0) {
+        if (lastName != null && lastName.trim().length() == 0) {
             error.append("Employer Contact last name cannot be empty! ");
         }
-        if (email == null || email.trim().length() == 0) {
+        if (email != null && email.trim().length() == 0) {
             error.append("Employer Contact email cannot be empty! ");
-        } else if (!ServiceUtils.isValidEmail(email)) {
+        } else if (email != null && !ServiceUtils.isValidEmail(email)) {
             error.append("Employer Contact email must be a valid email! ");
         }
-        if (phoneNumber == null || phoneNumber.trim().length() == 0) {
+        if (phoneNumber != null && phoneNumber.trim().length() == 0) {
             error.append("Employer Contact phone number cannot be empty! ");
-        } else if (!ServiceUtils.isValidPhoneNumber(phoneNumber)) {
+        } else if (phoneNumber != null && !ServiceUtils.isValidPhoneNumber(phoneNumber)) {
             error.append("Employer Contact phone number must be a valid number! ");
-        }
-        if (company == null) {
-            error.append("Employer Contact company cannot be null! ");
-        }
-        if (employerReports == null) {
-            error.append("Employer Contact employer reports cannot be null! ");
-        }
-        if (coopDetails == null) {
-            error.append("Employer Contact coop details cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        ec.setFirstName(firstName.trim());
-        ec.setLastName(lastName.trim());
-        ec.setEmail(email.trim());
-        ec.setPhoneNumber(phoneNumber.trim());
-        ec.setEmployerReports(employerReports);
-        ec.setCoopDetails(coopDetails);
-        ec.setCompany(company);
-
-        employerContactRepository.save(ec);
-
-        for (EmployerReport er : employerReports) {
-            er.setEmployerContact(ec);
-            employerReportRepository.save(er);
+        if (firstName != null && firstName.trim().length() > 0) {
+        	ec.setFirstName(firstName.trim());
+        }
+        if (lastName != null && lastName.trim().length() > 0) {
+        	ec.setLastName(lastName.trim());
+        }
+        if (email != null && email.trim().length() > 0 && ServiceUtils.isValidEmail(email)) {
+        	ec.setEmail(email.trim());
+        }
+        if (phoneNumber != null && phoneNumber.trim().length() > 0 && ServiceUtils.isValidPhoneNumber(phoneNumber)) {
+        	ec.setPhoneNumber(phoneNumber.trim());
+        }
+        if (employerReports != null) {
+        	ec.setEmployerReports(employerReports);
+        }
+        if (coopDetails != null) {
+        	ec.setCoopDetails(coopDetails);
+        }
+        if (company != null) {
+        	ec.setCompany(company);
         }
 
-        for (CoopDetails cd : coopDetails) {
-            cd.setEmployerContact(ec);
-            coopDetailsRepository.save(cd);
+        ec = employerContactRepository.save(ec);
+
+        if (employerReports != null) {
+	        for (EmployerReport er : employerReports) {
+	            er.setEmployerContact(ec);
+	            employerReportRepository.save(er);
+	        }
+        }
+
+        if (coopDetails != null) {
+	        for (CoopDetails cd : coopDetails) {
+	            cd.setEmployerContact(ec);
+	            coopDetailsRepository.save(cd);
+	        }
         }
 
         return employerContactRepository.save(ec);

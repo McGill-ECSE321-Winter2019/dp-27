@@ -90,12 +90,12 @@ public class Coop {
         return this.studentReports;
     }
 
-    public void setStudentReports(Set<StudentReport> studentReports) {
+    public void setStudentReports(Set<StudentReport> srs) {
         if (this.studentReports == null) {
-            this.studentReports = studentReports;
+            this.studentReports = srs;
         } else {
             this.studentReports.clear();
-            this.studentReports.addAll(studentReports);
+            this.studentReports.addAll(srs);
         }
     }
 

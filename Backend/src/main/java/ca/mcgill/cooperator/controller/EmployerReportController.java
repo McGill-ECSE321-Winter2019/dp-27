@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -110,8 +111,8 @@ public class EmployerReportController {
             @RequestParam("status") String status,
             @RequestParam("title") String title,
             @RequestParam("coop_id") int coopId,
-            @RequestParam("report_sections") Set<ReportSectionDto> rsDtos,
-            @RequestParam("employer_id") int employerId) {
+            @RequestParam("employer_id") int employerId,
+            @RequestBody Set<ReportSectionDto> rsDtos) {
         EmployerReport reportToUpdate = employerReportService.getEmployerReport(id);
 
         Coop coop = coopService.getCoopById(coopId);

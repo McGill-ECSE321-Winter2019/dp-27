@@ -305,10 +305,7 @@ public class CooperatorServiceEmployerContactTests {
                 "Employer Contact first name cannot be empty!"
                         + " Employer Contact last name cannot be empty!"
                         + " Employer Contact email cannot be empty!"
-                        + " Employer Contact phone number cannot be empty!"
-                        + " Employer Contact company cannot be null!"
-                        + " Employer Contact employer reports cannot be null!"
-                        + " Employer Contact coop details cannot be null!",
+                        + " Employer Contact phone number cannot be empty!",
                 error);
 
         // original EmployerContact should still exist

@@ -84,13 +84,14 @@ public class CooperatorServiceCourseTests {
     public void testUpdateCourseInvalid() {
         String error = "";
         String name = "ECSE321";
-        Course c = courseService.createCourse(name);
+        courseService.createCourse(name);
         try {
-            courseService.updateCourse(c, "", new ArrayList<CourseOffering>());
+            courseService.updateCourse(null, "", new ArrayList<CourseOffering>());
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
-        assertEquals("Course name cannot be empty!", error);
+        assertEquals("Course to update cannot be null! "
+        		   + "Course name cannot be empty!", error);
         assertEquals(1, courseService.getAllCourses().size());
         assertEquals(name, courseService.getAllCourses().get(0).getName());
     }
