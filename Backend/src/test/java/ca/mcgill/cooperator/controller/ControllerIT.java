@@ -26,7 +26,7 @@ public abstract class ControllerIT {
 
     public CourseDto createTestCourse() throws Exception {
         CourseDto courseDto = new CourseDto();
-        courseDto.setName("FACC200");
+        courseDto.setName("FACC 200");
         MvcResult mvcResult =
                 mvc.perform(
                                 post("/courses")

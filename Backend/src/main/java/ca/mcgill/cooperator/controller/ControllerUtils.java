@@ -514,15 +514,19 @@ public class ControllerUtils {
                 // reports
 
                 CoopDetails coopDetails = coop.getCoopDetails();
-                CoopDetailsDto coopDetailsDto =
-                        new CoopDetailsDto(
-                                coopDetails.getId(),
-                                coopDetails.getPayPerHour(),
-                                coopDetails.getHoursPerWeek(),
-                                null, // null employer contact, look up coop details by id to ge
-                                // employer contact
-                                null); // null coop since parent
-                coopDto.setCoopDetails(coopDetailsDto);
+                if (coopDetails != null) {
+                    CoopDetailsDto coopDetailsDto =
+                            new CoopDetailsDto(
+                                    coopDetails.getId(),
+                                    coopDetails.getPayPerHour(),
+                                    coopDetails.getHoursPerWeek(),
+                                    null, // null employer contact, look up coop details by id to ge
+                                    // employer contact
+                                    null); // null coop since parent
+                    coopDto.setCoopDetails(coopDetailsDto);
+                } else {
+                    coopDto.setCoopDetails(null);
+                }
 
                 Student student = coop.getStudent();
                 StudentDto studentDto =
