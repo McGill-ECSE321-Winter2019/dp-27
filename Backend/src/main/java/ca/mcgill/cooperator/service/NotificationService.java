@@ -53,6 +53,8 @@ public class NotificationService {
         n.setBody(body.trim());
         n.setSender(sender);
         n.setStudent(student);
+        n.setSeen(false);
+        n.setTimeStamp(System.currentTimeMillis());
         notificationRepository.save(n);
 
         Set<Notification> notifs = student.getNotifications();
@@ -112,6 +114,26 @@ public class NotificationService {
         return ServiceUtils.toList(notificationRepository.findAll());
     }
 
+    /**
+     * set notification to seen
+     *
+     * @return notification seen
+     */
+    public Notification setSeen(Notification n) {
+    	StringBuilder error = new StringBuilder();
+    	if(n != null)
+    		n.setSeen(true);
+    	else {
+    		error.append("Notification cannot be null");
+    	}
+    	if (error.length() > 0) {
+            throw new IllegalArgumentException(error.toString().trim());
+        }
+    	notificationRepository.save(n);
+    	return n;
+    }
+    
+    
     /**
      * updates an already existing notification
      *

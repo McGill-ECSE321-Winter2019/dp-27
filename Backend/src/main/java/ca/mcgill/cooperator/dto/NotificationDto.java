@@ -4,14 +4,18 @@ public class NotificationDto {
     private int id;
     private String title;
     private String body;
+    private Boolean seen;
+    private long timeStamp;
 
     private StudentDto student;
     private AdminDto sender;
 
-    public NotificationDto(int id, String title, String body, StudentDto student, AdminDto sender) {
+    public NotificationDto(int id, String title, String body, StudentDto student, AdminDto sender, Boolean seen, long timeStamp) {
         this.id = id;
         this.title = title;
         this.body = body;
+        this.seen = seen;
+        this.timeStamp = timeStamp;
         this.student = student;
         this.sender = sender;
     }
@@ -52,5 +56,21 @@ public class NotificationDto {
 
     public void setSender(AdminDto sender) {
         this.sender = sender;
+    }
+    
+    public Boolean getSeen() {
+    	return this.seen;
+    }
+    
+    public void setSeen(Boolean seen) {
+    	this.seen = seen;
+    }
+    
+    public long getTimeStamp() {
+    	return this.timeStamp;
+    }
+    
+    public void setTimeStamp(long timeStamp) {
+    	this.timeStamp = timeStamp;
     }
 }

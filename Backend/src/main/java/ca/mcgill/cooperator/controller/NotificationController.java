@@ -43,6 +43,20 @@ public class NotificationController {
 
         return ControllerUtils.convertToDto(n);
     }
+    
+
+    /**
+     * Sets notification seen by id
+     *
+     * @param id
+     * @return NotificationDto
+     */
+    @GetMapping("/seen/{id}")
+    public NotificationDto setNotificationSeen(@RequestParam int id) {
+        Notification n = notificationService.getNotification(id);
+        notificationService.setSeen(n);
+        return ControllerUtils.convertToDto(n);
+    }
 
     /**
      * Gets Notification by title
