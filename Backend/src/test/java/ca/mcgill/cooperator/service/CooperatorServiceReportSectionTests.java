@@ -69,11 +69,10 @@ public class CooperatorServiceReportSectionTests {
             er.setCoop(null);
             employerReportRepository.save(er);
         }
-        List<ReportSection> sections = reportSectionService.getAllReportSections();
-        for (ReportSection rs : sections) {
-            rs.setEmployerReport(null);
-            rs.setStudentReport(null);
-            reportSectionRepository.save(rs);
+        
+        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
+        for (ReportSection reportSection : reportSections) {
+            reportSectionService.deleteReportSection(reportSection);
         }
 
         coopRepository.deleteAll();
