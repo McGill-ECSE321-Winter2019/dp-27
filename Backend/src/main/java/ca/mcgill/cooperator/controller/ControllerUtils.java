@@ -515,7 +515,7 @@ public class ControllerUtils {
 
                 CoopDetails coopDetails = coop.getCoopDetails();
                 if (coopDetails != null) {
-                	CoopDetailsDto coopDetailsDto =
+                    CoopDetailsDto coopDetailsDto =
                             new CoopDetailsDto(
                                     coopDetails.getId(),
                                     coopDetails.getPayPerHour(),
@@ -525,9 +525,8 @@ public class ControllerUtils {
                                     null); // null coop since parent
                     coopDto.setCoopDetails(coopDetailsDto);
                 } else {
-                	coopDto.setCoopDetails(null);
+                    coopDto.setCoopDetails(null);
                 }
-                
 
                 Student student = coop.getStudent();
                 StudentDto studentDto =
