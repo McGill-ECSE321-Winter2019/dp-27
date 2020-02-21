@@ -66,6 +66,26 @@ public abstract class ControllerIT {
         return courseDto;
     }
 
+    public CourseDto createTestCourse(String name) throws Exception {
+        CourseDto courseDto = new CourseDto();
+        courseDto.setName(name);
+        MvcResult mvcResult =
+                mvc.perform(
+                                post("/courses")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(courseDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
+        // get object from response
+        courseDto =
+                objectMapper.readValue(
+                        mvcResult.getResponse().getContentAsString(), CourseDto.class);
+
+        return courseDto;
+    }
+
     public CourseOfferingDto createTestCourseOffering(CourseDto courseDto) throws Exception {
         CourseOfferingDto courseOfferingDto = new CourseOfferingDto();
         courseOfferingDto.setYear(2020);
