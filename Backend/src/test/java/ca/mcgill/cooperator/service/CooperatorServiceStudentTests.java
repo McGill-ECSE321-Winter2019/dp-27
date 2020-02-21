@@ -84,8 +84,7 @@ public class CooperatorServiceStudentTests {
         String studentID = "260735111";
 
         try {
-            studentService.createStudent(
-                    firstName, lastName, email, studentID);
+            studentService.createStudent(firstName, lastName, email, studentID);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -267,8 +266,7 @@ public class CooperatorServiceStudentTests {
             error = e.getMessage();
         }
 
-        assertEquals("Student to update cannot be null.", 
-                error);
+        assertEquals("Student to update cannot be null.", error);
         assertEquals(1, studentService.getAllStudents().size());
     }
 

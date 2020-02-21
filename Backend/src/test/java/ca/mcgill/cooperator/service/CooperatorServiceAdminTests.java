@@ -201,9 +201,9 @@ public class CooperatorServiceAdminTests {
 
         assertEquals(
                 "Admin to update cannot be null! "
-                + "Admin first name cannot be empty! "
-                + "Admin last name cannot be empty! "
-                + "Admin email cannot be empty!",
+                        + "Admin first name cannot be empty! "
+                        + "Admin last name cannot be empty! "
+                        + "Admin email cannot be empty!",
                 error);
 
         // Original Admin should still exist
@@ -246,7 +246,8 @@ public class CooperatorServiceAdminTests {
     }
 
     private Notification createTestNotification(Admin a) {
-        Student s = studentService.createStudent("Albert", "Kragl", "albert@kragl.com", "123456789");
+        Student s =
+                studentService.createStudent("Albert", "Kragl", "albert@kragl.com", "123456789");
         Notification n =
                 notificationService.createNotification(
                         "Report Due", "Report Due by April 2020", s, a);

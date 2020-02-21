@@ -164,11 +164,10 @@ public class StudentService {
         }
         if (lastName != null && lastName.trim().length() == 0) {
             error.append("Student last name cannot be empty. ");
-        } 
-        if (email != null && email.trim().length() == 0) {
-        	error.append("Student email cannot be empty. ");
         }
-        else if (email != null && !ServiceUtils.isValidEmail(email)) {
+        if (email != null && email.trim().length() == 0) {
+            error.append("Student email cannot be empty. ");
+        } else if (email != null && !ServiceUtils.isValidEmail(email)) {
             error.append("Student email is invalid. ");
         }
         if (studentId != null && studentId.trim().length() != 9) {
@@ -179,38 +178,38 @@ public class StudentService {
         }
 
         if (firstName != null && firstName.trim().length() > 0) {
-        	s.setFirstName(firstName.trim());
+            s.setFirstName(firstName.trim());
         }
         if (lastName != null && lastName.trim().length() > 0) {
-        	s.setLastName(lastName.trim());
+            s.setLastName(lastName.trim());
         }
         if (email != null && email.trim().length() > 0 && ServiceUtils.isValidEmail(email)) {
-        	s.setEmail(email.trim());
+            s.setEmail(email.trim());
         }
         if (studentId != null) {
-        	s.setStudentId(studentId);
+            s.setStudentId(studentId);
         }
         if (notifs != null) {
-        	s.setNotifications(notifs);
+            s.setNotifications(notifs);
         }
         if (coops != null) {
-        	s.setCoops(coops);
+            s.setCoops(coops);
         }
 
         s = studentRepository.save(s);
 
         if (notifs != null) {
-	        for (Notification notif : notifs) {
-	            notif.setStudent(s);
-	            notificationRepository.save(notif);
-	        }
+            for (Notification notif : notifs) {
+                notif.setStudent(s);
+                notificationRepository.save(notif);
+            }
         }
 
         if (coops != null) {
-	        for (Coop coop : coops) {
-	            coop.setStudent(s);
-	            coopRepository.save(coop);
-	        }
+            for (Coop coop : coops) {
+                coop.setStudent(s);
+                coopRepository.save(coop);
+            }
         }
 
         return studentRepository.save(s);

@@ -56,11 +56,11 @@ public class StudentReportService {
         sr.setReportSections(new HashSet<ReportSection>());
         sr.setTitle(title);
         if (file != null) {
-	        try {
-	            sr.setData(file.getBytes());
-	        } catch (IOException e) {
-	            throw new IllegalArgumentException(e.getMessage());
-	        }
+            try {
+                sr.setData(file.getBytes());
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
         }
 
         sr = studentReportRepository.save(sr);
@@ -129,56 +129,56 @@ public class StudentReportService {
         }
 
         if (status != null) {
-        	sr.setStatus(status);
+            sr.setStatus(status);
         }
         if (c != null) {
-        	sr.setCoop(c);
+            sr.setCoop(c);
         }
         if (title != null && title.trim().length() > 0) {
-        	sr.setTitle(title);
+            sr.setTitle(title);
         }
         if (sections != null) {
             sr.setReportSections(sections);
         }
-        
+
         if (file != null) {
-	        try {
-	            sr.setData(file.getBytes());
-	        } catch (IOException e) {
-	            throw new IllegalArgumentException(e.getMessage());
-	        }
+            try {
+                sr.setData(file.getBytes());
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
         }
 
         sr = studentReportRepository.save(sr);
 
         if (c != null) {
-	        // add/set employer report to coop
-	        boolean coopContains = false;
-	
-	        Set<StudentReport> coopReports = new HashSet<>();
-	        coopReports.addAll(c.getStudentReports());
-	        for (StudentReport coopStudentReport : coopReports) {
-	            if (coopStudentReport.getId() == sr.getId()) {
-	                coopReports.remove(coopStudentReport);
-	                coopReports.add(sr);
-	                coopContains = true;
-	            }
-	        }
-	
-	        if (coopContains == false) {
-	            coopReports.add(sr);
-	        }
-	        c.setStudentReports(coopReports);
-	
-	        coopRepository.save(c);
+            // add/set employer report to coop
+            boolean coopContains = false;
+
+            Set<StudentReport> coopReports = new HashSet<>();
+            coopReports.addAll(c.getStudentReports());
+            for (StudentReport coopStudentReport : coopReports) {
+                if (coopStudentReport.getId() == sr.getId()) {
+                    coopReports.remove(coopStudentReport);
+                    coopReports.add(sr);
+                    coopContains = true;
+                }
+            }
+
+            if (coopContains == false) {
+                coopReports.add(sr);
+            }
+            c.setStudentReports(coopReports);
+
+            coopRepository.save(c);
         }
 
         if (sections != null) {
-	        // set employer report as parent for all report sections
-	        for (ReportSection section : sections) {
-	            section.setStudentReport(sr);
-	            reportSectionRepository.save(section);
-	        }
+            // set employer report as parent for all report sections
+            for (ReportSection section : sections) {
+                section.setStudentReport(sr);
+                reportSectionRepository.save(section);
+            }
         }
 
         return studentReportRepository.save(sr);

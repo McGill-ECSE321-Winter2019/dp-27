@@ -258,9 +258,7 @@ public class CooperatorServiceReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Report Section cannot be null!",
-                error);
+        assertEquals("Report Section cannot be null!", error);
     }
 
     @Test

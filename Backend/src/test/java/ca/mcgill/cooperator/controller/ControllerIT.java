@@ -45,7 +45,7 @@ public abstract class ControllerIT {
 
         return courseDto;
     }
-    
+
     public CourseDto createTestCourse(String name) throws Exception {
         CourseDto courseDto = new CourseDto();
         courseDto.setName(name);
@@ -88,9 +88,9 @@ public abstract class ControllerIT {
 
         return courseOfferingDto;
     }
-    
-    public CourseOfferingDto createTestCourseOffering(CourseDto courseDto, int year, 
-    		Season season) throws Exception {
+
+    public CourseOfferingDto createTestCourseOffering(CourseDto courseDto, int year, Season season)
+            throws Exception {
         CourseOfferingDto courseOfferingDto = new CourseOfferingDto();
         courseOfferingDto.setYear(year);
         courseOfferingDto.setSeason(season);
@@ -136,7 +136,8 @@ public abstract class ControllerIT {
         return studentDto;
     }
 
-    public CoopDto createTestCoop(CourseOfferingDto courseOfferingDto, StudentDto studentDto, CoopStatus coopStatus)
+    public CoopDto createTestCoop(
+            CourseOfferingDto courseOfferingDto, StudentDto studentDto, CoopStatus coopStatus)
             throws Exception {
         CoopDto coopDto = new CoopDto();
         coopDto.setStatus(coopStatus);
@@ -182,10 +183,14 @@ public abstract class ControllerIT {
 
         return coopDetailsDto;
     }
-    
-    public CoopDetailsDto createTestCoopDetails(CoopDto coopDto, int payPerHour, 
-    		int hoursPerWeek, EmployerContactDto employerContactDto) throws Exception{
-    	CoopDetailsDto coopDetailsDto = new CoopDetailsDto();
+
+    public CoopDetailsDto createTestCoopDetails(
+            CoopDto coopDto,
+            int payPerHour,
+            int hoursPerWeek,
+            EmployerContactDto employerContactDto)
+            throws Exception {
+        CoopDetailsDto coopDetailsDto = new CoopDetailsDto();
         coopDetailsDto.setPayPerHour(payPerHour);
         coopDetailsDto.setHoursPerWeek(hoursPerWeek);
         coopDetailsDto.setCoop(coopDto);
@@ -230,8 +235,9 @@ public abstract class ControllerIT {
 
         return companyDto;
     }
-    
-    public CompanyDto createTestCompany(String name, String city, String region, String country) throws Exception {
+
+    public CompanyDto createTestCompany(String name, String city, String region, String country)
+            throws Exception {
         CompanyDto companyDto = new CompanyDto();
         companyDto.setName(name);
         companyDto.setCity(city);
@@ -254,7 +260,7 @@ public abstract class ControllerIT {
 
         return companyDto;
     }
-    
+
     public EmployerContactDto createTestEmployerContact(CompanyDto companyDto) throws Exception {
         EmployerContactDto employerContactDto = new EmployerContactDto();
         employerContactDto.setFirstName("Emma");
@@ -280,9 +286,14 @@ public abstract class ControllerIT {
 
         return employerContactDto;
     }
-    
-    public EmployerContactDto createTestEmployerContact(CompanyDto companyDto, String firstName, 
-    		String lastName, String email, String phoneNumber) throws Exception {
+
+    public EmployerContactDto createTestEmployerContact(
+            CompanyDto companyDto,
+            String firstName,
+            String lastName,
+            String email,
+            String phoneNumber)
+            throws Exception {
         EmployerContactDto employerContactDto = new EmployerContactDto();
         employerContactDto.setFirstName(firstName);
         employerContactDto.setLastName(lastName);
@@ -307,29 +318,28 @@ public abstract class ControllerIT {
 
         return employerContactDto;
     }
-    
-    public ReportSectionDto createTestReportSection(StudentReportDto studentReportDto) throws Exception {
-    	ReportSectionDto reportSectionDto = new ReportSectionDto();
-    	reportSectionDto.setStudentReport(studentReportDto);
-    	reportSectionDto.setTitle("Offer Letter Section");
-    	reportSectionDto.setContent("spicing up my offer letter with a report section");
-    	
-    	MvcResult mvcResult =
+
+    public ReportSectionDto createTestReportSection(StudentReportDto studentReportDto)
+            throws Exception {
+        ReportSectionDto reportSectionDto = new ReportSectionDto();
+        reportSectionDto.setStudentReport(studentReportDto);
+        reportSectionDto.setTitle("Offer Letter Section");
+        reportSectionDto.setContent("spicing up my offer letter with a report section");
+
+        MvcResult mvcResult =
                 mvc.perform(
                                 post("/report-sections")
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(
-                                                objectMapper.writeValueAsString(reportSectionDto))
+                                        .content(objectMapper.writeValueAsString(reportSectionDto))
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
         // get object from response
-    	reportSectionDto =
+        reportSectionDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), ReportSectionDto.class);
 
         return reportSectionDto;
-    	
     }
 }

@@ -180,42 +180,42 @@ public class CompanyService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-        
+
         if (name == null) {
-        	name = c.getName();
+            name = c.getName();
         }
         if (city == null) {
-        	city = c.getCity();
+            city = c.getCity();
         }
         if (region == null) {
-        	region = c.getRegion();
+            region = c.getRegion();
         }
         if (country == null) {
-        	country = c.getCountry();
+            country = c.getCountry();
         }
-        
+
         if (companyExists(name, city, region, country)) {
             String error_message = "Company with this name and location already exists!";
             throw new IllegalArgumentException(error_message);
         }
-        
-    	c.setName(name.trim());
-    	c.setCity(city.trim());
-    	c.setRegion(region.trim());
-    	c.setCountry(country.trim());
-    	
+
+        c.setName(name.trim());
+        c.setCity(city.trim());
+        c.setRegion(region.trim());
+        c.setCountry(country.trim());
+
         if (employees != null) {
-        	c.setEmployees(employees);
+            c.setEmployees(employees);
         }
 
         companyRepository.save(c);
-        
+
         if (employees != null) {
-	        for (EmployerContact employerContact : employees) {
-	            // We do this in case a new employee does not have the Company field set
-	            employerContact.setCompany(c);
-	            employerContactRepository.save(employerContact);
-	        }
+            for (EmployerContact employerContact : employees) {
+                // We do this in case a new employee does not have the Company field set
+                employerContact.setCompany(c);
+                employerContactRepository.save(employerContact);
+            }
         }
 
         return companyRepository.save(c);

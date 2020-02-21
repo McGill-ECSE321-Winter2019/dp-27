@@ -148,7 +148,7 @@ public class CooperatorServiceCoopTests {
         Course course = createTestCourse();
         CourseOffering courseOffering = createTestCourseOffering(course);
         Student student = createTestStudent();
-        
+
         try {
             coopService.createCoop(status, courseOffering, student);
         } catch (IllegalArgumentException e) {
@@ -165,9 +165,7 @@ public class CooperatorServiceCoopTests {
         }
 
         assertEquals(1, coopService.getAllCoops().size());
-        assertEquals(
-                "Co-op to update cannot be null!",
-                error);
+        assertEquals("Co-op to update cannot be null!", error);
     }
 
     @Test

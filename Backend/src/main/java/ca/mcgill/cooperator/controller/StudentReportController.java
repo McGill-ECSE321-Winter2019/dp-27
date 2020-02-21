@@ -119,16 +119,16 @@ public class StudentReportController {
      */
     @PutMapping("/{id}")
     public StudentReportDto updateStudentReport(
-    		@PathVariable int id,
-    		@ModelAttribute("file") MultipartFile file,
+            @PathVariable int id,
+            @ModelAttribute("file") MultipartFile file,
             @RequestParam("status") String status,
             @RequestParam("title") String title,
             @RequestParam("coop_id") int coopId,
             @RequestBody Set<ReportSectionDto> rsDtos) {
         StudentReport reportToUpdate = studentReportService.getStudentReport(id);
-        
+
         Set<ReportSection> sections = convertReportSectionSetToDomainObject(rsDtos);
-        
+
         Coop coop = coopService.getCoopById(coopId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
 
@@ -158,9 +158,8 @@ public class StudentReportController {
         ex.printStackTrace();
         return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
-    public Set<ReportSection> convertReportSectionSetToDomainObject(
-            Set<ReportSectionDto> rsDtos) {
+
+    public Set<ReportSection> convertReportSectionSetToDomainObject(Set<ReportSectionDto> rsDtos) {
         Set<ReportSection> reports = new HashSet<ReportSection>();
         for (ReportSectionDto rsDto : rsDtos) {
             ReportSection rs = reportSectionService.getReportSection(rsDto.getId());

@@ -133,47 +133,47 @@ public class CoopDetailsService {
             CoopDetails cd, int payPerHour, int hoursPerWeek, EmployerContact ec, Coop c) {
         StringBuilder error = new StringBuilder();
         if (cd == null) {
-        	error.append("Co-op Details to update cannot be null!");
+            error.append("Co-op Details to update cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
         if (payPerHour >= 0) {
-        	cd.setPayPerHour(payPerHour);
+            cd.setPayPerHour(payPerHour);
         }
         if (hoursPerWeek > 0) {
-        	cd.setHoursPerWeek(hoursPerWeek);
+            cd.setHoursPerWeek(hoursPerWeek);
         }
         if (ec != null) {
-        	cd.setEmployerContact(ec);
+            cd.setEmployerContact(ec);
         }
         if (c != null) {
-        	cd.setCoop(c);
+            cd.setCoop(c);
         }
 
         coopDetailsRepository.save(cd);
 
         if (ec != null) {
-	        Set<CoopDetails> employerCoopDetails = ec.getCoopDetails();
-	        boolean employerContains = false;
-	        for (CoopDetails coopDetails : employerCoopDetails) {
-	            if (coopDetails.getId() == cd.getId()) {
-	                employerCoopDetails.remove(coopDetails);
-	                employerCoopDetails.add(cd);
-	                employerContains = true;
-	            }
-	        }
-	        if (employerContains == false) {
-	            employerCoopDetails.add(cd);
-	        }
-	        ec.setCoopDetails(employerCoopDetails);
-	        employerContactRepository.save(ec);
+            Set<CoopDetails> employerCoopDetails = ec.getCoopDetails();
+            boolean employerContains = false;
+            for (CoopDetails coopDetails : employerCoopDetails) {
+                if (coopDetails.getId() == cd.getId()) {
+                    employerCoopDetails.remove(coopDetails);
+                    employerCoopDetails.add(cd);
+                    employerContains = true;
+                }
+            }
+            if (employerContains == false) {
+                employerCoopDetails.add(cd);
+            }
+            ec.setCoopDetails(employerCoopDetails);
+            employerContactRepository.save(ec);
         }
 
         if (c != null) {
-	        c.setCoopDetails(cd);
-	        coopRepository.save(c);
+            c.setCoopDetails(cd);
+            coopRepository.save(c);
         }
 
         return coopDetailsRepository.save(cd);
