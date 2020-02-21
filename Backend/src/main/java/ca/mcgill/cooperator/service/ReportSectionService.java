@@ -6,6 +6,8 @@ import ca.mcgill.cooperator.dao.StudentReportRepository;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.StudentReport;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +115,8 @@ public class ReportSectionService {
             rs.setStudentReport(sr);
             rs = reportSectionRepository.save(rs);
             boolean contains = false;
-            Set<ReportSection> sections = sr.getReportSections();
+            Set<ReportSection> sections = new HashSet<ReportSection>();
+            sections.addAll(sr.getReportSections());
             for (ReportSection section : sections) {
                 if (section.getId() == rs.getId()) {
                     sections.remove(section);
@@ -132,7 +135,8 @@ public class ReportSectionService {
             rs.setEmployerReport(er);
             rs = reportSectionRepository.save(rs);
             boolean contains = false;
-            Set<ReportSection> sections = er.getReportSections();
+            Set<ReportSection> sections = new HashSet<ReportSection>();
+            sections.addAll(er.getReportSections());
             for (ReportSection section : sections) {
                 if (section.getId() == rs.getId()) {
                     sections.remove(section);

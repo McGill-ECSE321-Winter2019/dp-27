@@ -8,6 +8,8 @@ import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -69,7 +71,8 @@ public class EmployerContactService {
         ec.setCoopDetails(new HashSet<CoopDetails>());
         ec.setCompany(company);
 
-        List<EmployerContact> employers = company.getEmployees();
+        List<EmployerContact> employers = new ArrayList<EmployerContact>();
+        employers.addAll(company.getEmployees());
         employers.add(ec);
         company.setEmployees(employers);
 

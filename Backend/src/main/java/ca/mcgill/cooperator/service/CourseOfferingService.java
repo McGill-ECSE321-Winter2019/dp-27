@@ -49,7 +49,8 @@ public class CourseOfferingService {
 
         co = courseOfferingRepository.save(co);
 
-        List<CourseOffering> offerings = c.getCourseOfferings();
+        List<CourseOffering> offerings = new ArrayList<CourseOffering>();
+        offerings.addAll(c.getCourseOfferings());
         offerings.add(co);
         c.setCourseOfferings(offerings);
 

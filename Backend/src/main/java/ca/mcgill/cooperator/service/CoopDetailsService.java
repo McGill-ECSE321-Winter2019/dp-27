@@ -6,6 +6,8 @@ import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,8 @@ public class CoopDetailsService {
 
         cd = coopDetailsRepository.save(cd);
 
-        Set<CoopDetails> employerCoopDetails = ec.getCoopDetails();
+        Set<CoopDetails> employerCoopDetails = new HashSet<CoopDetails>();
+        employerCoopDetails.addAll(ec.getCoopDetails());
         employerCoopDetails.add(cd);
         ec.setCoopDetails(employerCoopDetails);
 
@@ -155,7 +158,8 @@ public class CoopDetailsService {
         coopDetailsRepository.save(cd);
 
         if (ec != null) {
-            Set<CoopDetails> employerCoopDetails = ec.getCoopDetails();
+        	Set<CoopDetails> employerCoopDetails = new HashSet<CoopDetails>();
+            employerCoopDetails.addAll(ec.getCoopDetails());
             boolean employerContains = false;
             for (CoopDetails coopDetails : employerCoopDetails) {
                 if (coopDetails.getId() == cd.getId()) {
