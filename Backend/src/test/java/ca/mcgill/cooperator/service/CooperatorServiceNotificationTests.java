@@ -74,7 +74,7 @@ public class CooperatorServiceNotificationTests {
         assertFalse(notificationService.getAllNotifications().get(0).getSeen());
         
         try {
-            notificationService.setSeen(notificationService.getAllNotifications().get(0));
+            notificationService.markAsRead(notificationService.getAllNotifications().get(0));
 
         } catch (IllegalArgumentException e) {
             fail();

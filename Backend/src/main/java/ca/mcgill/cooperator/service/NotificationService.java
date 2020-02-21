@@ -119,16 +119,12 @@ public class NotificationService {
      *
      * @return notification seen
      */
-    public Notification setSeen(Notification n) {
-    	StringBuilder error = new StringBuilder();
+    public Notification markAsRead(Notification n) {
     	if(n != null)
     		n.setSeen(true);
     	else {
-    		error.append("Notification cannot be null");
+    		throw new IllegalArgumentException("Notification cannot be null");
     	}
-    	if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
-        }
     	notificationRepository.save(n);
     	return n;
     }

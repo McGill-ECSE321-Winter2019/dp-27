@@ -51,10 +51,10 @@ public class NotificationController {
      * @param id
      * @return NotificationDto
      */
-    @GetMapping("/seen/{id}")
+    @PutMapping("/{id}/seen")
     public NotificationDto setNotificationSeen(@RequestParam int id) {
         Notification n = notificationService.getNotification(id);
-        notificationService.setSeen(n);
+        notificationService.markAsRead(n);
         return ControllerUtils.convertToDto(n);
     }
 
