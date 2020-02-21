@@ -51,7 +51,7 @@ public class NotificationController {
      * @param id
      * @return NotificationDto
      */
-    @PutMapping("/{id}/seen")
+    @PutMapping("/{id}/mark-as-read")
     public NotificationDto setNotificationSeen(@RequestParam int id) {
         Notification n = notificationService.getNotification(id);
         notificationService.markAsRead(n);
