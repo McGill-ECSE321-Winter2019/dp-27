@@ -17,7 +17,7 @@
 
         <q-btn dense round flat class="q-mr-sm" icon="notifications">
           <q-badge color="white" text-color="red" floating transparent>
-            4
+            {unseen.length}
           </q-badge>
         </q-btn>
 
@@ -83,8 +83,22 @@ export default {
   },
   data() {
     return {
-      leftDrawerOpen: false
+      leftDrawerOpen: false,
+      unseen: []
     };
+  },
+  created: function (){
+    const user = this.$store.state.currentUser;
+    this.$axios.get("/notifications/" + user.id + "/unread",{
+          headers: {
+            Authorization: this.$store.state.token
+          }
+        }).then(resp => {
+      this.unseen = resp.data;
+    });
+  },
+  methods: {
+    //open notification popup?? 
   }
 };
 </script>
