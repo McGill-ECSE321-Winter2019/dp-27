@@ -81,6 +81,19 @@ public class NotificationController {
 
         return ControllerUtils.convertNotifListToDto(n);
     }
+    
+    /**
+     * Get unseen Notifications for student
+     *
+     * @return List<NotificationDto>
+     */
+    @GetMapping("/{id}/unread")
+    public List<NotificationDto> getUnreadForStudent(@RequestParam int id) {
+    	Student student = studentService.getStudentById(id);
+        List<Notification> n = notificationService.getUnreadForStudent(student);
+        
+        return ControllerUtils.convertNotifListToDto(n);
+    }
 
     /**
      * Creates Notification
