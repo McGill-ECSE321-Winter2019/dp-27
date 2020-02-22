@@ -52,7 +52,7 @@ public class CourseService {
         if (offerings != null) {
             c.setCourseOfferings(offerings);
         }
-        if (name != null && name.trim().length() > 0) {
+        if (name != null) {
             c.setName(name.trim());
         }
 

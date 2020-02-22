@@ -110,23 +110,21 @@ public class ReportSectionService {
         if (content != null && content.trim().length() > 0) {
             rs.setContent(content.trim());
         }
-
+        
+        
+        //need to update student report side or employer report side since 
+        //info is stored in multiple tables in db
         if (sr != null) {
             rs.setStudentReport(sr);
             rs = reportSectionRepository.save(rs);
-            boolean contains = false;
+            
             Set<ReportSection> sections = new HashSet<ReportSection>();
             sections.addAll(sr.getReportSections());
-            for (ReportSection section : sections) {
-                if (section.getId() == rs.getId()) {
-                    sections.remove(section);
-                    sections.add(section);
-                    contains = true;
-                }
-            }
-            if (contains == false) {
-                sections.add(rs);
-            }
+            Set<ReportSection> newSections = new HashSet<ReportSection>();
+            newSections.add(rs);
+            //addAll() is the union of the sets
+            sections.addAll(newSections);
+            
             sr.setReportSections(sections);
             studentReportRepository.save(sr);
         }
@@ -134,19 +132,14 @@ public class ReportSectionService {
         if (er != null) {
             rs.setEmployerReport(er);
             rs = reportSectionRepository.save(rs);
-            boolean contains = false;
+            
             Set<ReportSection> sections = new HashSet<ReportSection>();
             sections.addAll(er.getReportSections());
-            for (ReportSection section : sections) {
-                if (section.getId() == rs.getId()) {
-                    sections.remove(section);
-                    sections.add(section);
-                    contains = true;
-                }
-            }
-            if (contains == false) {
-                sections.add(rs);
-            }
+            Set<ReportSection> newSections = new HashSet<ReportSection>();
+            newSections.add(rs);
+            //addAll() is the union of the sets
+            sections.addAll(newSections);
+            
             er.setReportSections(sections);
             employerReportRepository.save(er);
         }

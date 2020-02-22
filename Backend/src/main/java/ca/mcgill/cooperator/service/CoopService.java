@@ -16,7 +16,6 @@ import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,21 +64,6 @@ public class CoopService {
         c.setStudent(s);
         c.setEmployerReports(new HashSet<EmployerReport>());
         c.setStudentReports(new HashSet<StudentReport>());
-
-        c = coopRepository.save(c);
-
-        Set<Coop> studentCoops = new HashSet<Coop>();
-        studentCoops.addAll(s.getCoops());
-        studentCoops.add(c);
-        s.setCoops(studentCoops);
-
-        List<Coop> coops = new ArrayList<Coop>();
-        coops.addAll(courseOffering.getCoops());
-        coops.add(c);
-        courseOffering.setCoops(coops);
-
-        studentRepository.save(s);
-        courseOfferingRepository.save(courseOffering);
 
         return coopRepository.save(c);
     }
@@ -138,45 +122,6 @@ public class CoopService {
         }
         if (studentReports != null) {
             c.setStudentReports(studentReports);
-        }
-
-        coopRepository.save(c);
-
-        if (s != null) {
-            boolean studentContains = false;
-            Set<Coop> studentCoops = new HashSet<Coop>();
-            studentCoops.addAll(s.getCoops());
-            for (Coop studentCoop : studentCoops) {
-                if (studentCoop.getId() == c.getId()) {
-                    studentCoops.remove(studentCoop);
-                    studentCoops.add(c);
-                    studentContains = true;
-                }
-            }
-            if (studentContains == false) {
-                studentCoops.add(c);
-            }
-
-            studentRepository.save(s);
-        }
-
-        if (cd != null) {
-            cd.setCoop(c);
-            coopDetailsRepository.save(cd);
-        }
-
-        if (employerReports != null) {
-            for (EmployerReport employerReport : employerReports) {
-                employerReport.setCoop(c);
-                employerReportRepository.save(employerReport);
-            }
-        }
-
-        if (studentReports != null) {
-            for (StudentReport studentReport : studentReports) {
-                studentReport.setCoop(c);
-                studentReportRepository.save(studentReport);
-            }
         }
 
         return coopRepository.save(c);

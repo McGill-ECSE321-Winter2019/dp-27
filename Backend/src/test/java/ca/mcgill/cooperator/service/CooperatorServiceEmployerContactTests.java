@@ -83,6 +83,8 @@ public class CooperatorServiceEmployerContactTests {
             fail();
         }
 
+        c = companyService.getCompany(c.getId());
+        assertEquals(firstName, c.getEmployees().get(0).getFirstName());
         assertEquals(1, employerContactService.getAllEmployerContacts().size());
     }
 
@@ -235,6 +237,10 @@ public class CooperatorServiceEmployerContactTests {
         assertEquals(1, ec.getCoopDetails().size());
         assertEquals(lastName, ec.getLastName());
         assertEquals(1, employerContactService.getAllEmployerContacts().size());
+        c = companyService.getCompany(c.getId());
+        assertEquals(firstName, c.getEmployees().get(0).getFirstName());
+        cd = coopDetailsService.getCoopDetails(cd.getId());
+        assertEquals(firstName, cd.getEmployerContact().getFirstName());
     }
 
     @Test
@@ -273,6 +279,8 @@ public class CooperatorServiceEmployerContactTests {
 
         assertEquals(firstName, ec.getFirstName());
         assertEquals(1, employerContactService.getAllEmployerContacts().size());
+        c = companyService.getCompany(c.getId());
+        assertEquals(firstName, c.getEmployees().get(0).getFirstName());
     }
 
     @Test

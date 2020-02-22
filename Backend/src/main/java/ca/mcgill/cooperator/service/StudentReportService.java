@@ -63,15 +63,6 @@ public class StudentReportService {
             }
         }
 
-        sr = studentReportRepository.save(sr);
-
-        Set<StudentReport> reports = new HashSet<>();
-        reports.addAll(c.getStudentReports());
-        reports.add(sr);
-        c.setStudentReports(reports);
-
-        coopRepository.save(c);
-
         return studentReportRepository.save(sr);
     }
 
@@ -151,30 +142,10 @@ public class StudentReportService {
 
         sr = studentReportRepository.save(sr);
 
-        if (c != null) {
-            // add/set employer report to coop
-            boolean coopContains = false;
-
-            Set<StudentReport> coopReports = new HashSet<>();
-            coopReports.addAll(c.getStudentReports());
-            for (StudentReport coopStudentReport : coopReports) {
-                if (coopStudentReport.getId() == sr.getId()) {
-                    coopReports.remove(coopStudentReport);
-                    coopReports.add(sr);
-                    coopContains = true;
-                }
-            }
-
-            if (coopContains == false) {
-                coopReports.add(sr);
-            }
-            c.setStudentReports(coopReports);
-
-            coopRepository.save(c);
-        }
-
+        //update student report side of relation since 
+        //info is stored in multiple tables in db
         if (sections != null) {
-            // set employer report as parent for all report sections
+            // set student report as parent for all report sections
             for (ReportSection section : sections) {
                 section.setStudentReport(sr);
                 reportSectionRepository.save(section);

@@ -156,13 +156,14 @@ public class CooperatorServiceAdminTests {
         String firstName = "Paul";
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
+        Notification n = new Notification();
 
         Admin a = null;
         try {
             adminService.createAdmin(firstName, lastName, email);
             a = adminService.getAdmin(email);
 
-            Notification n = createTestNotification(a);
+            n = createTestNotification(a);
             List<Notification> notifications = a.getSentNotifications();
             notifications.add(n);
 
@@ -171,7 +172,10 @@ public class CooperatorServiceAdminTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
+        
+        n = notificationService.getNotification(n.getId());
 
+        assertEquals("Paul", n.getSender().getFirstName());
         assertEquals(1, a.getSentNotifications().size());
         assertEquals(lastName, a.getLastName());
         assertEquals(1, adminService.getAllAdmins().size());

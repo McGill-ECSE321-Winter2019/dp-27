@@ -196,7 +196,7 @@ public class StudentService {
             s.setCoops(coops);
         }
 
-        s = studentRepository.save(s);
+        /*s = studentRepository.save(s);
 
         if (notifs != null) {
             for (Notification notif : notifs) {
@@ -210,7 +210,7 @@ public class StudentService {
                 coop.setStudent(s);
                 coopRepository.save(coop);
             }
-        }
+        }*/
 
         return studentRepository.save(s);
     }

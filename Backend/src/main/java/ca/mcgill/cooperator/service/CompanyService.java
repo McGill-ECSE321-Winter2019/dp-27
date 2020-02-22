@@ -65,12 +65,6 @@ public class CompanyService {
         c.setEmployees(employees);
         companyRepository.save(c);
 
-        for (EmployerContact employerContact : employees) {
-            // We do this in case a new employee does not have the Company field set
-            employerContact.setCompany(c);
-            employerContactRepository.save(employerContact);
-        }
-
         return companyRepository.save(c);
     }
 
@@ -206,16 +200,6 @@ public class CompanyService {
 
         if (employees != null) {
             c.setEmployees(employees);
-        }
-
-        companyRepository.save(c);
-
-        if (employees != null) {
-            for (EmployerContact employerContact : employees) {
-                // We do this in case a new employee does not have the Company field set
-                employerContact.setCompany(c);
-                employerContactRepository.save(employerContact);
-            }
         }
 
         return companyRepository.save(c);

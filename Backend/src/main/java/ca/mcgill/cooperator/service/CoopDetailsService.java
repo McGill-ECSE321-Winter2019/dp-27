@@ -7,7 +7,6 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,18 +53,6 @@ public class CoopDetailsService {
         cd.setHoursPerWeek(hoursPerWeek);
         cd.setEmployerContact(ec);
         cd.setCoop(c);
-
-        cd = coopDetailsRepository.save(cd);
-
-        Set<CoopDetails> employerCoopDetails = new HashSet<CoopDetails>();
-        employerCoopDetails.addAll(ec.getCoopDetails());
-        employerCoopDetails.add(cd);
-        ec.setCoopDetails(employerCoopDetails);
-
-        c.setCoopDetails(cd);
-
-        employerContactRepository.save(ec);
-        coopRepository.save(c);
 
         return coopDetailsRepository.save(cd);
     }
@@ -153,31 +140,6 @@ public class CoopDetailsService {
         }
         if (c != null) {
             cd.setCoop(c);
-        }
-
-        coopDetailsRepository.save(cd);
-
-        if (ec != null) {
-        	Set<CoopDetails> employerCoopDetails = new HashSet<CoopDetails>();
-            employerCoopDetails.addAll(ec.getCoopDetails());
-            boolean employerContains = false;
-            for (CoopDetails coopDetails : employerCoopDetails) {
-                if (coopDetails.getId() == cd.getId()) {
-                    employerCoopDetails.remove(coopDetails);
-                    employerCoopDetails.add(cd);
-                    employerContains = true;
-                }
-            }
-            if (employerContains == false) {
-                employerCoopDetails.add(cd);
-            }
-            ec.setCoopDetails(employerCoopDetails);
-            employerContactRepository.save(ec);
-        }
-
-        if (c != null) {
-            c.setCoopDetails(cd);
-            coopRepository.save(c);
         }
 
         return coopDetailsRepository.save(cd);

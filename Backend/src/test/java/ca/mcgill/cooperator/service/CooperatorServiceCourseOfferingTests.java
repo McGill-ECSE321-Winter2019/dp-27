@@ -51,6 +51,8 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(co.getSeason(), season);
         assertEquals(co.getYear(), year);
         assertEquals(co.getCourse().getId(), c.getId());
+        c = courseService.getCourseById(c.getId());
+        assertEquals(season, c.getCourseOfferings().get(0).getSeason());
     }
 
     @Test
@@ -105,6 +107,8 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(co.getSeason(), season2);
         assertEquals(co.getYear(), year2);
         assertEquals(co.getCourse().getId(), c2.getId());
+        c2 = courseService.getCourseById(c2.getId());
+        assertEquals(season2, c2.getCourseOfferings().get(0).getSeason());
     }
 
     @Test

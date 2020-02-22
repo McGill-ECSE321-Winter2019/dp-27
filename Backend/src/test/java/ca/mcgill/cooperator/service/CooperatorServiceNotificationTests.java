@@ -54,6 +54,11 @@ public class CooperatorServiceNotificationTests {
         }
 
         assertEquals(1, notificationService.getAllNotifications().size());
+        student = studentService.getStudentById(student.getId());
+        assertEquals("Hello", ((Notification)student.getNotifications().toArray()[0]).getTitle());
+        sender = adminService.getAdmin(sender.getId());
+        assertEquals("Hello", sender.getSentNotifications().get(0).getTitle());
+        
     }
     
     @Test
@@ -180,9 +185,12 @@ public class CooperatorServiceNotificationTests {
         }
 
         sender = adminService.getAdmin(sender.getId());
+        
+        student = studentService.getStudentById(student.getId());
 
         assertEquals("Bye", n.getTitle());
         assertEquals("Bye", sender.getSentNotifications().get(0).getTitle());
+        assertEquals("Bye", ((Notification)student.getNotifications().toArray()[0]).getTitle());
         assertEquals(1, notificationService.getAllNotifications().size());
     }
 

@@ -69,21 +69,6 @@ public class EmployerReportService {
             }
         }
 
-        er = employerReportRepository.save(er);
-
-        Set<EmployerReport> coopReports = new HashSet<EmployerReport>();
-        coopReports.addAll(c.getEmployerReports());
-        coopReports.add(er);
-        c.setEmployerReports(coopReports);
-
-        Set<EmployerReport> ecReports = new HashSet<EmployerReport>();
-        ecReports.addAll(ec.getEmployerReports());
-        ecReports.add(er);
-        ec.setEmployerReports(ecReports);
-
-        coopRepository.save(c);
-        employerContactRepository.save(ec);
-
         return employerReportRepository.save(er);
     }
 
@@ -165,53 +150,10 @@ public class EmployerReportService {
         } catch (IOException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
+        
+        employerReportRepository.save(er);
 
-        er = employerReportRepository.save(er);
-
-        // add/set employer report to coop
-        if (c != null) {
-            boolean coopContains = false;
-
-            Set<EmployerReport> coopReports = new HashSet<EmployerReport>();
-            coopReports.addAll(c.getEmployerReports());
-            for (EmployerReport coopEmployerReport : coopReports) {
-                if (coopEmployerReport.getId() == er.getId()) {
-                    coopReports.remove(coopEmployerReport);
-                    coopReports.add(er);
-                    coopContains = true;
-                }
-            }
-
-            if (coopContains == false) {
-                coopReports.add(er);
-            }
-            c.setEmployerReports(coopReports);
-
-            coopRepository.save(c);
-        }
-
-        // add/set employer report to employer contact
-        if (ec != null) {
-            boolean employerContains = false;
-
-            Set<EmployerReport> employerReports = new HashSet<EmployerReport>();
-            employerReports.addAll(c.getEmployerReports());
-            for (EmployerReport employerReport : employerReports) {
-                if (employerReport.getId() == er.getId()) {
-                    employerReports.remove(employerReport);
-                    employerReports.add(er);
-                    employerContains = true;
-                }
-            }
-
-            if (employerContains == false) {
-                employerReports.add(er);
-            }
-            ec.setEmployerReports(employerReports);
-
-            employerContactRepository.save(ec);
-        }
-
+        //need to update sections side since info stored in separate tables in db
         if (sections != null) {
             // set employer report as parent for all report sections
             for (ReportSection section : sections) {

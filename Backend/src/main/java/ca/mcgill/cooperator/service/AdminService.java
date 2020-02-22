@@ -131,24 +131,28 @@ public class AdminService {
         }
         // set fields if they're not null
 
-        if (firstName != null && firstName.trim().length() > 0) {
+        if (firstName != null) {
             a.setFirstName(firstName.trim());
         }
-        if (lastName != null && lastName.trim().length() > 0) {
+        if (lastName != null) {
             a.setLastName(lastName.trim());
         }
-        if (email != null && email.trim().length() > 0 && ServiceUtils.isValidEmail(email)) {
+        if (email != null) {
             a.setEmail(email.trim());
         }
-
+        
         if (sentNotifications != null) {
+        	a.setSentNotifications(sentNotifications);
+        }
+
+        /*if (sentNotifications != null) {
             for (Notification n : sentNotifications) {
                 n.setSender(a);
                 notificationRepository.save(n);
             }
 
             a.setSentNotifications(sentNotifications);
-        }
+        }*/
 
         return adminRepository.save(a);
     }

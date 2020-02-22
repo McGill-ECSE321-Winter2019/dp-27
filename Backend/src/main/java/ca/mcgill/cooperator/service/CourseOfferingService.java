@@ -46,16 +46,7 @@ public class CourseOfferingService {
         co.setSeason(season);
         co.setCourse(c);
         co.setCoops(new ArrayList<Coop>());
-
-        co = courseOfferingRepository.save(co);
-
-        List<CourseOffering> offerings = new ArrayList<CourseOffering>();
-        offerings.addAll(c.getCourseOfferings());
-        offerings.add(co);
-        c.setCourseOfferings(offerings);
-
-        courseRepository.save(c);
-
+        
         return courseOfferingRepository.save(co);
     }
 

@@ -108,7 +108,7 @@ public class StudentReportController {
     }
 
     /**
-     * Updates a StudentReport, put not the actual contents of report
+     * Updates a StudentReport
      *
      * @param reportId
      * @param status

@@ -67,7 +67,7 @@ public class CooperatorServiceCoopDetailsTests {
 
     @Test
     public void testCreateCoopDetails() {
-        int payPerHour = 20;
+        int payPerHour = 2000;
         int hoursPerWeek = 40;
         Company company = createTestCompany();
         EmployerContact ec = createTestEmployerContact(company);
@@ -81,7 +81,11 @@ public class CooperatorServiceCoopDetailsTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-
+        
+        ec = employerContactService.getEmployerContact(ec.getId());
+        assertEquals(2000, ((CoopDetails)ec.getCoopDetails().toArray()[0]).getPayPerHour());
+        coop = coopService.getCoopById(coop.getId());
+        assertEquals(2000, coop.getCoopDetails().getPayPerHour());
         assertEquals(1, coopDetailsService.getAllCoopDetails().size());
     }
 
@@ -123,7 +127,7 @@ public class CooperatorServiceCoopDetailsTests {
     @Test
     public void testUpdateCoopDetails() {
         CoopDetails cd = null;
-        int payPerHour = 20;
+        int payPerHour = 2000;
         int hoursPerWeek = 40;
         Company company = createTestCompany();
         EmployerContact ec = createTestEmployerContact(company);
@@ -141,12 +145,16 @@ public class CooperatorServiceCoopDetailsTests {
         assertEquals(1, coopDetailsService.getAllCoopDetails().size());
 
         try {
-            cd = coopDetailsService.updateCoopDetails(cd, 22, 30, ec, coop);
+            cd = coopDetailsService.updateCoopDetails(cd, 2200, 30, ec, coop);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(22, cd.getPayPerHour());
+        ec = employerContactService.getEmployerContact(ec.getId());
+        assertEquals(2200, ((CoopDetails)ec.getCoopDetails().toArray()[0]).getPayPerHour());
+        coop = coopService.getCoopById(coop.getId());
+        assertEquals(2200, coop.getCoopDetails().getPayPerHour());
+        assertEquals(2200, cd.getPayPerHour());
         assertEquals(1, coopDetailsService.getAllCoopDetails().size());
     }
 
