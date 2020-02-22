@@ -17,7 +17,7 @@
 
         <q-btn dense round flat class="q-mr-sm" icon="notifications">
           <q-badge color="white" text-color="red" floating transparent>
-            {unseen.length}
+            {{unseen.length}}
           </q-badge>
         </q-btn>
 
@@ -98,7 +98,7 @@ export default {
     });
   },
   methods: {
-    //open notification popup?? 
+    //open notification popup??
   }
 };
 </script>
