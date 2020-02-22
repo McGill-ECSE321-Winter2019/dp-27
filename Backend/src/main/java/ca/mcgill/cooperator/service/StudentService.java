@@ -196,22 +196,6 @@ public class StudentService {
             s.setCoops(coops);
         }
 
-        /*s = studentRepository.save(s);
-
-        if (notifs != null) {
-            for (Notification notif : notifs) {
-                notif.setStudent(s);
-                notificationRepository.save(notif);
-            }
-        }
-
-        if (coops != null) {
-            for (Coop coop : coops) {
-                coop.setStudent(s);
-                coopRepository.save(coop);
-            }
-        }*/
-
         return studentRepository.save(s);
     }
 
