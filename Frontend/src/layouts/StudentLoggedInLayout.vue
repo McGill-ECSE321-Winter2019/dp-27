@@ -23,14 +23,7 @@
 
         <q-btn flat dense round icon="settings" aria-label="Settings">
           <q-menu>
-            <q-list style="min-width: 100px">
-              <q-item clickable v-close-popup>
-                <q-item-section>username</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section>Help</q-item-section>
-              </q-item>
-              <q-separator />
+            <q-list style="min-width: 125px">
               <q-item clickable v-close-popup>
                 <q-item-section>Settings</q-item-section>
               </q-item>
@@ -63,6 +56,12 @@
           caption="View submitted and pending reports"
           link="/student/reports"
           icon="assignment"
+        />
+        <SidebarLink
+          title="Help"
+          caption="View frequently asked questions"
+          link="/student/help"
+          icon="help_outline"
         />
       </q-list>
     </q-drawer>
