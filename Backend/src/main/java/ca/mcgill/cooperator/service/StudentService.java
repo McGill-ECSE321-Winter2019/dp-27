@@ -85,8 +85,8 @@ public class StudentService {
         } else if (!ServiceUtils.isValidEmail(email)) {
             error.append("Student email must be a valid email. ");
         }
-        if (studentId == null || studentId.trim().length() == 0) {
-            error.append("Student ID cannot be empty. ");
+        if (studentId == null || studentId.trim().length() != 9) {
+            error.append("Invalid StudentID. ");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
