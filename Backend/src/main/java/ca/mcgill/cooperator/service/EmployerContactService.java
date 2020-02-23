@@ -8,7 +8,6 @@ import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -165,18 +164,16 @@ public class EmployerContactService {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        if (firstName != null && firstName.trim().length() > 0) {
+        if (firstName != null) {
             ec.setFirstName(firstName.trim());
         }
-        if (lastName != null && lastName.trim().length() > 0) {
+        if (lastName != null) {
             ec.setLastName(lastName.trim());
         }
-        if (email != null && email.trim().length() > 0 && ServiceUtils.isValidEmail(email)) {
+        if (email != null) {
             ec.setEmail(email.trim());
         }
-        if (phoneNumber != null
-                && phoneNumber.trim().length() > 0
-                && ServiceUtils.isValidPhoneNumber(phoneNumber)) {
+        if (phoneNumber != null) {
             ec.setPhoneNumber(phoneNumber.trim());
         }
         if (employerReports != null) {

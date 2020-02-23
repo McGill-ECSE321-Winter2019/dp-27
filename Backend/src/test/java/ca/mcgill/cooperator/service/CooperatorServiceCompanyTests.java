@@ -180,9 +180,9 @@ public class CooperatorServiceCompanyTests {
         } catch (IllegalArgumentException _e) {
             fail();
         }
-        
+
         ec = employerContactService.getEmployerContact(ec.getId());
-        
+
         assertEquals("Index Exchange", ec.getCompany().getName());
         assertEquals(1, companyService.getAllCompanies().size());
         assertEquals("Index Exchange", c.getName());

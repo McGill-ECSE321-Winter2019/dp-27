@@ -177,13 +177,13 @@ public class StudentService {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        if (firstName != null && firstName.trim().length() > 0) {
+        if (firstName != null) {
             s.setFirstName(firstName.trim());
         }
-        if (lastName != null && lastName.trim().length() > 0) {
+        if (lastName != null) {
             s.setLastName(lastName.trim());
         }
-        if (email != null && email.trim().length() > 0 && ServiceUtils.isValidEmail(email)) {
+        if (email != null) {
             s.setEmail(email.trim());
         }
         if (studentId != null) {

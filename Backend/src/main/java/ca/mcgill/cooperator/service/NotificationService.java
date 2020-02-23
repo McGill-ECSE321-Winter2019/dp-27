@@ -6,7 +6,6 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
-
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,16 +108,14 @@ public class NotificationService {
      * @return notification seen
      */
     public Notification markAsRead(Notification n) {
-    	if(n != null)
-    		n.setSeen(true);
-    	else {
-    		throw new IllegalArgumentException("Notification cannot be null");
-    	}
-    	notificationRepository.save(n);
-    	return n;
+        if (n != null) n.setSeen(true);
+        else {
+            throw new IllegalArgumentException("Notification cannot be null");
+        }
+        notificationRepository.save(n);
+        return n;
     }
-    
-    
+
     /**
      * updates an already existing notification
      *
@@ -151,7 +148,7 @@ public class NotificationService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
-        
+
         if (title != null) {
             n.setTitle(title.trim());
         }
@@ -159,10 +156,10 @@ public class NotificationService {
             n.setBody(body.trim());
         }
         if (sender != null) {
-        	n.setSender(sender);
+            n.setSender(sender);
         }
         if (student != null) {
-        	n.setStudent(student);
+            n.setStudent(student);
         }
 
         return notificationRepository.save(n);

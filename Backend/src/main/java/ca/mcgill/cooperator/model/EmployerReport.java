@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -26,10 +25,10 @@ public class EmployerReport {
     @ManyToOne private EmployerContact employerContact;
 
     @OneToMany(
-    		mappedBy = "employerReport",
-    		cascade = CascadeType.ALL, 
-    		orphanRemoval = true, 
-    		fetch = FetchType.EAGER)
+            mappedBy = "employerReport",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<ReportSection> reportSections;
 

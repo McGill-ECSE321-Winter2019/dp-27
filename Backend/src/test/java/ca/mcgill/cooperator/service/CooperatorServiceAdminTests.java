@@ -172,7 +172,7 @@ public class CooperatorServiceAdminTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-        
+
         n = notificationService.getNotification(n.getId());
 
         assertEquals("Paul", n.getSender().getFirstName());

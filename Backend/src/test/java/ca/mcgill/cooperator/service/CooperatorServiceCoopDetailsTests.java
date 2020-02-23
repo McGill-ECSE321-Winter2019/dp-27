@@ -81,9 +81,9 @@ public class CooperatorServiceCoopDetailsTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-        
+
         ec = employerContactService.getEmployerContact(ec.getId());
-        assertEquals(2000, ((CoopDetails)ec.getCoopDetails().toArray()[0]).getPayPerHour());
+        assertEquals(2000, ((CoopDetails) ec.getCoopDetails().toArray()[0]).getPayPerHour());
         coop = coopService.getCoopById(coop.getId());
         assertEquals(2000, coop.getCoopDetails().getPayPerHour());
         assertEquals(1, coopDetailsService.getAllCoopDetails().size());
@@ -151,7 +151,7 @@ public class CooperatorServiceCoopDetailsTests {
         }
 
         ec = employerContactService.getEmployerContact(ec.getId());
-        assertEquals(2200, ((CoopDetails)ec.getCoopDetails().toArray()[0]).getPayPerHour());
+        assertEquals(2200, ((CoopDetails) ec.getCoopDetails().toArray()[0]).getPayPerHour());
         coop = coopService.getCoopById(coop.getId());
         assertEquals(2200, coop.getCoopDetails().getPayPerHour());
         assertEquals(2200, cd.getPayPerHour());

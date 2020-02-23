@@ -69,7 +69,7 @@ public class CooperatorServiceReportSectionTests {
             er.setCoop(null);
             employerReportRepository.save(er);
         }
-        
+
         List<ReportSection> reportSections = reportSectionService.getAllReportSections();
         for (ReportSection reportSection : reportSections) {
             reportSectionService.deleteReportSection(reportSection);
@@ -177,7 +177,7 @@ public class CooperatorServiceReportSectionTests {
         assertEquals(sr.getId(), rs.getStudentReport().getId());
         assertEquals(1, reportSectionService.getAllReportSections().size());
         sr = studentReportService.getStudentReport(sr.getId());
-        assertEquals(title, ((ReportSection)sr.getReportSections().toArray()[0]).getTitle());
+        assertEquals(title, ((ReportSection) sr.getReportSections().toArray()[0]).getTitle());
     }
 
     @Test
@@ -211,7 +211,7 @@ public class CooperatorServiceReportSectionTests {
         assertEquals(er.getId(), rs.getEmployerReport().getId());
         assertEquals(1, reportSectionService.getAllReportSections().size());
         er = employerReportService.getEmployerReport(er.getId());
-        assertEquals(title, ((ReportSection)er.getReportSections().toArray()[0]).getTitle());
+        assertEquals(title, ((ReportSection) er.getReportSections().toArray()[0]).getTitle());
     }
 
     @Test

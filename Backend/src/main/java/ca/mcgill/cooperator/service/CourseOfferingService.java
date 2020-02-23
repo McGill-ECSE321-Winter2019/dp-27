@@ -46,7 +46,7 @@ public class CourseOfferingService {
         co.setSeason(season);
         co.setCourse(c);
         co.setCoops(new ArrayList<Coop>());
-        
+
         return courseOfferingRepository.save(co);
     }
 

@@ -217,7 +217,9 @@ public class CooperatorServiceStudentTests {
         assertEquals(1, s.getCoops().size());
         assertEquals(1, studentService.getAllStudents().size());
         coop = coopService.getCoopById(coop.getId());
-        assertEquals(firstName, ((Coop)coop.getStudent().getCoops().toArray()[0]).getStudent().getFirstName());
+        assertEquals(
+                firstName,
+                ((Coop) coop.getStudent().getCoops().toArray()[0]).getStudent().getFirstName());
         notif = notificationService.getNotification(notif.getId());
         assertEquals(firstName, notif.getStudent().getFirstName());
     }

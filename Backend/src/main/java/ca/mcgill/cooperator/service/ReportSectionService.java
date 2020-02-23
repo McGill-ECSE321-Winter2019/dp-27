@@ -6,7 +6,6 @@ import ca.mcgill.cooperator.dao.StudentReportRepository;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.StudentReport;
-
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,10 +102,10 @@ public class ReportSectionService {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        if (title != null && title.trim().length() > 0) {
+        if (title != null) {
             rs.setTitle(title.trim());
         }
-        if (content != null && content.trim().length() > 0) {
+        if (content != null) {
             rs.setContent(content.trim());
         }
         if (sr != null) {

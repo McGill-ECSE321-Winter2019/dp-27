@@ -6,7 +6,6 @@ import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
-
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;

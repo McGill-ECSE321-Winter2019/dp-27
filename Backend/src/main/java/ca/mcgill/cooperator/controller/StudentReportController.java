@@ -111,6 +111,7 @@ public class StudentReportController {
      * Updates a StudentReport
      *
      * @param reportId
+     * @param file
      * @param status
      * @param title
      * @param rsDtos

@@ -125,7 +125,7 @@ public class StudentReportService {
         if (c != null) {
             sr.setCoop(c);
         }
-        if (title != null && title.trim().length() > 0) {
+        if (title != null) {
             sr.setTitle(title);
         }
         if (sections != null) {
@@ -142,7 +142,7 @@ public class StudentReportService {
 
         sr = studentReportRepository.save(sr);
 
-        //update student report side of relation since it doesn't sync
+        // update student report side of relation since it doesn't sync
         if (sections != null) {
             // set student report as parent for all report sections
             for (ReportSection section : sections) {

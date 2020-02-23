@@ -133,7 +133,7 @@ public class EmployerReportService {
         if (status != null) {
             er.setStatus(status);
         }
-        if (title != null && title.trim().length() > 0) {
+        if (title != null) {
             er.setTitle(title);
         }
         if (c != null) {
@@ -150,10 +150,10 @@ public class EmployerReportService {
         } catch (IOException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
-        
+
         employerReportRepository.save(er);
 
-        //need to update sections side since it doesn't sync
+        // need to update sections side since it doesn't sync
         if (sections != null) {
             // set employer report as parent for all report sections
             for (ReportSection section : sections) {

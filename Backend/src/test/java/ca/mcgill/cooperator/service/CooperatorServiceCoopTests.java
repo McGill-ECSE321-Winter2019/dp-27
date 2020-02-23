@@ -82,11 +82,11 @@ public class CooperatorServiceCoopTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
-        
+
         courseOffering = courseOfferingService.getCourseOfferingById(courseOffering.getId());
         assertEquals(status, courseOffering.getCoops().get(0).getStatus());
         student = studentService.getStudentById(student.getId());
-        assertEquals(status, ((Coop)student.getCoops().toArray()[0]).getStatus());
+        assertEquals(status, ((Coop) student.getCoops().toArray()[0]).getStatus());
         assertEquals(1, coopService.getAllCoops().size());
     }
 
@@ -146,7 +146,7 @@ public class CooperatorServiceCoopTests {
         courseOffering = courseOfferingService.getCourseOfferingById(courseOffering.getId());
         assertEquals(status, courseOffering.getCoops().get(0).getStatus());
         student = studentService.getStudentById(student.getId());
-        assertEquals(status, ((Coop)student.getCoops().toArray()[0]).getStatus());
+        assertEquals(status, ((Coop) student.getCoops().toArray()[0]).getStatus());
         cd = coopDetailsService.getCoopDetails(cd.getId());
         assertEquals(status, cd.getCoop().getStatus());
         assertEquals(status, c.getStatus());

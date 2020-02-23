@@ -189,8 +189,8 @@ public class CompanyService {
         }
 
         if (companyExists(name, city, region, country)) {
-            String error_message = "Company with this name and location already exists!";
-            throw new IllegalArgumentException(error_message);
+            String errorMessage = "Company with this name and location already exists!";
+            throw new IllegalArgumentException(errorMessage);
         }
 
         c.setName(name.trim());

@@ -140,19 +140,10 @@ public class AdminService {
         if (email != null) {
             a.setEmail(email.trim());
         }
-        
+
         if (sentNotifications != null) {
-        	a.setSentNotifications(sentNotifications);
-        }
-
-        /*if (sentNotifications != null) {
-            for (Notification n : sentNotifications) {
-                n.setSender(a);
-                notificationRepository.save(n);
-            }
-
             a.setSentNotifications(sentNotifications);
-        }*/
+        }
 
         return adminRepository.save(a);
     }

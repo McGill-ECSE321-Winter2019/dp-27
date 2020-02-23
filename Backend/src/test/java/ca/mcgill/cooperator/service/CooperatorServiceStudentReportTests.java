@@ -87,8 +87,8 @@ public class CooperatorServiceStudentReportTests {
 
         assertEquals(1, studentReportService.getAllStudentReports().size());
         coop = coopService.getCoopById(coop.getId());
-        assertEquals("Offer Letter", ((StudentReport)coop.getStudentReports().toArray()[0]).getTitle());
-        
+        assertEquals(
+                "Offer Letter", ((StudentReport) coop.getStudentReports().toArray()[0]).getTitle());
     }
 
     @Test
@@ -150,7 +150,8 @@ public class CooperatorServiceStudentReportTests {
         assertEquals(1, sr.getReportSections().size());
         assertEquals(1, studentReportService.getAllStudentReports().size());
         coop = coopService.getCoopById(coop.getId());
-        assertEquals("Offer Letter", ((StudentReport)coop.getStudentReports().toArray()[0]).getTitle());
+        assertEquals(
+                "Offer Letter", ((StudentReport) coop.getStudentReports().toArray()[0]).getTitle());
         rs = reportSectionService.getReportSection(rs.getId());
         assertEquals("Offer Letter", rs.getStudentReport().getTitle());
     }

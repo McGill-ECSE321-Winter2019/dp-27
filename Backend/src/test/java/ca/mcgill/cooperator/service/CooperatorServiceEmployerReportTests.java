@@ -70,7 +70,7 @@ public class CooperatorServiceEmployerReportTests {
             er.setReportSections(new HashSet<ReportSection>());
             employerReportRepository.save(er);
         }
-        
+
         List<ReportSection> reportSections = reportSectionService.getAllReportSections();
         for (ReportSection reportSection : reportSections) {
             reportSectionService.deleteReportSection(reportSection);
@@ -107,9 +107,12 @@ public class CooperatorServiceEmployerReportTests {
 
         assertEquals(1, employerReportService.getAllEmployerReports().size());
         ec = employerContactService.getEmployerContact(ec.getId());
-        assertEquals("Offer Letter", ((EmployerReport)ec.getEmployerReports().toArray()[0]).getTitle());
+        assertEquals(
+                "Offer Letter", ((EmployerReport) ec.getEmployerReports().toArray()[0]).getTitle());
         coop = coopService.getCoopById(coop.getId());
-        assertEquals("Offer Letter", ((EmployerReport)coop.getEmployerReports().toArray()[0]).getTitle());
+        assertEquals(
+                "Offer Letter",
+                ((EmployerReport) coop.getEmployerReports().toArray()[0]).getTitle());
     }
 
     @Test
@@ -212,9 +215,12 @@ public class CooperatorServiceEmployerReportTests {
                 employerReportService.getEmployerReport(er.getId()).getStatus());
         assertEquals(1, employerReportService.getAllEmployerReports().size());
         ec = employerContactService.getEmployerContact(ec.getId());
-        assertEquals("Offer Letter", ((EmployerReport)ec.getEmployerReports().toArray()[0]).getTitle());
+        assertEquals(
+                "Offer Letter", ((EmployerReport) ec.getEmployerReports().toArray()[0]).getTitle());
         coop = coopService.getCoopById(coop.getId());
-        assertEquals("Offer Letter", ((EmployerReport)coop.getEmployerReports().toArray()[0]).getTitle());
+        assertEquals(
+                "Offer Letter",
+                ((EmployerReport) coop.getEmployerReports().toArray()[0]).getTitle());
         rs = reportSectionService.getReportSection(rs.getId());
         assertEquals("Offer Letter", rs.getEmployerReport().getTitle());
     }
