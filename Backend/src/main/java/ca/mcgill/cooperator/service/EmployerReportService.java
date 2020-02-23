@@ -153,7 +153,7 @@ public class EmployerReportService {
         
         employerReportRepository.save(er);
 
-        //need to update sections side since info stored in separate tables in db
+        //need to update sections side since it doesn't sync
         if (sections != null) {
             // set employer report as parent for all report sections
             for (ReportSection section : sections) {

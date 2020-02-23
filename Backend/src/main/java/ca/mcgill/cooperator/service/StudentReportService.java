@@ -142,8 +142,7 @@ public class StudentReportService {
 
         sr = studentReportRepository.save(sr);
 
-        //update student report side of relation since 
-        //info is stored in multiple tables in db
+        //update student report side of relation since it doesn't sync
         if (sections != null) {
             // set student report as parent for all report sections
             for (ReportSection section : sections) {

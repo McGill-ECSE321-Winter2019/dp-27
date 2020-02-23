@@ -7,7 +7,6 @@ import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.StudentReport;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,38 +109,12 @@ public class ReportSectionService {
         if (content != null && content.trim().length() > 0) {
             rs.setContent(content.trim());
         }
-        
-        
-        //need to update student report side or employer report side since 
-        //info is stored in multiple tables in db
         if (sr != null) {
             rs.setStudentReport(sr);
-            rs = reportSectionRepository.save(rs);
-            
-            Set<ReportSection> sections = new HashSet<ReportSection>();
-            sections.addAll(sr.getReportSections());
-            Set<ReportSection> newSections = new HashSet<ReportSection>();
-            newSections.add(rs);
-            //addAll() is the union of the sets
-            sections.addAll(newSections);
-            
-            sr.setReportSections(sections);
-            studentReportRepository.save(sr);
         }
 
         if (er != null) {
             rs.setEmployerReport(er);
-            rs = reportSectionRepository.save(rs);
-            
-            Set<ReportSection> sections = new HashSet<ReportSection>();
-            sections.addAll(er.getReportSections());
-            Set<ReportSection> newSections = new HashSet<ReportSection>();
-            newSections.add(rs);
-            //addAll() is the union of the sets
-            sections.addAll(newSections);
-            
-            er.setReportSections(sections);
-            employerReportRepository.save(er);
         }
 
         return reportSectionRepository.save(rs);
