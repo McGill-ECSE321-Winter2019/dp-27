@@ -82,6 +82,11 @@ public class CooperatorServiceCoopTests {
         } catch (IllegalArgumentException e) {
             fail();
         }
+
+        courseOffering = courseOfferingService.getCourseOfferingById(courseOffering.getId());
+        assertEquals(status, courseOffering.getCoops().get(0).getStatus());
+        student = studentService.getStudentById(student.getId());
+        assertEquals(status, ((Coop) student.getCoops().toArray()[0]).getStatus());
         assertEquals(1, coopService.getAllCoops().size());
     }
 
@@ -138,6 +143,12 @@ public class CooperatorServiceCoopTests {
             fail();
         }
 
+        courseOffering = courseOfferingService.getCourseOfferingById(courseOffering.getId());
+        assertEquals(status, courseOffering.getCoops().get(0).getStatus());
+        student = studentService.getStudentById(student.getId());
+        assertEquals(status, ((Coop) student.getCoops().toArray()[0]).getStatus());
+        cd = coopDetailsService.getCoopDetails(cd.getId());
+        assertEquals(status, cd.getCoop().getStatus());
         assertEquals(status, c.getStatus());
         assertEquals(1, coopService.getAllCoops().size());
     }
@@ -148,9 +159,9 @@ public class CooperatorServiceCoopTests {
         Course course = createTestCourse();
         CourseOffering courseOffering = createTestCourseOffering(course);
         Student student = createTestStudent();
-        Coop c = new Coop();
+
         try {
-            c = coopService.createCoop(status, courseOffering, student);
+            coopService.createCoop(status, courseOffering, student);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -159,20 +170,13 @@ public class CooperatorServiceCoopTests {
         String error = "";
 
         try {
-            c = coopService.updateCoop(c, null, null, null, null, null, null);
+            coopService.updateCoop(null, null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
         assertEquals(1, coopService.getAllCoops().size());
-        assertEquals(
-                "Co-op Status cannot be null! "
-                        + "Course Offering cannot be null! "
-                        + "Student cannot be null! "
-                        + "Co-op Details cannot be null! "
-                        + "Employer Reports cannot be null! "
-                        + "Student Reports cannot be null!",
-                error);
+        assertEquals("Co-op to update cannot be null!", error);
     }
 
     @Test
@@ -228,7 +232,7 @@ public class CooperatorServiceCoopTests {
         EmployerContact ec;
         ec =
                 employerContactService.createEmployerContact(
-                        "Albert", "Kragl", "albert@gmail.com", "12345678", c);
+                        "Albert", "Kragl", "albert@gmail.com", "123456789", c);
         return ec;
     }
 

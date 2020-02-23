@@ -55,18 +55,6 @@ public class NotificationService {
         n.setStudent(student);
         n.setSeen(false);
         n.setTimeStamp(System.currentTimeMillis());
-        notificationRepository.save(n);
-
-        Set<Notification> notifs = student.getNotifications();
-        notifs.add(n);
-        student.setNotifications(notifs);
-
-        List<Notification> senderNotifs = sender.getSentNotifications();
-        senderNotifs.add(n);
-        sender.setSentNotifications(senderNotifs);
-
-        adminRepository.save(sender);
-        studentRepository.save(student);
 
         return notificationRepository.save(n);
     }
@@ -120,16 +108,14 @@ public class NotificationService {
      * @return notification seen
      */
     public Notification markAsRead(Notification n) {
-    	if(n != null)
-    		n.setSeen(true);
-    	else {
-    		throw new IllegalArgumentException("Notification cannot be null");
-    	}
-    	notificationRepository.save(n);
-    	return n;
+        if (n != null) n.setSeen(true);
+        else {
+            throw new IllegalArgumentException("Notification cannot be null");
+        }
+        notificationRepository.save(n);
+        return n;
     }
-    
-    
+
     /**
      * updates an already existing notification
      *
@@ -144,10 +130,13 @@ public class NotificationService {
     public Notification updateNotification(
             Notification n, String title, String body, Student student, Admin sender) {
         StringBuilder error = new StringBuilder();
-        if (title == null || title.trim().length() == 0) {
+        if (n == null) {
+            error.append("Notification to update cannot be null! ");
+        }
+        if (title != null && title.trim().length() == 0) {
             error.append("Notification title cannot be empty! ");
         }
-        if (body == null || body.trim().length() == 0) {
+        if (body != null && body.trim().length() == 0) {
             error.append("Notification body cannot be empty! ");
         }
         if (student == null) {
@@ -160,46 +149,18 @@ public class NotificationService {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        // need to either replace or add notification in sender and student
-        boolean sender_contains = false;
-        boolean student_contains = false;
-
-        List<Notification> sender_notifs = sender.getSentNotifications();
-        Set<Notification> student_notifs = student.getNotifications();
-
-        for (Notification sender_n : sender_notifs) {
-            if (sender_n.getId() == n.getId()) {
-                sender_contains = true;
-                int sender_index = sender_notifs.indexOf(sender_n);
-                sender_notifs.set(sender_index, n);
-            }
+        if (title != null) {
+            n.setTitle(title.trim());
         }
-
-        for (Notification student_n : sender_notifs) {
-            if (student_n.getId() == n.getId()) {
-                sender_notifs.remove(student_n);
-                sender_notifs.add(n);
-                student_contains = true;
-            }
+        if (body != null) {
+            n.setBody(body.trim());
         }
-
-        n.setTitle(title.trim());
-        n.setBody(body.trim());
-        n.setSender(sender);
-        n.setStudent(student);
-
-        if (!sender_contains) {
-            sender_notifs.add(n);
+        if (sender != null) {
+            n.setSender(sender);
         }
-        sender.setSentNotifications(sender_notifs);
-
-        if (!student_contains) {
-            student_notifs.add(n);
+        if (student != null) {
+            n.setStudent(student);
         }
-        student.setNotifications(student_notifs);
-
-        studentRepository.save(student);
-        adminRepository.save(sender);
 
         return notificationRepository.save(n);
     }

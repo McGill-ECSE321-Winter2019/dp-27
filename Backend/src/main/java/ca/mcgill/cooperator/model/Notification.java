@@ -56,22 +56,20 @@ public class Notification {
     public void setSender(Admin sender) {
         this.sender = sender;
     }
-    
+
     public Boolean getSeen() {
-    	return this.seen;
+        return this.seen;
     }
-    
+
     public void setSeen(Boolean seen) {
-    	this.seen = seen;
+        this.seen = seen;
     }
-    
+
     public long getTimeStamp() {
-    	return this.timeStamp;
+        return this.timeStamp;
     }
-    
+
     public void setTimeStamp(long timeStamp) {
-    	this.timeStamp = timeStamp;
+        this.timeStamp = timeStamp;
     }
-    
-    
 }

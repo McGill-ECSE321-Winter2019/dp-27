@@ -198,7 +198,7 @@ public class CoopControllerIT extends ControllerIT {
     @Test
     public void testCoopCreationPartialCourseOffering() throws Exception {
         CoopStatus status = CoopStatus.UNDER_REVIEW;
-        CourseDto courseDto = createTestCourse();
+        createTestCourse();
 
         // create a Course Offering with only season and year
         CourseOfferingDto courseOfferingDto =

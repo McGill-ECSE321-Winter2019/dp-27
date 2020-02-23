@@ -58,6 +58,13 @@ public class CoopController {
         return ControllerUtils.convertCoopListToDto(coops);
     }
 
+    @GetMapping("/student/{id}")
+    public List<CoopDto> getCoopByStudentId(@PathVariable int id) {
+        Student s = studentService.getStudentById(id);
+        List<Coop> coops = coopService.getAllCoopsByStudent(s);
+        return ControllerUtils.convertCoopListToDto(coops);
+    }
+
     @PostMapping("")
     public CoopDto createCoop(@RequestBody CoopDto coopDto) {
         Coop coop = new Coop();

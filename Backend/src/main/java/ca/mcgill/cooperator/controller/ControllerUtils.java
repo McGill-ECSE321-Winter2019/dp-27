@@ -960,9 +960,9 @@ public class ControllerUtils {
                                 notification.getTitle(),
                                 notification.getBody(),
                                 null, // null student since parent
-                                null,// null admin
+                                null, // null admin
                                 notification.getSeen(),
-                                notification.getTimeStamp()); 
+                                notification.getTimeStamp());
 
                 Admin admin = notification.getSender();
                 AdminDto adminDto =

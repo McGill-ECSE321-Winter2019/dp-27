@@ -43,7 +43,6 @@ public class NotificationController {
 
         return ControllerUtils.convertToDto(n);
     }
-    
 
     /**
      * Sets notification seen by id

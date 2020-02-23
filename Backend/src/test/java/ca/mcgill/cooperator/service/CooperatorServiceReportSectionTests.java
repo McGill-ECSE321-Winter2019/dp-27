@@ -69,11 +69,10 @@ public class CooperatorServiceReportSectionTests {
             er.setCoop(null);
             employerReportRepository.save(er);
         }
-        List<ReportSection> sections = reportSectionService.getAllReportSections();
-        for (ReportSection rs : sections) {
-            rs.setEmployerReport(null);
-            rs.setStudentReport(null);
-            reportSectionRepository.save(rs);
+
+        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
+        for (ReportSection reportSection : reportSections) {
+            reportSectionService.deleteReportSection(reportSection);
         }
 
         coopRepository.deleteAll();
@@ -113,7 +112,7 @@ public class CooperatorServiceReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals("Title cannot be null! " + "Content cannot be null!", error);
+        assertEquals("Title cannot be empty! " + "Content cannot be empty!", error);
         assertEquals(0, reportSectionService.getAllReportSections().size());
     }
 
@@ -129,7 +128,7 @@ public class CooperatorServiceReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals("Title cannot be null! " + "Content cannot be null!", error);
+        assertEquals("Title cannot be empty! " + "Content cannot be empty!", error);
         assertEquals(0, reportSectionService.getAllReportSections().size());
     }
 
@@ -145,7 +144,7 @@ public class CooperatorServiceReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals("Title cannot be null! " + "Content cannot be null!", error);
+        assertEquals("Title cannot be empty! " + "Content cannot be empty!", error);
         assertEquals(0, reportSectionService.getAllReportSections().size());
     }
 
@@ -177,6 +176,8 @@ public class CooperatorServiceReportSectionTests {
 
         assertEquals(sr.getId(), rs.getStudentReport().getId());
         assertEquals(1, reportSectionService.getAllReportSections().size());
+        sr = studentReportService.getStudentReport(sr.getId());
+        assertEquals(title, ((ReportSection) sr.getReportSections().toArray()[0]).getTitle());
     }
 
     @Test
@@ -209,6 +210,8 @@ public class CooperatorServiceReportSectionTests {
 
         assertEquals(er.getId(), rs.getEmployerReport().getId());
         assertEquals(1, reportSectionService.getAllReportSections().size());
+        er = employerReportService.getEmployerReport(er.getId());
+        assertEquals(title, ((ReportSection) er.getReportSections().toArray()[0]).getTitle());
     }
 
     @Test
@@ -258,11 +261,7 @@ public class CooperatorServiceReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals(
-                "Report Section cannot be null! "
-                        + "Title cannot be null! "
-                        + "Content cannot be null!",
-                error);
+        assertEquals("Report Section cannot be null!", error);
     }
 
     @Test

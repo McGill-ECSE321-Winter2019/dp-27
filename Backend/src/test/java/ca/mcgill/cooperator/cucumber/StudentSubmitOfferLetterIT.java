@@ -21,6 +21,7 @@ import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
@@ -29,8 +30,10 @@ import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.EmployerContactService;
+import ca.mcgill.cooperator.service.ReportSectionService;
 import ca.mcgill.cooperator.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -71,6 +74,7 @@ public class StudentSubmitOfferLetterIT {
     @Autowired private CourseService courseService;
     @Autowired private CourseOfferingService courseOfferingService;
     @Autowired private CoopDetailsService coopDetailsService;
+    @Autowired private ReportSectionService reportSectionService;
 
     /* Global test variables */
 
@@ -81,12 +85,19 @@ public class StudentSubmitOfferLetterIT {
     CoopDto testCoop;
 
     @Before
+    @After
     public void clearDatabase() {
         List<CoopDetails> coopDetails = coopDetailsService.getAllCoopDetails();
         for (CoopDetails cd : coopDetails) {
             cd.setCoop(null);
             coopDetailsRepository.save(cd);
         }
+
+        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
+        for (ReportSection reportSection : reportSections) {
+            reportSectionService.deleteReportSection(reportSection);
+        }
+
         // deleting all students will also delete all coops
         studentRepository.deleteAll();
         // deleting all companies will also delete all employer contacts

@@ -8,6 +8,7 @@ import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.service.CoopService;
+import ca.mcgill.cooperator.service.ReportSectionService;
 import ca.mcgill.cooperator.service.StudentReportService;
 import ca.mcgill.cooperator.service.StudentService;
 import java.util.HashSet;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +39,7 @@ public class StudentReportController {
     @Autowired StudentReportService studentReportService;
     @Autowired StudentService studentService;
     @Autowired CoopService coopService;
+    @Autowired ReportSectionService reportSectionService;
 
     /**
      * Gets a StudentReport by ID
@@ -115,16 +118,18 @@ public class StudentReportController {
      * @param coopId
      * @return the updated StudentReport
      */
-    @PutMapping("/{reportId}")
+    @PutMapping("/{id}")
     public StudentReportDto updateStudentReport(
-            @PathVariable int reportId,
+            @PathVariable int id,
             @ModelAttribute("file") MultipartFile file,
             @RequestParam("status") String status,
             @RequestParam("title") String title,
-            @RequestParam("report_sections") Set<ReportSectionDto> rsDtos,
-            @RequestParam("coop_id") int coopId) {
-        StudentReport reportToUpdate = studentReportService.getStudentReport(reportId);
-        Set<ReportSection> sections = ControllerUtils.convertReportSectionSetToDomainObject(rsDtos);
+            @RequestParam("coop_id") int coopId,
+            @RequestBody Set<ReportSectionDto> rsDtos) {
+        StudentReport reportToUpdate = studentReportService.getStudentReport(id);
+
+        Set<ReportSection> sections = convertReportSectionSetToDomainObject(rsDtos);
+
         Coop coop = coopService.getCoopById(coopId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
 
@@ -153,5 +158,14 @@ public class StudentReportController {
     public final ResponseEntity<Exception> handleAllExceptions(RuntimeException ex) {
         ex.printStackTrace();
         return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    public Set<ReportSection> convertReportSectionSetToDomainObject(Set<ReportSectionDto> rsDtos) {
+        Set<ReportSection> reports = new HashSet<ReportSection>();
+        for (ReportSectionDto rsDto : rsDtos) {
+            ReportSection rs = reportSectionService.getReportSection(rsDto.getId());
+            reports.add(rs);
+        }
+        return reports;
     }
 }

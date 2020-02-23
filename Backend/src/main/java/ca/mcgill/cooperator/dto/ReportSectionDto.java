@@ -8,6 +8,8 @@ public class ReportSectionDto {
     private StudentReportDto studentReport;
     private EmployerReportDto employerReport;
 
+    public ReportSectionDto() {}
+
     public ReportSectionDto(
             int id,
             String title,

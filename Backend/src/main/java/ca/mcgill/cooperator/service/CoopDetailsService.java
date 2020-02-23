@@ -41,7 +41,7 @@ public class CoopDetailsService {
             error.append("Employer Contact cannot be null! ");
         }
         if (c == null) {
-            error.append("Coop cannot be null!");
+            error.append("Co-op cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
@@ -52,17 +52,6 @@ public class CoopDetailsService {
         cd.setHoursPerWeek(hoursPerWeek);
         cd.setEmployerContact(ec);
         cd.setCoop(c);
-
-        coopDetailsRepository.save(cd);
-
-        Set<CoopDetails> employerCoopDetails = ec.getCoopDetails();
-        employerCoopDetails.add(cd);
-        ec.setCoopDetails(employerCoopDetails);
-
-        c.setCoopDetails(cd);
-
-        employerContactRepository.save(ec);
-        coopRepository.save(c);
 
         return coopDetailsRepository.save(cd);
     }
@@ -77,7 +66,7 @@ public class CoopDetailsService {
     public CoopDetails getCoopDetails(int id) {
         CoopDetails cd = coopDetailsRepository.findById(id).orElse(null);
         if (cd == null) {
-            throw new IllegalArgumentException("Coop Details with ID " + id + " does not exist!");
+            throw new IllegalArgumentException("Co-op Details with ID " + id + " does not exist!");
         }
 
         return cd;
@@ -102,7 +91,7 @@ public class CoopDetailsService {
     @Transactional
     public CoopDetails deleteCoopDetails(CoopDetails cd) {
         if (cd == null) {
-            throw new IllegalArgumentException("Coop Details to delete cannot be null!");
+            throw new IllegalArgumentException("Co-op Details to delete cannot be null!");
         }
         Coop c = cd.getCoop();
         c.setCoopDetails(null);
@@ -132,47 +121,25 @@ public class CoopDetailsService {
     public CoopDetails updateCoopDetails(
             CoopDetails cd, int payPerHour, int hoursPerWeek, EmployerContact ec, Coop c) {
         StringBuilder error = new StringBuilder();
-        if (payPerHour < 0) {
-            error.append("Pay Per Hour is invalid! ");
-        }
-        if (hoursPerWeek <= 0) {
-            error.append("Hours Per Week is invalid! ");
-        }
-        if (ec == null) {
-            error.append("Employer Contact cannot be null! ");
-        }
-        if (c == null) {
-            error.append("Coop cannot be null!");
+        if (cd == null) {
+            error.append("Co-op Details to update cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        cd.setPayPerHour(payPerHour);
-        cd.setHoursPerWeek(hoursPerWeek);
-        cd.setEmployerContact(ec);
-        cd.setCoop(c);
-
-        coopDetailsRepository.save(cd);
-
-        Set<CoopDetails> employerCoopDetails = ec.getCoopDetails();
-        boolean employerContains = false;
-        for (CoopDetails coopDetails : employerCoopDetails) {
-            if (coopDetails.getId() == cd.getId()) {
-                employerCoopDetails.remove(coopDetails);
-                employerCoopDetails.add(cd);
-                employerContains = true;
-            }
+        if (payPerHour >= 0) {
+            cd.setPayPerHour(payPerHour);
         }
-        if (employerContains == false) {
-            employerCoopDetails.add(cd);
+        if (hoursPerWeek > 0) {
+            cd.setHoursPerWeek(hoursPerWeek);
         }
-        ec.setCoopDetails(employerCoopDetails);
-
-        c.setCoopDetails(cd);
-
-        employerContactRepository.save(ec);
-        coopRepository.save(c);
+        if (ec != null) {
+            cd.setEmployerContact(ec);
+        }
+        if (c != null) {
+            cd.setCoop(c);
+        }
 
         return coopDetailsRepository.save(cd);
     }

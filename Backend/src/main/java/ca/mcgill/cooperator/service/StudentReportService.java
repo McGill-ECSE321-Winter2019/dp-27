@@ -42,11 +42,8 @@ public class StudentReportService {
         if (c == null) {
             error.append("Coop cannot be null! ");
         }
-        if (title == null) {
-            error.append("File title cannot be null! ");
-        }
-        if (file == null) {
-            error.append("File cannot be null!");
+        if (title == null || title.trim().length() == 0) {
+            error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
@@ -58,20 +55,13 @@ public class StudentReportService {
         sr.setCoop(c);
         sr.setReportSections(new HashSet<ReportSection>());
         sr.setTitle(title);
-        try {
-            sr.setData(file.getBytes());
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        if (file != null) {
+            try {
+                sr.setData(file.getBytes());
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
         }
-
-        sr = studentReportRepository.save(sr);
-
-        Set<StudentReport> reports = new HashSet<>();
-        reports.addAll(c.getStudentReports());
-        reports.add(sr);
-        c.setStudentReports(reports);
-
-        coopRepository.save(c);
 
         return studentReportRepository.save(sr);
     }
@@ -122,59 +112,43 @@ public class StudentReportService {
         if (sr == null) {
             error.append("Student Report cannot be null! ");
         }
-        if (status == null) {
-            error.append("Report Status cannot be null! ");
-        }
-        if (c == null) {
-            error.append("Coop cannot be null! ");
-        }
-        if (title == null) {
-            error.append("File title cannot be null! ");
-        }
-        if (file == null) {
-            error.append("File cannot be null!");
+        if (title != null && title.trim().length() == 0) {
+            error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(error.toString().trim());
         }
 
-        sr.setStatus(status);
-        sr.setCoop(c);
-        sr.setTitle(title);
+        if (status != null) {
+            sr.setStatus(status);
+        }
+        if (c != null) {
+            sr.setCoop(c);
+        }
+        if (title != null) {
+            sr.setTitle(title);
+        }
         if (sections != null) {
             sr.setReportSections(sections);
         }
-        try {
-            sr.setData(file.getBytes());
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
 
-        studentReportRepository.save(sr);
-
-        // add/set employer report to coop
-        boolean coopContains = false;
-
-        Set<StudentReport> coopReports = c.getStudentReports();
-        for (StudentReport coopStudentReport : coopReports) {
-            if (coopStudentReport.getId() == sr.getId()) {
-                coopReports.remove(coopStudentReport);
-                coopReports.add(sr);
-                coopContains = true;
+        if (file != null) {
+            try {
+                sr.setData(file.getBytes());
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e.getMessage());
             }
         }
 
-        if (coopContains == false) {
-            coopReports.add(sr);
-        }
-        c.setStudentReports(coopReports);
+        sr = studentReportRepository.save(sr);
 
-        coopRepository.save(c);
-
-        // set employer report as parent for all report sections
-        for (ReportSection section : sections) {
-            section.setStudentReport(sr);
-            reportSectionRepository.save(section);
+        // update student report side of relation since it doesn't sync
+        if (sections != null) {
+            // set student report as parent for all report sections
+            for (ReportSection section : sections) {
+                section.setStudentReport(sr);
+                reportSectionRepository.save(section);
+            }
         }
 
         return studentReportRepository.save(sr);

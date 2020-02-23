@@ -51,6 +51,8 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(co.getSeason(), season);
         assertEquals(co.getYear(), year);
         assertEquals(co.getCourse().getId(), c.getId());
+        c = courseService.getCourseById(c.getId());
+        assertEquals(season, c.getCourseOfferings().get(0).getSeason());
     }
 
     @Test
@@ -105,6 +107,8 @@ public class CooperatorServiceCourseOfferingTests {
         assertEquals(co.getSeason(), season2);
         assertEquals(co.getYear(), year2);
         assertEquals(co.getCourse().getId(), c2.getId());
+        c2 = courseService.getCourseById(c2.getId());
+        assertEquals(season2, c2.getCourseOfferings().get(0).getSeason());
     }
 
     @Test
@@ -133,12 +137,10 @@ public class CooperatorServiceCourseOfferingTests {
         Course c2 = null;
 
         try {
-            courseOfferingService.updateCourseOffering(co, year2, season2, c2);
+            courseOfferingService.updateCourseOffering(null, year2, season2, c2);
 
         } catch (IllegalArgumentException e) {
-            assertEquals(
-                    "Year is invalid! Season cannot be null! Course cannot be null!",
-                    e.getMessage());
+            assertEquals("Course Offering to update cannot be null!", e.getMessage());
         }
 
         co = courseOfferingService.getAllCourseOfferings().get(0);

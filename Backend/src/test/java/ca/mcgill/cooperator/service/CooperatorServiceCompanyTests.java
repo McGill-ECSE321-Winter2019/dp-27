@@ -181,6 +181,9 @@ public class CooperatorServiceCompanyTests {
             fail();
         }
 
+        ec = employerContactService.getEmployerContact(ec.getId());
+
+        assertEquals("Index Exchange", ec.getCompany().getName());
         assertEquals(1, companyService.getAllCompanies().size());
         assertEquals("Index Exchange", c.getName());
         assertEquals(1, c.getEmployees().size());
@@ -197,7 +200,7 @@ public class CooperatorServiceCompanyTests {
         Company c = null;
         try {
             companyService.createCompany(name, city, region, country, employees);
-            c = companyService.getCompany(name, city, region, country);
+            companyService.getCompany(name, city, region, country);
         } catch (IllegalArgumentException _e) {
             fail();
         }
@@ -210,11 +213,11 @@ public class CooperatorServiceCompanyTests {
         }
 
         assertEquals(
-                "Company name cannot be empty! "
+                "Company to update cannot be null! "
+                        + "Company name cannot be empty! "
                         + "Company city cannot be empty! "
                         + "Company region cannot be empty! "
-                        + "Company country cannot be empty! "
-                        + "Company employees cannot be null!",
+                        + "Company country cannot be empty!",
                 error);
 
         // original Company should still exist
