@@ -1,15 +1,20 @@
 package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.StudentDto;
-import ca.mcgill.cooperator.model.Student;
+import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.service.CoopService;
+import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.StudentService;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,6 +30,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class CSVParserController {
 
     @Autowired private StudentService studentService;
+    @Autowired private CoopService coopService;
+    @Autowired private CourseOfferingService courseOfferingService;
+    
     /**
      * Used to create the set of students each semester
      * 
@@ -33,18 +41,27 @@ public class CSVParserController {
      * @throws Exception
      */
     @PostMapping("")
-    public List<Student> importCSVFile(@ModelAttribute("file") MultipartFile file) throws Exception {
+    public List<String> importCSVFile(@ModelAttribute("file") MultipartFile file, @RequestParam("course_id") int courseOfferingId) throws Exception {
+    	List<String> students = new ArrayList<>();
+    	
     	String line;
         InputStream is = file.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        List<Student> students = new ArrayList<>();
-        br.readLine();
-		while((line = br.readLine()) != null) {
-			String[] csv = line.split(",");
-			//The char replace is to remove random # in each entry of the csv
-			students.add(studentService.createStudent(csv[3].replace("#", ""), csv[2].replace("#", ""), csv[4].replace("#", ""), csv[0].replace("#", "")));
-		}
 
+        br.readLine(); //Escapes the first line containing the headers
+        
+		while((line = br.readLine()) != null) {
+			String studentEmail = line.split("#")[2].split(",")[0];
+			students.add(studentEmail);
+			System.out.println(studentEmail);
+		}
+				
+    	CourseOffering courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingId);
+    	List<Coop> coops = coopService.getAllCoopsForCourseOffering(courseOffering);
+    	for(Coop c: coops) {
+    		students.remove(c.getStudent().getEmail());
+    	}
+		
 		return students;
     	
 	}
