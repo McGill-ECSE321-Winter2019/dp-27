@@ -10,6 +10,7 @@ import ca.mcgill.cooperator.service.AdminService;
 import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.StudentService;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -43,7 +44,7 @@ public class NotificationController {
 
         return ControllerUtils.convertToDto(n);
     }
-    
+
 
     /**
      * Sets notification seen by id
@@ -52,7 +53,7 @@ public class NotificationController {
      * @return NotificationDto
      */
     @PutMapping("/{id}/mark-as-read")
-    public NotificationDto setNotificationSeen(@RequestParam int id) {
+    public NotificationDto setNotificationSeen(@PathVariable int id) {
         Notification n = notificationService.getNotification(id);
         notificationService.markAsRead(n);
         return ControllerUtils.convertToDto(n);
@@ -82,17 +83,30 @@ public class NotificationController {
 
         return ControllerUtils.convertNotifListToDto(n);
     }
-    
+
     /**
      * Get unseen Notifications for student
      *
      * @return List<NotificationDto>
      */
     @GetMapping("/{id}/unread")
-    public List<NotificationDto> getUnreadForStudent(@RequestParam int id) {
+    public List<NotificationDto> getUnreadForStudent(@PathVariable int id) {
     	Student student = studentService.getStudentById(id);
         List<Notification> n = notificationService.getUnreadForStudent(student);
-        
+
+        return ControllerUtils.convertNotifListToDto(n);
+    }
+    
+    /**
+     * Get all Notifications for student
+     *
+     * @return List<NotificationDto>
+     */
+    @GetMapping("/all/{id}")
+    public List<NotificationDto> getAllForStudent(@PathVariable int id) {
+    	Student student = studentService.getStudentById(id);
+        List<Notification> n = notificationService.getAllNotificationsOfStudent(student);
+
         return ControllerUtils.convertNotifListToDto(n);
     }
 

@@ -2,10 +2,11 @@
   <div>
     <div class="row items-center">
       <div class="col">
-        <div>{{notif.admin.firstName}} {{notif.admin.lastName}} </div>
+        <div>{{notif.name}}</div>
+        <!-- <div>{{notif.admin.firstName}} {{notif.admin.lastName}} </div>
         <div>need to get date</div>
         <div>{{notif.title}}</div>
-        <div>{{notif.body}}</div>
+        <div>{{notif.body}}</div> -->
       </div>
     </div>
   </div>
@@ -14,7 +15,14 @@
 <script>
 
 export default {
-  
+  props: {
+    notification: {
+      type: Object,
+      required: true
+    }
+  },
+  created() {
+  }
 }
 </script>
 
