@@ -15,7 +15,14 @@
           <router-link to="/student/home">Co-operator</router-link>
         </q-toolbar-title>
 
-        <q-btn dense round flat class="q-mr-sm" icon="notifications">
+        <q-btn
+          dense
+          round
+          flat
+          class="q-mr-sm"
+          icon="notifications"
+          @click="goToNotifPage()"
+          >
           <q-badge color="white" text-color="red" floating transparent>
             {{unseen.length}}
           </q-badge>
@@ -98,6 +105,9 @@ export default {
   },
   methods: {
     //open notification popup??
+    goToNotifPage() {
+      this.$router.push('/student/notifications')
+    }
   }
 };
 </script>
