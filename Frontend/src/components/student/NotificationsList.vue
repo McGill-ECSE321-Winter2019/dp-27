@@ -16,13 +16,9 @@
             @child-clicked="handleSelect"
           />
         </q-card-section>
-    </q-card>
-
-    <q-card
-      flat
-      bordered
-      class="card"
-    >
+        <q-card-section v-else>
+          You have no notifications!
+        </q-card-section>
     </q-card>
   </div>
 </template>
@@ -48,7 +44,9 @@ export default {
           }
         }).then(resp => {
       this.notifications = resp.data;
-      this.notifsLoaded = true;
+      if(notifications.length != 0) {
+        this.notifsLoaded = true;
+      }
     });
   },
 }

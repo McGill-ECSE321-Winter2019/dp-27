@@ -2,11 +2,10 @@
   <div>
     <div class="row items-center">
       <div class="col">
-        <div>{{notif.name}}</div>
-        <!-- <div>{{notif.admin.firstName}} {{notif.admin.lastName}} </div>
+        <div><b>From {{notif.admin.firstName}} {{notif.admin.lastName}}</b></div>
         <div>need to get date</div>
         <div>{{notif.title}}</div>
-        <div>{{notif.body}}</div> -->
+        <div>{{notif.body}}</div>
       </div>
     </div>
   </div>
