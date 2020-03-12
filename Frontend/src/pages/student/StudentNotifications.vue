@@ -1,18 +1,18 @@
 <template>
   <q-page class="flex justify-center">
     <div id="container">
-      <CoopsList />
+      <NotifsList />
     </div>
   </q-page>
 </template>
 
 <script>
-import NotifList from 'components/student/NotificationList.vue'
+import NotifsList from 'components/student/NotificationsList.vue'
 
 export default {
   name: 'StudentNotifs',
   components: {
-    NotifList
+    NotifsList
   }
 }
 </script>
