@@ -22,9 +22,9 @@
           class="q-mr-sm"
           icon="notifications"
           @click="goToNotifPage()"
-          >
+        >
           <q-badge color="white" text-color="red" floating transparent>
-            {{unseen.length}}
+            {{ unseen.length }}
           </q-badge>
         </q-btn>
 
@@ -93,20 +93,21 @@ export default {
       unseen: []
     };
   },
-  created: function (){
+  created: function() {
     const user = this.$store.state.currentUser;
-    this.$axios.get("/notifications/" + user.id + "/unread",{
-          headers: {
-            Authorization: this.$store.state.token
-          }
-        }).then(resp => {
-      this.unseen = resp.data;
-    });
+    this.$axios
+      .get("/notifications/" + user.id + "/unread", {
+        headers: {
+          Authorization: this.$store.state.token
+        }
+      })
+      .then(resp => {
+        this.unseen = resp.data;
+      });
   },
   methods: {
-    //open notification popup??
     goToNotifPage() {
-      this.$router.push('/student/notifications')
+      this.$router.push("/student/notifications");
     }
   }
 };
