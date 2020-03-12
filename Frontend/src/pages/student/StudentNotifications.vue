@@ -10,7 +10,6 @@
 import NotifsList from 'components/student/NotificationsList.vue'
 
 export default {
-  name: 'StudentNotifs',
   components: {
     NotifsList
   }

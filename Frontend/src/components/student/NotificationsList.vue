@@ -6,14 +6,16 @@
       class="card"
     >
       <q-card-section>
-        <div class="text-h6">Current Co-op</div>
+        <div class="text-h6">Notifications</div>
       </q-card-section>
-
-      <q-separator inset />
-
-      <q-card-section>
-        <CoopsListItem />
-      </q-card-section>
+        <q-card-section v-if="notifsLoaded">
+          <NotificationListItem
+            v-for="notif in notifications"
+            :key="notif.id"
+            :notif="notif"
+            @child-clicked="handleSelect"
+          />
+        </q-card-section>
     </q-card>
 
     <q-card
@@ -21,13 +23,6 @@
       bordered
       class="card"
     >
-      <q-card-section>
-        <div class="text-h6">Past Co-ops</div>
-      </q-card-section>
-
-      <q-separator inset />
-
-      <q-card-section>None</q-card-section>
     </q-card>
   </div>
 </template>
@@ -36,10 +31,26 @@
 import NotificationListItem from 'components/student/NotificationListItem.vue'
 
 export default {
-  name: 'CoopsList',
   components: {
-    CoopsListItem
-  }
+    NotificationListItem
+  },
+  data() {
+    return {
+      notfications: [],
+      notifsLoaded: false
+    };
+  },
+  created: function (){
+    const user = this.$store.state.currentUser;
+    this.$axios.get("/notifications/all/" + user.id ,{
+          headers: {
+            Authorization: this.$store.state.token
+          }
+        }).then(resp => {
+      this.notifications = resp.data;
+      this.notifsLoaded = true;
+    });
+  },
 }
 </script>
 

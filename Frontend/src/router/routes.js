@@ -31,8 +31,13 @@ const routes = [
         component: () => import("pages/student/StudentReports.vue")
       },
       {
+<<<<<<< HEAD
         path: "help",
         component: () => import("pages/student/StudentFAQ.vue")
+=======
+        path: "notifications",
+        component: () => import("pages/student/StudentNotifications.vue")
+>>>>>>> 58362456... i think it works
       }
     ]
   },
