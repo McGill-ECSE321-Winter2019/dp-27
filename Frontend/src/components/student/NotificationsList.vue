@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      notfications: [],
+      notifications: [],
       notifsLoaded: false
     };
   },
