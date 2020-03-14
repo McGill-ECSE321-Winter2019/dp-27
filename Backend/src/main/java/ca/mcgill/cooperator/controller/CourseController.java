@@ -1,19 +1,12 @@
 package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.CourseDto;
-import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.model.Course;
-import ca.mcgill.cooperator.model.CourseOffering;
-import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,13 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("courses")
-public class CourseController {
+public class CourseController extends BaseController {
 
     @Autowired private CourseService courseService;
-    @Autowired private CourseOfferingService courseOfferingService;
 
     /**
-     * Get a Course by ID
+     * Gets a Course by ID
      *
      * @param id
      * @return CourseDto object
@@ -43,7 +35,7 @@ public class CourseController {
     }
 
     /**
-     * Get all courses
+     * Gets all courses
      *
      * @return List of CourseDto objects
      */
@@ -55,7 +47,7 @@ public class CourseController {
     }
 
     /**
-     * Create a new Course
+     * Creates a new Course
      *
      * <p>In request body:
      *
@@ -70,7 +62,7 @@ public class CourseController {
     }
 
     /**
-     * Update an existing Course
+     * Updates an existing Course
      *
      * <p>In request body:
      *
@@ -84,13 +76,14 @@ public class CourseController {
                 courseService.updateCourse(
                         course,
                         c.getName(),
-                        convertCourseOfferingListToDomainObject(c.getCourseOfferings()));
+                        ControllerUtils.convertCourseOfferingListToDomainObject(
+                                c.getCourseOfferings()));
 
         return ControllerUtils.convertToDto(updatedCourse);
     }
 
     /**
-     * Delete an existing Course
+     * Deletes an existing Course
      *
      * @param id
      * @return deleted CourseDto object
@@ -101,28 +94,5 @@ public class CourseController {
         Course deletedCourse = courseService.deleteCourse(course);
 
         return ControllerUtils.convertToDto(deletedCourse);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public final ResponseEntity<Exception> handleAllExceptions(RuntimeException ex) {
-        return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    /**
-     * Delete an existing Course
-     *
-     * @param list of CourseOfferingDto objects
-     * @return list of CourseOffering objects
-     */
-    private List<CourseOffering> convertCourseOfferingListToDomainObject(
-            List<CourseOfferingDto> coDtos) {
-        List<CourseOffering> cos = new ArrayList<>(coDtos.size());
-        for (CourseOfferingDto coDto : coDtos) {
-            if (coDto != null) {
-                CourseOffering co = courseOfferingService.getCourseOfferingById(coDto.getId());
-                cos.add(co);
-            }
-        }
-        return cos;
     }
 }

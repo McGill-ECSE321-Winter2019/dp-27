@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("companies")
-public class CompanyController {
+public class CompanyController extends BaseController {
 
     @Autowired private CompanyService companyService;
     @Autowired private EmployerContactService employerContactService;

@@ -19,10 +19,8 @@ import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
-import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.service.CoopDetailsService;
-import ca.mcgill.cooperator.service.ReportSectionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -32,11 +30,15 @@ import io.cucumber.java.en.When;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class StudentGetCoopInfoIT extends ControllerIT {
 
@@ -68,7 +70,6 @@ public class StudentGetCoopInfoIT extends ControllerIT {
     @Autowired private CoopDetailsRepository coopDetailsRepository;
 
     @Autowired private CoopDetailsService coopDetailsService;
-    @Autowired private ReportSectionService reportSectionService;
 
     @Before
     @After
@@ -77,11 +78,6 @@ public class StudentGetCoopInfoIT extends ControllerIT {
         for (CoopDetails cd : coopDetails) {
             cd.setCoop(null);
             coopDetailsRepository.save(cd);
-        }
-
-        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
-        for (ReportSection reportSection : reportSections) {
-            reportSectionService.deleteReportSection(reportSection);
         }
 
         // deleting all students will also delete all coops

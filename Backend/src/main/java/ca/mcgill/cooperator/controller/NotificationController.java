@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("notifications")
-public class NotificationController {
+public class NotificationController extends BaseController {
 
     @Autowired NotificationService notificationService;
     @Autowired StudentService studentService;

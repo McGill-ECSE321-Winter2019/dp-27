@@ -23,13 +23,13 @@ public class NotificationService {
     @Autowired AdminRepository adminRepository;
 
     /**
-     * creates a Notification with title, body, admin sender and student receiver
+     * Creates a new Notification
      *
      * @param title
      * @param body
      * @param student
      * @param sender
-     * @return created notification
+     * @return created Notification
      */
     @Transactional
     public Notification createNotification(
@@ -63,10 +63,10 @@ public class NotificationService {
     }
 
     /**
-     * retrieves a notification with specific id from the database
+     * Retrieves a Notification with specific id from the database
      *
      * @param id
-     * @return notification with given id
+     * @return Notification with given id
      */
     @Transactional
     public Notification getNotification(int id) {
@@ -79,9 +79,16 @@ public class NotificationService {
     }
 
     /**
+<<<<<<< HEAD
      * returns all notifications in the database
      *
      * @return all notifications
+=======
+     * Retrieves first Notification in database with given title
+     *
+     * @param title
+     * @return Notification with given title
+>>>>>>> Add ReportConfig and related classes, delete ReportSection, update tests
      */
     @Transactional
     public List<Notification> getAllNotifications() {
@@ -90,9 +97,13 @@ public class NotificationService {
     
     
     /**
+<<<<<<< HEAD
      * returns all notifications for student in the database
+=======
+     * Returns all Notifications in the database
+>>>>>>> Add ReportConfig and related classes, delete ReportSection, update tests
      *
-     * @return all notifications
+     * @return all Notifications
      */
     @Transactional
     public List<Notification> getAllNotificationsOfStudent(Student student) {
@@ -128,28 +139,28 @@ public class NotificationService {
     }
 
     /**
-     * set notification to seen
+     * Set Notification to seen
      *
-     * @return notification seen
+     * @return updated Notification
      */
     public Notification markAsRead(Notification n) {
         if (n != null) n.setSeen(true);
         else {
-            throw new IllegalArgumentException("Notification cannot be null");
+            throw new IllegalArgumentException("Notification cannot be null!");
         }
         notificationRepository.save(n);
         return n;
     }
 
     /**
-     * updates an already existing notification
+     * Updates an already existing Notification
      *
      * @param n
      * @param title
      * @param body
      * @param student
      * @param sender
-     * @return updated notification
+     * @return updated Notification
      */
     @Transactional
     public Notification updateNotification(
@@ -191,7 +202,7 @@ public class NotificationService {
     }
 
     /**
-     * deletes a notification from the database
+     * Deletes a Notification from the database
      *
      * @param n
      * @return deleted notification

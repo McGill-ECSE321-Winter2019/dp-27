@@ -1,12 +1,12 @@
 package ca.mcgill.cooperator.service;
 
 import ca.mcgill.cooperator.dao.CoopRepository;
-import ca.mcgill.cooperator.dao.ReportSectionRepository;
 import ca.mcgill.cooperator.dao.StudentReportRepository;
+import ca.mcgill.cooperator.dao.StudentReportSectionRepository;
 import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.StudentReport;
+import ca.mcgill.cooperator.model.StudentReportSection;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -19,9 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class StudentReportService {
 
-    @Autowired StudentReportRepository studentReportRepository;
     @Autowired CoopRepository coopRepository;
-    @Autowired ReportSectionRepository reportSectionRepository;
+    @Autowired StudentReportRepository studentReportRepository;
+    @Autowired StudentReportSectionRepository studentReportSectionRepository;
 
     /**
      * Creates new student report in database
@@ -53,7 +53,7 @@ public class StudentReportService {
 
         sr.setStatus(status);
         sr.setCoop(c);
-        sr.setReportSections(new HashSet<ReportSection>());
+        sr.setReportSections(new HashSet<StudentReportSection>());
         sr.setTitle(title);
         if (file != null) {
             try {
@@ -106,7 +106,7 @@ public class StudentReportService {
             ReportStatus status,
             String title,
             Coop c,
-            Set<ReportSection> sections,
+            Set<StudentReportSection> sections,
             MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (sr == null) {
@@ -145,9 +145,9 @@ public class StudentReportService {
         // update student report side of relation since it doesn't sync
         if (sections != null) {
             // set student report as parent for all report sections
-            for (ReportSection section : sections) {
+            for (StudentReportSection section : sections) {
                 section.setStudentReport(sr);
-                reportSectionRepository.save(section);
+                studentReportSectionRepository.save(section);
             }
         }
 

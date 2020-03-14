@@ -13,8 +13,8 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
-import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.dto.StudentReportDto;
+import ca.mcgill.cooperator.dto.StudentReportSectionDto;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.ReportStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -102,7 +102,7 @@ public class StudentReportControllerIT extends ControllerIT {
 
         // 3. update file
 
-        Set<ReportSectionDto> rdtos = new HashSet<ReportSectionDto>();
+        Set<StudentReportSectionDto> rsDtos = new HashSet<StudentReportSectionDto>();
 
         MockMultipartHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/student-reports/" + returnedReport.getId());
@@ -123,7 +123,7 @@ public class StudentReportControllerIT extends ControllerIT {
                                         .param("coop_id", String.valueOf(coopDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(rdtos))
+                                        .content(objectMapper.writeValueAsString(rsDtos))
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();

@@ -1,11 +1,11 @@
 package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.EmployerReportDto;
-import ca.mcgill.cooperator.dto.ReportSectionDto;
+import ca.mcgill.cooperator.dto.EmployerReportSectionDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.ReportSection;
+import ca.mcgill.cooperator.model.EmployerReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.EmployerContactService;
@@ -13,11 +13,8 @@ import ca.mcgill.cooperator.service.EmployerReportService;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("employer-reports")
-public class EmployerReportController {
+public class EmployerReportController extends BaseController {
 
     @Autowired CoopService coopService;
     @Autowired EmployerContactService employerContactService;
@@ -112,13 +109,14 @@ public class EmployerReportController {
             @RequestParam("title") String title,
             @RequestParam("coop_id") int coopId,
             @RequestParam("employer_id") int employerId,
-            @RequestBody Set<ReportSectionDto> rsDtos) {
+            @RequestBody Set<EmployerReportSectionDto> rsDtos) {
         EmployerReport reportToUpdate = employerReportService.getEmployerReport(id);
 
         Coop coop = coopService.getCoopById(coopId);
         EmployerContact ec = employerContactService.getEmployerContact(employerId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
-        Set<ReportSection> sections = ControllerUtils.convertReportSectionSetToDomainObject(rsDtos);
+        Set<EmployerReportSection> sections =
+                ControllerUtils.convertEmployerReportSectionSetToDomainObject(rsDtos);
 
         EmployerReport updatedReport =
                 employerReportService.updateEmployerReport(
@@ -139,11 +137,5 @@ public class EmployerReportController {
         report = employerReportService.deleteEmployerReport(report);
 
         return ControllerUtils.convertToDto(report);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public final ResponseEntity<Exception> handleAllExceptions(RuntimeException ex) {
-        ex.printStackTrace();
-        return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
