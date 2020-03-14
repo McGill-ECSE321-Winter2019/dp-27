@@ -317,7 +317,8 @@ public class CooperatorServiceStudentReportTests {
         return s;
     }
 
-    private StudentReportSection createTestStudentReportSection(ReportSectionConfig rsConfig, StudentReport sr) {
+    private StudentReportSection createTestStudentReportSection(
+            ReportSectionConfig rsConfig, StudentReport sr) {
         return studentReportSectionService.createReportSection("This is a response", rsConfig, sr);
     }
 
