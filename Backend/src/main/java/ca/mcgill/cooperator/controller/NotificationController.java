@@ -96,13 +96,13 @@ public class NotificationController {
 
         return ControllerUtils.convertNotifListToDto(n);
     }
-    
+
     /**
      * Get all Notifications for student
      *
      * @return List<NotificationDto>
      */
-    @GetMapping("/all/{id}")
+    @GetMapping("/student/{id}")
     public List<NotificationDto> getAllForStudent(@PathVariable int id) {
     	Student student = studentService.getStudentById(id);
         List<Notification> n = notificationService.getAllNotificationsOfStudent(student);
