@@ -35,7 +35,7 @@ export default {
   created: function() {
     const user = this.$store.state.currentUser;
     this.$axios
-      .get("/notifications/all/" + user.id, {
+      .get("/notifications/student/" + user.id, {
         headers: {
           Authorization: this.$store.state.token
         }
