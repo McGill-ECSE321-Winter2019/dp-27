@@ -88,6 +88,7 @@ public class NotificationService {
         return ServiceUtils.toList(notificationRepository.findAll());
     }
     
+    
     /**
      * returns all notifications for student in the database
      *

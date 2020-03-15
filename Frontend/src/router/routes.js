@@ -32,12 +32,17 @@ const routes = [
       },
       {
 <<<<<<< HEAD
+<<<<<<< HEAD
         path: "help",
         component: () => import("pages/student/StudentFAQ.vue")
 =======
         path: "notifications",
         component: () => import("pages/student/StudentNotifications.vue")
 >>>>>>> 58362456... i think it works
+=======
+        path: "notifications",
+        component: () => import("pages/student/StudentNotifications.vue")
+>>>>>>> d256c4d0a1386f2d865cd5e49053ac68f02e3b1e
       }
     ]
   },
