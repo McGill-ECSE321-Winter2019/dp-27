@@ -9,6 +9,8 @@ public class NotificationDto {
 
     private StudentDto student;
     private AdminDto sender;
+    
+    public NotificationDto() {};
 
     public NotificationDto(
             int id,

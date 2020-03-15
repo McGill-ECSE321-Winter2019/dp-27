@@ -3,6 +3,7 @@ package ca.mcgill.cooperator.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.cooperator.dto.AdminDto;
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.CoopDetailsDto;
 import ca.mcgill.cooperator.dto.CoopDto;
@@ -341,5 +342,30 @@ public abstract class ControllerIT {
                         mvcResult.getResponse().getContentAsString(), ReportSectionDto.class);
 
         return reportSectionDto;
+    }
+    
+    public AdminDto createTestAdmin() throws Exception {
+    	AdminDto adminDto = new AdminDto();
+    	adminDto.setEmail("admin@gmail.com");
+    	adminDto.setFirstName("Lucy");
+    	adminDto.setLastName("Brown");
+    	
+    	// 1. create the Admin with a POST request
+        MvcResult mvcResult =
+                mvc.perform(
+                                post("/admins")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(adminDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
+        // get object from response
+        adminDto =
+                objectMapper.readValue(
+                        mvcResult.getResponse().getContentAsString(), AdminDto.class);
+        
+        return adminDto;
+    	
     }
 }
