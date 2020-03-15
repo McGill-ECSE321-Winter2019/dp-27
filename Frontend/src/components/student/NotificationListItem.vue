@@ -2,12 +2,22 @@
   <div>
     <div class="row items-center">
       <div class="col">
+        <q-separator inset />
+        <br />
         <div>
-          <b>From {{ notif.admin.firstName }} {{ notif.admin.lastName }}</b>
+          <b v-if="!notification.seen" style="color:red">
+            NEW &nbsp;
+          </b>
+          <b
+            >From {{ notification.sender.firstName }}
+            {{ notification.sender.lastName }}</b
+          >
         </div>
-        <div>need to get date</div>
-        <div>{{ notif.title }}</div>
-        <div>{{ notif.body }}</div>
+        <div>{{ notification.timeStamp }}</div>
+        <div>
+          <b>{{ notification.title }}</b>
+        </div>
+        <div>{{ notification.body }}</div>
       </div>
     </div>
   </div>

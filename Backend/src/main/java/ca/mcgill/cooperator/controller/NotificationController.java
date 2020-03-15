@@ -53,10 +53,10 @@ public class NotificationController {
      * @return NotificationDto
      */
     @PutMapping("/{id}/mark-as-read")
-    public NotificationDto setNotificationSeen(@PathVariable int id) {
-        Notification n = notificationService.getNotification(id);
-        notificationService.markAsRead(n);
-        return ControllerUtils.convertToDto(n);
+    public List<NotificationDto> setNotificationsSeen(@PathVariable int id) {
+    	Student student = studentService.getStudentById(id);
+    	List<Notification> all = notificationService.markAllAsRead(student);
+        return ControllerUtils.convertNotifListToDto(all);
     }
 
     /**

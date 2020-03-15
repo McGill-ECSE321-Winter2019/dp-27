@@ -141,6 +141,19 @@ public class NotificationService {
     	}
     	return unread;
     }
+    
+    
+    /**
+     * Set all Notifications of Student to seen
+     *
+     * @return all Notifications 
+     */
+    public List<Notification> markAllAsRead(Student s) {
+    	for(Notification n : notificationRepository.findByStudent(s)) {
+    		markAsRead(n);
+    	}
+    	return notificationRepository.findByStudent(s);
+    }
 
     /**
      * set notification to seen
