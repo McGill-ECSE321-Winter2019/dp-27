@@ -170,14 +170,12 @@ public class CooperatorServiceNotificationTests {
         Notification n = null;
 
         try {
-            notificationService.createNotification(title, body, student, sender);
-            n = notificationService.getNotification(title);
+            n = notificationService.createNotification(title, body, student, sender);
 
             title = "Bye";
             body = "different message";
 
-            notificationService.updateNotification(n, title, body, student, sender);
-            n = notificationService.getNotification(title);
+            n = notificationService.updateNotification(n, title, body, student, sender);
 
         } catch (IllegalArgumentException e) {
             fail();
@@ -203,14 +201,12 @@ public class CooperatorServiceNotificationTests {
         Notification n = null;
 
         try {
-            notificationService.createNotification(title, body, student, sender);
-            n = notificationService.getNotification(title);
+            n = notificationService.createNotification(title, body, student, sender);
 
             title = "    ";
             body = "  ";
 
-            notificationService.updateNotification(n, title, body, null, null);
-            n = notificationService.getNotification(title);
+            n = notificationService.updateNotification(n, title, body, null, null);
 
         } catch (IllegalArgumentException e) {
             String error = e.getMessage();

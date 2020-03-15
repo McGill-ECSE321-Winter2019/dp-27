@@ -59,19 +59,6 @@ public class NotificationController {
     }
 
     /**
-     * Gets Notification by title
-     *
-     * @param title
-     * @return NotificationDto
-     */
-    @GetMapping("/{title}")
-    public NotificationDto getNotificationByTitle(@RequestParam String title) {
-        Notification n = notificationService.getNotification(title);
-
-        return ControllerUtils.convertToDto(n);
-    }
-
-    /**
      * Gets all Notifications
      *
      * @return List<NotificationDto>
