@@ -1219,7 +1219,7 @@ public class ControllerUtils {
 
     public static List<CourseOffering> convertCourseOfferingListToDomainObject(
             List<CourseOfferingDto> coDtos) {
-        List<CourseOffering> cos = new ArrayList<>(coDtos.size());
+        List<CourseOffering> cos = new ArrayList<>();
         for (CourseOfferingDto coDto : coDtos) {
             if (coDto != null) {
                 CourseOffering co = courseOfferingService.getCourseOfferingById(coDto.getId());

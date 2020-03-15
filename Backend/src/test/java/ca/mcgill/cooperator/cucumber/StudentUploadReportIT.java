@@ -55,8 +55,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.web.multipart.MultipartFile;
 
-@SpringBootTest
-@AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class StudentUploadReportIT extends ControllerIT {
 
