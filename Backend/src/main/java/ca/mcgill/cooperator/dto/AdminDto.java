@@ -11,6 +11,8 @@ public class AdminDto {
 
     private List<NotificationDto> sent;
 
+    public AdminDto() {};
+    
     public AdminDto(
             int id, String firstName, String lastName, String email, List<NotificationDto> sent) {
         this.id = id;

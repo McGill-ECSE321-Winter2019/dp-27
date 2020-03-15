@@ -221,6 +221,43 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
                     error);
         }
     }
+    
+    @Test
+    public void testMultipleNotifications() {
+    	String title = "Hello";
+        String body = "Please attend meeting.";
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
+
+        try {
+            notificationService.createNotification(title, body, student, sender);
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(1, notificationService.getAllNotifications().size());
+        student = studentService.getStudentById(student.getId());
+        assertEquals("Hello", ((Notification) student.getNotifications().toArray()[0]).getTitle());
+        sender = adminService.getAdmin(sender.getId());
+        assertEquals("Hello", sender.getSentNotifications().get(0).getTitle());
+        
+        title = "Bye";
+        body = "Please attend meeting again.";
+
+        try {
+            notificationService.createNotification(title, body, student, sender);
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(2, notificationService.getAllNotifications().size());
+        student = studentService.getStudentById(student.getId());
+        assertEquals(2, student.getNotifications().size());
+        sender = adminService.getAdmin(sender.getId());
+        assertEquals(2, sender.getSentNotifications().size());
+    }
 
     @Test
     public void testDeleteNotification() {

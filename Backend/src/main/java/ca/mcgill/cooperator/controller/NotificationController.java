@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
@@ -38,7 +37,7 @@ public class NotificationController extends BaseController {
      * @return NotificationDto
      */
     @GetMapping("/{id}")
-    public NotificationDto getNotificationById(@RequestParam int id) {
+    public NotificationDto getNotificationById(@PathVariable int id) {
         Notification n = notificationService.getNotification(id);
 
         return ControllerUtils.convertToDto(n);
