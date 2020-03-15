@@ -15,9 +15,16 @@
           <router-link to="/student/home">Co-operator</router-link>
         </q-toolbar-title>
 
-        <q-btn dense round flat class="q-mr-sm" icon="notifications">
+        <q-btn
+          dense
+          round
+          flat
+          class="q-mr-sm"
+          icon="notifications"
+          @click="goToNotifPage()"
+        >
           <q-badge color="white" text-color="red" floating transparent>
-            4
+            {{ unseen.length }}
           </q-badge>
         </q-btn>
 
@@ -82,8 +89,26 @@ export default {
   },
   data() {
     return {
-      leftDrawerOpen: false
+      leftDrawerOpen: false,
+      unseen: []
     };
+  },
+  created: function() {
+    const user = this.$store.state.currentUser;
+    this.$axios
+      .get("/notifications/" + user.id + "/unread", {
+        headers: {
+          Authorization: this.$store.state.token
+        }
+      })
+      .then(resp => {
+        this.unseen = resp.data;
+      });
+  },
+  methods: {
+    goToNotifPage() {
+      this.$router.push("/student/notifications");
+    }
   }
 };
 </script>
