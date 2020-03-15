@@ -6,10 +6,9 @@
       </q-card-section>
       <q-card-section v-if="notifsLoaded">
         <NotificationListItem
-          v-for="notif in notifications"
-          :key="notif.id"
-          :notif="notif"
-          @child-clicked="handleSelect"
+          v-for="notification in notifications"
+          :key="notification.id"
+          :notification="notification"
         />
       </q-card-section>
       <q-card-section v-else>
@@ -42,10 +41,18 @@ export default {
       })
       .then(resp => {
         this.notifications = resp.data;
-        if (notifications.length != 0) {
-          this.notifsLoaded = true;
+        this.notifsLoaded = true;
+        if (this.notifications.length == 0) {
+          this.notifsLoaded = false;
         }
       });
+    this.$axios
+      .put("/notifications/" + user.id + "/mark-as-read", {
+        headers: {
+          Authorization: this.$store.state.token
+        }
+      })
+      .then(resp => {});
   }
 };
 </script>
