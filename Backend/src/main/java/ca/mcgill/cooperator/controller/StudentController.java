@@ -103,7 +103,8 @@ public class StudentController extends BaseController {
                 s.getEmail(),
                 s.getStudentId(),
                 ControllerUtils.convertCoopsListToDomainObject(coopService, s.getCoops()),
-                ControllerUtils.convertNotificationListToDomainObjectSet(notificationService, s.getNotifications()));
+                ControllerUtils.convertNotificationListToDomainObjectSet(
+                        notificationService, s.getNotifications()));
         return ControllerUtils.convertToDto(student);
     }
 

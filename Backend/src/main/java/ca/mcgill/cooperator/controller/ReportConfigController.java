@@ -4,7 +4,6 @@ import ca.mcgill.cooperator.dto.ReportConfigDto;
 import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.service.ReportConfigService;
 import ca.mcgill.cooperator.service.ReportSectionConfigService;
-
 import java.util.HashSet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +78,8 @@ public class ReportConfigController extends BaseController {
                         rcDto.getType(),
                         new HashSet<>(
                                 ControllerUtils.convertReportSectionConfigDtosToDomainObjects(
-                                        reportSectionConfigService, rcDto.getReportSectionConfigs())));
+                                        reportSectionConfigService,
+                                        rcDto.getReportSectionConfigs())));
 
         return ControllerUtils.convertToDto(updatedReportConfig);
     }

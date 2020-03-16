@@ -10,7 +10,6 @@ import ca.mcgill.cooperator.service.AdminService;
 import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.StudentService;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,8 +52,8 @@ public class NotificationController extends BaseController {
      */
     @PutMapping("/{id}/mark-as-read")
     public List<NotificationDto> setNotificationsSeen(@PathVariable int id) {
-    	Student student = studentService.getStudentById(id);
-    	List<Notification> all = notificationService.markAllAsRead(student);
+        Student student = studentService.getStudentById(id);
+        List<Notification> all = notificationService.markAllAsRead(student);
         return ControllerUtils.convertNotifListToDto(all);
     }
 
@@ -77,7 +76,7 @@ public class NotificationController extends BaseController {
      */
     @GetMapping("/{id}/unread")
     public List<NotificationDto> getUnreadForStudent(@PathVariable int id) {
-    	Student student = studentService.getStudentById(id);
+        Student student = studentService.getStudentById(id);
         List<Notification> n = notificationService.getUnreadForStudent(student);
 
         return ControllerUtils.convertNotifListToDto(n);
@@ -90,7 +89,7 @@ public class NotificationController extends BaseController {
      */
     @GetMapping("/student/{id}")
     public List<NotificationDto> getAllForStudent(@PathVariable int id) {
-    	Student student = studentService.getStudentById(id);
+        Student student = studentService.getStudentById(id);
         List<Notification> n = notificationService.getAllNotificationsOfStudent(student);
 
         return ControllerUtils.convertNotifListToDto(n);

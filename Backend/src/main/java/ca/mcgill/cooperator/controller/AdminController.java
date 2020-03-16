@@ -4,7 +4,6 @@ import ca.mcgill.cooperator.dto.AdminDto;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.service.AdminService;
 import ca.mcgill.cooperator.service.NotificationService;
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;

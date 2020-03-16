@@ -118,7 +118,8 @@ public class EmployerReportController extends BaseController {
         EmployerContact ec = employerContactService.getEmployerContact(employerId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
         Set<EmployerReportSection> sections =
-                ControllerUtils.convertEmployerReportSectionsToDomainObjects(employerReportSectionService, rsDtos);
+                ControllerUtils.convertEmployerReportSectionsToDomainObjects(
+                        employerReportSectionService, rsDtos);
 
         EmployerReport updatedReport =
                 employerReportService.updateEmployerReport(

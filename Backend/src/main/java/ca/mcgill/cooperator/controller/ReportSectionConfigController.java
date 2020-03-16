@@ -7,7 +7,6 @@ import ca.mcgill.cooperator.service.EmployerReportSectionService;
 import ca.mcgill.cooperator.service.ReportConfigService;
 import ca.mcgill.cooperator.service.ReportSectionConfigService;
 import ca.mcgill.cooperator.service.StudentReportSectionService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;

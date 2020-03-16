@@ -6,9 +6,7 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,8 +85,7 @@ public class NotificationService {
     public List<Notification> getAllNotifications() {
         return ServiceUtils.toList(notificationRepository.findAll());
     }
-    
-    
+
     /**
      * returns all notifications for student in the database
      *
@@ -98,7 +95,7 @@ public class NotificationService {
     public List<Notification> getAllNotificationsOfStudent(Student student) {
         return ServiceUtils.toList(notificationRepository.findByStudent(student));
     }
-    
+
     /**
      * returns all unseen notifications for student id
      *
@@ -106,25 +103,23 @@ public class NotificationService {
      */
     @Transactional
     public List<Notification> getUnreadForStudent(Student student) {
-    	List<Notification> unread = new ArrayList<>();
-    	for(Notification n : notificationRepository.findByStudent(student)) {
-    		if(!n.getSeen())
-    			unread.add(n);
-    	}
-    	return unread;
+        List<Notification> unread = new ArrayList<>();
+        for (Notification n : notificationRepository.findByStudent(student)) {
+            if (!n.getSeen()) unread.add(n);
+        }
+        return unread;
     }
-    
-    
+
     /**
      * Set all Notifications of Student to seen
      *
-     * @return all Notifications 
+     * @return all Notifications
      */
     public List<Notification> markAllAsRead(Student s) {
-    	for(Notification n : notificationRepository.findByStudent(s)) {
-    		markAsRead(n);
-    	}
-    	return notificationRepository.findByStudent(s);
+        for (Notification n : notificationRepository.findByStudent(s)) {
+            markAsRead(n);
+        }
+        return notificationRepository.findByStudent(s);
     }
 
     /**

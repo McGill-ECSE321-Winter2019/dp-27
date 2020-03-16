@@ -1161,7 +1161,7 @@ public class ControllerUtils {
      */
 
     public static List<Notification> convertNotificationListToDomainObject(
-    		NotificationService service, List<NotificationDto> notifDtos) {
+            NotificationService service, List<NotificationDto> notifDtos) {
         List<Notification> notifs = new ArrayList<Notification>();
         for (NotificationDto nDto : notifDtos) {
             Notification n = service.getNotification(nDto.getId());
@@ -1171,7 +1171,7 @@ public class ControllerUtils {
     }
 
     public static Set<Notification> convertNotificationListToDomainObjectSet(
-    		NotificationService service, List<NotificationDto> notifDtos) {
+            NotificationService service, List<NotificationDto> notifDtos) {
         Set<Notification> notifs = new HashSet<>();
         if (notifDtos == null) {
             return notifs;
@@ -1194,7 +1194,7 @@ public class ControllerUtils {
     }
 
     public static Set<EmployerReportSection> convertEmployerReportSectionsToDomainObjects(
-    		EmployerReportSectionService service, Collection<EmployerReportSectionDto> rsDtos) {
+            EmployerReportSectionService service, Collection<EmployerReportSectionDto> rsDtos) {
         Set<EmployerReportSection> reports = new HashSet<EmployerReportSection>();
         for (EmployerReportSectionDto rsDto : rsDtos) {
             EmployerReportSection rs = service.getReportSection(rsDto.getId());
@@ -1203,7 +1203,8 @@ public class ControllerUtils {
         return reports;
     }
 
-    public static Set<Coop> convertCoopsListToDomainObject(CoopService service, List<CoopDto> coopDto) {
+    public static Set<Coop> convertCoopsListToDomainObject(
+            CoopService service, List<CoopDto> coopDto) {
         Set<Coop> coops = new HashSet<>();
         if (coopDto == null) return coops;
         for (CoopDto cDto : coopDto) {
@@ -1226,12 +1227,11 @@ public class ControllerUtils {
     }
 
     public static List<ReportSectionConfig> convertReportSectionConfigDtosToDomainObjects(
-    		ReportSectionConfigService service, Collection<ReportSectionConfigDto> rscDtos) {
+            ReportSectionConfigService service, Collection<ReportSectionConfigDto> rscDtos) {
         List<ReportSectionConfig> reportSectionConfigs = new ArrayList<>();
         for (ReportSectionConfigDto rscDto : rscDtos) {
             if (rscDto != null) {
-                ReportSectionConfig rsc =
-                        service.getReportSectionConfig(rscDto.getId());
+                ReportSectionConfig rsc = service.getReportSectionConfig(rscDto.getId());
                 reportSectionConfigs.add(rsc);
             }
         }
