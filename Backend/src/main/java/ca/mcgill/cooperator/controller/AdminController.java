@@ -3,13 +3,11 @@ package ca.mcgill.cooperator.controller;
 import ca.mcgill.cooperator.dto.AdminDto;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.service.AdminService;
+import ca.mcgill.cooperator.service.NotificationService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,9 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("admins")
-public class AdminController {
+public class AdminController extends BaseController {
 
     @Autowired private AdminService adminService;
+    @Autowired private NotificationService notifService;
 
     /**
      * Get all Admins
@@ -90,7 +89,7 @@ public class AdminController {
                         a.getLastName(),
                         a.getEmail(),
                         ControllerUtils.convertNotificationListToDomainObject(
-                                a.getSentNotifications()));
+                                notifService, a.getSentNotifications()));
 
         return ControllerUtils.convertToDto(updatedAdmin);
     }
@@ -107,10 +106,5 @@ public class AdminController {
         Admin deletedAdmin = adminService.deleteAdmin(admin);
 
         return ControllerUtils.convertToDto(deletedAdmin);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public final ResponseEntity<Exception> handleAllExceptions(RuntimeException ex) {
-        return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

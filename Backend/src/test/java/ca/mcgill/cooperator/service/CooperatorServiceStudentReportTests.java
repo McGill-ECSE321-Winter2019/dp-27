@@ -6,18 +6,22 @@ import static org.junit.jupiter.api.Assertions.fail;
 import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
-import ca.mcgill.cooperator.dao.ReportSectionRepository;
+import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.StudentReportRepository;
+import ca.mcgill.cooperator.dao.StudentReportSectionRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
-import ca.mcgill.cooperator.model.ReportSection;
+import ca.mcgill.cooperator.model.ReportConfig;
+import ca.mcgill.cooperator.model.ReportResponseType;
+import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
+import ca.mcgill.cooperator.model.StudentReportSection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashSet;
@@ -40,14 +44,17 @@ public class CooperatorServiceStudentReportTests {
     @Autowired CourseRepository courseRepository;
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired StudentRepository studentRepository;
-    @Autowired ReportSectionRepository reportSectionRepository;
+    @Autowired StudentReportSectionRepository studentReportSectionRepository;
+    @Autowired ReportConfigRepository reportConfigRepository;
 
     @Autowired StudentReportService studentReportService;
     @Autowired CoopService coopService;
     @Autowired CourseService courseService;
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired StudentService studentService;
-    @Autowired ReportSectionService reportSectionService;
+    @Autowired StudentReportSectionService studentReportSectionService;
+    @Autowired ReportConfigService reportConfigService;
+    @Autowired ReportSectionConfigService reportSectionConfigService;
 
     File testFile = new File("src/test/resources/Test_Offer_Letter.pdf");
 
@@ -56,7 +63,7 @@ public class CooperatorServiceStudentReportTests {
     public void clearDatabase() {
         List<StudentReport> studentReports = studentReportService.getAllStudentReports();
         for (StudentReport studentReport : studentReports) {
-            studentReport.setReportSections(new HashSet<ReportSection>());
+            studentReport.setReportSections(new HashSet<StudentReportSection>());
             studentReportRepository.save(studentReport);
         }
 
@@ -64,8 +71,9 @@ public class CooperatorServiceStudentReportTests {
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
         studentRepository.deleteAll();
-        reportSectionRepository.deleteAll();
+        studentReportSectionRepository.deleteAll();
         studentReportRepository.deleteAll();
+        reportConfigRepository.deleteAll();
     }
 
     @Test
@@ -116,6 +124,7 @@ public class CooperatorServiceStudentReportTests {
         CourseOffering courseOffering = createTestCourseOffering(course);
         Student s = createTestStudent();
         Coop coop = createTestCoop(courseOffering, s);
+        ReportSectionConfig rsConfig = createTestReportSectionConfig();
 
         // 1. create Student Report
         MultipartFile multipartFile = null;
@@ -129,8 +138,8 @@ public class CooperatorServiceStudentReportTests {
             fail();
         }
 
-        Set<ReportSection> sections = new HashSet<ReportSection>();
-        ReportSection rs = createTestReportSection();
+        Set<StudentReportSection> sections = new HashSet<StudentReportSection>();
+        StudentReportSection rs = createTestStudentReportSection(rsConfig, sr);
         sections.add(rs);
 
         // 2. update with valid values
@@ -152,7 +161,7 @@ public class CooperatorServiceStudentReportTests {
         coop = coopService.getCoopById(coop.getId());
         assertEquals(
                 "Offer Letter", ((StudentReport) coop.getStudentReports().toArray()[0]).getTitle());
-        rs = reportSectionService.getReportSection(rs.getId());
+        rs = studentReportSectionService.getReportSection(rs.getId());
         assertEquals("Offer Letter", rs.getStudentReport().getTitle());
     }
 
@@ -164,6 +173,7 @@ public class CooperatorServiceStudentReportTests {
         CourseOffering courseOffering = createTestCourseOffering(course);
         Student s = createTestStudent();
         Coop coop = createTestCoop(courseOffering, s);
+        ReportSectionConfig rsConfig = createTestReportSectionConfig();
 
         // 1. create Student Report
         MultipartFile multipartFile = null;
@@ -177,8 +187,8 @@ public class CooperatorServiceStudentReportTests {
             fail();
         }
 
-        Set<ReportSection> sections = new HashSet<ReportSection>();
-        ReportSection rs = createTestReportSection();
+        Set<StudentReportSection> sections = new HashSet<StudentReportSection>();
+        StudentReportSection rs = createTestStudentReportSection(rsConfig, sr);
         sections.add(rs);
 
         // 2. update with valid values
@@ -307,9 +317,16 @@ public class CooperatorServiceStudentReportTests {
         return s;
     }
 
-    private ReportSection createTestReportSection() {
-        ReportSection rs = new ReportSection();
-        rs = reportSectionService.createReportSection("Hello", "This is a report section");
-        return rs;
+    private StudentReportSection createTestStudentReportSection(
+            ReportSectionConfig rsConfig, StudentReport sr) {
+        return studentReportSectionService.createReportSection("This is a response", rsConfig, sr);
+    }
+
+    private ReportSectionConfig createTestReportSectionConfig() {
+        ReportConfig reportConfig =
+                reportConfigService.createReportConfig(true, 14, true, "Evaluation");
+
+        return reportSectionConfigService.createReportSectionConfig(
+                "How was your co-op?", ReportResponseType.LONG_TEXT, reportConfig);
     }
 }

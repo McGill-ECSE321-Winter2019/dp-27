@@ -9,7 +9,8 @@ import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.dao.EmployerReportRepository;
-import ca.mcgill.cooperator.dao.ReportSectionRepository;
+import ca.mcgill.cooperator.dao.EmployerReportSectionRepository;
+import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Coop;
@@ -18,7 +19,10 @@ import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.ReportSection;
+import ca.mcgill.cooperator.model.EmployerReportSection;
+import ca.mcgill.cooperator.model.ReportConfig;
+import ca.mcgill.cooperator.model.ReportResponseType;
+import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
@@ -48,7 +52,8 @@ public class CooperatorServiceEmployerReportTests {
     @Autowired CompanyRepository companyRepository;
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired StudentRepository studentRepository;
-    @Autowired ReportSectionRepository reportSectionRepository;
+    @Autowired EmployerReportSectionRepository employerReportSectionRepository;
+    @Autowired ReportConfigRepository reportConfigRepository;
 
     @Autowired EmployerReportService employerReportService;
     @Autowired CoopService coopService;
@@ -57,7 +62,9 @@ public class CooperatorServiceEmployerReportTests {
     @Autowired CompanyService companyService;
     @Autowired EmployerContactService employerContactService;
     @Autowired StudentService studentService;
-    @Autowired ReportSectionService reportSectionService;
+    @Autowired EmployerReportSectionService employerReportSectionService;
+    @Autowired ReportConfigService reportConfigService;
+    @Autowired ReportSectionConfigService reportSectionConfigService;
 
     File testFile = new File("src/test/resources/Test_Offer_Letter.pdf");
 
@@ -67,13 +74,14 @@ public class CooperatorServiceEmployerReportTests {
         List<EmployerReport> ers = employerReportService.getAllEmployerReports();
         for (EmployerReport er : ers) {
             er.setCoop(null);
-            er.setReportSections(new HashSet<ReportSection>());
+            er.setReportSections(new HashSet<EmployerReportSection>());
             employerReportRepository.save(er);
         }
 
-        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
-        for (ReportSection reportSection : reportSections) {
-            reportSectionService.deleteReportSection(reportSection);
+        List<EmployerReportSection> reportSections =
+                employerReportSectionService.getAllReportSections();
+        for (EmployerReportSection reportSection : reportSections) {
+            employerReportSectionService.deleteReportSection(reportSection);
         }
 
         coopRepository.deleteAll();
@@ -82,8 +90,9 @@ public class CooperatorServiceEmployerReportTests {
         employerContactRepository.deleteAll();
         companyRepository.deleteAll();
         studentRepository.deleteAll();
-        reportSectionRepository.deleteAll();
+        employerReportSectionRepository.deleteAll();
         employerReportRepository.deleteAll();
+        reportConfigRepository.deleteAll();
     }
 
     @Test
@@ -142,6 +151,7 @@ public class CooperatorServiceEmployerReportTests {
         Coop coop = createTestCoop(courseOffering, s);
         Company company = createTestCompany();
         EmployerContact ec = createTestEmployerContact(company);
+        ReportSectionConfig rsConfig = createTestReportSectionConfig();
 
         MultipartFile multipartFile = null;
         try {
@@ -154,8 +164,8 @@ public class CooperatorServiceEmployerReportTests {
             fail();
         }
 
-        Set<ReportSection> sections = new HashSet<ReportSection>();
-        ReportSection rs = createTestReportSection();
+        Set<EmployerReportSection> sections = new HashSet<EmployerReportSection>();
+        EmployerReportSection rs = createTestEmployerReportSection(rsConfig, er);
         sections.add(rs);
 
         try {
@@ -186,6 +196,7 @@ public class CooperatorServiceEmployerReportTests {
         Coop coop = createTestCoop(courseOffering, s);
         Company company = createTestCompany();
         EmployerContact ec = createTestEmployerContact(company);
+        ReportSectionConfig rsConfig = createTestReportSectionConfig();
 
         MultipartFile multipartFile = null;
         try {
@@ -198,8 +209,8 @@ public class CooperatorServiceEmployerReportTests {
             fail();
         }
 
-        Set<ReportSection> sections = new HashSet<ReportSection>();
-        ReportSection rs = createTestReportSection();
+        Set<EmployerReportSection> sections = new HashSet<EmployerReportSection>();
+        EmployerReportSection rs = createTestEmployerReportSection(rsConfig, er);
         sections.add(rs);
 
         try {
@@ -221,7 +232,7 @@ public class CooperatorServiceEmployerReportTests {
         assertEquals(
                 "Offer Letter",
                 ((EmployerReport) coop.getEmployerReports().toArray()[0]).getTitle());
-        rs = reportSectionService.getReportSection(rs.getId());
+        rs = employerReportSectionService.getReportSection(rs.getId());
         assertEquals("Offer Letter", rs.getEmployerReport().getTitle());
     }
 
@@ -353,9 +364,16 @@ public class CooperatorServiceEmployerReportTests {
         return s;
     }
 
-    private ReportSection createTestReportSection() {
-        ReportSection rs = new ReportSection();
-        rs = reportSectionService.createReportSection("Hello", "This is a report section");
-        return rs;
+    private EmployerReportSection createTestEmployerReportSection(
+            ReportSectionConfig rsConfig, EmployerReport er) {
+        return employerReportSectionService.createReportSection("This is a response", rsConfig, er);
+    }
+
+    private ReportSectionConfig createTestReportSectionConfig() {
+        ReportConfig reportConfig =
+                reportConfigService.createReportConfig(true, 14, true, "Evaluation");
+
+        return reportSectionConfigService.createReportSectionConfig(
+                "How was your co-op?", ReportResponseType.LONG_TEXT, reportConfig);
     }
 }

@@ -6,9 +6,7 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +21,13 @@ public class NotificationService {
     @Autowired AdminRepository adminRepository;
 
     /**
-     * creates a Notification with title, body, admin sender and student receiver
+     * Creates a new Notification
      *
      * @param title
      * @param body
      * @param student
      * @param sender
-     * @return created notification
+     * @return created Notification
      */
     @Transactional
     public Notification createNotification(
@@ -63,10 +61,10 @@ public class NotificationService {
     }
 
     /**
-     * retrieves a notification with specific id from the database
+     * Retrieves a Notification with specific id from the database
      *
      * @param id
-     * @return notification with given id
+     * @return Notification with given id
      */
     @Transactional
     public Notification getNotification(int id) {
@@ -87,18 +85,17 @@ public class NotificationService {
     public List<Notification> getAllNotifications() {
         return ServiceUtils.toList(notificationRepository.findAll());
     }
-    
-    
+
     /**
      * returns all notifications for student in the database
      *
-     * @return all notifications
+     * @return all Notifications
      */
     @Transactional
     public List<Notification> getAllNotificationsOfStudent(Student student) {
         return ServiceUtils.toList(notificationRepository.findByStudent(student));
     }
-    
+
     /**
      * returns all unseen notifications for student id
      *
@@ -106,50 +103,48 @@ public class NotificationService {
      */
     @Transactional
     public List<Notification> getUnreadForStudent(Student student) {
-    	List<Notification> unread = new ArrayList<>();
-    	for(Notification n : notificationRepository.findByStudent(student)) {
-    		if(!n.getSeen())
-    			unread.add(n);
-    	}
-    	return unread;
-    }
-    
-    
-    /**
-     * Set all Notifications of Student to seen
-     *
-     * @return all Notifications 
-     */
-    public List<Notification> markAllAsRead(Student s) {
-    	for(Notification n : notificationRepository.findByStudent(s)) {
-    		markAsRead(n);
-    	}
-    	return notificationRepository.findByStudent(s);
+        List<Notification> unread = new ArrayList<>();
+        for (Notification n : notificationRepository.findByStudent(student)) {
+            if (!n.getSeen()) unread.add(n);
+        }
+        return unread;
     }
 
     /**
-     * set notification to seen
+     * Set all Notifications of Student to seen
      *
-     * @return notification seen
+     * @return all Notifications
+     */
+    public List<Notification> markAllAsRead(Student s) {
+        for (Notification n : notificationRepository.findByStudent(s)) {
+            markAsRead(n);
+        }
+        return notificationRepository.findByStudent(s);
+    }
+
+    /**
+     * Set Notification to seen
+     *
+     * @return updated Notification
      */
     public Notification markAsRead(Notification n) {
         if (n != null) n.setSeen(true);
         else {
-            throw new IllegalArgumentException("Notification cannot be null");
+            throw new IllegalArgumentException("Notification cannot be null!");
         }
         notificationRepository.save(n);
         return n;
     }
 
     /**
-     * updates an already existing notification
+     * Updates an already existing Notification
      *
      * @param n
      * @param title
      * @param body
      * @param student
      * @param sender
-     * @return updated notification
+     * @return updated Notification
      */
     @Transactional
     public Notification updateNotification(
@@ -191,7 +186,7 @@ public class NotificationService {
     }
 
     /**
-     * deletes a notification from the database
+     * Deletes a Notification from the database
      *
      * @param n
      * @return deleted notification

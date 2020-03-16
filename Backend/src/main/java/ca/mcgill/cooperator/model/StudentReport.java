@@ -16,6 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class StudentReport {
     @Id @GeneratedValue private int id;
     private String title;
+    private String type;
     private ReportStatus status;
 
     @Lob private byte[] data;
@@ -24,11 +25,11 @@ public class StudentReport {
 
     @OneToMany(
             mappedBy = "studentReport",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.PERSIST,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<ReportSection> reportSections;
+    private Set<StudentReportSection> reportSections;
 
     /*--- Getters and Setters ---*/
 
@@ -42,6 +43,14 @@ public class StudentReport {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public ReportStatus getStatus() {
@@ -68,11 +77,11 @@ public class StudentReport {
         this.data = data;
     }
 
-    public Set<ReportSection> getReportSections() {
+    public Set<StudentReportSection> getReportSections() {
         return this.reportSections;
     }
 
-    public void setReportSections(Set<ReportSection> reportSections) {
+    public void setReportSections(Set<StudentReportSection> reportSections) {
         if (this.reportSections == null) {
             this.reportSections = reportSections;
         } else {

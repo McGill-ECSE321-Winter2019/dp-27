@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("course-offerings")
-public class CourseOfferingController {
+public class CourseOfferingController extends BaseController {
 
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired CourseService courseService;

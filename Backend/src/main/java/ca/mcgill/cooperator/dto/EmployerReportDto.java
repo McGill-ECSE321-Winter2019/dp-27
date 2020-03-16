@@ -12,7 +12,9 @@ public class EmployerReportDto {
 
     private CoopDto coop;
     private EmployerContactDto employerContact;
-    private List<ReportSectionDto> reportSections;
+    private List<EmployerReportSectionDto> reportSections;
+
+    public EmployerReportDto() {}
 
     public EmployerReportDto(
             int id,
@@ -21,7 +23,7 @@ public class EmployerReportDto {
             byte[] data,
             CoopDto coop,
             EmployerContactDto employerContact,
-            List<ReportSectionDto> reportSections) {
+            List<EmployerReportSectionDto> reportSections) {
         this.id = id;
         this.title = title;
         this.status = status;
@@ -77,11 +79,11 @@ public class EmployerReportDto {
         this.employerContact = employerContact;
     }
 
-    public List<ReportSectionDto> getReportSections() {
+    public List<EmployerReportSectionDto> getReportSections() {
         return this.reportSections;
     }
 
-    public void setReportSections(List<ReportSectionDto> reportSections) {
+    public void setReportSections(List<EmployerReportSectionDto> reportSections) {
         this.reportSections = reportSections;
     }
 }

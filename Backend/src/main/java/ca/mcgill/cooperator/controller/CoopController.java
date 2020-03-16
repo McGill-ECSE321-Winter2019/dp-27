@@ -37,7 +37,8 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("coops")
-public class CoopController {
+public class CoopController extends BaseController {
+
     @Autowired CoopService coopService;
     @Autowired CourseService courseService;
     @Autowired CourseOfferingService courseOfferingService;

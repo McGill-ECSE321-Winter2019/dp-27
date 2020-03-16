@@ -3,11 +3,11 @@ package ca.mcgill.cooperator.service;
 import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.dao.EmployerReportRepository;
-import ca.mcgill.cooperator.dao.ReportSectionRepository;
+import ca.mcgill.cooperator.dao.EmployerReportSectionRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.ReportSection;
+import ca.mcgill.cooperator.model.EmployerReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import java.io.IOException;
 import java.util.HashSet;
@@ -20,10 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class EmployerReportService {
-    @Autowired EmployerReportRepository employerReportRepository;
+
     @Autowired EmployerContactRepository employerContactRepository;
+    @Autowired EmployerReportRepository employerReportRepository;
+    @Autowired EmployerReportSectionRepository employerReportSectionRepository;
     @Autowired CoopRepository coopRepository;
-    @Autowired ReportSectionRepository reportSectionRepository;
 
     /**
      * Creates new employer report in database
@@ -60,7 +61,7 @@ public class EmployerReportService {
         er.setTitle(title);
         er.setCoop(c);
         er.setEmployerContact(ec);
-        er.setReportSections(new HashSet<ReportSection>());
+        er.setReportSections(new HashSet<EmployerReportSection>());
         if (file != null) {
             try {
                 er.setData(file.getBytes());
@@ -92,7 +93,7 @@ public class EmployerReportService {
     /**
      * Retrieves all employer reports from database
      *
-     * @return list of empoyer reports
+     * @return list of employer reports
      */
     @Transactional
     public List<EmployerReport> getAllEmployerReports() {
@@ -116,7 +117,7 @@ public class EmployerReportService {
             Coop c,
             String title,
             EmployerContact ec,
-            Set<ReportSection> sections,
+            Set<EmployerReportSection> sections,
             MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (er == null) {
@@ -156,9 +157,9 @@ public class EmployerReportService {
         // need to update sections side since it doesn't sync
         if (sections != null) {
             // set employer report as parent for all report sections
-            for (ReportSection section : sections) {
+            for (EmployerReportSection section : sections) {
                 section.setEmployerReport(er);
-                reportSectionRepository.save(section);
+                employerReportSectionRepository.save(section);
             }
         }
 

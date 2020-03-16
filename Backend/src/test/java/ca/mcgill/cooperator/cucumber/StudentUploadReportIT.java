@@ -16,16 +16,19 @@ import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
-import ca.mcgill.cooperator.dto.ReportSectionDto;
+import ca.mcgill.cooperator.dto.ReportConfigDto;
+import ca.mcgill.cooperator.dto.ReportSectionConfigDto;
 import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.dto.StudentReportDto;
+import ca.mcgill.cooperator.dto.StudentReportSectionDto;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
-import ca.mcgill.cooperator.model.ReportSection;
+import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
+import ca.mcgill.cooperator.model.StudentReportSection;
 import ca.mcgill.cooperator.service.CoopDetailsService;
-import ca.mcgill.cooperator.service.ReportSectionService;
+import ca.mcgill.cooperator.service.StudentReportSectionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -42,7 +45,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -50,7 +52,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.web.multipart.MultipartFile;
 
-@ActiveProfiles("test")
 public class StudentUploadReportIT extends ControllerIT {
 
     @Autowired private MockMvc mvc;
@@ -65,9 +66,11 @@ public class StudentUploadReportIT extends ControllerIT {
     @Autowired private CoopDetailsRepository coopDetailsRepository;
 
     @Autowired private CoopDetailsService coopDetailsService;
-    @Autowired private ReportSectionService reportSectionService;
+    @Autowired private StudentReportSectionService studentReportSectionService;
 
     MvcResult mvcResult;
+
+    /* Global test variables */
 
     StudentDto studentDto;
     CourseDto courseDto;
@@ -77,7 +80,9 @@ public class StudentUploadReportIT extends ControllerIT {
     CompanyDto companyDto;
     EmployerContactDto employerContactDto;
     StudentReportDto studentReportDto;
-    ReportSectionDto reportSectionDto;
+    StudentReportSectionDto studentReportSectionDto;
+    ReportConfigDto reportConfigDto;
+    ReportSectionConfigDto reportSectionConfigDto;
 
     @Before
     @After
@@ -89,12 +94,13 @@ public class StudentUploadReportIT extends ControllerIT {
             coopDetailsRepository.save(cd);
         }
 
-        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
-        for (ReportSection reportSection : reportSections) {
-            reportSectionService.deleteReportSection(reportSection);
+        List<StudentReportSection> reportSections =
+                studentReportSectionService.getAllReportSections();
+        for (StudentReportSection reportSection : reportSections) {
+            studentReportSectionService.deleteReportSection(reportSection);
         }
 
-        reportSections = reportSectionService.getAllReportSections();
+        reportSections = studentReportSectionService.getAllReportSections();
         assertEquals(0, reportSections.size());
 
         studentReportRepository.deleteAll();
@@ -120,6 +126,10 @@ public class StudentUploadReportIT extends ControllerIT {
                 createTestEmployerContact(
                         companyDto, "John", "Smith", "smithy@smithy.com", "12345678");
         coopDetailsDto = createTestCoopDetails(coopDto, 2500, 40, employerContactDto);
+        reportConfigDto = createTestReportConfig(true, 14, true, "Evaluation");
+        reportSectionConfigDto =
+                createTestReportSectionConfig(
+                        "How was your co-op?", ReportResponseType.LONG_TEXT, reportConfigDto);
     }
 
     @And("the Student has a Report due")
@@ -150,7 +160,7 @@ public class StudentUploadReportIT extends ControllerIT {
         MultipartFile multipartFile =
                 new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-        Set<ReportSectionDto> rdtos = new HashSet<ReportSectionDto>();
+        Set<StudentReportSectionDto> rsDtos = new HashSet<StudentReportSectionDto>();
 
         MockMultipartHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/student-reports/" + studentReportDto.getId());
@@ -171,7 +181,7 @@ public class StudentUploadReportIT extends ControllerIT {
                                         .param("coop_id", String.valueOf(coopDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(rdtos))
+                                        .content(objectMapper.writeValueAsString(rsDtos))
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
@@ -215,9 +225,10 @@ public class StudentUploadReportIT extends ControllerIT {
 
     @When("the Student uploads the same type of Report again")
     public void studentUploadsReportAgain() throws Exception {
-        Set<ReportSectionDto> rdtos = new HashSet<ReportSectionDto>();
-        reportSectionDto = createTestReportSection(studentReportDto);
-        rdtos.add(reportSectionDto);
+        Set<StudentReportSectionDto> rdtos = new HashSet<StudentReportSectionDto>();
+        studentReportSectionDto =
+                createTestStudentReportSection(reportSectionConfigDto, studentReportDto);
+        rdtos.add(studentReportSectionDto);
 
         File testFile = new File("src/test/resources/Test_Offer_Letter.pdf");
         MultipartFile multipartFile =

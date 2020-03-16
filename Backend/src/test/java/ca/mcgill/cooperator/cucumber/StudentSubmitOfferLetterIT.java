@@ -21,7 +21,6 @@ import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
@@ -30,7 +29,6 @@ import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.EmployerContactService;
-import ca.mcgill.cooperator.service.ReportSectionService;
 import ca.mcgill.cooperator.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.After;
@@ -44,18 +42,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.multipart.MultipartFile;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
 public class StudentSubmitOfferLetterIT {
 
     @Autowired private MockMvc mvc;
@@ -74,7 +66,6 @@ public class StudentSubmitOfferLetterIT {
     @Autowired private CourseService courseService;
     @Autowired private CourseOfferingService courseOfferingService;
     @Autowired private CoopDetailsService coopDetailsService;
-    @Autowired private ReportSectionService reportSectionService;
 
     /* Global test variables */
 
@@ -91,11 +82,6 @@ public class StudentSubmitOfferLetterIT {
         for (CoopDetails cd : coopDetails) {
             cd.setCoop(null);
             coopDetailsRepository.save(cd);
-        }
-
-        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
-        for (ReportSection reportSection : reportSections) {
-            reportSectionService.deleteReportSection(reportSection);
         }
 
         // deleting all students will also delete all coops

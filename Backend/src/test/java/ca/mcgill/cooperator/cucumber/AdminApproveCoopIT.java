@@ -18,15 +18,15 @@ import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
-import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.dto.StudentReportDto;
+import ca.mcgill.cooperator.dto.StudentReportSectionDto;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
-import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
+import ca.mcgill.cooperator.model.StudentReportSection;
 import ca.mcgill.cooperator.service.CoopDetailsService;
-import ca.mcgill.cooperator.service.ReportSectionService;
+import ca.mcgill.cooperator.service.StudentReportSectionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -43,7 +43,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -51,7 +50,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.web.multipart.MultipartFile;
 
-@ActiveProfiles("test")
 public class AdminApproveCoopIT extends ControllerIT {
 
     @Autowired private MockMvc mvc;
@@ -65,7 +63,7 @@ public class AdminApproveCoopIT extends ControllerIT {
     @Autowired private CoopDetailsRepository coopDetailsRepository;
 
     @Autowired private CoopDetailsService coopDetailsService;
-    @Autowired private ReportSectionService reportSectionService;
+    @Autowired private StudentReportSectionService studentReportSectionService;
 
     /* Global test variables */
     StudentDto studentDto;
@@ -87,9 +85,10 @@ public class AdminApproveCoopIT extends ControllerIT {
             coopDetailsRepository.save(cd);
         }
 
-        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
-        for (ReportSection reportSection : reportSections) {
-            reportSectionService.deleteReportSection(reportSection);
+        List<StudentReportSection> reportSections =
+                studentReportSectionService.getAllReportSections();
+        for (StudentReportSection reportSection : reportSections) {
+            studentReportSectionService.deleteReportSection(reportSection);
         }
 
         // deleting all students will also delete all coops
@@ -190,7 +189,7 @@ public class AdminApproveCoopIT extends ControllerIT {
         // update student report status
         studentReportDto.setStatus(ReportStatus.COMPLETED);
 
-        Set<ReportSectionDto> rdtos = new HashSet<ReportSectionDto>();
+        Set<StudentReportSectionDto> rsDtos = new HashSet<StudentReportSectionDto>();
 
         MockMultipartHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/student-reports/" + studentReportDto.getId());
@@ -211,7 +210,7 @@ public class AdminApproveCoopIT extends ControllerIT {
                                         .param("coop_id", String.valueOf(coopDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(rdtos))
+                                        .content(objectMapper.writeValueAsString(rsDtos))
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
@@ -287,7 +286,7 @@ public class AdminApproveCoopIT extends ControllerIT {
                         .andReturn();
 
         // update student report status
-        Set<ReportSectionDto> rdtos = new HashSet<ReportSectionDto>();
+        Set<StudentReportSectionDto> rsDtos = new HashSet<StudentReportSectionDto>();
 
         MockMultipartHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/student-reports/" + studentReportDto.getId());
@@ -308,7 +307,7 @@ public class AdminApproveCoopIT extends ControllerIT {
                                         .param("coop_id", String.valueOf(coopDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(rdtos))
+                                        .content(objectMapper.writeValueAsString(rsDtos))
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();

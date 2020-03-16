@@ -16,6 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class EmployerReport {
     @Id @GeneratedValue private int id;
     private String title;
+    private String type;
     private ReportStatus status;
 
     @Lob private byte[] data;
@@ -30,7 +31,7 @@ public class EmployerReport {
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<ReportSection> reportSections;
+    private Set<EmployerReportSection> reportSections;
 
     /*--- Getters and Setters ---*/
 
@@ -44,6 +45,14 @@ public class EmployerReport {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public ReportStatus getStatus() {
@@ -78,11 +87,11 @@ public class EmployerReport {
         this.employerContact = employerContact;
     }
 
-    public Set<ReportSection> getReportSections() {
+    public Set<EmployerReportSection> getReportSections() {
         return this.reportSections;
     }
 
-    public void setReportSections(Set<ReportSection> reportSections) {
+    public void setReportSections(Set<EmployerReportSection> reportSections) {
         if (this.reportSections == null) {
             this.reportSections = reportSections;
         } else {

@@ -25,7 +25,7 @@ public class NotificationDto {
         this.title = title;
         this.body = body;
         this.seen = seen;
-        DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm"); 
+        DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm");
         this.timeStamp = simple.format(timeStamp);
         this.student = student;
         this.sender = sender;
@@ -77,13 +77,12 @@ public class NotificationDto {
         this.seen = seen;
     }
 
-    
     public String getTimeStamp() {
-    	return this.timeStamp;
+        return this.timeStamp;
     }
 
     public void setTimeStamp(long timeStamp) {
-    	DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm"); 
+        DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm");
         this.timeStamp = simple.format(timeStamp);
     }
 }

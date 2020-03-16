@@ -19,7 +19,7 @@ import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.EmployerReportDto;
-import ca.mcgill.cooperator.dto.ReportSectionDto;
+import ca.mcgill.cooperator.dto.EmployerReportSectionDto;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.ReportStatus;
@@ -124,8 +124,7 @@ public class EmployerReportControllerIT extends ControllerIT {
         assertEquals(returnedReport.getTitle(), "Offer Letter");
 
         // 3. update file
-
-        Set<ReportSectionDto> rdtos = new HashSet<ReportSectionDto>();
+        Set<EmployerReportSectionDto> rsDtos = new HashSet<EmployerReportSectionDto>();
 
         MockMultipartHttpServletRequestBuilder builder =
                 MockMvcRequestBuilders.multipart("/employer-reports/" + returnedReport.getId());
@@ -147,7 +146,7 @@ public class EmployerReportControllerIT extends ControllerIT {
                                         .param("employer_id", String.valueOf(ecDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(rdtos))
+                                        .content(objectMapper.writeValueAsString(rsDtos))
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();

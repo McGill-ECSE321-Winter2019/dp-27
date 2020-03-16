@@ -11,7 +11,9 @@ public class StudentReportDto {
     private byte[] data;
 
     private CoopDto coop;
-    private List<ReportSectionDto> reportSections;
+    private List<StudentReportSectionDto> reportSections;
+
+    public StudentReportDto() {}
 
     public StudentReportDto(
             int id,
@@ -19,7 +21,7 @@ public class StudentReportDto {
             String title,
             byte[] data,
             CoopDto coop,
-            List<ReportSectionDto> reportSections) {
+            List<StudentReportSectionDto> reportSections) {
         this.id = id;
         this.status = status;
         this.title = title;
@@ -66,11 +68,11 @@ public class StudentReportDto {
         this.coop = coop;
     }
 
-    public List<ReportSectionDto> getReportSections() {
+    public List<StudentReportSectionDto> getReportSections() {
         return this.reportSections;
     }
 
-    public void setReportSections(List<ReportSectionDto> reportSections) {
+    public void setReportSections(List<StudentReportSectionDto> reportSections) {
         this.reportSections = reportSections;
     }
 }
