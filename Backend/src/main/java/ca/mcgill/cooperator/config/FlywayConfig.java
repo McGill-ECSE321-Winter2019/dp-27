@@ -15,7 +15,7 @@ public class FlywayConfig {
                 new FlywayMigrationStrategy() {
                     @Override
                     public void migrate(Flyway flyway) {
-                        flyway.migrate();
+                    	flyway.migrate();
                     }
                 };
 

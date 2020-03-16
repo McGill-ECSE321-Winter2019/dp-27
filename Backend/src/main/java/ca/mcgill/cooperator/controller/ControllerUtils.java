@@ -73,7 +73,7 @@ public class ControllerUtils {
                                 notification.getTimeStamp());
                 Student student = notification.getStudent();
                 StudentDto studentDto =
-                        new StudentDto(
+                        new StudentDto( 
                                 student.getId(),
                                 student.getFirstName(),
                                 student.getLastName(),

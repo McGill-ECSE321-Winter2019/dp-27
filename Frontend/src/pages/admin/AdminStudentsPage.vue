@@ -37,8 +37,16 @@
           <q-table
             :data="students"
             :columns="columns"
-            row-key="studentName"
+            row-key="email"
             @row-click="goToStudentCoop"
+            selection="multiple"
+            :selected.sync="selected"
+          />
+          <q-btn
+            class="dashBtn"
+            label="Send Notification to Selected Students"
+            color="primary"
+            @click="sendNotif"
           />
         </div>
       </q-card-section>
@@ -73,6 +81,7 @@ export default {
     }
   },
   data: () => ({
+    selected: [],
     students: [],
     courseNames: [],
     courseNameData: "",
@@ -177,6 +186,15 @@ export default {
     goToStudentCoop() {
       this.$router.push("/admin/student-coops");
     },
+    sendNotif() {
+      this.$router.push({
+        path: "/admin/notification",
+        name: "CreateNotif",
+        params: {
+          selected: this.selected
+        }
+      });
+    },
     clearFilter() {
       this.courseNameData = "";
       this.termData = "";
@@ -217,4 +235,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.dashBtn {
+  width: 40%;
+  margin-top: 4%;
+  margin-left: 30%;
+  margin-right: 30%;
+  position: center;
+}
+</style>

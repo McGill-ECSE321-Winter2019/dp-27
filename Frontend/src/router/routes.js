@@ -89,6 +89,12 @@ const routes = [
       {
         path: "csv-parse",
         component: () => import("pages/admin/CsvParse.vue")
+      },
+      {
+        path: "notification",
+        component: () => import("pages/admin/AdminCreateNotificationPage.vue"),
+        props: true,
+        name: "CreateNotif"
       }
     ]
   }

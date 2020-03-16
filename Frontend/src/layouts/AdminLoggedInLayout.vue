@@ -16,12 +16,6 @@
           <span class="text-caption q-ml-sm">ADMIN</span>
         </q-toolbar-title>
 
-        <q-btn dense round flat class="q-mr-sm" icon="notifications">
-          <q-badge color="white" text-color="red" floating transparent>
-            4
-          </q-badge>
-        </q-btn>
-
         <q-btn flat dense round icon="settings" aria-label="Settings">
           <q-menu>
             <q-list style="min-width: 200px">
