@@ -5,6 +5,8 @@ import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Student;
+import ca.mcgill.cooperator.service.CoopService;
+import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.StudentService;
 import java.util.HashSet;
 import java.util.List;
@@ -27,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudentController extends BaseController {
 
     @Autowired private StudentService studentService;
+    @Autowired private CoopService coopService;
+    @Autowired private NotificationService notificationService;
 
     /**
      * Get all students
@@ -98,8 +102,8 @@ public class StudentController extends BaseController {
                 s.getLastName(),
                 s.getEmail(),
                 s.getStudentId(),
-                ControllerUtils.convertCoopsListToDomainObject(s.getCoops()),
-                ControllerUtils.convertNotificationListToDomainObjectSet(s.getNotifications()));
+                ControllerUtils.convertCoopsListToDomainObject(coopService, s.getCoops()),
+                ControllerUtils.convertNotificationListToDomainObjectSet(notificationService, s.getNotifications()));
         return ControllerUtils.convertToDto(student);
     }
 

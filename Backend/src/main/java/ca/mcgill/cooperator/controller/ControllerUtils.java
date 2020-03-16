@@ -34,21 +34,19 @@ import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.EmployerReportSectionService;
 import ca.mcgill.cooperator.service.NotificationService;
+import ca.mcgill.cooperator.service.ReportSectionConfigService;
 import ca.mcgill.cooperator.service.StudentReportSectionService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ControllerUtils {
 
-    @Autowired private static NotificationService notificationService;
-    @Autowired private static EmployerReportSectionService employerReportSectionService;
-    @Autowired private static StudentReportSectionService studentReportSectionService;
-    @Autowired private static CoopService coopService;
-    @Autowired private static CourseOfferingService courseOfferingService;
+    static final String ERROR_PREFIX = "ERROR [DTO Conversion]: ";
 
     /*
      * Domain Object to DTO conversion methods
@@ -1108,8 +1106,7 @@ public class ControllerUtils {
 
     public static ReportConfigDto convertToDto(ReportConfig rc) {
         if (rc == null) {
-            throw new IllegalArgumentException(
-                    "ERROR [DTO Conversion]: Report config cannot be null!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Report config cannot be null!");
         }
         return new ReportConfigDto(
                 rc.getId(),
@@ -1125,8 +1122,7 @@ public class ControllerUtils {
         List<ReportConfigDto> reportConfigDtos = new ArrayList<>();
         for (ReportConfig reportConfig : reportConfigs) {
             if (reportConfig == null) {
-                throw new IllegalArgumentException(
-                        "ERROR [DTO Conversion]: Report config cannot be null!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Report config cannot be null!");
             }
             reportConfigDtos.add(convertToDto(reportConfig));
         }
@@ -1136,7 +1132,7 @@ public class ControllerUtils {
     public static ReportSectionConfigDto convertToDto(ReportSectionConfig rsConfig) {
         if (rsConfig == null) {
             throw new IllegalArgumentException(
-                    "ERROR [DTO Conversion]: Report section config cannot be null!");
+                    ERROR_PREFIX + "Report section config cannot be null!");
         }
         return new ReportSectionConfigDto(
                 rsConfig.getId(),
@@ -1153,7 +1149,7 @@ public class ControllerUtils {
         for (ReportSectionConfig rsConfig : rsConfigs) {
             if (rsConfig == null) {
                 throw new IllegalArgumentException(
-                        "ERROR [DTO Conversion]: Report section config cannot be null!");
+                        ERROR_PREFIX + "Report section config cannot be null!");
             }
             rsConfigDtos.add(convertToDto(rsConfig));
         }
@@ -1165,67 +1161,80 @@ public class ControllerUtils {
      */
 
     public static List<Notification> convertNotificationListToDomainObject(
-            List<NotificationDto> notifDtos) {
+    		NotificationService service, List<NotificationDto> notifDtos) {
         List<Notification> notifs = new ArrayList<Notification>();
         for (NotificationDto nDto : notifDtos) {
-            Notification n = notificationService.getNotification(nDto.getId());
+            Notification n = service.getNotification(nDto.getId());
             notifs.add(n);
         }
         return notifs;
     }
 
-    public static Set<StudentReportSection> convertStudentReportSectionSetToDomainObject(
-            Set<StudentReportSectionDto> rsDtos) {
-        Set<StudentReportSection> reports = new HashSet<StudentReportSection>();
-        for (StudentReportSectionDto rsDto : rsDtos) {
-            StudentReportSection rs = studentReportSectionService.getReportSection(rsDto.getId());
-            reports.add(rs);
-        }
-        return reports;
-    }
-
-    public static Set<EmployerReportSection> convertEmployerReportSectionSetToDomainObject(
-            Set<EmployerReportSectionDto> rsDtos) {
-        Set<EmployerReportSection> reports = new HashSet<EmployerReportSection>();
-        for (EmployerReportSectionDto rsDto : rsDtos) {
-            EmployerReportSection rs = employerReportSectionService.getReportSection(rsDto.getId());
-            reports.add(rs);
-        }
-        return reports;
-    }
-
     public static Set<Notification> convertNotificationListToDomainObjectSet(
-            List<NotificationDto> notifDtos) {
+    		NotificationService service, List<NotificationDto> notifDtos) {
         Set<Notification> notifs = new HashSet<>();
         if (notifDtos == null) {
             return notifs;
         }
         for (NotificationDto nDto : notifDtos) {
-            Notification n = notificationService.getNotification(nDto.getId());
+            Notification n = service.getNotification(nDto.getId());
             notifs.add(n);
         }
         return notifs;
     }
 
-    public static Set<Coop> convertCoopsListToDomainObject(List<CoopDto> coopDto) {
+    public static Set<StudentReportSection> convertStudentReportSectionsToDomainObjects(
+            StudentReportSectionService service, Collection<StudentReportSectionDto> rsDtos) {
+        Set<StudentReportSection> reports = new HashSet<StudentReportSection>();
+        for (StudentReportSectionDto rsDto : rsDtos) {
+            StudentReportSection rs = service.getReportSection(rsDto.getId());
+            reports.add(rs);
+        }
+        return reports;
+    }
+
+    public static Set<EmployerReportSection> convertEmployerReportSectionsToDomainObjects(
+    		EmployerReportSectionService service, Collection<EmployerReportSectionDto> rsDtos) {
+        Set<EmployerReportSection> reports = new HashSet<EmployerReportSection>();
+        for (EmployerReportSectionDto rsDto : rsDtos) {
+            EmployerReportSection rs = service.getReportSection(rsDto.getId());
+            reports.add(rs);
+        }
+        return reports;
+    }
+
+    public static Set<Coop> convertCoopsListToDomainObject(CoopService service, List<CoopDto> coopDto) {
         Set<Coop> coops = new HashSet<>();
         if (coopDto == null) return coops;
         for (CoopDto cDto : coopDto) {
-            Coop c = coopService.getCoopById(cDto.getId());
+            Coop c = service.getCoopById(cDto.getId());
             coops.add(c);
         }
         return coops;
     }
 
     public static List<CourseOffering> convertCourseOfferingListToDomainObject(
-            List<CourseOfferingDto> coDtos) {
+            CourseOfferingService service, List<CourseOfferingDto> coDtos) {
         List<CourseOffering> cos = new ArrayList<>();
         for (CourseOfferingDto coDto : coDtos) {
             if (coDto != null) {
-                CourseOffering co = courseOfferingService.getCourseOfferingById(coDto.getId());
+                CourseOffering co = service.getCourseOfferingById(coDto.getId());
                 cos.add(co);
             }
         }
         return cos;
+    }
+
+    public static List<ReportSectionConfig> convertReportSectionConfigDtosToDomainObjects(
+    		ReportSectionConfigService service, Collection<ReportSectionConfigDto> rscDtos) {
+        List<ReportSectionConfig> reportSectionConfigs = new ArrayList<>();
+        for (ReportSectionConfigDto rscDto : rscDtos) {
+            if (rscDto != null) {
+                ReportSectionConfig rsc =
+                        service.getReportSectionConfig(rscDto.getId());
+                reportSectionConfigs.add(rsc);
+            }
+        }
+        return reportSectionConfigs;
     }
 }

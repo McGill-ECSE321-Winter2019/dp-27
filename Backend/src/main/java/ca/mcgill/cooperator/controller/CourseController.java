@@ -2,6 +2,7 @@ package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.model.Course;
+import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CourseController extends BaseController {
 
     @Autowired private CourseService courseService;
+    @Autowired private CourseOfferingService courseOfferingService;
 
     /**
      * Gets a Course by ID
@@ -77,7 +79,7 @@ public class CourseController extends BaseController {
                         course,
                         c.getName(),
                         ControllerUtils.convertCourseOfferingListToDomainObject(
-                                c.getCourseOfferings()));
+                                courseOfferingService, c.getCourseOfferings()));
 
         return ControllerUtils.convertToDto(updatedCourse);
     }

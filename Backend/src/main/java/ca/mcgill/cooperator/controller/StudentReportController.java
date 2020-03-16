@@ -126,7 +126,7 @@ public class StudentReportController extends BaseController {
         StudentReport reportToUpdate = studentReportService.getStudentReport(id);
 
         Set<StudentReportSection> sections =
-                ControllerUtils.convertStudentReportSectionSetToDomainObject(rsDtos);
+                ControllerUtils.convertStudentReportSectionsToDomainObjects(studentReportSectionService, rsDtos);
 
         Coop coop = coopService.getCoopById(coopId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);

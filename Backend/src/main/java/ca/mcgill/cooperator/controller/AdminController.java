@@ -3,6 +3,8 @@ package ca.mcgill.cooperator.controller;
 import ca.mcgill.cooperator.dto.AdminDto;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.service.AdminService;
+import ca.mcgill.cooperator.service.NotificationService;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController extends BaseController {
 
     @Autowired private AdminService adminService;
+    @Autowired private NotificationService notifService;
 
     /**
      * Get all Admins
@@ -87,7 +90,7 @@ public class AdminController extends BaseController {
                         a.getLastName(),
                         a.getEmail(),
                         ControllerUtils.convertNotificationListToDomainObject(
-                                a.getSentNotifications()));
+                                notifService, a.getSentNotifications()));
 
         return ControllerUtils.convertToDto(updatedAdmin);
     }

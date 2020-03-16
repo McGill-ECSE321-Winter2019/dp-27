@@ -4,6 +4,7 @@ import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.transaction.Transactional;
@@ -43,6 +44,7 @@ public class ReportConfigService {
         reportConfig.setDeadline(deadline);
         reportConfig.setIsDeadlineFromStart(isDeadlineFromStart);
         reportConfig.setType(type);
+        reportConfig.setReportSectionConfigs(new HashSet<ReportSectionConfig>());
 
         return reportConfigRepository.save(reportConfig);
     }

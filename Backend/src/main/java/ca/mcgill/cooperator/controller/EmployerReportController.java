@@ -9,6 +9,7 @@ import ca.mcgill.cooperator.model.EmployerReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.EmployerContactService;
+import ca.mcgill.cooperator.service.EmployerReportSectionService;
 import ca.mcgill.cooperator.service.EmployerReportService;
 import java.util.List;
 import java.util.Set;
@@ -34,6 +35,7 @@ public class EmployerReportController extends BaseController {
     @Autowired CoopService coopService;
     @Autowired EmployerContactService employerContactService;
     @Autowired EmployerReportService employerReportService;
+    @Autowired EmployerReportSectionService employerReportSectionService;
 
     /**
      * Gets an EmployerReport by ID
@@ -116,7 +118,7 @@ public class EmployerReportController extends BaseController {
         EmployerContact ec = employerContactService.getEmployerContact(employerId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
         Set<EmployerReportSection> sections =
-                ControllerUtils.convertEmployerReportSectionSetToDomainObject(rsDtos);
+                ControllerUtils.convertEmployerReportSectionsToDomainObjects(employerReportSectionService, rsDtos);
 
         EmployerReport updatedReport =
                 employerReportService.updateEmployerReport(

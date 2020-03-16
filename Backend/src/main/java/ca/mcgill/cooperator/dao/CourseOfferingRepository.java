@@ -5,7 +5,6 @@ import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.Season;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
 public interface CourseOfferingRepository extends CrudRepository<CourseOffering, Integer> {
 

@@ -4,7 +4,7 @@ import ca.mcgill.cooperator.model.ReportResponseType;
 import java.util.List;
 
 public class ReportSectionConfigDto {
-    private int id;
+    private Integer id;
     private String sectionPrompt;
     private ReportResponseType responseType;
 
@@ -15,7 +15,7 @@ public class ReportSectionConfigDto {
     public ReportSectionConfigDto() {}
 
     public ReportSectionConfigDto(
-            int id,
+            Integer id,
             String sectionPrompt,
             ReportResponseType responseType,
             ReportConfigDto reportConfig,
@@ -31,7 +31,7 @@ public class ReportSectionConfigDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

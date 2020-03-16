@@ -1,7 +1,7 @@
 package ca.mcgill.cooperator.dto;
 
 public class EmployerReportSectionDto {
-    private int id;
+    private Integer id;
     private String response;
 
     private EmployerReportDto employerReport;
@@ -10,7 +10,7 @@ public class EmployerReportSectionDto {
     public EmployerReportSectionDto() {}
 
     public EmployerReportSectionDto(
-            int id,
+            Integer id,
             String response,
             EmployerReportDto employerReport,
             ReportSectionConfigDto reportSectionConfig) {
@@ -22,7 +22,7 @@ public class EmployerReportSectionDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

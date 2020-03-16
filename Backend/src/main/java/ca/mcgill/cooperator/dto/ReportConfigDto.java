@@ -3,10 +3,10 @@ package ca.mcgill.cooperator.dto;
 import java.util.List;
 
 public class ReportConfigDto {
-    private int id;
-    private boolean requiresFile;
-    private int deadline;
-    private boolean isDeadlineFromStart;
+    private Integer id;
+    private Boolean requiresFile;
+    private Integer deadline;
+    private Boolean isDeadlineFromStart;
     private String type;
 
     private List<ReportSectionConfigDto> reportSectionConfigs;
@@ -14,10 +14,10 @@ public class ReportConfigDto {
     public ReportConfigDto() {}
 
     public ReportConfigDto(
-            int id,
-            boolean requiresFile,
-            int deadline,
-            boolean isDeadlineFromStart,
+            Integer id,
+            Boolean requiresFile,
+            Integer deadline,
+            Boolean isDeadlineFromStart,
             String type,
             List<ReportSectionConfigDto> reportSectionConfigs) {
         this.id = id;
@@ -30,11 +30,11 @@ public class ReportConfigDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public boolean getRequiresFile() {
+    public Boolean getRequiresFile() {
         return this.requiresFile;
     }
 
@@ -42,7 +42,7 @@ public class ReportConfigDto {
         this.requiresFile = requiresFile;
     }
 
-    public int getDeadline() {
+    public Integer getDeadline() {
         return this.deadline;
     }
 
@@ -50,7 +50,7 @@ public class ReportConfigDto {
         this.deadline = deadline;
     }
 
-    public boolean getIsDeadlineFromStart() {
+    public Boolean getIsDeadlineFromStart() {
         return this.isDeadlineFromStart;
     }
 
