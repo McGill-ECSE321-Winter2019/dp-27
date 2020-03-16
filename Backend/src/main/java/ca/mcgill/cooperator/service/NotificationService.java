@@ -79,16 +79,9 @@ public class NotificationService {
     }
 
     /**
-<<<<<<< HEAD
      * returns all notifications in the database
      *
      * @return all notifications
-=======
-     * Retrieves first Notification in database with given title
-     *
-     * @param title
-     * @return Notification with given title
->>>>>>> Add ReportConfig and related classes, delete ReportSection, update tests
      */
     @Transactional
     public List<Notification> getAllNotifications() {
@@ -97,11 +90,7 @@ public class NotificationService {
     
     
     /**
-<<<<<<< HEAD
      * returns all notifications for student in the database
-=======
-     * Returns all Notifications in the database
->>>>>>> Add ReportConfig and related classes, delete ReportSection, update tests
      *
      * @return all Notifications
      */
