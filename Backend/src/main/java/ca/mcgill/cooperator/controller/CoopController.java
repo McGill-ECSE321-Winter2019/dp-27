@@ -66,7 +66,7 @@ public class CoopController {
         Student student = studentService.getStudentById(studentDto.getId());
 
         CourseOfferingDto courseOfferingDto = coopDto.getCourseOffering();
-        
+
         CourseOffering courseOffering;
         if (courseOfferingDto.getId() != 0) {
             courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingDto.getId());

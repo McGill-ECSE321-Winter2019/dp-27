@@ -215,9 +215,9 @@ public class CoopService {
 
         return c;
     }
-    
+
     @Transactional
-    public List<Coop> getAllCoopsForCourseOffering(CourseOffering courseOffering){
-    	return ServiceUtils.toList(coopRepository.findByCourseOffering(courseOffering));
+    public List<Coop> getAllCoopsForCourseOffering(CourseOffering courseOffering) {
+        return ServiceUtils.toList(coopRepository.findByCourseOffering(courseOffering));
     }
 }

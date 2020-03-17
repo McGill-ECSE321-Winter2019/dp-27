@@ -15,9 +15,7 @@ import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Season;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Arrays;
@@ -64,102 +62,117 @@ public class CSVParserControllerIT extends ControllerIT {
         studentDto.setFirstName("Albert");
         studentDto.setLastName("Kragl");
         studentDto.setStudentId("260732298");
-        MvcResult mvcResult = mvc.perform(post("/students").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(studentDto)).characterEncoding("utf-8"))
+        MvcResult mvcResult =
+                mvc.perform(
+                                post("/students")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(studentDto))
+                                        .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
         studentDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), StudentDto.class);
-        
+
         StudentDto studentDto2 = new StudentDto();
         studentDto.setEmail("emma.eagles@mail.mcgill.ca");
         studentDto.setFirstName("Emma");
         studentDto.setLastName("Eagles");
         studentDto.setStudentId("260709533");
-        
-        mvcResult = mvc.perform(post("/students").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(studentDto)).characterEncoding("utf-8"))
+
+        mvcResult =
+                mvc.perform(
+                                post("/students")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(studentDto))
+                                        .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
+
         studentDto2 =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), StudentDto.class);
-        
-        //Make coop, make course offering, make course
+
+        // Make coop, make course offering, make course
         CourseDto courseDto = new CourseDto();
         courseDto.setName("ECSE201");
-        
-        mvcResult = mvc.perform(
-                post("/courses")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(courseDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
-        
+
+        mvcResult =
+                mvc.perform(
+                                post("/courses")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(courseDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
         CourseOfferingDto courseOfferingDto = new CourseOfferingDto();
         courseOfferingDto.setYear(2020);
         courseOfferingDto.setSeason(Season.SUMMER);
         courseOfferingDto.setCourse(courseDto);
-        
-        mvcResult = mvc.perform(
-                post("/course-offerings")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(courseOfferingDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
+
+        mvcResult =
+                mvc.perform(
+                                post("/course-offerings")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(courseOfferingDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
         courseOfferingDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), CourseOfferingDto.class);
-        
+
         CoopDto coopDto = new CoopDto();
         coopDto.setStudent(studentDto);
         coopDto.setStatus(CoopStatus.FUTURE);
         coopDto.setCourseOffering(courseOfferingDto);
-        
+
         mvc.perform(
-                post("/coops")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(coopDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
+                        post("/coops")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(coopDto))
+                                .characterEncoding("utf-8"))
+                .andExpect(status().isOk())
+                .andReturn();
+
         coopDto.setStudent(studentDto2);
         coopDto.setStatus(CoopStatus.FUTURE);
         coopDto.setCourseOffering(courseOfferingDto);
-        
+
         mvc.perform(
-                post("/coops")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(coopDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
+                        post("/coops")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(coopDto))
+                                .characterEncoding("utf-8"))
+                .andExpect(status().isOk())
+                .andReturn();
+
         File testFile = new File("src/test/resources/sampleStudent.csv");
         MultipartFile multipartFile =
                 new MockMultipartFile("Student CSV", new FileInputStream(testFile));
-        
-               
+
         mvcResult =
                 mvc.perform(
                                 multipart("/csv-parser/check-registered")
                                         .file("file", multipartFile.getBytes())
-                                        .param("course_id", String.valueOf(courseOfferingDto.getId()))
+                                        .param(
+                                                "course_id",
+                                                String.valueOf(courseOfferingDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
-        List<Object> students = Arrays.asList(objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Object[].class));
-        
+
+        List<Object> students =
+                Arrays.asList(
+                        objectMapper.readValue(
+                                mvcResult.getResponse().getContentAsString(), Object[].class));
+
         assertEquals(0, students.size());
     }
-    
+
     @Test
     public void testCheckStudentsRegisteredIncorrect() throws Exception {
         StudentDto studentDto = new StudentDto();
@@ -167,77 +180,86 @@ public class CSVParserControllerIT extends ControllerIT {
         studentDto.setFirstName("Albert");
         studentDto.setLastName("Kragl");
         studentDto.setStudentId("260732298");
-        MvcResult mvcResult = mvc.perform(post("/students").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(studentDto)).characterEncoding("utf-8"))
+        MvcResult mvcResult =
+                mvc.perform(
+                                post("/students")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(studentDto))
+                                        .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
+
         studentDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), StudentDto.class);
-        
-        //Make coop, make course offering, make course
+
+        // Make coop, make course offering, make course
         CourseDto courseDto = new CourseDto();
         courseDto.setName("ECSE201");
-        
-        mvcResult = mvc.perform(
-                post("/courses")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(courseDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
-        
+
+        mvcResult =
+                mvc.perform(
+                                post("/courses")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(courseDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
         CourseOfferingDto courseOfferingDto = new CourseOfferingDto();
         courseOfferingDto.setYear(2020);
         courseOfferingDto.setSeason(Season.SUMMER);
         courseOfferingDto.setCourse(courseDto);
-        
-        mvcResult = mvc.perform(
-                post("/course-offerings")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(courseOfferingDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
+
+        mvcResult =
+                mvc.perform(
+                                post("/course-offerings")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(courseOfferingDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
         courseOfferingDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), CourseOfferingDto.class);
-        
+
         CoopDto coopDto = new CoopDto();
         coopDto.setStudent(studentDto);
         coopDto.setStatus(CoopStatus.FUTURE);
         coopDto.setCourseOffering(courseOfferingDto);
-        
+
         mvc.perform(
-                post("/coops")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(coopDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
+                        post("/coops")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(coopDto))
+                                .characterEncoding("utf-8"))
+                .andExpect(status().isOk())
+                .andReturn();
+
         File testFile = new File("src/test/resources/sampleStudent.csv");
         MultipartFile multipartFile =
                 new MockMultipartFile("Student CSV", new FileInputStream(testFile));
-        
-               
+
         mvcResult =
                 mvc.perform(
                                 multipart("/csv-parser/check-registered")
                                         .file("file", multipartFile.getBytes())
-                                        .param("course_id", String.valueOf(courseOfferingDto.getId()))
+                                        .param(
+                                                "course_id",
+                                                String.valueOf(courseOfferingDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
-        List<Object> students = Arrays.asList(objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Object[].class));
-        
+
+        List<Object> students =
+                Arrays.asList(
+                        objectMapper.readValue(
+                                mvcResult.getResponse().getContentAsString(), Object[].class));
+
         assertEquals(1, students.size());
     }
-
 
     @Test
     public void testCheckStudentsEnrolledCorrect() throws Exception {
@@ -246,102 +268,117 @@ public class CSVParserControllerIT extends ControllerIT {
         studentDto.setFirstName("Albert");
         studentDto.setLastName("Kragl");
         studentDto.setStudentId("260732298");
-        MvcResult mvcResult = mvc.perform(post("/students").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(studentDto)).characterEncoding("utf-8"))
+        MvcResult mvcResult =
+                mvc.perform(
+                                post("/students")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(studentDto))
+                                        .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
         studentDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), StudentDto.class);
-        
+
         StudentDto studentDto2 = new StudentDto();
         studentDto.setEmail("emma.eagles@mail.mcgill.ca");
         studentDto.setFirstName("Emma");
         studentDto.setLastName("Eagles");
         studentDto.setStudentId("260709533");
-        
-        mvcResult = mvc.perform(post("/students").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(studentDto)).characterEncoding("utf-8"))
+
+        mvcResult =
+                mvc.perform(
+                                post("/students")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(studentDto))
+                                        .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
+
         studentDto2 =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), StudentDto.class);
-        
-        //Make coop, make course offering, make course
+
+        // Make coop, make course offering, make course
         CourseDto courseDto = new CourseDto();
         courseDto.setName("ECSE201");
-        
-        mvcResult = mvc.perform(
-                post("/courses")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(courseDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
-        
+
+        mvcResult =
+                mvc.perform(
+                                post("/courses")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(courseDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
         CourseOfferingDto courseOfferingDto = new CourseOfferingDto();
         courseOfferingDto.setYear(2020);
         courseOfferingDto.setSeason(Season.SUMMER);
         courseOfferingDto.setCourse(courseDto);
-        
-        mvcResult = mvc.perform(
-                post("/course-offerings")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(courseOfferingDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
+
+        mvcResult =
+                mvc.perform(
+                                post("/course-offerings")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(courseOfferingDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
         courseOfferingDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), CourseOfferingDto.class);
-        
+
         CoopDto coopDto = new CoopDto();
         coopDto.setStudent(studentDto);
         coopDto.setStatus(CoopStatus.FUTURE);
         coopDto.setCourseOffering(courseOfferingDto);
-        
+
         mvc.perform(
-                post("/coops")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(coopDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
+                        post("/coops")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(coopDto))
+                                .characterEncoding("utf-8"))
+                .andExpect(status().isOk())
+                .andReturn();
+
         coopDto.setStudent(studentDto2);
         coopDto.setStatus(CoopStatus.FUTURE);
         coopDto.setCourseOffering(courseOfferingDto);
-        
+
         mvc.perform(
-                post("/coops")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(coopDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
+                        post("/coops")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(coopDto))
+                                .characterEncoding("utf-8"))
+                .andExpect(status().isOk())
+                .andReturn();
+
         File testFile = new File("src/test/resources/sampleStudent.csv");
         MultipartFile multipartFile =
                 new MockMultipartFile("Student CSV", new FileInputStream(testFile));
-        
-               
+
         mvcResult =
                 mvc.perform(
                                 multipart("/csv-parser/check-enrollment")
                                         .file("file", multipartFile.getBytes())
-                                        .param("course_id", String.valueOf(courseOfferingDto.getId()))
+                                        .param(
+                                                "course_id",
+                                                String.valueOf(courseOfferingDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
-        List<Object> students = Arrays.asList(objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Object[].class));
-        
+
+        List<Object> students =
+                Arrays.asList(
+                        objectMapper.readValue(
+                                mvcResult.getResponse().getContentAsString(), Object[].class));
+
         assertEquals(0, students.size());
     }
-    
+
     @Test
     public void testCheckStudentsEnrolledIncorrect() throws Exception {
         StudentDto studentDto = new StudentDto();
@@ -349,87 +386,102 @@ public class CSVParserControllerIT extends ControllerIT {
         studentDto.setFirstName("Albert");
         studentDto.setLastName("Kragl");
         studentDto.setStudentId("260732298");
-        MvcResult mvcResult = mvc.perform(post("/students").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(studentDto)).characterEncoding("utf-8"))
+        MvcResult mvcResult =
+                mvc.perform(
+                                post("/students")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(studentDto))
+                                        .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
         studentDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), StudentDto.class);
-        
+
         StudentDto studentDto2 = new StudentDto();
         studentDto.setEmail("paul.hooley@mail.mcgill.ca");
         studentDto.setFirstName("Paul");
         studentDto.setLastName("Hooley");
         studentDto.setStudentId("269727420");
-        
-        mvcResult = mvc.perform(post("/students").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(studentDto)).characterEncoding("utf-8"))
+
+        mvcResult =
+                mvc.perform(
+                                post("/students")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(studentDto))
+                                        .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
+
         studentDto2 =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), StudentDto.class);
-        
-        //Make coop, make course offering, make course
+
+        // Make coop, make course offering, make course
         CourseDto courseDto = new CourseDto();
         courseDto.setName("ECSE201");
-        
-        mvcResult = mvc.perform(
-                post("/courses")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(courseDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
-        
+
+        mvcResult =
+                mvc.perform(
+                                post("/courses")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(courseDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
         CourseOfferingDto courseOfferingDto = new CourseOfferingDto();
         courseOfferingDto.setYear(2020);
         courseOfferingDto.setSeason(Season.SUMMER);
         courseOfferingDto.setCourse(courseDto);
-        
-        mvcResult = mvc.perform(
-                post("/course-offerings")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(courseOfferingDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
+
+        mvcResult =
+                mvc.perform(
+                                post("/course-offerings")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(courseOfferingDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
         courseOfferingDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), CourseOfferingDto.class);
-        
+
         CoopDto coopDto = new CoopDto();
         coopDto.setStudent(studentDto);
         coopDto.setStatus(CoopStatus.FUTURE);
         coopDto.setCourseOffering(courseOfferingDto);
-        
+
         mvc.perform(
-                post("/coops")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(coopDto))
-                        .characterEncoding("utf-8"))
-        .andExpect(status().isOk())
-        .andReturn();
-        
+                        post("/coops")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(coopDto))
+                                .characterEncoding("utf-8"))
+                .andExpect(status().isOk())
+                .andReturn();
+
         File testFile = new File("src/test/resources/sampleStudent.csv");
         MultipartFile multipartFile =
                 new MockMultipartFile("Student CSV", new FileInputStream(testFile));
-        
-               
+
         mvcResult =
                 mvc.perform(
                                 multipart("/csv-parser/check-enrolled")
                                         .file("file", multipartFile.getBytes())
-                                        .param("course_id", String.valueOf(courseOfferingDto.getId()))
+                                        .param(
+                                                "course_id",
+                                                String.valueOf(courseOfferingDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
-        
-        List<Object> students = Arrays.asList(objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Object[].class));
-        
+
+        List<Object> students =
+                Arrays.asList(
+                        objectMapper.readValue(
+                                mvcResult.getResponse().getContentAsString(), Object[].class));
+
         assertEquals(1, students.size());
     }
 }
