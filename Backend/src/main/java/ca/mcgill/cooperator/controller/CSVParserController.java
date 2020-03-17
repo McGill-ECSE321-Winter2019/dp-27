@@ -34,14 +34,15 @@ public class CSVParserController {
     @Autowired private CourseOfferingService courseOfferingService;
     
     /**
-     * Used to create the set of students each semester
+     * Used to create the set of Students who have not registered on Cooperator
      * 
      * @param file
-     * @return List<StudentDto> of students added
+     * @param courseOfferingId
+     * @return List<StudentDto>
      * @throws Exception
      */
-    @PostMapping("")
-    public List<String> importCSVFile(@ModelAttribute("file") MultipartFile file, @RequestParam("course_id") int courseOfferingId) throws Exception {
+    @PostMapping("check-registered")
+    public List<String> checkStudentsRegistered(@ModelAttribute("file") MultipartFile file, @RequestParam("course_id") int courseOfferingId) throws Exception {
     	List<String> students = new ArrayList<>();
     	
     	String line;
@@ -53,7 +54,6 @@ public class CSVParserController {
 		while((line = br.readLine()) != null) {
 			String studentEmail = line.split("#")[2].split(",")[0];
 			students.add(studentEmail);
-			System.out.println(studentEmail);
 		}
 				
     	CourseOffering courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingId);
@@ -61,8 +61,37 @@ public class CSVParserController {
     	for(Coop c: coops) {
     		students.remove(c.getStudent().getEmail());
     	}
-		
 		return students;
-    	
+    }
+    
+    /**
+     * Used to create the set of Students who have not enrolled on Minerva
+     * 
+     * @param file
+     * @param courseOfferingId
+     * @return List<StudentDto>
+     * @throws Exception
+     */
+    @PostMapping("/check-enrollment")
+    public List<String> checkStudentsEnrolled(@ModelAttribute("file") MultipartFile file, @RequestParam("course_id") int courseOfferingId) throws Exception {
+    	List<String> students = new ArrayList<>();
+       
+        CourseOffering courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingId);
+    	List<Coop> coops = coopService.getAllCoopsForCourseOffering(courseOffering);
+    	for(Coop c: coops) {
+    		students.add(c.getStudent().getEmail());
+    	}
+        
+        String line;
+        InputStream is = file.getInputStream();
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+        br.readLine(); //Escapes the first line containing the headers
+        
+		while((line = br.readLine()) != null) {
+			String studentEmail = line.split("#")[2].split(",")[0];
+			students.remove(studentEmail);
+		}
+		return students;
 	}
 }
