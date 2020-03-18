@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class AdminControllerIT {
+public class AdminControllerIT extends BaseControllerIT {
 
     @Autowired private MockMvc mvc;
 

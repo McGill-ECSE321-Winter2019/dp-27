@@ -8,7 +8,6 @@ import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
-import ca.mcgill.cooperator.model.Student;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -166,7 +165,7 @@ public class CooperatorServiceAdminTests extends BaseServiceTest {
             adminService.createAdmin(firstName, lastName, email);
             a = adminService.getAdmin(email);
 
-            n = createTestNotification(a);
+            n = createTestNotification(studentService, notificationService, a);
             List<Notification> notifications = a.getSentNotifications();
             notifications.add(n);
 
@@ -251,15 +250,5 @@ public class CooperatorServiceAdminTests extends BaseServiceTest {
         }
 
         assertEquals(ERROR_PREFIX + "Admin to delete cannot be null!", error);
-    }
-
-    private Notification createTestNotification(Admin a) {
-        Student s =
-                studentService.createStudent("Albert", "Kragl", "albert@kragl.com", "123456789");
-        Notification n =
-                notificationService.createNotification(
-                        "Report Due", "Report Due by April 2020", s, a);
-
-        return n;
     }
 }

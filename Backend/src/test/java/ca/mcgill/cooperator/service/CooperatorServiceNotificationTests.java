@@ -42,8 +42,8 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
     public void testCreateNotification() {
         String title = "Hello";
         String body = "Please attend meeting.";
-        Student student = createTestStudent();
-        Admin sender = createTestAdmin();
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
 
         try {
             notificationService.createNotification(title, body, student, sender);
@@ -63,8 +63,8 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
     public void testCreateNotificationSetSeen() {
         String title = "Hello";
         String body = "Please attend meeting.";
-        Student student = createTestStudent();
-        Admin sender = createTestAdmin();
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
 
         try {
             notificationService.createNotification(title, body, student, sender);
@@ -103,7 +103,8 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
         }
 
         assertEquals(
-        		ERROR_PREFIX + "Notification title cannot be empty! "
+                ERROR_PREFIX
+                        + "Notification title cannot be empty! "
                         + "Notification body cannot be empty! "
                         + "Notification must have a Student receiver! "
                         + "Notification must have an Admin sender!",
@@ -127,7 +128,8 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
         }
 
         assertEquals(
-        		ERROR_PREFIX + "Notification title cannot be empty! "
+                ERROR_PREFIX
+                        + "Notification title cannot be empty! "
                         + "Notification body cannot be empty! "
                         + "Notification must have a Student receiver! "
                         + "Notification must have an Admin sender!",
@@ -151,7 +153,8 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
         }
 
         assertEquals(
-        		ERROR_PREFIX + "Notification title cannot be empty! "
+                ERROR_PREFIX
+                        + "Notification title cannot be empty! "
                         + "Notification body cannot be empty! "
                         + "Notification must have a Student receiver! "
                         + "Notification must have an Admin sender!",
@@ -163,8 +166,8 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
     public void testUpdateNotification() {
         String title = "Hello";
         String body = "Please attend meeting.";
-        Student student = createTestStudent();
-        Admin sender = createTestAdmin();
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
 
         Notification n = null;
 
@@ -194,8 +197,8 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
     public void testUpdateNotificationInvalid() {
         String title = "Hello";
         String body = "Please attend meeting.";
-        Student student = createTestStudent();
-        Admin sender = createTestAdmin();
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
 
         Notification n = null;
 
@@ -210,7 +213,8 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
         } catch (IllegalArgumentException e) {
             String error = e.getMessage();
             assertEquals(
-            		ERROR_PREFIX + "Notification title cannot be empty! "
+                    ERROR_PREFIX
+                            + "Notification title cannot be empty! "
                             + "Notification body cannot be empty! "
                             + "Notification must have a Student receiver! "
                             + "Notification must have an Admin sender!",
@@ -222,8 +226,8 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
     public void testDeleteNotification() {
         String title = "Hello";
         String body = "Please attend meeting.";
-        Student student = createTestStudent();
-        Admin sender = createTestAdmin();
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
 
         Notification n = null;
 
@@ -238,19 +242,5 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
         }
 
         assertEquals(0, notificationService.getAllNotifications().size());
-    }
-
-    public Student createTestStudent() {
-        Student s = new Student();
-        s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
-
-        return s;
-    }
-
-    public Admin createTestAdmin() {
-        Admin a = new Admin();
-        a = adminService.createAdmin("Lorraine", "Douglas", "lorraine@gmail.com");
-
-        return a;
     }
 }

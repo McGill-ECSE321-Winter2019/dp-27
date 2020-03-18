@@ -13,14 +13,11 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
-import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,7 +71,7 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         try {
             employerContactService.createEmployerContact(
@@ -94,7 +91,7 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
         String lastName = "Hooley";
         String email = "abcdefg";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         try {
             employerContactService.createEmployerContact(
@@ -111,7 +108,7 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "asdfdgf";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         try {
             employerContactService.createEmployerContact(
@@ -210,15 +207,15 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
         EmployerContact ec = null;
 
         // course->course offering->coops->coop details
         CoopDetails cd = null;
-        Course course = createTestCourse();
-        CourseOffering co = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(co, s);
+        Course course = createTestCourse(courseService);
+        CourseOffering co = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, co, s);
         Set<CoopDetails> coopDetails = new HashSet<CoopDetails>();
 
         try {
@@ -227,7 +224,7 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
                             firstName, lastName, email, phoneNumber, c);
             ec = employerContactService.getEmployerContact(ec.getId());
 
-            cd = createTestCoopDetails(ec, coop);
+            cd = createTestCoopDetails(coopDetailsService, ec, coop);
             coopDetails.add(cd);
 
             Set<EmployerReport> reports = new HashSet<EmployerReport>();
@@ -255,7 +252,7 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         EmployerContact ec = null;
         try {
@@ -295,7 +292,7 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         EmployerContact ec = null;
         try {
@@ -338,7 +335,7 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         EmployerContact ec = null;
         try {
@@ -364,49 +361,5 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
         }
 
         assertEquals(ERROR_PREFIX + "Employer Contact to delete cannot be null!", error);
-    }
-
-    private Company createTestCompany() {
-        Company c = new Company();
-        c =
-                companyService.createCompany(
-                        "Facebook",
-                        "Menlo Park",
-                        "California",
-                        "USA",
-                        new ArrayList<EmployerContact>());
-
-        return c;
-    }
-
-    private CoopDetails createTestCoopDetails(EmployerContact ec, Coop c) {
-        CoopDetails cd = new CoopDetails();
-        cd = coopDetailsService.createCoopDetails(20, 40, ec, c);
-        return cd;
-    }
-
-    private Course createTestCourse() {
-        Course c = null;
-        c = courseService.createCourse("FACC200");
-        return c;
-    }
-
-    private CourseOffering createTestCourseOffering(Course c) {
-        CourseOffering co = null;
-        co = courseOfferingService.createCourseOffering(2020, Season.WINTER, c);
-        return co;
-    }
-
-    private Student createTestStudent() {
-        Student s = new Student();
-        s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
-
-        return s;
-    }
-
-    private Coop createTestCoop(CourseOffering co, Student s) {
-        Coop coop = new Coop();
-        coop = coopService.createCoop(CoopStatus.FUTURE, co, s);
-        return coop;
     }
 }

@@ -11,14 +11,10 @@ import ca.mcgill.cooperator.dao.StudentReportRepository;
 import ca.mcgill.cooperator.dao.StudentReportSectionRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
-import ca.mcgill.cooperator.model.ReportConfig;
-import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.ReportStatus;
-import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.model.StudentReportSection;
@@ -78,10 +74,10 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
 
     @Test
     public void testCreateStudentReport() {
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
 
         try {
             MultipartFile multipartFile =
@@ -109,7 +105,8 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         }
 
         assertEquals(
-        		ERROR_PREFIX + "Report Status cannot be null! "
+                ERROR_PREFIX
+                        + "Report Status cannot be null! "
                         + "Coop cannot be null! "
                         + "File title cannot be empty!",
                 error);
@@ -120,11 +117,12 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
     public void testUpdateStudentReportWithReportSections() {
         StudentReport sr = null;
 
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
-        ReportSectionConfig rsConfig = createTestReportSectionConfig();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
+        ReportSectionConfig rsConfig =
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
 
         // 1. create Student Report
         MultipartFile multipartFile = null;
@@ -139,7 +137,8 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         }
 
         Set<StudentReportSection> sections = new HashSet<StudentReportSection>();
-        StudentReportSection rs = createTestStudentReportSection(rsConfig, sr);
+        StudentReportSection rs =
+                createTestStudentReportSection(studentReportSectionService, rsConfig, sr);
         sections.add(rs);
 
         // 2. update with valid values
@@ -169,11 +168,12 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
     public void testUpdateStudentReport() {
         StudentReport sr = null;
 
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
-        ReportSectionConfig rsConfig = createTestReportSectionConfig();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
+        ReportSectionConfig rsConfig =
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
 
         // 1. create Student Report
         MultipartFile multipartFile = null;
@@ -188,7 +188,8 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         }
 
         Set<StudentReportSection> sections = new HashSet<StudentReportSection>();
-        StudentReportSection rs = createTestStudentReportSection(rsConfig, sr);
+        StudentReportSection rs =
+                createTestStudentReportSection(studentReportSectionService, rsConfig, sr);
         sections.add(rs);
 
         // 2. update with valid values
@@ -215,11 +216,10 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
     @Test
     public void testUpdateStudentReportInvalid() {
         StudentReport sr = null;
-
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
 
         // 1. create Student Report
         MultipartFile multipartFile = null;
@@ -251,10 +251,10 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
     @Test
     public void testDeleteStudentReport() {
         StudentReport sr = null;
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
 
         // 1. create Student Report
         try {
@@ -290,43 +290,5 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         }
 
         assertEquals(ERROR_PREFIX + "Student Report to delete cannot be null!", error);
-    }
-
-    private Course createTestCourse() {
-        Course c = null;
-        c = courseService.createCourse("FACC200");
-        return c;
-    }
-
-    private CourseOffering createTestCourseOffering(Course c) {
-        CourseOffering co = null;
-        co = courseOfferingService.createCourseOffering(2020, Season.WINTER, c);
-        return co;
-    }
-
-    private Coop createTestCoop(CourseOffering co, Student s) {
-        Coop coop = new Coop();
-        coop = coopService.createCoop(CoopStatus.FUTURE, co, s);
-        return coop;
-    }
-
-    private Student createTestStudent() {
-        Student s = new Student();
-        s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
-
-        return s;
-    }
-
-    private StudentReportSection createTestStudentReportSection(
-            ReportSectionConfig rsConfig, StudentReport sr) {
-        return studentReportSectionService.createReportSection("This is a response", rsConfig, sr);
-    }
-
-    private ReportSectionConfig createTestReportSectionConfig() {
-        ReportConfig reportConfig =
-                reportConfigService.createReportConfig(true, 14, true, "Evaluation");
-
-        return reportSectionConfigService.createReportSectionConfig(
-                "How was your co-op?", ReportResponseType.LONG_TEXT, reportConfig);
     }
 }

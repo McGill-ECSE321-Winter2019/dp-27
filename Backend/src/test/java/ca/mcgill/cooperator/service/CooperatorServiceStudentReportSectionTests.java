@@ -11,34 +11,24 @@ import ca.mcgill.cooperator.dao.StudentReportRepository;
 import ca.mcgill.cooperator.dao.StudentReportSectionRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
-import ca.mcgill.cooperator.model.ReportConfig;
-import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
-import ca.mcgill.cooperator.model.ReportStatus;
-import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.model.StudentReportSection;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 @ActiveProfiles("test")
 public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest {
-	
+
     @Autowired StudentReportSectionRepository studentReportSectionRepository;
     @Autowired StudentReportRepository studentReportRepository;
     @Autowired CoopRepository coopRepository;
@@ -77,12 +67,13 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
     @Test
     public void createReportSection() {
         String response = "This is a response";
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
-        StudentReport sr = createTestStudentReport(coop);
-        ReportSectionConfig rsConfig = createTestReportSectionConfig();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
+        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportSectionConfig rsConfig =
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
 
         try {
             studentReportSectionService.createReportSection(response, rsConfig, sr);
@@ -103,7 +94,8 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         }
 
         assertEquals(
-        		ERROR_PREFIX + "Response cannot be empty! "
+                ERROR_PREFIX
+                        + "Response cannot be empty! "
                         + "Report section config cannot be null! "
                         + "Student report cannot be null!",
                 error);
@@ -120,7 +112,8 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         }
 
         assertEquals(
-        		ERROR_PREFIX + "Response cannot be empty! "
+                ERROR_PREFIX
+                        + "Response cannot be empty! "
                         + "Report section config cannot be null! "
                         + "Student report cannot be null!",
                 error);
@@ -137,7 +130,8 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         }
 
         assertEquals(
-        		ERROR_PREFIX + "Response cannot be empty! "
+                ERROR_PREFIX
+                        + "Response cannot be empty! "
                         + "Report section config cannot be null! "
                         + "Student report cannot be null!",
                 error);
@@ -148,12 +142,13 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
     public void updateReportSection() {
         StudentReportSection rs = null;
         String response = "This is a response";
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
-        StudentReport sr = createTestStudentReport(coop);
-        ReportSectionConfig rsConfig = createTestReportSectionConfig();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
+        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportSectionConfig rsConfig =
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
 
         try {
             rs = studentReportSectionService.createReportSection(response, rsConfig, sr);
@@ -184,12 +179,13 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
     public void updateReportSectionInvalid() {
         StudentReportSection rs = null;
         String response = "This is a response";
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
-        StudentReport sr = createTestStudentReport(coop);
-        ReportSectionConfig rsConfig = createTestReportSectionConfig();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
+        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportSectionConfig rsConfig =
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
 
         try {
             studentReportSectionService.createReportSection(response, rsConfig, sr);
@@ -207,18 +203,22 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         }
 
         assertEquals(
-        		ERROR_PREFIX + "Student report section cannot be null! " + "Response cannot be empty!", error);
+                ERROR_PREFIX
+                        + "Student report section cannot be null! "
+                        + "Response cannot be empty!",
+                error);
     }
 
     @Test
     public void updateReportSectionNull() {
         String response = "This is a response";
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
-        StudentReport sr = createTestStudentReport(coop);
-        ReportSectionConfig rsConfig = createTestReportSectionConfig();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
+        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportSectionConfig rsConfig =
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
 
         try {
             studentReportSectionService.createReportSection(response, rsConfig, sr);
@@ -242,12 +242,13 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
     public void deleteReportSection() {
         StudentReportSection rs = null;
         String response = "This is a response";
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
-        StudentReport sr = createTestStudentReport(coop);
-        ReportSectionConfig rsConfig = createTestReportSectionConfig();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
+        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportSectionConfig rsConfig =
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
 
         try {
             rs = studentReportSectionService.createReportSection(response, rsConfig, sr);
@@ -270,12 +271,13 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
     public void deleteReportSectionStudentReport() {
         StudentReportSection rs = null;
         String response = "This is a response";
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
-        StudentReport sr = createTestStudentReport(coop);
-        ReportSectionConfig rsConfig = createTestReportSectionConfig();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
+        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportSectionConfig rsConfig =
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
 
         try {
             rs = studentReportSectionService.createReportSection(response, rsConfig, sr);
@@ -299,52 +301,5 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         }
 
         assertEquals(ERROR_PREFIX + "Student report section to delete cannot be null!", error);
-    }
-
-    private Course createTestCourse() {
-        Course c = null;
-        c = courseService.createCourse("FACC 200");
-        return c;
-    }
-
-    private CourseOffering createTestCourseOffering(Course c) {
-        CourseOffering co = null;
-        co = courseOfferingService.createCourseOffering(2020, Season.WINTER, c);
-        return co;
-    }
-
-    private Coop createTestCoop(CourseOffering co, Student s) {
-        Coop coop = new Coop();
-        coop = coopService.createCoop(CoopStatus.FUTURE, co, s);
-        return coop;
-    }
-
-    private Student createTestStudent() {
-        Student s = new Student();
-        s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
-        return s;
-    }
-
-    private StudentReport createTestStudentReport(Coop c) {
-        StudentReport sr = new StudentReport();
-        File file = new File("src/test/resources/Test_Offer_Letter.pdf");
-        try {
-            MultipartFile multipartFile = new MockMultipartFile("file", new FileInputStream(file));
-
-            sr =
-                    studentReportService.createStudentReport(
-                            ReportStatus.COMPLETED, c, "Offer Letter", multipartFile);
-            return sr;
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    private ReportSectionConfig createTestReportSectionConfig() {
-        ReportConfig reportConfig =
-                reportConfigService.createReportConfig(true, 14, true, "Evaluation");
-
-        return reportSectionConfigService.createReportSectionConfig(
-                "How was your co-op?", ReportResponseType.LONG_TEXT, reportConfig);
     }
 }

@@ -11,11 +11,9 @@ import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.Notification;
-import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import java.util.HashSet;
 import java.util.Set;
@@ -106,7 +104,8 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         }
 
         assertEquals(
-        		ERROR_PREFIX + "Student first name cannot be empty. "
+                ERROR_PREFIX
+                        + "Student first name cannot be empty. "
                         + "Student last name cannot be empty. "
                         + "Student email cannot be empty. "
                         + "Student ID cannot be null or invalid.",
@@ -123,7 +122,8 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         }
 
         assertEquals(
-        		ERROR_PREFIX + "Student first name cannot be empty. "
+                ERROR_PREFIX
+                        + "Student first name cannot be empty. "
                         + "Student last name cannot be empty. "
                         + "Student email cannot be empty. "
                         + "Student ID cannot be null or invalid.",
@@ -140,7 +140,8 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         }
 
         assertEquals(
-        		ERROR_PREFIX + "Student first name cannot be empty. "
+                ERROR_PREFIX
+                        + "Student first name cannot be empty. "
                         + "Student last name cannot be empty. "
                         + "Student email cannot be empty. "
                         + "Student ID cannot be null or invalid.",
@@ -196,13 +197,13 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
 
         assertEquals(1, studentService.getAllStudents().size());
 
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Coop coop = createTestCoop(courseOffering, s);
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
         Set<Coop> coops = new HashSet<Coop>();
         coops.add(coop);
-        Admin a = createTestAdmin();
-        Notification notif = createTestNotification(s, a);
+        Admin a = createTestAdmin(adminService);
+        Notification notif = createTestNotification(notificationService, s, a);
         Set<Notification> notifs = new HashSet<Notification>();
         notifs.add(notif);
 
@@ -318,13 +319,13 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
 
         assertEquals(1, studentService.getAllStudents().size());
 
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Coop coop = createTestCoop(courseOffering, s);
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
         Set<Coop> coops = new HashSet<Coop>();
         coops.add(coop);
-        Admin a = createTestAdmin();
-        Notification notif = createTestNotification(s, a);
+        Admin a = createTestAdmin(adminService);
+        Notification notif = createTestNotification(notificationService, s, a);
         Set<Notification> notifs = new HashSet<Notification>();
         notifs.add(notif);
 
@@ -343,35 +344,5 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         }
 
         assertEquals(0, studentService.getAllStudents().size());
-    }
-
-    private Course createTestCourse() {
-        Course c = null;
-        c = courseService.createCourse("FACC200");
-        return c;
-    }
-
-    private CourseOffering createTestCourseOffering(Course c) {
-        CourseOffering co = null;
-        co = courseOfferingService.createCourseOffering(2020, Season.WINTER, c);
-        return co;
-    }
-
-    private Coop createTestCoop(CourseOffering co, Student s) {
-        Coop coop = new Coop();
-        coop = coopService.createCoop(CoopStatus.FUTURE, co, s);
-        return coop;
-    }
-
-    private Admin createTestAdmin() {
-        Admin a = new Admin();
-        a = adminService.createAdmin("Emma", "Eagles", "emma@gmail.com");
-        return a;
-    }
-
-    private Notification createTestNotification(Student s, Admin a) {
-        Notification notif = new Notification();
-        notif = notificationService.createNotification("title", "body", s, a);
-        return notif;
     }
 }
