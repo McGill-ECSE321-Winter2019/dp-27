@@ -17,7 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceCourseOfferingTests {
+public class CooperatorServiceCourseOfferingTests extends BaseServiceTest {
 
     @Autowired CourseService courseService;
     @Autowired CourseOfferingService courseOfferingService;
@@ -62,7 +62,7 @@ public class CooperatorServiceCourseOfferingTests {
             courseOfferingService.createCourseOffering(0, null, null);
         } catch (IllegalArgumentException e) {
             assertEquals(
-                    "Year is invalid! Season cannot be null! Course cannot be null!",
+                    ERROR_PREFIX + "Year is invalid! Season cannot be null! Course cannot be null!",
                     e.getMessage());
         }
 
@@ -140,7 +140,8 @@ public class CooperatorServiceCourseOfferingTests {
             courseOfferingService.updateCourseOffering(null, year2, season2, c2);
 
         } catch (IllegalArgumentException e) {
-            assertEquals("Course Offering to update cannot be null!", e.getMessage());
+            assertEquals(
+                    ERROR_PREFIX + "Course Offering to update cannot be null!", e.getMessage());
         }
 
         co = courseOfferingService.getAllCourseOfferings().get(0);

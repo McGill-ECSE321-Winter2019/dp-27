@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmployerContactService {
+public class EmployerContactService extends BaseService {
 
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CompanyRepository companyRepository;
@@ -57,7 +57,7 @@ public class EmployerContactService {
             error.append("Employer Contact company cannot be empty!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         EmployerContact ec = new EmployerContact();
@@ -83,7 +83,7 @@ public class EmployerContactService {
         EmployerContact ec = employerContactRepository.findById(id).orElse(null);
         if (ec == null) {
             throw new IllegalArgumentException(
-                    "Employer Contact with ID " + id + " does not exist!");
+                    ERROR_PREFIX + "Employer Contact with ID " + id + " does not exist!");
         }
 
         return ec;
@@ -100,7 +100,10 @@ public class EmployerContactService {
         EmployerContact ec = employerContactRepository.findByEmail(email.trim());
         if (ec == null) {
             throw new IllegalArgumentException(
-                    "Employer Contact with email " + email.trim() + " does not exist!");
+                    ERROR_PREFIX
+                            + "Employer Contact with email "
+                            + email.trim()
+                            + " does not exist!");
         }
 
         return ec;
@@ -161,7 +164,7 @@ public class EmployerContactService {
             error.append("Employer Contact phone number must be a valid number! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (firstName != null) {
@@ -198,7 +201,8 @@ public class EmployerContactService {
     @Transactional
     public EmployerContact deleteEmployerContact(EmployerContact ec) {
         if (ec == null) {
-            throw new IllegalArgumentException("Employer Contact to delete cannot be null!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Employer Contact to delete cannot be null!");
         }
 
         Company c = ec.getCompany();

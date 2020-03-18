@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class EmployerReportSectionService {
+public class EmployerReportSectionService extends BaseService {
 
     @Autowired EmployerReportSectionRepository employerReportSectionRepository;
     @Autowired EmployerReportRepository employerReportRepository;
@@ -43,7 +43,7 @@ public class EmployerReportSectionService {
             error.append("Employer report cannot be null!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         EmployerReportSection rs = new EmployerReportSection();
@@ -65,7 +65,7 @@ public class EmployerReportSectionService {
         EmployerReportSection rs = employerReportSectionRepository.findById(id).orElse(null);
         if (rs == null) {
             throw new IllegalArgumentException(
-                    "Employer report Section with ID " + id + " does not exist!");
+                    ERROR_PREFIX + "Employer report Section with ID " + id + " does not exist!");
         }
 
         return rs;
@@ -104,7 +104,7 @@ public class EmployerReportSectionService {
             error.append("Response cannot be empty!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (response != null) {
@@ -129,7 +129,8 @@ public class EmployerReportSectionService {
     @Transactional
     public EmployerReportSection deleteReportSection(EmployerReportSection rs) {
         if (rs == null) {
-            throw new IllegalArgumentException("Employer report section to delete cannot be null!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Employer report section to delete cannot be null!");
         }
 
         // first delete from parents

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CourseService {
+public class CourseService extends BaseService {
     @Autowired CourseRepository courseRepository;
 
     /**
@@ -26,7 +26,7 @@ public class CourseService {
             error.append("Course name cannot be empty!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         Course c = new Course();
@@ -46,7 +46,7 @@ public class CourseService {
             error.append("Course name cannot be empty!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (offerings != null) {
@@ -63,7 +63,8 @@ public class CourseService {
     public Course getCourseByName(String name) {
         Course c = courseRepository.findByName(name.trim());
         if (c == null) {
-            throw new IllegalArgumentException("Course with name " + name + " does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Course with name " + name + " does not exist!");
         }
         return c;
     }
@@ -72,7 +73,8 @@ public class CourseService {
     public Course getCourseById(int id) {
         Course c = courseRepository.findById(id).orElse(null);
         if (c == null) {
-            throw new IllegalArgumentException("Course with ID " + id + " does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Course with ID " + id + " does not exist!");
         }
         return c;
     }
@@ -85,7 +87,7 @@ public class CourseService {
     @Transactional
     public Course deleteCourse(Course c) {
         if (c == null) {
-            throw new IllegalArgumentException("Course to delete cannot be null!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Course to delete cannot be null!");
         }
         courseRepository.delete(c);
         return c;

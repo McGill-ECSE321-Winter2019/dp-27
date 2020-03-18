@@ -34,9 +34,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceCoopTests {
+public class CooperatorServiceCoopTests extends BaseServiceTest {
 
-    // TODO: add Service and Repository class imports here
     @Autowired CoopService coopService;
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired StudentService studentService;
@@ -101,7 +100,8 @@ public class CooperatorServiceCoopTests {
 
         assertEquals(0, coopService.getAllCoops().size());
         assertEquals(
-                "Co-op Status cannot be null. "
+                ERROR_PREFIX
+                        + "Co-op Status cannot be null. "
                         + "Course Offering cannot be null. "
                         + "Student cannot be null.",
                 error);
@@ -176,7 +176,7 @@ public class CooperatorServiceCoopTests {
         }
 
         assertEquals(1, coopService.getAllCoops().size());
-        assertEquals("Co-op to update cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Co-op to update cannot be null!", error);
     }
 
     @Test

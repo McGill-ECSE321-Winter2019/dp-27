@@ -30,7 +30,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceCoopDetailsTests {
+public class CooperatorServiceCoopDetailsTests extends BaseServiceTest {
 
     @Autowired CoopDetailsRepository coopDetailsRepository;
     @Autowired CoopRepository coopRepository;
@@ -100,7 +100,9 @@ public class CooperatorServiceCoopDetailsTests {
             error = e.getMessage();
         }
 
-        assertEquals("Employer Contact cannot be null! " + "Co-op cannot be null!", error);
+        assertEquals(
+                ERROR_PREFIX + "Employer Contact cannot be null! " + "Co-op cannot be null!",
+                error);
         assertEquals(0, coopDetailsService.getAllCoopDetails().size());
     }
 
@@ -116,7 +118,8 @@ public class CooperatorServiceCoopDetailsTests {
         }
 
         assertEquals(
-                "Pay Per Hour is invalid! "
+                ERROR_PREFIX
+                        + "Pay Per Hour is invalid! "
                         + "Hours Per Week is invalid! "
                         + "Employer Contact cannot be null! "
                         + "Co-op cannot be null!",
@@ -185,7 +188,7 @@ public class CooperatorServiceCoopDetailsTests {
             error = e.getMessage();
         }
 
-        assertEquals("Co-op Details to update cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Co-op Details to update cannot be null!", error);
         assertEquals(1, coopDetailsService.getAllCoopDetails().size());
     }
 
@@ -227,7 +230,7 @@ public class CooperatorServiceCoopDetailsTests {
             error = e.getMessage();
         }
 
-        assertEquals("Co-op Details to delete cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Co-op Details to delete cannot be null!", error);
     }
 
     private Course createTestCourse() {

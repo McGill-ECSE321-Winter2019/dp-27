@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class StudentService {
+public class StudentService extends BaseService {
     @Autowired StudentRepository studentRepository;
     @Autowired CoopRepository coopRepository;
     @Autowired NotificationRepository notificationRepository;
@@ -47,7 +47,7 @@ public class StudentService {
             error.append("Student ID cannot be null or invalid.");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         Student s = new Student();
@@ -75,7 +75,8 @@ public class StudentService {
         }
         List<Student> s = studentRepository.findByFirstNameAndLastName(firstName, lastName);
         if (s == null) {
-            throw new IllegalArgumentException("No students exist with that first and last name.");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "No students exist with that first and last name.");
         }
         return s;
     }
@@ -83,12 +84,13 @@ public class StudentService {
     @Transactional
     public List<Student> getStudentByFirstName(String firstName) {
         if (firstName == null || firstName.trim().length() == 0) {
-            throw new IllegalArgumentException("FirstName is null or invalid. ");
+            throw new IllegalArgumentException(ERROR_PREFIX + "FirstName is null or invalid. ");
         }
 
         List<Student> s = studentRepository.findByFirstName(firstName);
         if (s == null) {
-            throw new IllegalArgumentException("No students exist with that first name.");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "No students exist with that first name.");
         }
         return s;
     }
@@ -96,12 +98,13 @@ public class StudentService {
     @Transactional
     public List<Student> getStudentByLastName(String lastName) {
         if (lastName == null || lastName.trim().length() == 0) {
-            throw new IllegalArgumentException("FirstName is null or invalid. ");
+            throw new IllegalArgumentException(ERROR_PREFIX + "LastName is null or invalid. ");
         }
 
         List<Student> s = studentRepository.findByLastName(lastName);
         if (s == null) {
-            throw new IllegalArgumentException("No students exist with that first name.");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "No students exist with that last name.");
         }
         return s;
     }
@@ -109,11 +112,11 @@ public class StudentService {
     @Transactional
     public Student getStudentByStudentID(String id) {
         if (id == null || id.trim().length() != 9) {
-            throw new IllegalArgumentException("ID is invalid.");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Student ID is invalid.");
         }
         Student s = studentRepository.findByStudentId(id);
         if (s == null) {
-            throw new IllegalArgumentException("Student does not exist.");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist.");
         }
         return s;
     }
@@ -121,11 +124,11 @@ public class StudentService {
     @Transactional
     public Student getStudentByID(Integer id) {
         if (id == null || id < 0) {
-            throw new IllegalArgumentException("ID is invalid.");
+            throw new IllegalArgumentException(ERROR_PREFIX + "ID is invalid.");
         }
         Student s = studentRepository.findById(id).orElse(null);
         if (s == null) {
-            throw new IllegalArgumentException("Student does not exist.");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist.");
         }
         return s;
     }
@@ -134,7 +137,8 @@ public class StudentService {
     public Student getStudentById(int id) {
         Student s = studentRepository.findById(id).orElse(null);
         if (s == null) {
-            throw new IllegalArgumentException("Student with ID " + id + " does not exist.");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Student with ID " + id + " does not exist.");
         }
 
         return s;
@@ -174,7 +178,7 @@ public class StudentService {
             error.append("Student ID is invalid.");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (firstName != null) {
@@ -202,7 +206,7 @@ public class StudentService {
     @Transactional
     public Student deleteStudent(Student s) {
         if (s == null) {
-            throw new IllegalArgumentException("Student to delete cannot be null.");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Student to delete cannot be null.");
         }
 
         studentRepository.delete(s);
@@ -212,11 +216,11 @@ public class StudentService {
     @Transactional
     public Student deleteStudentByStudentID(String id) {
         if (id == null || id.trim().length() != 9) {
-            throw new IllegalArgumentException("ID is invalid.");
+            throw new IllegalArgumentException(ERROR_PREFIX + "ID is invalid.");
         }
         Student s = studentRepository.findByStudentId(id);
         if (s == null) {
-            throw new IllegalArgumentException("Student does not exist.");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist.");
         }
         studentRepository.delete(s);
         return s;

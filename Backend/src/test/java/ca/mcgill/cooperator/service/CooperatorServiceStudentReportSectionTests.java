@@ -37,7 +37,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceStudentReportSectionTests {
+public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest {
+	
     @Autowired StudentReportSectionRepository studentReportSectionRepository;
     @Autowired StudentReportRepository studentReportRepository;
     @Autowired CoopRepository coopRepository;
@@ -102,7 +103,7 @@ public class CooperatorServiceStudentReportSectionTests {
         }
 
         assertEquals(
-                "Response cannot be empty! "
+        		ERROR_PREFIX + "Response cannot be empty! "
                         + "Report section config cannot be null! "
                         + "Student report cannot be null!",
                 error);
@@ -119,7 +120,7 @@ public class CooperatorServiceStudentReportSectionTests {
         }
 
         assertEquals(
-                "Response cannot be empty! "
+        		ERROR_PREFIX + "Response cannot be empty! "
                         + "Report section config cannot be null! "
                         + "Student report cannot be null!",
                 error);
@@ -136,7 +137,7 @@ public class CooperatorServiceStudentReportSectionTests {
         }
 
         assertEquals(
-                "Response cannot be empty! "
+        		ERROR_PREFIX + "Response cannot be empty! "
                         + "Report section config cannot be null! "
                         + "Student report cannot be null!",
                 error);
@@ -206,7 +207,7 @@ public class CooperatorServiceStudentReportSectionTests {
         }
 
         assertEquals(
-                "Student report section cannot be null! " + "Response cannot be empty!", error);
+        		ERROR_PREFIX + "Student report section cannot be null! " + "Response cannot be empty!", error);
     }
 
     @Test
@@ -234,7 +235,7 @@ public class CooperatorServiceStudentReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals("Student report section cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Student report section cannot be null!", error);
     }
 
     @Test
@@ -297,7 +298,7 @@ public class CooperatorServiceStudentReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals("Student report section to delete cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Student report section to delete cannot be null!", error);
     }
 
     private Course createTestCourse() {

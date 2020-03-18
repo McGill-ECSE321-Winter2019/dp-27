@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ReportConfigService {
+public class ReportConfigService extends BaseService {
 
     @Autowired ReportConfigRepository reportConfigRepository;
 
@@ -36,7 +36,7 @@ public class ReportConfigService {
             error.append("Report type cannot be empty!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException("ERROR [Service]: " + error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         ReportConfig reportConfig = new ReportConfig();
@@ -60,7 +60,7 @@ public class ReportConfigService {
         ReportConfig reportConfig = reportConfigRepository.findById(id).orElse(null);
         if (reportConfig == null) {
             throw new IllegalArgumentException(
-                    "ERROR [Service]: Report config with ID " + id + " does not exist!");
+                    ERROR_PREFIX + "Report config with ID " + id + " does not exist!");
         }
 
         return reportConfig;
@@ -77,7 +77,7 @@ public class ReportConfigService {
         ReportConfig reportConfig = reportConfigRepository.findByType(type);
         if (reportConfig == null) {
             throw new IllegalArgumentException(
-                    "ERROR [Service]: Report config with type " + type + " does not exist!");
+                    ERROR_PREFIX + "Report config with type " + type + " does not exist!");
         }
 
         return reportConfig;
@@ -138,7 +138,7 @@ public class ReportConfigService {
             error.append("Report type cannot be empty!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException("ERROR [Service]: " + error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (requiresFile != null) {
@@ -170,7 +170,7 @@ public class ReportConfigService {
     public ReportConfig deleteReportConfig(ReportConfig reportConfig) {
         if (reportConfig == null) {
             throw new IllegalArgumentException(
-                    "ERROR [Service]: Report config to delete cannot be null!");
+                    ERROR_PREFIX + "Report config to delete cannot be null!");
         }
 
         reportConfigRepository.delete(reportConfig);

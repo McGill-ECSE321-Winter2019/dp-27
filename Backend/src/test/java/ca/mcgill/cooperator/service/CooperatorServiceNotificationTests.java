@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceNotificationTests {
+public class CooperatorServiceNotificationTests extends BaseServiceTest {
 
     @Autowired NotificationService notificationService;
     @Autowired AdminService adminService;
@@ -34,7 +34,6 @@ public class CooperatorServiceNotificationTests {
     @AfterEach
     public void clearDatabase() {
         notificationRepository.deleteAll();
-
         studentRepository.deleteAll();
         adminRepository.deleteAll();
     }
@@ -104,7 +103,7 @@ public class CooperatorServiceNotificationTests {
         }
 
         assertEquals(
-                "Notification title cannot be empty! "
+        		ERROR_PREFIX + "Notification title cannot be empty! "
                         + "Notification body cannot be empty! "
                         + "Notification must have a Student receiver! "
                         + "Notification must have an Admin sender!",
@@ -128,7 +127,7 @@ public class CooperatorServiceNotificationTests {
         }
 
         assertEquals(
-                "Notification title cannot be empty! "
+        		ERROR_PREFIX + "Notification title cannot be empty! "
                         + "Notification body cannot be empty! "
                         + "Notification must have a Student receiver! "
                         + "Notification must have an Admin sender!",
@@ -152,7 +151,7 @@ public class CooperatorServiceNotificationTests {
         }
 
         assertEquals(
-                "Notification title cannot be empty! "
+        		ERROR_PREFIX + "Notification title cannot be empty! "
                         + "Notification body cannot be empty! "
                         + "Notification must have a Student receiver! "
                         + "Notification must have an Admin sender!",
@@ -211,7 +210,7 @@ public class CooperatorServiceNotificationTests {
         } catch (IllegalArgumentException e) {
             String error = e.getMessage();
             assertEquals(
-                    "Notification title cannot be empty! "
+            		ERROR_PREFIX + "Notification title cannot be empty! "
                             + "Notification body cannot be empty! "
                             + "Notification must have a Student receiver! "
                             + "Notification must have an Admin sender!",

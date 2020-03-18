@@ -43,7 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceEmployerReportTests {
+public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
 
     @Autowired EmployerReportRepository employerReportRepository;
     @Autowired CoopRepository coopRepository;
@@ -134,7 +134,7 @@ public class CooperatorServiceEmployerReportTests {
         }
 
         assertEquals(
-                "Report Status cannot be null! "
+        		ERROR_PREFIX + "Report Status cannot be null! "
                         + "Coop cannot be null! "
                         + "Employer Contact cannot be null! "
                         + "File title cannot be empty!",
@@ -267,7 +267,7 @@ public class CooperatorServiceEmployerReportTests {
             error = e.getMessage();
         }
 
-        assertEquals("Employer Report cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Employer Report cannot be null!", error);
         assertEquals(
                 ReportStatus.COMPLETED,
                 employerReportService.getEmployerReport(er.getId()).getStatus());
@@ -315,7 +315,7 @@ public class CooperatorServiceEmployerReportTests {
             error = e.getMessage();
         }
 
-        assertEquals("Employer Report to delete cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Employer Report to delete cannot be null!", error);
     }
 
     private Course createTestCourse() {

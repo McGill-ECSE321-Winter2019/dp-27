@@ -19,7 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceAdminTests {
+public class CooperatorServiceAdminTests extends BaseServiceTest {
 
     @Autowired AdminService adminService;
     @Autowired NotificationService notificationService;
@@ -60,7 +60,7 @@ public class CooperatorServiceAdminTests {
         try {
             adminService.createAdmin(firstName, lastName, email);
         } catch (IllegalArgumentException e) {
-            assertEquals("Admin email must be a valid email!", e.getMessage());
+            assertEquals(ERROR_PREFIX + "Admin email must be a valid email!", e.getMessage());
         }
     }
 
@@ -78,7 +78,8 @@ public class CooperatorServiceAdminTests {
         }
 
         assertEquals(
-                "Admin first name cannot be empty! Admin last name cannot be empty! Admin email cannot be empty!",
+                ERROR_PREFIX
+                        + "Admin first name cannot be empty! Admin last name cannot be empty! Admin email cannot be empty!",
                 error);
         assertEquals(0, adminService.getAllAdmins().size());
     }
@@ -97,7 +98,8 @@ public class CooperatorServiceAdminTests {
         }
 
         assertEquals(
-                "Admin first name cannot be empty! Admin last name cannot be empty! Admin email cannot be empty!",
+                ERROR_PREFIX
+                        + "Admin first name cannot be empty! Admin last name cannot be empty! Admin email cannot be empty!",
                 error);
         assertEquals(0, adminService.getAllAdmins().size());
     }
@@ -116,7 +118,8 @@ public class CooperatorServiceAdminTests {
         }
 
         assertEquals(
-                "Admin first name cannot be empty! "
+                ERROR_PREFIX
+                        + "Admin first name cannot be empty! "
                         + "Admin last name cannot be empty! "
                         + "Admin email cannot be empty!",
                 error);
@@ -204,7 +207,8 @@ public class CooperatorServiceAdminTests {
         }
 
         assertEquals(
-                "Admin to update cannot be null! "
+                ERROR_PREFIX
+                        + "Admin to update cannot be null! "
                         + "Admin first name cannot be empty! "
                         + "Admin last name cannot be empty! "
                         + "Admin email cannot be empty!",
@@ -246,7 +250,7 @@ public class CooperatorServiceAdminTests {
             error = e.getMessage();
         }
 
-        assertEquals("Admin to delete cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Admin to delete cannot be null!", error);
     }
 
     private Notification createTestNotification(Admin a) {

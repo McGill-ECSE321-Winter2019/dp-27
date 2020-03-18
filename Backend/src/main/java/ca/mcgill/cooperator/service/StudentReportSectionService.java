@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class StudentReportSectionService {
+public class StudentReportSectionService extends BaseService {
 
     @Autowired ReportSectionConfigRepository reportSectionConfigRepository;
     @Autowired StudentReportSectionRepository studentReportSectionRepository;
@@ -41,7 +41,7 @@ public class StudentReportSectionService {
             error.append("Student report cannot be null!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         StudentReportSection rs = new StudentReportSection();
@@ -63,7 +63,7 @@ public class StudentReportSectionService {
         StudentReportSection rs = studentReportSectionRepository.findById(id).orElse(null);
         if (rs == null) {
             throw new IllegalArgumentException(
-                    "Student report section with ID " + id + " does not exist!");
+                    ERROR_PREFIX + "Student report section with ID " + id + " does not exist!");
         }
 
         return rs;
@@ -102,7 +102,7 @@ public class StudentReportSectionService {
             error.append("Response cannot be empty!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (response != null) {
@@ -127,7 +127,8 @@ public class StudentReportSectionService {
     @Transactional
     public StudentReportSection deleteReportSection(StudentReportSection rs) {
         if (rs == null) {
-            throw new IllegalArgumentException("Student report section to delete cannot be null!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Student report section to delete cannot be null!");
         }
 
         // first delete from parents

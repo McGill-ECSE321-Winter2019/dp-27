@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class NotificationService {
+public class NotificationService extends BaseService {
 
     @Autowired NotificationRepository notificationRepository;
     @Autowired StudentRepository studentRepository;
@@ -46,7 +46,7 @@ public class NotificationService {
             error.append("Notification must have an Admin sender!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         Notification n = new Notification();
@@ -70,7 +70,8 @@ public class NotificationService {
     public Notification getNotification(int id) {
         Notification n = notificationRepository.findById(id).orElse(null);
         if (n == null) {
-            throw new IllegalArgumentException("Notification with ID " + id + " does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Notification with ID " + id + " does not exist!");
         }
 
         return n;
@@ -130,7 +131,7 @@ public class NotificationService {
     public Notification markAsRead(Notification n) {
         if (n != null) n.setSeen(true);
         else {
-            throw new IllegalArgumentException("Notification cannot be null!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Notification cannot be null!");
         }
         notificationRepository.save(n);
         return n;
@@ -166,7 +167,7 @@ public class NotificationService {
             error.append("Notification must have an Admin sender!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (title != null) {
@@ -194,7 +195,8 @@ public class NotificationService {
     @Transactional
     public Notification deleteNotification(Notification n) {
         if (n == null) {
-            throw new IllegalArgumentException("Notification to delete cannot be null!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Notification to delete cannot be null!");
         }
 
         Student s = n.getStudent();

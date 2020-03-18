@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class StudentReportService {
+public class StudentReportService extends BaseService {
 
     @Autowired CoopRepository coopRepository;
     @Autowired StudentReportRepository studentReportRepository;
@@ -46,7 +46,7 @@ public class StudentReportService {
             error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         StudentReport sr = new StudentReport();
@@ -76,7 +76,8 @@ public class StudentReportService {
     public StudentReport getStudentReport(int id) {
         StudentReport sr = studentReportRepository.findById(id).orElse(null);
         if (sr == null) {
-            throw new IllegalArgumentException("Student Report with ID " + id + " does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Student Report with ID " + id + " does not exist!");
         }
 
         return sr;
@@ -116,7 +117,7 @@ public class StudentReportService {
             error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (status != null) {
@@ -163,7 +164,8 @@ public class StudentReportService {
     @Transactional
     public StudentReport deleteStudentReport(StudentReport sr) {
         if (sr == null) {
-            throw new IllegalArgumentException("Student Report to delete cannot be null!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Student Report to delete cannot be null!");
         }
 
         // first delete from all parents

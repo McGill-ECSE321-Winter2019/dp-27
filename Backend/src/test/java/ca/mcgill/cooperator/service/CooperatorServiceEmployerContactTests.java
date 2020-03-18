@@ -33,7 +33,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceEmployerContactTests {
+public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
 
     @Autowired EmployerContactService employerContactService;
     @Autowired CompanyService companyService;
@@ -100,7 +100,8 @@ public class CooperatorServiceEmployerContactTests {
             employerContactService.createEmployerContact(
                     firstName, lastName, email, phoneNumber, c);
         } catch (IllegalArgumentException e) {
-            assertEquals("Employer Contact email must be a valid email!", e.getMessage());
+            assertEquals(
+                    ERROR_PREFIX + "Employer Contact email must be a valid email!", e.getMessage());
         }
     }
 
@@ -116,7 +117,9 @@ public class CooperatorServiceEmployerContactTests {
             employerContactService.createEmployerContact(
                     firstName, lastName, email, phoneNumber, c);
         } catch (IllegalArgumentException e) {
-            assertEquals("Employer Contact phone number must be a valid number!", e.getMessage());
+            assertEquals(
+                    ERROR_PREFIX + "Employer Contact phone number must be a valid number!",
+                    e.getMessage());
         }
     }
 
@@ -137,7 +140,8 @@ public class CooperatorServiceEmployerContactTests {
             error = e.getMessage();
         }
         assertEquals(
-                "Employer Contact first name cannot be empty!"
+                ERROR_PREFIX
+                        + "Employer Contact first name cannot be empty!"
                         + " Employer Contact last name cannot be empty!"
                         + " Employer Contact email cannot be empty!"
                         + " Employer Contact phone number cannot be empty!"
@@ -163,7 +167,8 @@ public class CooperatorServiceEmployerContactTests {
             error = e.getMessage();
         }
         assertEquals(
-                "Employer Contact first name cannot be empty!"
+                ERROR_PREFIX
+                        + "Employer Contact first name cannot be empty!"
                         + " Employer Contact last name cannot be empty!"
                         + " Employer Contact email cannot be empty!"
                         + " Employer Contact phone number cannot be empty!"
@@ -189,7 +194,8 @@ public class CooperatorServiceEmployerContactTests {
             error = e.getMessage();
         }
         assertEquals(
-                "Employer Contact first name cannot be empty!"
+                ERROR_PREFIX
+                        + "Employer Contact first name cannot be empty!"
                         + " Employer Contact last name cannot be empty!"
                         + " Employer Contact email cannot be empty!"
                         + " Employer Contact phone number cannot be empty!"
@@ -310,7 +316,8 @@ public class CooperatorServiceEmployerContactTests {
         }
 
         assertEquals(
-                "Employer Contact first name cannot be empty!"
+                ERROR_PREFIX
+                        + "Employer Contact first name cannot be empty!"
                         + " Employer Contact last name cannot be empty!"
                         + " Employer Contact email cannot be empty!"
                         + " Employer Contact phone number cannot be empty!",
@@ -356,7 +363,7 @@ public class CooperatorServiceEmployerContactTests {
             error = e.getMessage();
         }
 
-        assertEquals("Employer Contact to delete cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Employer Contact to delete cannot be null!", error);
     }
 
     private Company createTestCompany() {

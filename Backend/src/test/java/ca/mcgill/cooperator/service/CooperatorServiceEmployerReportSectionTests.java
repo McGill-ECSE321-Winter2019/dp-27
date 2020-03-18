@@ -41,7 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceEmployerReportSectionTests {
+public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest {
 
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired EmployerReportSectionRepository employerReportSectionRepository;
@@ -113,7 +113,8 @@ public class CooperatorServiceEmployerReportSectionTests {
         }
 
         assertEquals(
-                "Response cannot be empty! "
+                ERROR_PREFIX
+                        + "Response cannot be empty! "
                         + "Report section config cannot be null! "
                         + "Employer report cannot be null!",
                 error);
@@ -130,7 +131,8 @@ public class CooperatorServiceEmployerReportSectionTests {
         }
 
         assertEquals(
-                "Response cannot be empty! "
+                ERROR_PREFIX
+                        + "Response cannot be empty! "
                         + "Report section config cannot be null! "
                         + "Employer report cannot be null!",
                 error);
@@ -147,7 +149,8 @@ public class CooperatorServiceEmployerReportSectionTests {
         }
 
         assertEquals(
-                "Response cannot be empty! "
+                ERROR_PREFIX
+                        + "Response cannot be empty! "
                         + "Report section config cannot be null! "
                         + "Employer report cannot be null!",
                 error);
@@ -217,7 +220,10 @@ public class CooperatorServiceEmployerReportSectionTests {
         }
 
         assertEquals(
-                "Employer report section cannot be null! " + "Response cannot be empty!", error);
+                ERROR_PREFIX
+                        + "Employer report section cannot be null! "
+                        + "Response cannot be empty!",
+                error);
     }
 
     @Test
@@ -245,7 +251,7 @@ public class CooperatorServiceEmployerReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals("Employer report section cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Employer report section cannot be null!", error);
     }
 
     @Test
@@ -310,7 +316,7 @@ public class CooperatorServiceEmployerReportSectionTests {
             error = e.getMessage();
         }
 
-        assertEquals("Employer report section to delete cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Employer report section to delete cannot be null!", error);
     }
 
     private Course createTestCourse() {

@@ -28,7 +28,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceStudentTests {
+public class CooperatorServiceStudentTests extends BaseServiceTest {
 
     @Autowired StudentService studentService;
     @Autowired CourseService courseService;
@@ -106,7 +106,7 @@ public class CooperatorServiceStudentTests {
         }
 
         assertEquals(
-                "Student first name cannot be empty. "
+        		ERROR_PREFIX + "Student first name cannot be empty. "
                         + "Student last name cannot be empty. "
                         + "Student email cannot be empty. "
                         + "Student ID cannot be null or invalid.",
@@ -123,7 +123,7 @@ public class CooperatorServiceStudentTests {
         }
 
         assertEquals(
-                "Student first name cannot be empty. "
+        		ERROR_PREFIX + "Student first name cannot be empty. "
                         + "Student last name cannot be empty. "
                         + "Student email cannot be empty. "
                         + "Student ID cannot be null or invalid.",
@@ -140,7 +140,7 @@ public class CooperatorServiceStudentTests {
         }
 
         assertEquals(
-                "Student first name cannot be empty. "
+        		ERROR_PREFIX + "Student first name cannot be empty. "
                         + "Student last name cannot be empty. "
                         + "Student email cannot be empty. "
                         + "Student ID cannot be null or invalid.",
@@ -272,7 +272,7 @@ public class CooperatorServiceStudentTests {
             error = e.getMessage();
         }
 
-        assertEquals("Student to update cannot be null.", error);
+        assertEquals(ERROR_PREFIX + "Student to update cannot be null.", error);
         assertEquals(1, studentService.getAllStudents().size());
     }
 
