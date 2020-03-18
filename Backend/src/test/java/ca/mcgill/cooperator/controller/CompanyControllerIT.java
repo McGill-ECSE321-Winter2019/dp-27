@@ -29,7 +29,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class CompanyControllerIT extends ControllerIT {
+public class CompanyControllerIT extends BaseControllerIT {
     @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
