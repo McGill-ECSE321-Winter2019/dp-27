@@ -90,7 +90,7 @@ public class ReportConfigController extends BaseController {
      * @param id
      * @return the deleted ReportConfig
      */
-    @DeleteMapping("/{id")
+    @DeleteMapping("/{id}")
     public ReportConfigDto deleteReportConfig(@PathVariable int id) {
         ReportConfig reportConfig =
                 reportConfigService.deleteReportConfig(reportConfigService.getReportConfig(id));
