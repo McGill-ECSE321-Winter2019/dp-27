@@ -41,9 +41,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.springframework.stereotype.Component;
 
-@Component
 public class ControllerUtils {
 
     static final String ERROR_PREFIX = "ERROR [DTO Conversion]: ";
@@ -54,7 +52,7 @@ public class ControllerUtils {
 
     public static AdminDto convertToDto(Admin a) {
         if (a == null) {
-            throw new IllegalArgumentException("Admin does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Admin does not exist!");
         }
 
         AdminDto adminDto =
@@ -99,7 +97,7 @@ public class ControllerUtils {
 
         for (Admin a : admins) {
             if (a == null) {
-                throw new IllegalArgumentException("Admin does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Admin does not exist!");
             }
             adminDtos.add(convertToDto(a));
         }
@@ -109,7 +107,7 @@ public class ControllerUtils {
 
     public static CompanyDto convertToDto(Company c) {
         if (c == null) {
-            throw new IllegalArgumentException("Company does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Company does not exist!");
         }
 
         CompanyDto companyDto =
@@ -148,7 +146,7 @@ public class ControllerUtils {
 
         for (Company c : companies) {
             if (c == null) {
-                throw new IllegalArgumentException("Company does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Company does not exist!");
             }
             companyDtos.add(convertToDto(c));
         }
@@ -157,7 +155,7 @@ public class ControllerUtils {
 
     public static CoopDto convertToDto(Coop c) {
         if (c == null) {
-            throw new IllegalArgumentException("Coop does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Coop does not exist!");
         }
 
         // first make coop with null course offering and null student
@@ -314,7 +312,7 @@ public class ControllerUtils {
 
         for (Coop c : coops) {
             if (c == null) {
-                throw new IllegalArgumentException("Coop does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Coop does not exist!");
             }
             coopDtos.add(convertToDto(c));
         }
@@ -326,7 +324,7 @@ public class ControllerUtils {
 
         for (Coop c : coops) {
             if (c == null) {
-                throw new IllegalArgumentException("Coop does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Coop does not exist!");
             }
             coopDtos.add(convertToDto(c));
         }
@@ -335,7 +333,7 @@ public class ControllerUtils {
 
     public static CoopDetailsDto convertToDto(CoopDetails cd) {
         if (cd == null) {
-            throw new IllegalArgumentException("Coop details do not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Coop details do not exist!");
         }
 
         CoopDetailsDto coopDetailsDto =
@@ -420,24 +418,13 @@ public class ControllerUtils {
         return coopDetailsDto;
     }
 
-    public static List<CoopDetailsDto> convertCoopDetailsListToDto(Set<CoopDetails> coopDetails) {
+    public static List<CoopDetailsDto> convertCoopDetailsListToDto(
+            Collection<CoopDetails> coopDetails) {
         List<CoopDetailsDto> coopDetailsDtos = new ArrayList<CoopDetailsDto>();
 
         for (CoopDetails cd : coopDetails) {
             if (cd == null) {
-                throw new IllegalArgumentException("Coop details do not exist!");
-            }
-            coopDetailsDtos.add(convertToDto(cd));
-        }
-        return coopDetailsDtos;
-    }
-
-    public static List<CoopDetailsDto> convertCoopDetailsListToDto(List<CoopDetails> coopDetails) {
-        List<CoopDetailsDto> coopDetailsDtos = new ArrayList<CoopDetailsDto>();
-
-        for (CoopDetails cd : coopDetails) {
-            if (cd == null) {
-                throw new IllegalArgumentException("Coop details do not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Coop details do not exist!");
             }
             coopDetailsDtos.add(convertToDto(cd));
         }
@@ -446,7 +433,7 @@ public class ControllerUtils {
 
     public static CourseDto convertToDto(Course c) {
         if (c == null) {
-            throw new IllegalArgumentException("Course does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Course does not exist!");
         }
 
         CourseDto courseDto = new CourseDto(c.getId(), c.getName(), null); // null course offerings
@@ -477,7 +464,7 @@ public class ControllerUtils {
 
         for (Course c : courses) {
             if (c == null) {
-                throw new IllegalArgumentException("Course does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Course does not exist!");
             }
             courseDtos.add(convertToDto(c));
         }
@@ -486,7 +473,7 @@ public class ControllerUtils {
 
     public static CourseOfferingDto convertToDto(CourseOffering co) {
         if (co == null) {
-            throw new IllegalArgumentException("Course Offering does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Course Offering does not exist!");
         }
 
         // create course offering dto with null course
@@ -566,7 +553,8 @@ public class ControllerUtils {
 
         for (CourseOffering co : courseOfferings) {
             if (co == null) {
-                throw new IllegalArgumentException("Course Offering does not exist!");
+                throw new IllegalArgumentException(
+                        ERROR_PREFIX + "Course Offering does not exist!");
             }
             courseOfferingDtos.add(convertToDto(co));
         }
@@ -575,7 +563,7 @@ public class ControllerUtils {
 
     public static EmployerContactDto convertToDto(EmployerContact e) {
         if (e == null) {
-            throw new IllegalArgumentException("Employer Contact does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Employer Contact does not exist!");
         }
 
         // create employer contact dto
@@ -684,7 +672,8 @@ public class ControllerUtils {
         if (employerContacts != null) {
             for (EmployerContact ec : employerContacts) {
                 if (ec == null) {
-                    throw new IllegalArgumentException("Employer Contact does not exist!");
+                    throw new IllegalArgumentException(
+                            ERROR_PREFIX + "Employer Contact does not exist!");
                 }
                 employerContactDtos.add(convertToDto(ec));
             }
@@ -694,7 +683,7 @@ public class ControllerUtils {
 
     public static EmployerReportDto convertToDto(EmployerReport er) {
         if (er == null) {
-            throw new IllegalArgumentException("Employer Report does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Employer Report does not exist!");
         }
 
         EmployerReportDto employerReportDto =
@@ -792,7 +781,8 @@ public class ControllerUtils {
         if (employerReports != null && employerReports.size() > 0) {
             for (EmployerReport er : employerReports) {
                 if (er == null) {
-                    throw new IllegalArgumentException("Employer Report does not exist!");
+                    throw new IllegalArgumentException(
+                            ERROR_PREFIX + "Employer Report does not exist!");
                 }
                 employerReportDtos.add(convertToDto(er));
             }
@@ -803,7 +793,8 @@ public class ControllerUtils {
 
     public static StudentReportSectionDto convertToDto(StudentReportSection rs) {
         if (rs == null) {
-            throw new IllegalArgumentException("Student report section does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Student report section does not exist!");
         }
         return new StudentReportSectionDto(
                 rs.getId(),
@@ -818,7 +809,8 @@ public class ControllerUtils {
 
         for (StudentReportSection rs : reportSections) {
             if (rs == null) {
-                throw new IllegalArgumentException("Student report section does not exist!");
+                throw new IllegalArgumentException(
+                        ERROR_PREFIX + "Student report section does not exist!");
             }
             reportSectionDtos.add(convertToDto(rs));
         }
@@ -827,7 +819,8 @@ public class ControllerUtils {
 
     public static EmployerReportSectionDto convertToDto(EmployerReportSection rs) {
         if (rs == null) {
-            throw new IllegalArgumentException("Employer report section does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Employer report section does not exist!");
         }
         return new EmployerReportSectionDto(
                 rs.getId(),
@@ -843,7 +836,8 @@ public class ControllerUtils {
 
         for (EmployerReportSection rs : reportSections) {
             if (rs == null) {
-                throw new IllegalArgumentException("Employer report section does not exist!");
+                throw new IllegalArgumentException(
+                        ERROR_PREFIX + "Employer report section does not exist!");
             }
             reportSectionDtos.add(convertToDto(rs));
         }
@@ -852,7 +846,7 @@ public class ControllerUtils {
 
     public static NotificationDto convertToDto(Notification n) {
         if (n == null) {
-            throw new IllegalArgumentException("Notification does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Notification does not exist!");
         }
 
         NotificationDto notificationDto =
@@ -900,7 +894,7 @@ public class ControllerUtils {
 
         for (Notification n : notifs) {
             if (n == null) {
-                throw new IllegalArgumentException("Notification does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Notification does not exist!");
             }
             notifDtos.add(convertToDto(n));
         }
@@ -912,7 +906,7 @@ public class ControllerUtils {
 
         for (Notification n : notifs) {
             if (n == null) {
-                throw new IllegalArgumentException("Notification does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Notification does not exist!");
             }
             notifDtos.add(convertToDto(n));
         }
@@ -921,7 +915,7 @@ public class ControllerUtils {
 
     public static StudentDto convertToDto(Student s) {
         if (s == null) {
-            throw new IllegalArgumentException("Student does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist!");
         }
 
         StudentDto studentDto =
@@ -1022,7 +1016,7 @@ public class ControllerUtils {
 
         for (Student s : students) {
             if (s == null) {
-                throw new IllegalArgumentException("Student does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist!");
             }
             studentDtos.add(convertToDto(s));
         }
@@ -1031,7 +1025,7 @@ public class ControllerUtils {
 
     public static StudentReportDto convertToDto(StudentReport sr) {
         if (sr == null) {
-            throw new IllegalArgumentException("Student Report does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Student Report does not exist!");
         }
 
         StudentReportDto studentReportDto =
@@ -1068,7 +1062,6 @@ public class ControllerUtils {
                         null); // null notifications, look up student by id to get all notifications
 
         coopDto.setStudent(studentDto);
-
         studentReportDto.setCoop(coopDto);
 
         // create report section dtos
@@ -1097,7 +1090,7 @@ public class ControllerUtils {
 
         for (StudentReport sr : studentReports) {
             if (sr == null) {
-                throw new IllegalArgumentException("Student Report does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Student Report does not exist!");
             }
             studentReportDtos.add(convertToDto(sr));
         }

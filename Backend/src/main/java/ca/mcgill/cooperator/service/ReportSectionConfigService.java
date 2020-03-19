@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ReportSectionConfigService {
+public class ReportSectionConfigService extends BaseService {
 
     @Autowired ReportConfigRepository reportConfigRepository;
     @Autowired ReportSectionConfigRepository reportSectionConfigRepository;
@@ -41,7 +41,7 @@ public class ReportSectionConfigService {
             error.append("Report config cannot be null!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         ReportSectionConfig rsConfig = new ReportSectionConfig();
@@ -65,7 +65,7 @@ public class ReportSectionConfigService {
         ReportSectionConfig rsConfig = reportSectionConfigRepository.findById(id).orElse(null);
         if (rsConfig == null) {
             throw new IllegalArgumentException(
-                    "Report section config with ID " + id + " does not exist!");
+                    ERROR_PREFIX + "Report section config with ID " + id + " does not exist!");
         }
 
         return rsConfig;
@@ -98,7 +98,7 @@ public class ReportSectionConfigService {
             error.append("Section prompt cannot be empty! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (sectionPrompt != null) {
@@ -129,7 +129,8 @@ public class ReportSectionConfigService {
     @Transactional
     public ReportSectionConfig deleteReportSectionConfig(ReportSectionConfig rsConfig) {
         if (rsConfig == null) {
-            throw new IllegalArgumentException("Report section config to delete cannot be null!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Report section config to delete cannot be null!");
         }
 
         // first delete from parent ReportConfig

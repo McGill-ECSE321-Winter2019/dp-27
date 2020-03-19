@@ -10,10 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CompanyService {
+public class CompanyService extends BaseService {
 
     @Autowired CompanyRepository companyRepository;
-
     @Autowired EmployerContactRepository employerContactRepository;
 
     /**
@@ -54,7 +53,7 @@ public class CompanyService {
             error.append("Company with this name and location already exists!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         Company c = new Company();
@@ -78,7 +77,8 @@ public class CompanyService {
     public Company getCompany(int id) {
         Company c = companyRepository.findById(id).orElse(null);
         if (c == null) {
-            throw new IllegalArgumentException("Company with ID " + id + " does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Company with ID " + id + " does not exist!");
         }
 
         return c;
@@ -101,7 +101,8 @@ public class CompanyService {
         if (c == null) {
             String location = city.trim() + ", " + region.trim() + " " + country.trim();
             throw new IllegalArgumentException(
-                    "Company with name "
+                    ERROR_PREFIX
+                            + "Company with name "
                             + name.trim()
                             + " and location "
                             + location
@@ -123,7 +124,7 @@ public class CompanyService {
 
         if (companies == null || companies.isEmpty()) {
             throw new IllegalArgumentException(
-                    "No offices for company with name " + name.trim() + "!");
+                    ERROR_PREFIX + "No offices for company with name " + name.trim() + "!");
         }
 
         return companies;
@@ -172,7 +173,7 @@ public class CompanyService {
             error.append("Company country cannot be empty! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (name == null) {
@@ -189,8 +190,8 @@ public class CompanyService {
         }
 
         if (companyExists(name, city, region, country)) {
-            String errorMessage = "Company with this name and location already exists!";
-            throw new IllegalArgumentException(errorMessage);
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Company with this name and location already exists!");
         }
 
         c.setName(name.trim());
@@ -214,7 +215,7 @@ public class CompanyService {
     @Transactional
     public Company deleteCompany(Company c) {
         if (c == null) {
-            throw new IllegalArgumentException("Company to delete cannot be null!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Company to delete cannot be null!");
         }
         companyRepository.delete(c);
 

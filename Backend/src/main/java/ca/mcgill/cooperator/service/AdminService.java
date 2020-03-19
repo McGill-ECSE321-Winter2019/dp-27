@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AdminService {
+public class AdminService extends BaseService {
 
     @Autowired AdminRepository adminRepository;
     @Autowired NotificationRepository notificationRepository;
@@ -39,7 +39,7 @@ public class AdminService {
             error.append("Admin email must be a valid email!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         Admin a = new Admin();
@@ -61,7 +61,8 @@ public class AdminService {
     public Admin getAdmin(int id) {
         Admin a = adminRepository.findById(id).orElse(null);
         if (a == null) {
-            throw new IllegalArgumentException("Admin with ID " + id + " does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Admin with ID " + id + " does not exist!");
         }
 
         return a;
@@ -78,7 +79,7 @@ public class AdminService {
         Admin a = adminRepository.findByEmail(email.trim());
         if (a == null) {
             throw new IllegalArgumentException(
-                    "Admin with email " + email.trim() + " does not exist!");
+                    ERROR_PREFIX + "Admin with email " + email.trim() + " does not exist!");
         }
 
         return a;
@@ -127,7 +128,7 @@ public class AdminService {
             error.append("Admin email must be a valid email!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
         // set fields if they're not null
 
@@ -157,7 +158,7 @@ public class AdminService {
     @Transactional
     public Admin deleteAdmin(Admin a) {
         if (a == null) {
-            throw new IllegalArgumentException("Admin to delete cannot be null!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Admin to delete cannot be null!");
         }
         adminRepository.delete(a);
 

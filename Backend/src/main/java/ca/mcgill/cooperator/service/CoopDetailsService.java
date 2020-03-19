@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CoopDetailsService {
+public class CoopDetailsService extends BaseService {
+
     @Autowired CoopDetailsRepository coopDetailsRepository;
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CoopRepository coopRepository;
@@ -44,7 +45,7 @@ public class CoopDetailsService {
             error.append("Co-op cannot be null!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         CoopDetails cd = new CoopDetails();
@@ -66,7 +67,8 @@ public class CoopDetailsService {
     public CoopDetails getCoopDetails(int id) {
         CoopDetails cd = coopDetailsRepository.findById(id).orElse(null);
         if (cd == null) {
-            throw new IllegalArgumentException("Co-op Details with ID " + id + " does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Co-op Details with ID " + id + " does not exist!");
         }
 
         return cd;
@@ -91,7 +93,8 @@ public class CoopDetailsService {
     @Transactional
     public CoopDetails deleteCoopDetails(CoopDetails cd) {
         if (cd == null) {
-            throw new IllegalArgumentException("Co-op Details to delete cannot be null!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Co-op Details to delete cannot be null!");
         }
         Coop c = cd.getCoop();
         c.setCoopDetails(null);
@@ -125,7 +128,7 @@ public class CoopDetailsService {
             error.append("Co-op Details to update cannot be null!");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (payPerHour >= 0) {

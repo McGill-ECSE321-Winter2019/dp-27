@@ -8,7 +8,6 @@ import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
-import ca.mcgill.cooperator.model.Student;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceAdminTests {
+public class CooperatorServiceAdminTests extends BaseServiceTest {
 
     @Autowired AdminService adminService;
     @Autowired NotificationService notificationService;
@@ -60,7 +59,7 @@ public class CooperatorServiceAdminTests {
         try {
             adminService.createAdmin(firstName, lastName, email);
         } catch (IllegalArgumentException e) {
-            assertEquals("Admin email must be a valid email!", e.getMessage());
+            assertEquals(ERROR_PREFIX + "Admin email must be a valid email!", e.getMessage());
         }
     }
 
@@ -78,7 +77,8 @@ public class CooperatorServiceAdminTests {
         }
 
         assertEquals(
-                "Admin first name cannot be empty! Admin last name cannot be empty! Admin email cannot be empty!",
+                ERROR_PREFIX
+                        + "Admin first name cannot be empty! Admin last name cannot be empty! Admin email cannot be empty!",
                 error);
         assertEquals(0, adminService.getAllAdmins().size());
     }
@@ -97,7 +97,8 @@ public class CooperatorServiceAdminTests {
         }
 
         assertEquals(
-                "Admin first name cannot be empty! Admin last name cannot be empty! Admin email cannot be empty!",
+                ERROR_PREFIX
+                        + "Admin first name cannot be empty! Admin last name cannot be empty! Admin email cannot be empty!",
                 error);
         assertEquals(0, adminService.getAllAdmins().size());
     }
@@ -116,7 +117,8 @@ public class CooperatorServiceAdminTests {
         }
 
         assertEquals(
-                "Admin first name cannot be empty! "
+                ERROR_PREFIX
+                        + "Admin first name cannot be empty! "
                         + "Admin last name cannot be empty! "
                         + "Admin email cannot be empty!",
                 error);
@@ -163,7 +165,7 @@ public class CooperatorServiceAdminTests {
             adminService.createAdmin(firstName, lastName, email);
             a = adminService.getAdmin(email);
 
-            n = createTestNotification(a);
+            n = createTestNotification(studentService, notificationService, a);
             List<Notification> notifications = a.getSentNotifications();
             notifications.add(n);
 
@@ -204,7 +206,8 @@ public class CooperatorServiceAdminTests {
         }
 
         assertEquals(
-                "Admin to update cannot be null! "
+                ERROR_PREFIX
+                        + "Admin to update cannot be null! "
                         + "Admin first name cannot be empty! "
                         + "Admin last name cannot be empty! "
                         + "Admin email cannot be empty!",
@@ -246,16 +249,6 @@ public class CooperatorServiceAdminTests {
             error = e.getMessage();
         }
 
-        assertEquals("Admin to delete cannot be null!", error);
-    }
-
-    private Notification createTestNotification(Admin a) {
-        Student s =
-                studentService.createStudent("Albert", "Kragl", "albert@kragl.com", "123456789");
-        Notification n =
-                notificationService.createNotification(
-                        "Report Due", "Report Due by April 2020", s, a);
-
-        return n;
+        assertEquals(ERROR_PREFIX + "Admin to delete cannot be null!", error);
     }
 }

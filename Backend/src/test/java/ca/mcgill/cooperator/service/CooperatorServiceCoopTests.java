@@ -18,10 +18,8 @@ import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,9 +32,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceCoopTests {
+public class CooperatorServiceCoopTests extends BaseServiceTest {
 
-    // TODO: add Service and Repository class imports here
     @Autowired CoopService coopService;
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired StudentService studentService;
@@ -73,9 +70,9 @@ public class CooperatorServiceCoopTests {
     @Test
     public void testCreateCoop() {
         CoopStatus status = CoopStatus.IN_PROGRESS;
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student student = createTestStudent();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student student = createTestStudent(studentService);
 
         try {
             coopService.createCoop(status, courseOffering, student);
@@ -101,7 +98,8 @@ public class CooperatorServiceCoopTests {
 
         assertEquals(0, coopService.getAllCoops().size());
         assertEquals(
-                "Co-op Status cannot be null. "
+                ERROR_PREFIX
+                        + "Co-op Status cannot be null. "
                         + "Course Offering cannot be null. "
                         + "Student cannot be null.",
                 error);
@@ -110,9 +108,9 @@ public class CooperatorServiceCoopTests {
     @Test
     public void testUpdateCoop() {
         CoopStatus status = CoopStatus.IN_PROGRESS;
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student student = createTestStudent();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student student = createTestStudent(studentService);
         Coop c = new Coop();
         try {
             c = coopService.createCoop(status, courseOffering, student);
@@ -123,9 +121,9 @@ public class CooperatorServiceCoopTests {
         assertEquals(1, coopService.getAllCoops().size());
 
         status = CoopStatus.COMPLETED;
-        Company company = createTestCompany();
-        EmployerContact ec = createTestEmployerContact(company);
-        CoopDetails cd = createTestCoopDetails(ec, c);
+        Company company = createTestCompany(companyService);
+        EmployerContact ec = createTestEmployerContact(employerContactService, company);
+        CoopDetails cd = createTestCoopDetails(coopDetailsService, ec, c);
         Set<EmployerReport> employerReports = new HashSet<EmployerReport>();
         Set<StudentReport> studentReports = new HashSet<StudentReport>();
 
@@ -156,9 +154,9 @@ public class CooperatorServiceCoopTests {
     @Test
     public void testUpdateCoopInvalid() {
         CoopStatus status = CoopStatus.IN_PROGRESS;
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student student = createTestStudent();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student student = createTestStudent(studentService);
 
         try {
             coopService.createCoop(status, courseOffering, student);
@@ -176,15 +174,15 @@ public class CooperatorServiceCoopTests {
         }
 
         assertEquals(1, coopService.getAllCoops().size());
-        assertEquals("Co-op to update cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Co-op to update cannot be null!", error);
     }
 
     @Test
     public void testDeleteCoop() {
         CoopStatus status = CoopStatus.IN_PROGRESS;
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student student = createTestStudent();
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student student = createTestStudent(studentService);
         Coop c = new Coop();
         try {
             c = coopService.createCoop(status, courseOffering, student);
@@ -201,50 +199,5 @@ public class CooperatorServiceCoopTests {
         }
 
         assertEquals(0, coopService.getAllCoops().size());
-    }
-
-    private Course createTestCourse() {
-        Course c = null;
-        c = courseService.createCourse("FACC200");
-        return c;
-    }
-
-    private CourseOffering createTestCourseOffering(Course c) {
-        CourseOffering co = null;
-        co = courseOfferingService.createCourseOffering(2020, Season.WINTER, c);
-        return co;
-    }
-
-    private Student createTestStudent() {
-        Student s = new Student();
-        s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
-
-        return s;
-    }
-
-    private CoopDetails createTestCoopDetails(EmployerContact ec, Coop c) {
-        CoopDetails cd = new CoopDetails();
-        cd = coopDetailsService.createCoopDetails(20, 40, ec, c);
-        return cd;
-    }
-
-    private EmployerContact createTestEmployerContact(Company c) {
-        EmployerContact ec;
-        ec =
-                employerContactService.createEmployerContact(
-                        "Albert", "Kragl", "albert@gmail.com", "123456789", c);
-        return ec;
-    }
-
-    private Company createTestCompany() {
-        Company c = new Company();
-        c =
-                companyService.createCompany(
-                        "Facebook",
-                        "Menlo Park",
-                        "California",
-                        "USA",
-                        new ArrayList<EmployerContact>());
-        return c;
     }
 }

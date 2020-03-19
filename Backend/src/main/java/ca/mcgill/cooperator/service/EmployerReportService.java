@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class EmployerReportService {
+public class EmployerReportService extends BaseService {
 
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired EmployerReportRepository employerReportRepository;
@@ -53,7 +53,7 @@ public class EmployerReportService {
             error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         EmployerReport er = new EmployerReport();
@@ -84,7 +84,7 @@ public class EmployerReportService {
         EmployerReport er = employerReportRepository.findById(id).orElse(null);
         if (er == null) {
             throw new IllegalArgumentException(
-                    "Employer Report with ID " + id + " does not exist!");
+                    ERROR_PREFIX + "Employer Report with ID " + id + " does not exist!");
         }
 
         return er;
@@ -127,7 +127,7 @@ public class EmployerReportService {
             error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         // set all values in employer report if they're not null
@@ -175,7 +175,8 @@ public class EmployerReportService {
     @Transactional
     public EmployerReport deleteEmployerReport(EmployerReport er) {
         if (er == null) {
-            throw new IllegalArgumentException("Employer Report to delete cannot be null!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Employer Report to delete cannot be null!");
         }
 
         // first delete from all parents

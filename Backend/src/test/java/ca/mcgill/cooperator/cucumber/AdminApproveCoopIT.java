@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import ca.mcgill.cooperator.controller.ControllerIT;
+import ca.mcgill.cooperator.controller.BaseControllerIT;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
@@ -50,7 +50,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.web.multipart.MultipartFile;
 
-public class AdminApproveCoopIT extends ControllerIT {
+public class AdminApproveCoopIT extends BaseControllerIT {
 
     @Autowired private MockMvc mvc;
 

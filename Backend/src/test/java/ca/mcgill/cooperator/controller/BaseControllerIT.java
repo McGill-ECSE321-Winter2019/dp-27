@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.MvcResult;
  *
  * @see CoopControllerIT (example)
  */
-public abstract class ControllerIT {
+public abstract class BaseControllerIT {
 
     @Autowired private MockMvc mvc;
 

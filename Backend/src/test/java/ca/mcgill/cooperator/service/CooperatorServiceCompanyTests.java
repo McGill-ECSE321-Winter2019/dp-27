@@ -18,7 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceCompanyTests {
+public class CooperatorServiceCompanyTests extends BaseServiceTest {
 
     @Autowired CompanyService companyService;
     @Autowired EmployerContactService employerContactService;
@@ -65,7 +65,8 @@ public class CooperatorServiceCompanyTests {
         }
 
         assertEquals(
-                "Company name cannot be empty! "
+                ERROR_PREFIX
+                        + "Company name cannot be empty! "
                         + "Company city cannot be empty! "
                         + "Company region cannot be empty! "
                         + "Company country cannot be empty! "
@@ -84,7 +85,8 @@ public class CooperatorServiceCompanyTests {
         }
 
         assertEquals(
-                "Company name cannot be empty! "
+                ERROR_PREFIX
+                        + "Company name cannot be empty! "
                         + "Company city cannot be empty! "
                         + "Company region cannot be empty! "
                         + "Company country cannot be empty! "
@@ -114,7 +116,7 @@ public class CooperatorServiceCompanyTests {
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
-        assertEquals("Company with this name and location already exists!", error);
+        assertEquals(ERROR_PREFIX + "Company with this name and location already exists!", error);
         assertEquals(companyService.getAllCompanies().size(), 1);
     }
 
@@ -166,7 +168,7 @@ public class CooperatorServiceCompanyTests {
             c = companyService.getCompany(name, city, region, country);
 
             // Add new employee
-            ec = createTestEmployerContact(c);
+            ec = createTestEmployerContact(employerContactService, c);
             employees.add(ec);
 
             String updatedName = "Index Exchange";
@@ -213,7 +215,8 @@ public class CooperatorServiceCompanyTests {
         }
 
         assertEquals(
-                "Company to update cannot be null! "
+                ERROR_PREFIX
+                        + "Company to update cannot be null! "
                         + "Company name cannot be empty! "
                         + "Company city cannot be empty! "
                         + "Company region cannot be empty! "
@@ -243,7 +246,9 @@ public class CooperatorServiceCompanyTests {
 
             companyService.updateCompany(c, name, city, region, country, employees);
         } catch (IllegalArgumentException e) {
-            assertEquals("Company with this name and location already exists!", e.getMessage());
+            assertEquals(
+                    ERROR_PREFIX + "Company with this name and location already exists!",
+                    e.getMessage());
         }
 
         assertEquals(1, companyService.getAllCompanies().size());
@@ -280,16 +285,6 @@ public class CooperatorServiceCompanyTests {
             error = e.getMessage();
         }
 
-        assertEquals("Company to delete cannot be null!", error);
-    }
-
-    private EmployerContact createTestEmployerContact(Company c) {
-        EmployerContact e = new EmployerContact();
-
-        e =
-                employerContactService.createEmployerContact(
-                        "Albert", "Kragl", "albert@kragl.com", "123456678", c);
-
-        return e;
+        assertEquals(ERROR_PREFIX + "Company to delete cannot be null!", error);
     }
 }

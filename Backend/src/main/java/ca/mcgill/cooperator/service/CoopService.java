@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CoopService {
+public class CoopService extends BaseService {
 
     @Autowired CoopRepository coopRepository;
     @Autowired StudentRepository studentRepository;
@@ -54,7 +54,7 @@ public class CoopService {
             error.append("Student cannot be null.");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         Coop c = new Coop();
@@ -71,7 +71,8 @@ public class CoopService {
     public Coop getCoopById(int id) {
         Coop c = coopRepository.findById(id).orElse(null);
         if (c == null) {
-            throw new IllegalArgumentException("Co-op with ID " + id + " does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Co-op with ID " + id + " does not exist!");
         }
 
         return c;
@@ -101,7 +102,7 @@ public class CoopService {
             error.append("Co-op to update cannot be null! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         if (status != null) {
@@ -129,7 +130,7 @@ public class CoopService {
     @Transactional
     public List<Coop> getCoopsByStatus(CoopStatus status) {
         if (status == null) {
-            throw new IllegalArgumentException("Status cannot be null.");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Status cannot be null.");
         }
         List<Coop> coops = coopRepository.findByStatus(status);
         return coops;
@@ -138,7 +139,7 @@ public class CoopService {
     @Transactional
     public Coop deleteCoop(Coop c) {
         if (c == null) {
-            throw new IllegalArgumentException("Co-op to delete cannot be null!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Co-op to delete cannot be null!");
         }
 
         Student s = c.getStudent();
@@ -157,16 +158,18 @@ public class CoopService {
         if (coopDetails != null) {
             coopDetails.setCoop(null);
             coopDetailsRepository.save(coopDetails);
+
             c.setCoopDetails(null);
             coopRepository.save(c);
+
             EmployerContact ec = coopDetails.getEmployerContact();
             Set<CoopDetails> details = ec.getCoopDetails();
             details.remove(coopDetails);
             ec.setCoopDetails(details);
+
             employerContactRepository.save(ec);
             coopDetailsRepository.delete(coopDetails);
         }
-
         coopRepository.delete(c);
 
         return c;

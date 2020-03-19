@@ -13,13 +13,10 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
-import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
-import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +27,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceCoopDetailsTests {
+public class CooperatorServiceCoopDetailsTests extends BaseServiceTest {
 
     @Autowired CoopDetailsRepository coopDetailsRepository;
     @Autowired CoopRepository coopRepository;
@@ -69,12 +66,12 @@ public class CooperatorServiceCoopDetailsTests {
     public void testCreateCoopDetails() {
         int payPerHour = 2000;
         int hoursPerWeek = 40;
-        Company company = createTestCompany();
-        EmployerContact ec = createTestEmployerContact(company);
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
+        Company company = createTestCompany(companyService);
+        EmployerContact ec = createTestEmployerContact(employerContactService, company);
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
 
         try {
             coopDetailsService.createCoopDetails(payPerHour, hoursPerWeek, ec, coop);
@@ -100,7 +97,9 @@ public class CooperatorServiceCoopDetailsTests {
             error = e.getMessage();
         }
 
-        assertEquals("Employer Contact cannot be null! " + "Co-op cannot be null!", error);
+        assertEquals(
+                ERROR_PREFIX + "Employer Contact cannot be null! " + "Co-op cannot be null!",
+                error);
         assertEquals(0, coopDetailsService.getAllCoopDetails().size());
     }
 
@@ -116,7 +115,8 @@ public class CooperatorServiceCoopDetailsTests {
         }
 
         assertEquals(
-                "Pay Per Hour is invalid! "
+                ERROR_PREFIX
+                        + "Pay Per Hour is invalid! "
                         + "Hours Per Week is invalid! "
                         + "Employer Contact cannot be null! "
                         + "Co-op cannot be null!",
@@ -129,12 +129,12 @@ public class CooperatorServiceCoopDetailsTests {
         CoopDetails cd = null;
         int payPerHour = 2000;
         int hoursPerWeek = 40;
-        Company company = createTestCompany();
-        EmployerContact ec = createTestEmployerContact(company);
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
+        Company company = createTestCompany(companyService);
+        EmployerContact ec = createTestEmployerContact(employerContactService, company);
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
 
         try {
             cd = coopDetailsService.createCoopDetails(payPerHour, hoursPerWeek, ec, coop);
@@ -163,12 +163,12 @@ public class CooperatorServiceCoopDetailsTests {
         CoopDetails cd = null;
         int payPerHour = 20;
         int hoursPerWeek = 40;
-        Company company = createTestCompany();
-        EmployerContact ec = createTestEmployerContact(company);
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
+        Company company = createTestCompany(companyService);
+        EmployerContact ec = createTestEmployerContact(employerContactService, company);
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
 
         try {
             coopDetailsService.createCoopDetails(payPerHour, hoursPerWeek, ec, coop);
@@ -185,7 +185,7 @@ public class CooperatorServiceCoopDetailsTests {
             error = e.getMessage();
         }
 
-        assertEquals("Co-op Details to update cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Co-op Details to update cannot be null!", error);
         assertEquals(1, coopDetailsService.getAllCoopDetails().size());
     }
 
@@ -194,12 +194,12 @@ public class CooperatorServiceCoopDetailsTests {
         CoopDetails cd = null;
         int payPerHour = 20;
         int hoursPerWeek = 40;
-        Company company = createTestCompany();
-        EmployerContact ec = createTestEmployerContact(company);
-        Course course = createTestCourse();
-        CourseOffering courseOffering = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(courseOffering, s);
+        Company company = createTestCompany(companyService);
+        EmployerContact ec = createTestEmployerContact(employerContactService, company);
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, courseOffering, s);
 
         try {
             cd = coopDetailsService.createCoopDetails(payPerHour, hoursPerWeek, ec, coop);
@@ -227,52 +227,6 @@ public class CooperatorServiceCoopDetailsTests {
             error = e.getMessage();
         }
 
-        assertEquals("Co-op Details to delete cannot be null!", error);
-    }
-
-    private Course createTestCourse() {
-        Course c = null;
-        c = courseService.createCourse("FACC200");
-        return c;
-    }
-
-    private CourseOffering createTestCourseOffering(Course c) {
-        CourseOffering co = null;
-        co = courseOfferingService.createCourseOffering(2020, Season.WINTER, c);
-        return co;
-    }
-
-    private Coop createTestCoop(CourseOffering co, Student s) {
-        Coop coop = new Coop();
-        coop = coopService.createCoop(CoopStatus.FUTURE, co, s);
-        return coop;
-    }
-
-    private Company createTestCompany() {
-        Company c = new Company();
-        c =
-                companyService.createCompany(
-                        "Facebook",
-                        "Menlo Park",
-                        "California",
-                        "USA",
-                        new ArrayList<EmployerContact>());
-
-        return c;
-    }
-
-    private EmployerContact createTestEmployerContact(Company c) {
-        EmployerContact ec = new EmployerContact();
-        ec =
-                employerContactService.createEmployerContact(
-                        "Emma", "Eags", "eags@gmail.com", "2143546578", c);
-        return ec;
-    }
-
-    private Student createTestStudent() {
-        Student s = new Student();
-        s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
-
-        return s;
+        assertEquals(ERROR_PREFIX + "Co-op Details to delete cannot be null!", error);
     }
 }
