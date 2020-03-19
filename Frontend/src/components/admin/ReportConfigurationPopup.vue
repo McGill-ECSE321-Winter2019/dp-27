@@ -1,16 +1,16 @@
 <template>
   <q-card id="card">
     <q-card-section class="row items-center">
-      <div class="text-h6">Add New Report Configuration</div>
+      <div class="text-h6">{{ popupTitle }}</div>
       <q-space />
       <q-btn icon="close" flat round dense v-close-popup />
     </q-card-section>
 
     <q-card-section>
-      <q-form @submit="createReportConfig" class="q-gutter-sm">
+      <q-form @submit="onSubmit" class="q-gutter-sm">
         <q-input
           filled
-          v-model="type"
+          v-model="typeData"
           label="Report Type (e.g. Final Evaluation)"
           lazy-rules
           :rules="[
@@ -20,7 +20,7 @@
 
         <q-checkbox
           left-label
-          v-model="requiresFile"
+          v-model="requiresFileData"
           label="Requires file (PDF)?"
         />
 
@@ -28,7 +28,7 @@
         <div class="row items-start">
           <q-input
             filled
-            v-model.number="deadline"
+            v-model.number="deadlineData"
             type="number"
             label="Number of Days"
             lazy-rules
@@ -40,18 +40,18 @@
 
           <q-select
             filled
-            v-model="isDeadlineFromStart"
+            v-model="isDeadlineFromStartData"
             :options="options"
             class="col-6"
           />
         </div>
 
-        <div class="text-caption q-mb-md">
+        <div v-if="!isEditing" class="text-caption q-mb-md">
           Report sections can be configured after the initial report
           configuration is created.
         </div>
 
-        <q-btn color="primary" type="submit" label="Create" />
+        <q-btn color="primary" type="submit" :label="buttonLabel" />
       </q-form>
     </q-card-section> </q-card
 ></template>
@@ -61,21 +61,50 @@ export default {
   name: "ReportConfigurationPopup",
   data: function() {
     return {
-      type: "",
-      requiresFile: false,
-      deadline: null,
-      isDeadlineFromStart: "",
-      options: ["Start of co-op", "End of co-op"]
+      typeData: "",
+      requiresFileData: false,
+      deadlineData: null,
+      isDeadlineFromStartData: "",
+      options: ["Start of co-op", "End of co-op"],
+      buttonLabel: "Create",
+      popupTitle: "Add New Report Configuration"
     };
   },
+  props: {
+    isEditing: Boolean,
+    id: Number,
+    requiresFile: Boolean,
+    deadline: Number,
+    isDeadlineFromStart: Boolean,
+    type: String
+  },
+  created: function() {
+    if (this.isEditing) {
+      this.typeData = this.type;
+      this.requiresFileData = this.requiresFile;
+      this.deadlineData = this.deadline;
+      this.isDeadlineFromStartData = this.isDeadlineFromStart
+        ? this.options[0]
+        : this.options[1];
+      this.buttonLabel = "Update";
+      this.popupTitle = "Edit Report Configuration";
+    }
+  },
   methods: {
+    onSubmit: function() {
+      if (this.isEditing) {
+        this.updateReportConfig();
+      } else {
+        this.createReportConfig();
+      }
+    },
     createReportConfig: function() {
       const body = {
-        requiresFile: this.requiresFile,
-        deadline: this.deadline,
+        requiresFile: this.requiresFileData,
+        deadline: this.deadlineData,
         isDeadlineFromStart:
-          this.isDeadlineFromStart === this.options[0] ? true : false,
-        type: this.type
+          this.isDeadlineFromStartData === this.options[0] ? true : false,
+        type: this.typeData
       };
 
       this.$axios
@@ -87,6 +116,39 @@ export default {
             textColor: "white",
             icon: "cloud_done",
             message: "Created Successfully"
+          });
+          // let parent know to close the dialog and refresh its list of report configs
+          this.$emit("refresh");
+        })
+        .catch(_err => {
+          this.$q.notify({
+            color: "red-4",
+            position: "top",
+            textColor: "white",
+            icon: "error",
+            message: "Something went wrong, please try again"
+          });
+        });
+    },
+    updateReportConfig: function() {
+      const body = {
+        id: this.id,
+        requiresFile: this.requiresFileData,
+        deadline: this.deadlineData,
+        isDeadlineFromStart:
+          this.isDeadlineFromStartData === this.options[0] ? true : false,
+        type: this.typeData
+      };
+
+      this.$axios
+        .put("/report-configs", body)
+        .then(_resp => {
+          this.$q.notify({
+            color: "green-4",
+            position: "top",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "Updated Successfully"
           });
           // let parent know to close the dialog and refresh its list of report configs
           this.$emit("refresh");

@@ -37,7 +37,7 @@
               :deadline="rc.deadline"
               :isDeadlineFromStart="rc.isDeadlineFromStart"
               :reportSectionConfigs="rc.reportSectionConfigs"
-              @remove-clicked="renderDeletePopup"
+              @refresh="refreshList"
             />
           </div>
           <div v-else class="center-item">
@@ -48,13 +48,6 @@
         <q-dialog v-model="showPopup">
           <ReportConfigurationPopup @refresh="refreshList" />
         </q-dialog>
-
-        <q-dialog v-model="showDeletePopup">
-          <ReportConfigurationDeletePopup
-            :id="this.deleteId"
-            @refresh="refreshList"
-          />
-        </q-dialog>
       </div>
     </div>
   </q-page>
@@ -63,14 +56,12 @@
 <script>
 import ReportConfigurationItem from "../../components/admin/ReportConfigurationItem.vue";
 import ReportConfigurationPopup from "../../components/admin/ReportConfigurationPopup.vue";
-import ReportConfigurationDeletePopup from "../../components/admin/ReportConfigurationDeletePopup.vue";
 
 export default {
   name: "AdminReportConfigPage",
   components: {
     ReportConfigurationItem,
-    ReportConfigurationPopup,
-    ReportConfigurationDeletePopup
+    ReportConfigurationPopup
   },
   data: function() {
     return {
@@ -96,12 +87,6 @@ export default {
         this.reportConfigs = resp.data;
         this.loading = false;
       });
-    },
-    renderDeletePopup: function(id) {
-      // id passed from child
-      this.deleteId = id;
-      // show popup once the ID to delete is set
-      this.showDeletePopup = true;
     }
   }
 };

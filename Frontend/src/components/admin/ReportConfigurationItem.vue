@@ -44,28 +44,50 @@
         </div>
       </div>
 
-      <q-btn label="Edit" color="primary" flat />
+      <q-btn label="Edit" color="primary" flat @click="showEditPopup = true" />
       <q-btn
         label="Remove"
         color="primary"
         flat
         class="q-ml-sm"
-        @click="notifyParent"
+        @click="showDeletePopup = true"
       />
+
+      <q-dialog v-model="showEditPopup">
+        <ReportConfigurationPopup
+          :isEditing="true"
+          :id="id"
+          :type="type"
+          :requiresFile="requiresFile"
+          :deadline="deadline"
+          :isDeadlineFromStart="isDeadlineFromStart"
+          @refresh="notifyParent"
+        />
+      </q-dialog>
+
+      <q-dialog v-model="showDeletePopup">
+        <ReportConfigurationDeletePopup :id="this.id" @refresh="notifyParent" />
+      </q-dialog>
     </q-card-section>
   </q-card>
 </template>
 
 <script>
+import ReportConfigurationPopup from "./ReportConfigurationPopup";
+import ReportConfigurationDeletePopup from "./ReportConfigurationDeletePopup.vue";
 import ReportSectionConfigurationItem from "./ReportSectionConfigurationItem.vue";
 
 export default {
   name: "ReportConfigurationItem",
   components: {
+    ReportConfigurationPopup,
+    ReportConfigurationDeletePopup,
     ReportSectionConfigurationItem
   },
   data: function() {
     return {
+      showEditPopup: false,
+      showDeletePopup: false,
       rsConfigs: this.reportSectionConfigs
     };
   },
@@ -99,7 +121,7 @@ export default {
   },
   methods: {
     notifyParent: function() {
-      this.$emit("remove-clicked", this.id);
+      this.$emit("refresh");
     }
   }
 };
