@@ -13,6 +13,7 @@
 
         <q-toolbar-title>
           <router-link to="/admin/home">Co-operator</router-link>
+          <span class="text-caption q-ml-sm">ADMIN</span>
         </q-toolbar-title>
 
         <q-btn dense round flat class="q-mr-sm" icon="notifications">
@@ -63,6 +64,12 @@
           caption="View all company information"
           link="/admin/companies"
           icon="domain"
+        />
+        <SidebarLink
+          title="Report Configuration"
+          caption="Configure reports to be submitted for co-op terms"
+          link="/admin/report-config"
+          icon="assignment"
         />
       </q-list>
     </q-drawer>

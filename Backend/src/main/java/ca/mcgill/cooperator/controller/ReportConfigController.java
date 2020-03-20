@@ -2,10 +2,13 @@ package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.ReportConfigDto;
 import ca.mcgill.cooperator.model.ReportConfig;
+import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.service.ReportConfigService;
 import ca.mcgill.cooperator.service.ReportSectionConfigService;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -69,6 +72,15 @@ public class ReportConfigController extends BaseController {
     @PutMapping("")
     public ReportConfigDto updateReportConfig(@RequestBody ReportConfigDto rcDto) {
         ReportConfig rc = reportConfigService.getReportConfig(rcDto.getId());
+        
+        Set<ReportSectionConfig> rscConfigs = null;
+        if (rcDto.getReportSectionConfigs() != null) {
+        	rscConfigs = new HashSet<>(
+                    ControllerUtils.convertReportSectionConfigDtosToDomainObjects(
+                            reportSectionConfigService,
+                            rcDto.getReportSectionConfigs()));
+        }
+        
         ReportConfig updatedReportConfig =
                 reportConfigService.updateReportConfig(
                         rc,
@@ -76,10 +88,7 @@ public class ReportConfigController extends BaseController {
                         rcDto.getDeadline(),
                         rcDto.getIsDeadlineFromStart(),
                         rcDto.getType(),
-                        new HashSet<>(
-                                ControllerUtils.convertReportSectionConfigDtosToDomainObjects(
-                                        reportSectionConfigService,
-                                        rcDto.getReportSectionConfigs())));
+                        rscConfigs);
 
         return ControllerUtils.convertToDto(updatedReportConfig);
     }
@@ -90,7 +99,7 @@ public class ReportConfigController extends BaseController {
      * @param id
      * @return the deleted ReportConfig
      */
-    @DeleteMapping("/{id")
+    @DeleteMapping("/{id}")
     public ReportConfigDto deleteReportConfig(@PathVariable int id) {
         ReportConfig reportConfig =
                 reportConfigService.deleteReportConfig(reportConfigService.getReportConfig(id));
