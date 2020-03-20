@@ -1222,6 +1222,9 @@ public class ControllerUtils {
     public static List<ReportSectionConfig> convertReportSectionConfigDtosToDomainObjects(
             ReportSectionConfigService service, Collection<ReportSectionConfigDto> rscDtos) {
         List<ReportSectionConfig> reportSectionConfigs = new ArrayList<>();
+    	if (rscDtos == null) {
+    		return reportSectionConfigs;
+    	}
         for (ReportSectionConfigDto rscDto : rscDtos) {
             if (rscDto != null) {
                 ReportSectionConfig rsc = service.getReportSectionConfig(rscDto.getId());
