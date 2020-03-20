@@ -1,3 +1,7 @@
+<!-- This component is an interstitial popup that appears when an admin
+tries to delete a report configuration, prompting them to confirm the delete.
+
+Parent: ReportConfigurationItem.vue -->
 <template>
   <q-card>
     <q-card-section>

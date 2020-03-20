@@ -1,3 +1,4 @@
+<!-- This page contains all functionality related to report configurations. -->
 <template>
   <q-page class="flex justify-center">
     <div id="container" class="row">

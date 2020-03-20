@@ -1,3 +1,6 @@
+<!-- This component represents a single report configuration.
+
+Parent: AdminReportConfigPage.vue -->
 <template>
   <q-card flat bordered class="q-mb-md">
     <q-card-section>
