@@ -51,6 +51,20 @@ public class CooperatorServiceAdminTests extends BaseServiceTest {
     }
 
     @Test
+    public void testAdminUniqueEmail() {
+        String firstName = "Paul";
+        String lastName = "Hooley";
+        String email = "phooley@gmail.com";
+        try {
+            adminService.createAdmin(firstName, lastName, email);
+            // email must be unique so expect a SQLException
+            adminService.createAdmin(firstName, lastName, email);
+        } catch (Exception e) {
+            assertEquals(1, adminService.getAllAdmins().size());
+        }
+    }
+
+    @Test
     public void testCreateAdminInvalidEmail() {
         String firstName = "Paul";
         String lastName = "Hooley";

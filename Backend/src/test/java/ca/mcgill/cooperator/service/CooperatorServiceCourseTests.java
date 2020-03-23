@@ -42,6 +42,18 @@ public class CooperatorServiceCourseTests extends BaseServiceTest {
     }
 
     @Test
+    public void testCourseUniqueName() {
+        String name = "ECSE321";
+        try {
+            courseService.createCourse(name);
+            // name must be unique so expect a SQLException
+            courseService.createCourse(name);
+        } catch (Exception e) {
+            assertEquals(1, courseService.getAllCourses().size());
+        }
+    }
+
+    @Test
     public void testCreateCourseNull() {
         String name = null;
         String error = "";

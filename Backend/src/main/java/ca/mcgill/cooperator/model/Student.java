@@ -2,6 +2,7 @@ package ca.mcgill.cooperator.model;
 
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,7 +16,11 @@ public class Student {
     @Id @GeneratedValue private int id;
     private String firstName;
     private String lastName;
+
+    @Column(unique = true)
     private String email;
+
+    @Column(unique = true)
     private String studentId;
 
     @OneToMany(

@@ -92,7 +92,8 @@ public class CooperatorServiceCourseOfferingTests extends BaseServiceTest {
 
         int year2 = 2021;
         Season season2 = Season.FALL;
-        Course c2 = courseService.createCourse(name);
+        String name2 = "ECSE223";
+        Course c2 = courseService.createCourse(name2);
 
         try {
             courseOfferingService.updateCourseOffering(co, year2, season2, c2);

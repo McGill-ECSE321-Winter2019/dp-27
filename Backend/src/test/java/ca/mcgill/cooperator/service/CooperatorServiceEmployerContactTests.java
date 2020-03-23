@@ -86,6 +86,25 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
     }
 
     @Test
+    public void testEmployerContactUniqueEmail() {
+        String firstName = "Paul";
+        String lastName = "Hooley";
+        String email = "phooley@gmail.com";
+        String phoneNumber = "0123456789";
+        Company c = createTestCompany(companyService);
+
+        try {
+            employerContactService.createEmployerContact(
+                    firstName, lastName, email, phoneNumber, c);
+            // email must be unique so expect a SQLException
+            employerContactService.createEmployerContact(
+                    firstName, lastName, email, phoneNumber, c);
+        } catch (Exception e) {
+            assertEquals(1, employerContactService.getAllEmployerContacts().size());
+        }
+    }
+
+    @Test
     public void testCreateEmployerContactInvalidEmail() {
         String firstName = "Paul";
         String lastName = "Hooley";

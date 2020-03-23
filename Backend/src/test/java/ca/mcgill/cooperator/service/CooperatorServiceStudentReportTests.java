@@ -13,6 +13,7 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Student;
@@ -121,8 +122,9 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         // 1. create Student Report
         MultipartFile multipartFile = null;
@@ -172,8 +174,9 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         // 1. create Student Report
         MultipartFile multipartFile = null;

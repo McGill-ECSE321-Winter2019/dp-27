@@ -7,12 +7,14 @@ import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
+import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.StudentReportRepository;
 import ca.mcgill.cooperator.dao.StudentReportSectionRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
@@ -36,6 +38,7 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired StudentRepository studentRepository;
+    @Autowired ReportConfigRepository reportConfigRepository;
 
     @Autowired StudentReportSectionService studentReportSectionService;
     @Autowired StudentReportService studentReportService;
@@ -62,6 +65,7 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         studentRepository.deleteAll();
         studentReportSectionRepository.deleteAll();
         studentReportRepository.deleteAll();
+        reportConfigRepository.deleteAll();
     }
 
     @Test
@@ -72,8 +76,9 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
         StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
             studentReportSectionService.createReportSection(response, rsConfig, sr);
@@ -147,8 +152,9 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
         StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
             rs = studentReportSectionService.createReportSection(response, rsConfig, sr);
@@ -184,8 +190,9 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
         StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
             studentReportSectionService.createReportSection(response, rsConfig, sr);
@@ -217,8 +224,9 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
         StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
             studentReportSectionService.createReportSection(response, rsConfig, sr);
@@ -247,8 +255,9 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
         StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
             rs = studentReportSectionService.createReportSection(response, rsConfig, sr);
@@ -276,8 +285,9 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
         StudentReport sr = createTestStudentReport(studentReportService, coop);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
             rs = studentReportSectionService.createReportSection(response, rsConfig, sr);
