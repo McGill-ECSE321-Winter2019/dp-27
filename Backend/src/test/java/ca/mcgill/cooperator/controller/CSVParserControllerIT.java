@@ -219,16 +219,16 @@ public class CSVParserControllerIT extends BaseControllerIT {
                         mvcResult.getResponse().getContentAsString(), StudentDto.class);
 
         StudentDto studentDto2 = new StudentDto();
-        studentDto.setEmail("paul.hooley@mail.mcgill.ca");
-        studentDto.setFirstName("Paul");
-        studentDto.setLastName("Hooley");
-        studentDto.setStudentId("269727420");
+        studentDto2.setEmail("paul.hooley@mail.mcgill.ca");
+        studentDto2.setFirstName("Paul");
+        studentDto2.setLastName("Hooley");
+        studentDto2.setStudentId("269727420");
 
         mvcResult =
                 mvc.perform(
                                 post("/students")
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(studentDto))
+                                        .content(objectMapper.writeValueAsString(studentDto2))
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
@@ -281,13 +281,26 @@ public class CSVParserControllerIT extends BaseControllerIT {
                 .andExpect(status().isOk())
                 .andReturn();
 
+        CoopDto coopDto2 = new CoopDto();
+        coopDto2.setStudent(studentDto2);
+        coopDto2.setStatus(CoopStatus.FUTURE);
+        coopDto2.setCourseOffering(courseOfferingDto);
+
+        mvc.perform(
+                        post("/coops")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(coopDto2))
+                                .characterEncoding("utf-8"))
+                .andExpect(status().isOk())
+                .andReturn();
+
         File testFile = new File("src/test/resources/sampleStudent.csv");
         MultipartFile multipartFile =
                 new MockMultipartFile("Student CSV", new FileInputStream(testFile));
 
         mvcResult =
                 mvc.perform(
-                                multipart("/csv-parser/check-enrolled")
+                                multipart("/csv-parser/check-enrollment")
                                         .file("file", multipartFile.getBytes())
                                         .param(
                                                 "course_id",

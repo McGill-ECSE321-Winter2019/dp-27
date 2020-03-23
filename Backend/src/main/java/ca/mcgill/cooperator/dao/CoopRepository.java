@@ -10,8 +10,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface CoopRepository extends CrudRepository<Coop, Integer> {
     List<Coop> findByStatus(CoopStatus coopStatus);
 
-    List<Coop> findByFirstName(String firstName);
-
     List<Coop> findByCourseOffering(CourseOffering courseOffering);
 
     List<Coop> findByStudent(Student s);
