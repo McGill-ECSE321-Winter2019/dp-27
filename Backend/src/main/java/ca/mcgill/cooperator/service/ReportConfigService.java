@@ -131,7 +131,7 @@ public class ReportConfigService extends BaseService {
         if (reportConfig == null) {
             error.append("Report config to update cannot be null! ");
         }
-        if (deadline < 0) {
+        if (deadline != null && deadline < 0) {
             error.append("Deadline cannot be negative! ");
         }
         if (type != null && type.trim().length() == 0) {
