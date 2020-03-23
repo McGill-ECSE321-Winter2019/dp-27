@@ -37,7 +37,8 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("coops")
-public class CoopController {
+public class CoopController extends BaseController {
+
     @Autowired CoopService coopService;
     @Autowired CourseService courseService;
     @Autowired CourseOfferingService courseOfferingService;
@@ -58,6 +59,13 @@ public class CoopController {
         return ControllerUtils.convertCoopListToDto(coops);
     }
 
+    @GetMapping("/student/{id}")
+    public List<CoopDto> getCoopByStudentId(@PathVariable int id) {
+        Student s = studentService.getStudentById(id);
+        List<Coop> coops = coopService.getAllCoopsByStudent(s);
+        return ControllerUtils.convertCoopListToDto(coops);
+    }
+
     @PostMapping("")
     public CoopDto createCoop(@RequestBody CoopDto coopDto) {
         Coop coop = new Coop();
@@ -68,7 +76,7 @@ public class CoopController {
         CourseOfferingDto courseOfferingDto = coopDto.getCourseOffering();
 
         CourseOffering courseOffering;
-        if (courseOfferingDto.getId() != 0) {
+        if (courseOfferingDto.getId() > 0) {
             courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingDto.getId());
         } else {
             // we need to derive the Course Offering if ID is not given

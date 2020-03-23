@@ -29,6 +29,14 @@ const routes = [
       {
         path: "reports",
         component: () => import("pages/student/StudentReports.vue")
+      },
+      {
+        path: "help",
+        component: () => import("pages/student/StudentFAQ.vue")
+      },
+      {
+        path: "notifications",
+        component: () => import("pages/student/StudentNotifications.vue")
       }
     ]
   },
@@ -63,6 +71,10 @@ const routes = [
       {
         path: "notifications",
         component: () => import("pages/admin/AdminNotifications.vue")
+      },
+      {
+        path: "report-config",
+        component: () => import("pages/admin/AdminReportConfigPage.vue")
       }
     ]
   }

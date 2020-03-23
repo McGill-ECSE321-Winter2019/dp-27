@@ -1,12 +1,12 @@
 package ca.mcgill.cooperator.service;
 
 import ca.mcgill.cooperator.dao.CoopRepository;
-import ca.mcgill.cooperator.dao.ReportSectionRepository;
 import ca.mcgill.cooperator.dao.StudentReportRepository;
+import ca.mcgill.cooperator.dao.StudentReportSectionRepository;
 import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.StudentReport;
+import ca.mcgill.cooperator.model.StudentReportSection;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -17,11 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class StudentReportService {
+public class StudentReportService extends BaseService {
 
-    @Autowired StudentReportRepository studentReportRepository;
     @Autowired CoopRepository coopRepository;
-    @Autowired ReportSectionRepository reportSectionRepository;
+    @Autowired StudentReportRepository studentReportRepository;
+    @Autowired StudentReportSectionRepository studentReportSectionRepository;
 
     /**
      * Creates new student report in database
@@ -42,36 +42,26 @@ public class StudentReportService {
         if (c == null) {
             error.append("Coop cannot be null! ");
         }
-        if (title == null) {
-            error.append("File title cannot be null! ");
-        }
-        if (file == null) {
-            error.append("File cannot be null!");
+        if (title == null || title.trim().length() == 0) {
+            error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         StudentReport sr = new StudentReport();
 
         sr.setStatus(status);
         sr.setCoop(c);
-        sr.setReportSections(new HashSet<ReportSection>());
+        sr.setReportSections(new HashSet<StudentReportSection>());
         sr.setTitle(title);
-        try {
-            sr.setData(file.getBytes());
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        if (file != null) {
+            try {
+                sr.setData(file.getBytes());
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
         }
-
-        sr = studentReportRepository.save(sr);
-
-        Set<StudentReport> reports = new HashSet<>();
-        reports.addAll(c.getStudentReports());
-        reports.add(sr);
-        c.setStudentReports(reports);
-
-        coopRepository.save(c);
 
         return studentReportRepository.save(sr);
     }
@@ -86,7 +76,8 @@ public class StudentReportService {
     public StudentReport getStudentReport(int id) {
         StudentReport sr = studentReportRepository.findById(id).orElse(null);
         if (sr == null) {
-            throw new IllegalArgumentException("Student Report with ID " + id + " does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Student Report with ID " + id + " does not exist!");
         }
 
         return sr;
@@ -116,65 +107,49 @@ public class StudentReportService {
             ReportStatus status,
             String title,
             Coop c,
-            Set<ReportSection> sections,
+            Set<StudentReportSection> sections,
             MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (sr == null) {
             error.append("Student Report cannot be null! ");
         }
-        if (status == null) {
-            error.append("Report Status cannot be null! ");
-        }
-        if (c == null) {
-            error.append("Coop cannot be null! ");
-        }
-        if (title == null) {
-            error.append("File title cannot be null! ");
-        }
-        if (file == null) {
-            error.append("File cannot be null!");
+        if (title != null && title.trim().length() == 0) {
+            error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
-        sr.setStatus(status);
-        sr.setCoop(c);
-        sr.setTitle(title);
+        if (status != null) {
+            sr.setStatus(status);
+        }
+        if (c != null) {
+            sr.setCoop(c);
+        }
+        if (title != null) {
+            sr.setTitle(title);
+        }
         if (sections != null) {
             sr.setReportSections(sections);
         }
-        try {
-            sr.setData(file.getBytes());
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
 
-        studentReportRepository.save(sr);
-
-        // add/set employer report to coop
-        boolean coopContains = false;
-
-        Set<StudentReport> coopReports = c.getStudentReports();
-        for (StudentReport coopStudentReport : coopReports) {
-            if (coopStudentReport.getId() == sr.getId()) {
-                coopReports.remove(coopStudentReport);
-                coopReports.add(sr);
-                coopContains = true;
+        if (file != null) {
+            try {
+                sr.setData(file.getBytes());
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e.getMessage());
             }
         }
 
-        if (coopContains == false) {
-            coopReports.add(sr);
-        }
-        c.setStudentReports(coopReports);
+        sr = studentReportRepository.save(sr);
 
-        coopRepository.save(c);
-
-        // set employer report as parent for all report sections
-        for (ReportSection section : sections) {
-            section.setStudentReport(sr);
-            reportSectionRepository.save(section);
+        // update student report side of relation since it doesn't sync
+        if (sections != null) {
+            // set student report as parent for all report sections
+            for (StudentReportSection section : sections) {
+                section.setStudentReport(sr);
+                studentReportSectionRepository.save(section);
+            }
         }
 
         return studentReportRepository.save(sr);
@@ -189,7 +164,8 @@ public class StudentReportService {
     @Transactional
     public StudentReport deleteStudentReport(StudentReport sr) {
         if (sr == null) {
-            throw new IllegalArgumentException("Student Report to delete cannot be null!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Student Report to delete cannot be null!");
         }
 
         // first delete from all parents

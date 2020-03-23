@@ -10,6 +10,8 @@ public class Notification {
     @Id @GeneratedValue private int id;
     private String title;
     private String body;
+    private Boolean seen;
+    private long timeStamp;
 
     @ManyToOne(optional = false)
     private Student student;
@@ -53,5 +55,21 @@ public class Notification {
 
     public void setSender(Admin sender) {
         this.sender = sender;
+    }
+
+    public Boolean getSeen() {
+        return this.seen;
+    }
+
+    public void setSeen(Boolean seen) {
+        this.seen = seen;
+    }
+
+    public long getTimeStamp() {
+        return this.timeStamp;
+    }
+
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }

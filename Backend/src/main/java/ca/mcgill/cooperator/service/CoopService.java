@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class CoopService {
+public class CoopService extends BaseService {
 
     @Autowired CoopRepository coopRepository;
     @Autowired StudentRepository studentRepository;
@@ -54,7 +54,7 @@ public class CoopService {
             error.append("Student cannot be null.");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         Coop c = new Coop();
@@ -64,19 +64,6 @@ public class CoopService {
         c.setEmployerReports(new HashSet<EmployerReport>());
         c.setStudentReports(new HashSet<StudentReport>());
 
-        coopRepository.save(c);
-
-        Set<Coop> studentCoops = s.getCoops();
-        studentCoops.add(c);
-        s.setCoops(studentCoops);
-
-        List<Coop> coops = courseOffering.getCoops();
-        coops.add(c);
-        courseOffering.setCoops(coops);
-
-        studentRepository.save(s);
-        courseOfferingRepository.save(courseOffering);
-
         return coopRepository.save(c);
     }
 
@@ -84,7 +71,8 @@ public class CoopService {
     public Coop getCoopById(int id) {
         Coop c = coopRepository.findById(id).orElse(null);
         if (c == null) {
-            throw new IllegalArgumentException("Co-op with ID " + id + " does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Co-op with ID " + id + " does not exist!");
         }
 
         return c;
@@ -93,6 +81,11 @@ public class CoopService {
     @Transactional
     public List<Coop> getAllCoops() {
         return ServiceUtils.toList(coopRepository.findAll());
+    }
+
+    @Transactional
+    public List<Coop> getAllCoopsByStudent(Student s) {
+        return ServiceUtils.toList(coopRepository.findByStudent(s));
     }
 
     @Transactional
@@ -108,63 +101,27 @@ public class CoopService {
         if (c == null) {
             error.append("Co-op to update cannot be null! ");
         }
-        if (status == null) {
-            error.append("Co-op Status cannot be null! ");
-        }
-        if (courseOffering == null) {
-            error.append("Course Offering cannot be null! ");
-        }
-        if (s == null) {
-            error.append("Student cannot be null! ");
-        }
-        if (cd == null) {
-            error.append("Co-op Details cannot be null! ");
-        }
-        // cannot be null but can be empty
-        if (employerReports == null) {
-            error.append("Employer Reports cannot be null! ");
-        }
-        if (studentReports == null) {
-            error.append("Student Reports cannot be null!");
-        }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
-        c.setStatus(status);
-        c.setCourseOffering(courseOffering);
-        c.setStudent(s);
-        c.setCoopDetails(cd);
-        c.setEmployerReports(employerReports);
-        c.setStudentReports(studentReports);
-        coopRepository.save(c);
-
-        boolean studentContains = false;
-        Set<Coop> studentCoops = s.getCoops();
-        for (Coop studentCoop : studentCoops) {
-            if (studentCoop.getId() == c.getId()) {
-                studentCoops.remove(studentCoop);
-                studentCoops.add(c);
-                studentContains = true;
-            }
+        if (status != null) {
+            c.setStatus(status);
         }
-        if (studentContains == false) {
-            studentCoops.add(c);
+        if (courseOffering != null) {
+            c.setCourseOffering(courseOffering);
         }
-
-        studentRepository.save(s);
-
-        cd.setCoop(c);
-        coopDetailsRepository.save(cd);
-
-        for (EmployerReport employerReport : employerReports) {
-            employerReport.setCoop(c);
-            employerReportRepository.save(employerReport);
+        if (s != null) {
+            c.setStudent(s);
         }
-
-        for (StudentReport studentReport : studentReports) {
-            studentReport.setCoop(c);
-            studentReportRepository.save(studentReport);
+        if (cd != null) {
+            c.setCoopDetails(cd);
+        }
+        if (employerReports != null) {
+            c.setEmployerReports(employerReports);
+        }
+        if (studentReports != null) {
+            c.setStudentReports(studentReports);
         }
 
         return coopRepository.save(c);
@@ -173,7 +130,7 @@ public class CoopService {
     @Transactional
     public List<Coop> getCoopsByStatus(CoopStatus status) {
         if (status == null) {
-            throw new IllegalArgumentException("Status cannot be null.");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Status cannot be null.");
         }
         List<Coop> coops = coopRepository.findByStatus(status);
         return coops;
@@ -182,7 +139,7 @@ public class CoopService {
     @Transactional
     public Coop deleteCoop(Coop c) {
         if (c == null) {
-            throw new IllegalArgumentException("Co-op to delete cannot be null!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Co-op to delete cannot be null!");
         }
 
         Student s = c.getStudent();
@@ -201,16 +158,18 @@ public class CoopService {
         if (coopDetails != null) {
             coopDetails.setCoop(null);
             coopDetailsRepository.save(coopDetails);
+
             c.setCoopDetails(null);
             coopRepository.save(c);
+
             EmployerContact ec = coopDetails.getEmployerContact();
             Set<CoopDetails> details = ec.getCoopDetails();
             details.remove(coopDetails);
             ec.setCoopDetails(details);
+
             employerContactRepository.save(ec);
             coopDetailsRepository.delete(coopDetails);
         }
-
         coopRepository.delete(c);
 
         return c;

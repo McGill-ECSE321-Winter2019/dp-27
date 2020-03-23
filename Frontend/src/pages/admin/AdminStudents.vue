@@ -1,11 +1,6 @@
 <template>
-  <q-card
-    flat
-    bordered
-    id="card"
-  >
-    <q-card-section>All Students
-    </q-card-section>
+  <div>
+    <q-card-section>All Students </q-card-section>
 
     <q-separator inset />
 
@@ -17,34 +12,44 @@
         @row-click="goToStudentCoop"
       />
     </div>
-  </q-card>
+  </div>
 </template>
 <script>
 export default {
-  name: 'AdminAllStudents',
+  name: "AdminAllStudents",
   data: () => ({
     students: [],
     columns: [
       {
-        name: 'studentName',
+        name: "firstName",
         required: true,
-        label: 'Student Name',
-        align: 'left',
-        field: 'name',
+        label: "First Name",
+        align: "left",
+        field: "firstName",
         sortable: true,
-        classes: 'my-class',
-        style: 'width: 500px'
+        classes: "my-class",
+        style: "width: 500px"
       },
       {
-        name: 'studentID',
+        name: "lastName",
         required: true,
-        label: 'Student ID',
-        align: 'left',
-        field: 'id',
+        label: "Last Name",
+        align: "left",
+        field: "lastName",
         sortable: true,
-        classes: 'my-class',
-        style: 'width: 500px'
+        classes: "my-class",
+        style: "width: 500px"
       },
+      {
+        name: "studentID",
+        required: true,
+        label: "Student ID",
+        align: "left",
+        field: "studentId",
+        sortable: true,
+        classes: "my-class",
+        style: "width: 500px"
+      }
       // {
       //   name: 'year',
       //   required: true,
@@ -67,24 +72,24 @@ export default {
       // }
     ]
   }),
-  created: function (){
+  created: function() {
     const user = this.$store.state.currentUser;
-    this.$axios.get("/students",{
-          headers: {
-            Authorization: this.$store.state.token
-          }
-        }).then(resp => {
-      this.students = resp.data;
-    });
-
+    this.$axios
+      .get("/students", {
+        headers: {
+          Authorization: this.$store.state.token
+        }
+      })
+      .then(resp => {
+        this.students = resp.data;
+      });
   },
   methods: {
-    goToStudentCoop () {
-      this.$router.push('/admin/studentcoops')
+    goToStudentCoop() {
+      this.$router.push("/admin/studentcoops");
     }
   }
-}
+};
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

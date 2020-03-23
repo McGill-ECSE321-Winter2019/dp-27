@@ -9,19 +9,27 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class StudentReport {
     @Id @GeneratedValue private int id;
     private String title;
+    private String type;
     private ReportStatus status;
 
     @Lob private byte[] data;
 
     @ManyToOne private Coop coop;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private Set<ReportSection> reportSections;
+    @OneToMany(
+            mappedBy = "studentReport",
+            cascade = CascadeType.PERSIST,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<StudentReportSection> reportSections;
 
     /*--- Getters and Setters ---*/
 
@@ -35,6 +43,14 @@ public class StudentReport {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public ReportStatus getStatus() {
@@ -61,11 +77,11 @@ public class StudentReport {
         this.data = data;
     }
 
-    public Set<ReportSection> getReportSections() {
+    public Set<StudentReportSection> getReportSections() {
         return this.reportSections;
     }
 
-    public void setReportSections(Set<ReportSection> reportSections) {
+    public void setReportSections(Set<StudentReportSection> reportSections) {
         if (this.reportSections == null) {
             this.reportSections = reportSections;
         } else {

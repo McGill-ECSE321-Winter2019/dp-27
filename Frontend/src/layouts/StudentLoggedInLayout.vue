@@ -15,22 +15,22 @@
           <router-link to="/student/home">Co-operator</router-link>
         </q-toolbar-title>
 
-        <q-btn dense round flat class="q-mr-sm" icon="notifications">
+        <q-btn
+          dense
+          round
+          flat
+          class="q-mr-sm"
+          icon="notifications"
+          @click="goToNotifPage()"
+        >
           <q-badge color="white" text-color="red" floating transparent>
-            4
+            {{ unseen.length }}
           </q-badge>
         </q-btn>
 
         <q-btn flat dense round icon="settings" aria-label="Settings">
           <q-menu>
-            <q-list style="min-width: 100px">
-              <q-item clickable v-close-popup>
-                <q-item-section>username</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section>Help</q-item-section>
-              </q-item>
-              <q-separator />
+            <q-list style="min-width: 125px">
               <q-item clickable v-close-popup>
                 <q-item-section>Settings</q-item-section>
               </q-item>
@@ -64,6 +64,12 @@
           link="/student/reports"
           icon="assignment"
         />
+        <SidebarLink
+          title="Help"
+          caption="View frequently asked questions"
+          link="/student/help"
+          icon="help_outline"
+        />
       </q-list>
     </q-drawer>
 
@@ -83,8 +89,26 @@ export default {
   },
   data() {
     return {
-      leftDrawerOpen: false
+      leftDrawerOpen: false,
+      unseen: []
     };
+  },
+  created: function() {
+    const user = this.$store.state.currentUser;
+    this.$axios
+      .get("/notifications/" + user.id + "/unread", {
+        headers: {
+          Authorization: this.$store.state.token
+        }
+      })
+      .then(resp => {
+        this.unseen = resp.data;
+      });
+  },
+  methods: {
+    goToNotifPage() {
+      this.$router.push("/student/notifications");
+    }
   }
 };
 </script>

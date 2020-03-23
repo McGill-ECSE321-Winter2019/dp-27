@@ -1,6 +1,8 @@
 package ca.mcgill.cooperator.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import ca.mcgill.cooperator.dao.AdminRepository;
@@ -18,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceNotificationTests {
+public class CooperatorServiceNotificationTests extends BaseServiceTest {
 
     @Autowired NotificationService notificationService;
     @Autowired AdminService adminService;
@@ -32,7 +34,6 @@ public class CooperatorServiceNotificationTests {
     @AfterEach
     public void clearDatabase() {
         notificationRepository.deleteAll();
-
         studentRepository.deleteAll();
         adminRepository.deleteAll();
     }
@@ -41,8 +42,8 @@ public class CooperatorServiceNotificationTests {
     public void testCreateNotification() {
         String title = "Hello";
         String body = "Please attend meeting.";
-        Student student = createTestStudent();
-        Admin sender = createTestAdmin();
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
 
         try {
             notificationService.createNotification(title, body, student, sender);
@@ -52,6 +53,38 @@ public class CooperatorServiceNotificationTests {
         }
 
         assertEquals(1, notificationService.getAllNotifications().size());
+        student = studentService.getStudentById(student.getId());
+        assertEquals("Hello", ((Notification) student.getNotifications().toArray()[0]).getTitle());
+        sender = adminService.getAdmin(sender.getId());
+        assertEquals("Hello", sender.getSentNotifications().get(0).getTitle());
+    }
+
+    @Test
+    public void testCreateNotificationSetSeen() {
+        String title = "Hello";
+        String body = "Please attend meeting.";
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
+
+        try {
+            notificationService.createNotification(title, body, student, sender);
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(1, notificationService.getAllNotifications().size());
+        assertFalse(notificationService.getAllNotifications().get(0).getSeen());
+
+        try {
+            notificationService.markAsRead(notificationService.getAllNotifications().get(0));
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(1, notificationService.getAllNotifications().size());
+        assertTrue(notificationService.getAllNotifications().get(0).getSeen());
     }
 
     @Test
@@ -70,7 +103,8 @@ public class CooperatorServiceNotificationTests {
         }
 
         assertEquals(
-                "Notification title cannot be empty! "
+                ERROR_PREFIX
+                        + "Notification title cannot be empty! "
                         + "Notification body cannot be empty! "
                         + "Notification must have a Student receiver! "
                         + "Notification must have an Admin sender!",
@@ -94,7 +128,8 @@ public class CooperatorServiceNotificationTests {
         }
 
         assertEquals(
-                "Notification title cannot be empty! "
+                ERROR_PREFIX
+                        + "Notification title cannot be empty! "
                         + "Notification body cannot be empty! "
                         + "Notification must have a Student receiver! "
                         + "Notification must have an Admin sender!",
@@ -118,7 +153,8 @@ public class CooperatorServiceNotificationTests {
         }
 
         assertEquals(
-                "Notification title cannot be empty! "
+                ERROR_PREFIX
+                        + "Notification title cannot be empty! "
                         + "Notification body cannot be empty! "
                         + "Notification must have a Student receiver! "
                         + "Notification must have an Admin sender!",
@@ -130,20 +166,18 @@ public class CooperatorServiceNotificationTests {
     public void testUpdateNotification() {
         String title = "Hello";
         String body = "Please attend meeting.";
-        Student student = createTestStudent();
-        Admin sender = createTestAdmin();
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
 
         Notification n = null;
 
         try {
-            notificationService.createNotification(title, body, student, sender);
-            n = notificationService.getNotification(title);
+            n = notificationService.createNotification(title, body, student, sender);
 
             title = "Bye";
             body = "different message";
 
-            notificationService.updateNotification(n, title, body, student, sender);
-            n = notificationService.getNotification(title);
+            n = notificationService.updateNotification(n, title, body, student, sender);
 
         } catch (IllegalArgumentException e) {
             fail();
@@ -151,8 +185,11 @@ public class CooperatorServiceNotificationTests {
 
         sender = adminService.getAdmin(sender.getId());
 
+        student = studentService.getStudentById(student.getId());
+
         assertEquals("Bye", n.getTitle());
         assertEquals("Bye", sender.getSentNotifications().get(0).getTitle());
+        assertEquals("Bye", ((Notification) student.getNotifications().toArray()[0]).getTitle());
         assertEquals(1, notificationService.getAllNotifications().size());
     }
 
@@ -160,25 +197,24 @@ public class CooperatorServiceNotificationTests {
     public void testUpdateNotificationInvalid() {
         String title = "Hello";
         String body = "Please attend meeting.";
-        Student student = createTestStudent();
-        Admin sender = createTestAdmin();
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
 
         Notification n = null;
 
         try {
-            notificationService.createNotification(title, body, student, sender);
-            n = notificationService.getNotification(title);
+            n = notificationService.createNotification(title, body, student, sender);
 
             title = "    ";
             body = "  ";
 
-            notificationService.updateNotification(n, title, body, null, null);
-            n = notificationService.getNotification(title);
+            n = notificationService.updateNotification(n, title, body, null, null);
 
         } catch (IllegalArgumentException e) {
             String error = e.getMessage();
             assertEquals(
-                    "Notification title cannot be empty! "
+                    ERROR_PREFIX
+                            + "Notification title cannot be empty! "
                             + "Notification body cannot be empty! "
                             + "Notification must have a Student receiver! "
                             + "Notification must have an Admin sender!",
@@ -190,8 +226,8 @@ public class CooperatorServiceNotificationTests {
     public void testDeleteNotification() {
         String title = "Hello";
         String body = "Please attend meeting.";
-        Student student = createTestStudent();
-        Admin sender = createTestAdmin();
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
 
         Notification n = null;
 
@@ -206,19 +242,5 @@ public class CooperatorServiceNotificationTests {
         }
 
         assertEquals(0, notificationService.getAllNotifications().size());
-    }
-
-    public Student createTestStudent() {
-        Student s = new Student();
-        s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
-
-        return s;
-    }
-
-    public Admin createTestAdmin() {
-        Admin a = new Admin();
-        a = adminService.createAdmin("Lorraine", "Douglas", "lorraine@gmail.com");
-
-        return a;
     }
 }

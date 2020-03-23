@@ -31,6 +31,7 @@ import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -41,18 +42,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.multipart.MultipartFile;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
 public class StudentSubmitOfferLetterIT {
 
     @Autowired private MockMvc mvc;
@@ -81,12 +76,14 @@ public class StudentSubmitOfferLetterIT {
     CoopDto testCoop;
 
     @Before
+    @After
     public void clearDatabase() {
         List<CoopDetails> coopDetails = coopDetailsService.getAllCoopDetails();
         for (CoopDetails cd : coopDetails) {
             cd.setCoop(null);
             coopDetailsRepository.save(cd);
         }
+
         // deleting all students will also delete all coops
         studentRepository.deleteAll();
         // deleting all companies will also delete all employer contacts

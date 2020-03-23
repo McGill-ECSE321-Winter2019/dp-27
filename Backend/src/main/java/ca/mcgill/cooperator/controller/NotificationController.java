@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("notifications")
-public class NotificationController {
+public class NotificationController extends BaseController {
 
     @Autowired NotificationService notificationService;
     @Autowired StudentService studentService;
@@ -45,16 +45,16 @@ public class NotificationController {
     }
 
     /**
-     * Gets Notification by title
+     * Sets notification seen by id
      *
-     * @param title
+     * @param id
      * @return NotificationDto
      */
-    @GetMapping("/{title}")
-    public NotificationDto getNotificationByTitle(@RequestParam String title) {
-        Notification n = notificationService.getNotification(title);
-
-        return ControllerUtils.convertToDto(n);
+    @PutMapping("/{id}/mark-as-read")
+    public List<NotificationDto> setNotificationsSeen(@PathVariable int id) {
+        Student student = studentService.getStudentById(id);
+        List<Notification> all = notificationService.markAllAsRead(student);
+        return ControllerUtils.convertNotifListToDto(all);
     }
 
     /**
@@ -65,6 +65,32 @@ public class NotificationController {
     @GetMapping("")
     public List<NotificationDto> getAllNotifications() {
         List<Notification> n = notificationService.getAllNotifications();
+
+        return ControllerUtils.convertNotifListToDto(n);
+    }
+
+    /**
+     * Get unseen Notifications for student
+     *
+     * @return List<NotificationDto>
+     */
+    @GetMapping("/{id}/unread")
+    public List<NotificationDto> getUnreadForStudent(@PathVariable int id) {
+        Student student = studentService.getStudentById(id);
+        List<Notification> n = notificationService.getUnreadForStudent(student);
+
+        return ControllerUtils.convertNotifListToDto(n);
+    }
+
+    /**
+     * Get all Notifications for student
+     *
+     * @return List<NotificationDto>
+     */
+    @GetMapping("/student/{id}")
+    public List<NotificationDto> getAllForStudent(@PathVariable int id) {
+        Student student = studentService.getStudentById(id);
+        List<Notification> n = notificationService.getAllNotificationsOfStudent(student);
 
         return ControllerUtils.convertNotifListToDto(n);
     }

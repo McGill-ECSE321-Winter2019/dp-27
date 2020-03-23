@@ -16,7 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceCourseTests {
+public class CooperatorServiceCourseTests extends BaseServiceTest {
 
     @Autowired CourseService courseService;
 
@@ -50,7 +50,7 @@ public class CooperatorServiceCourseTests {
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
-        assertEquals("Course name cannot be empty!", error);
+        assertEquals(ERROR_PREFIX + "Course name cannot be empty!", error);
         assertEquals(0, courseService.getAllCourses().size());
     }
 
@@ -63,7 +63,7 @@ public class CooperatorServiceCourseTests {
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
-        assertEquals("Course name cannot be empty!", error);
+        assertEquals(ERROR_PREFIX + "Course name cannot be empty!", error);
         assertEquals(0, courseService.getAllCourses().size());
     }
 
@@ -76,7 +76,7 @@ public class CooperatorServiceCourseTests {
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
-        assertEquals("Course name cannot be empty!", error);
+        assertEquals(ERROR_PREFIX + "Course name cannot be empty!", error);
         assertEquals(0, courseService.getAllCourses().size());
     }
 
@@ -84,13 +84,15 @@ public class CooperatorServiceCourseTests {
     public void testUpdateCourseInvalid() {
         String error = "";
         String name = "ECSE321";
-        Course c = courseService.createCourse(name);
+        courseService.createCourse(name);
         try {
-            courseService.updateCourse(c, "", new ArrayList<CourseOffering>());
+            courseService.updateCourse(null, "", new ArrayList<CourseOffering>());
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
-        assertEquals("Course name cannot be empty!", error);
+        assertEquals(
+                ERROR_PREFIX + "Course to update cannot be null! " + "Course name cannot be empty!",
+                error);
         assertEquals(1, courseService.getAllCourses().size());
         assertEquals(name, courseService.getAllCourses().get(0).getName());
     }
@@ -139,6 +141,6 @@ public class CooperatorServiceCourseTests {
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
-        assertEquals(error, "Course to delete cannot be null!");
+        assertEquals(ERROR_PREFIX + "Course to delete cannot be null!", error);
     }
 }

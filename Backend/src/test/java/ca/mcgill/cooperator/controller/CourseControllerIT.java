@@ -11,7 +11,6 @@ import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
-import ca.mcgill.cooperator.service.CourseOfferingService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +29,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class CourseControllerIT extends ControllerIT {
+public class CourseControllerIT extends BaseControllerIT {
 
     @Autowired private MockMvc mvc;
 
@@ -38,7 +37,6 @@ public class CourseControllerIT extends ControllerIT {
 
     @Autowired CourseRepository courseRepository;
     @Autowired CourseOfferingRepository courseOfferingRepository;
-    @Autowired CourseOfferingService courseOfferingService;
 
     @BeforeEach
     @AfterEach

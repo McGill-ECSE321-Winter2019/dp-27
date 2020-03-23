@@ -3,11 +3,11 @@ package ca.mcgill.cooperator.service;
 import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.dao.EmployerReportRepository;
-import ca.mcgill.cooperator.dao.ReportSectionRepository;
+import ca.mcgill.cooperator.dao.EmployerReportSectionRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.ReportSection;
+import ca.mcgill.cooperator.model.EmployerReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import java.io.IOException;
 import java.util.HashSet;
@@ -19,11 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class EmployerReportService {
-    @Autowired EmployerReportRepository employerReportRepository;
+public class EmployerReportService extends BaseService {
+
     @Autowired EmployerContactRepository employerContactRepository;
+    @Autowired EmployerReportRepository employerReportRepository;
+    @Autowired EmployerReportSectionRepository employerReportSectionRepository;
     @Autowired CoopRepository coopRepository;
-    @Autowired ReportSectionRepository reportSectionRepository;
 
     /**
      * Creates new employer report in database
@@ -48,14 +49,11 @@ public class EmployerReportService {
         if (ec == null) {
             error.append("Employer Contact cannot be null! ");
         }
-        if (title == null) {
-            error.append("File title cannot be null! ");
-        }
-        if (file == null) {
-            error.append("File cannot be null!");
+        if (title == null || title.trim().length() == 0) {
+            error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
         EmployerReport er = new EmployerReport();
@@ -63,25 +61,14 @@ public class EmployerReportService {
         er.setTitle(title);
         er.setCoop(c);
         er.setEmployerContact(ec);
-        er.setReportSections(new HashSet<ReportSection>());
-        try {
-            er.setData(file.getBytes());
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        er.setReportSections(new HashSet<EmployerReportSection>());
+        if (file != null) {
+            try {
+                er.setData(file.getBytes());
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
         }
-
-        employerReportRepository.save(er);
-
-        Set<EmployerReport> coopReports = c.getEmployerReports();
-        coopReports.add(er);
-        c.setEmployerReports(coopReports);
-
-        Set<EmployerReport> ecReports = ec.getEmployerReports();
-        ecReports.add(er);
-        ec.setEmployerReports(ecReports);
-
-        coopRepository.save(c);
-        employerContactRepository.save(ec);
 
         return employerReportRepository.save(er);
     }
@@ -97,7 +84,7 @@ public class EmployerReportService {
         EmployerReport er = employerReportRepository.findById(id).orElse(null);
         if (er == null) {
             throw new IllegalArgumentException(
-                    "Employer Report with ID " + id + " does not exist!");
+                    ERROR_PREFIX + "Employer Report with ID " + id + " does not exist!");
         }
 
         return er;
@@ -106,7 +93,7 @@ public class EmployerReportService {
     /**
      * Retrieves all employer reports from database
      *
-     * @return list of empoyer reports
+     * @return list of employer reports
      */
     @Transactional
     public List<EmployerReport> getAllEmployerReports() {
@@ -130,36 +117,32 @@ public class EmployerReportService {
             Coop c,
             String title,
             EmployerContact ec,
-            Set<ReportSection> sections,
+            Set<EmployerReportSection> sections,
             MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (er == null) {
             error.append("Employer Report cannot be null! ");
         }
-        if (status == null) {
-            error.append("Report Status cannot be null! ");
-        }
-        if (c == null) {
-            error.append("Coop cannot be null! ");
-        }
-        if (ec == null) {
-            error.append("Employer Contact cannot be null! ");
-        }
-        if (title == null) {
-            error.append("File title cannot be null! ");
-        }
-        if (file == null) {
-            error.append("File cannot be null!");
+        if (title != null && title.trim().length() == 0) {
+            error.append("File title cannot be empty! ");
         }
         if (error.length() > 0) {
-            throw new IllegalArgumentException(error.toString().trim());
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
-        // set all values in employer report
-        er.setStatus(status);
-        er.setTitle(title);
-        er.setCoop(c);
-        er.setEmployerContact(ec);
+        // set all values in employer report if they're not null
+        if (status != null) {
+            er.setStatus(status);
+        }
+        if (title != null) {
+            er.setTitle(title);
+        }
+        if (c != null) {
+            er.setCoop(c);
+        }
+        if (ec != null) {
+            er.setEmployerContact(ec);
+        }
         if (sections != null) {
             er.setReportSections(sections);
         }
@@ -171,48 +154,13 @@ public class EmployerReportService {
 
         employerReportRepository.save(er);
 
-        // add/set employer report to coop
-        boolean coopContains = false;
-
-        Set<EmployerReport> coopReports = c.getEmployerReports();
-        for (EmployerReport coopEmployerReport : coopReports) {
-            if (coopEmployerReport.getId() == er.getId()) {
-                coopReports.remove(coopEmployerReport);
-                coopReports.add(er);
-                coopContains = true;
+        // need to update sections side since it doesn't sync
+        if (sections != null) {
+            // set employer report as parent for all report sections
+            for (EmployerReportSection section : sections) {
+                section.setEmployerReport(er);
+                employerReportSectionRepository.save(section);
             }
-        }
-
-        if (coopContains == false) {
-            coopReports.add(er);
-        }
-        c.setEmployerReports(coopReports);
-
-        coopRepository.save(c);
-
-        // add/set employer report to employer contact
-        boolean employerContains = false;
-
-        Set<EmployerReport> employerReports = c.getEmployerReports();
-        for (EmployerReport employerReport : employerReports) {
-            if (employerReport.getId() == er.getId()) {
-                employerReports.remove(employerReport);
-                employerReports.add(er);
-                employerContains = true;
-            }
-        }
-
-        if (employerContains == false) {
-            employerReports.add(er);
-        }
-        ec.setEmployerReports(employerReports);
-
-        employerContactRepository.save(ec);
-
-        // set employer report as parent for all report sections
-        for (ReportSection section : sections) {
-            section.setEmployerReport(er);
-            reportSectionRepository.save(section);
         }
 
         return employerReportRepository.save(er);
@@ -227,7 +175,8 @@ public class EmployerReportService {
     @Transactional
     public EmployerReport deleteEmployerReport(EmployerReport er) {
         if (er == null) {
-            throw new IllegalArgumentException("Employer Report to delete cannot be null!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Employer Report to delete cannot be null!");
         }
 
         // first delete from all parents

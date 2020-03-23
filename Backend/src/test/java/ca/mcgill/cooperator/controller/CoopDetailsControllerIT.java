@@ -22,6 +22,7 @@ import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.model.CoopDetails;
+import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
@@ -40,7 +41,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class CoopDetailsControllerIT extends ControllerIT {
+public class CoopDetailsControllerIT extends BaseControllerIT {
     @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
@@ -83,7 +84,7 @@ public class CoopDetailsControllerIT extends ControllerIT {
         CourseDto courseDto = createTestCourse();
         CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
         StudentDto studentDto = createTestStudent();
-        CoopDto coopDto = createTestCoop(courseOfferingDto, studentDto);
+        CoopDto coopDto = createTestCoop(courseOfferingDto, studentDto, CoopStatus.IN_PROGRESS);
         CompanyDto companyDto = createTestCompany();
         EmployerContactDto employerContactDto = createTestEmployerContact(companyDto);
 

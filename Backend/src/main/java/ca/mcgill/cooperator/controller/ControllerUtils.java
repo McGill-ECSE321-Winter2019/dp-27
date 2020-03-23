@@ -8,10 +8,13 @@ import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.EmployerReportDto;
+import ca.mcgill.cooperator.dto.EmployerReportSectionDto;
 import ca.mcgill.cooperator.dto.NotificationDto;
-import ca.mcgill.cooperator.dto.ReportSectionDto;
+import ca.mcgill.cooperator.dto.ReportConfigDto;
+import ca.mcgill.cooperator.dto.ReportSectionConfigDto;
 import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.dto.StudentReportDto;
+import ca.mcgill.cooperator.dto.StudentReportSectionDto;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Coop;
@@ -20,24 +23,28 @@ import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.EmployerReportSection;
 import ca.mcgill.cooperator.model.Notification;
-import ca.mcgill.cooperator.model.ReportSection;
+import ca.mcgill.cooperator.model.ReportConfig;
+import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
+import ca.mcgill.cooperator.model.StudentReportSection;
 import ca.mcgill.cooperator.service.CoopService;
+import ca.mcgill.cooperator.service.CourseOfferingService;
+import ca.mcgill.cooperator.service.EmployerReportSectionService;
 import ca.mcgill.cooperator.service.NotificationService;
-import ca.mcgill.cooperator.service.ReportSectionService;
+import ca.mcgill.cooperator.service.ReportSectionConfigService;
+import ca.mcgill.cooperator.service.StudentReportSectionService;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class ControllerUtils {
 
-    @Autowired private static NotificationService notificationService;
-    @Autowired private static ReportSectionService reportSectionService;
-    @Autowired private static CoopService coopService;
+    static final String ERROR_PREFIX = "ERROR [DTO Conversion]: ";
 
     /*
      * Domain Object to DTO conversion methods
@@ -45,7 +52,7 @@ public class ControllerUtils {
 
     public static AdminDto convertToDto(Admin a) {
         if (a == null) {
-            throw new IllegalArgumentException("Admin does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Admin does not exist!");
         }
 
         AdminDto adminDto =
@@ -61,7 +68,9 @@ public class ControllerUtils {
                                 notification.getTitle(),
                                 notification.getBody(),
                                 null, // null student
-                                null); // null admin
+                                null, // null admin
+                                notification.getSeen(),
+                                notification.getTimeStamp());
                 Student student = notification.getStudent();
                 StudentDto studentDto =
                         new StudentDto(
@@ -88,7 +97,7 @@ public class ControllerUtils {
 
         for (Admin a : admins) {
             if (a == null) {
-                throw new IllegalArgumentException("Admin does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Admin does not exist!");
             }
             adminDtos.add(convertToDto(a));
         }
@@ -98,7 +107,7 @@ public class ControllerUtils {
 
     public static CompanyDto convertToDto(Company c) {
         if (c == null) {
-            throw new IllegalArgumentException("Company does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Company does not exist!");
         }
 
         CompanyDto companyDto =
@@ -137,7 +146,7 @@ public class ControllerUtils {
 
         for (Company c : companies) {
             if (c == null) {
-                throw new IllegalArgumentException("Company does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Company does not exist!");
             }
             companyDtos.add(convertToDto(c));
         }
@@ -146,7 +155,7 @@ public class ControllerUtils {
 
     public static CoopDto convertToDto(Coop c) {
         if (c == null) {
-            throw new IllegalArgumentException("Coop does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Coop does not exist!");
         }
 
         // first make coop with null course offering and null student
@@ -243,14 +252,14 @@ public class ControllerUtils {
                                 null, // null coop since coop is parent
                                 null); // null report sections
 
-                Set<ReportSection> reportSections = studentReport.getReportSections();
-                List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
-                for (ReportSection reportSection : reportSections) {
-                    ReportSectionDto reportSectionDto =
-                            new ReportSectionDto(
+                Set<StudentReportSection> reportSections = studentReport.getReportSections();
+                List<StudentReportSectionDto> reportSectionDtos =
+                        new ArrayList<StudentReportSectionDto>();
+                for (StudentReportSection reportSection : reportSections) {
+                    StudentReportSectionDto reportSectionDto =
+                            new StudentReportSectionDto(
                                     reportSection.getId(),
-                                    reportSection.getTitle(),
-                                    reportSection.getContent(),
+                                    reportSection.getResponse(),
                                     null, // null student report since parent
                                     null); // null employer report since part of student report
                     reportSectionDtos.add(reportSectionDto);
@@ -277,14 +286,14 @@ public class ControllerUtils {
                                 // details
                                 null); // null report sections
 
-                Set<ReportSection> reportSections = employerReport.getReportSections();
-                List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
-                for (ReportSection reportSection : reportSections) {
-                    ReportSectionDto reportSectionDto =
-                            new ReportSectionDto(
+                Set<EmployerReportSection> reportSections = employerReport.getReportSections();
+                List<EmployerReportSectionDto> reportSectionDtos =
+                        new ArrayList<EmployerReportSectionDto>();
+                for (EmployerReportSection reportSection : reportSections) {
+                    EmployerReportSectionDto reportSectionDto =
+                            new EmployerReportSectionDto(
                                     reportSection.getId(),
-                                    reportSection.getTitle(),
-                                    reportSection.getContent(),
+                                    reportSection.getResponse(),
                                     null, // null student report since part of employer report
                                     null); // null employer report since parent
                     reportSectionDtos.add(reportSectionDto);
@@ -303,7 +312,7 @@ public class ControllerUtils {
 
         for (Coop c : coops) {
             if (c == null) {
-                throw new IllegalArgumentException("Coop does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Coop does not exist!");
             }
             coopDtos.add(convertToDto(c));
         }
@@ -315,7 +324,7 @@ public class ControllerUtils {
 
         for (Coop c : coops) {
             if (c == null) {
-                throw new IllegalArgumentException("Coop does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Coop does not exist!");
             }
             coopDtos.add(convertToDto(c));
         }
@@ -324,7 +333,7 @@ public class ControllerUtils {
 
     public static CoopDetailsDto convertToDto(CoopDetails cd) {
         if (cd == null) {
-            throw new IllegalArgumentException("Coop details do not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Coop details do not exist!");
         }
 
         CoopDetailsDto coopDetailsDto =
@@ -409,24 +418,13 @@ public class ControllerUtils {
         return coopDetailsDto;
     }
 
-    public static List<CoopDetailsDto> convertCoopDetailsListToDto(Set<CoopDetails> coopDetails) {
+    public static List<CoopDetailsDto> convertCoopDetailsListToDto(
+            Collection<CoopDetails> coopDetails) {
         List<CoopDetailsDto> coopDetailsDtos = new ArrayList<CoopDetailsDto>();
 
         for (CoopDetails cd : coopDetails) {
             if (cd == null) {
-                throw new IllegalArgumentException("Coop details do not exist!");
-            }
-            coopDetailsDtos.add(convertToDto(cd));
-        }
-        return coopDetailsDtos;
-    }
-
-    public static List<CoopDetailsDto> convertCoopDetailsListToDto(List<CoopDetails> coopDetails) {
-        List<CoopDetailsDto> coopDetailsDtos = new ArrayList<CoopDetailsDto>();
-
-        for (CoopDetails cd : coopDetails) {
-            if (cd == null) {
-                throw new IllegalArgumentException("Coop details do not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Coop details do not exist!");
             }
             coopDetailsDtos.add(convertToDto(cd));
         }
@@ -435,7 +433,7 @@ public class ControllerUtils {
 
     public static CourseDto convertToDto(Course c) {
         if (c == null) {
-            throw new IllegalArgumentException("Course does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Course does not exist!");
         }
 
         CourseDto courseDto = new CourseDto(c.getId(), c.getName(), null); // null course offerings
@@ -466,7 +464,7 @@ public class ControllerUtils {
 
         for (Course c : courses) {
             if (c == null) {
-                throw new IllegalArgumentException("Course does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Course does not exist!");
             }
             courseDtos.add(convertToDto(c));
         }
@@ -475,7 +473,7 @@ public class ControllerUtils {
 
     public static CourseOfferingDto convertToDto(CourseOffering co) {
         if (co == null) {
-            throw new IllegalArgumentException("Course Offering does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Course Offering does not exist!");
         }
 
         // create course offering dto with null course
@@ -514,15 +512,19 @@ public class ControllerUtils {
                 // reports
 
                 CoopDetails coopDetails = coop.getCoopDetails();
-                CoopDetailsDto coopDetailsDto =
-                        new CoopDetailsDto(
-                                coopDetails.getId(),
-                                coopDetails.getPayPerHour(),
-                                coopDetails.getHoursPerWeek(),
-                                null, // null employer contact, look up coop details by id to ge
-                                // employer contact
-                                null); // null coop since parent
-                coopDto.setCoopDetails(coopDetailsDto);
+                if (coopDetails != null) {
+                    CoopDetailsDto coopDetailsDto =
+                            new CoopDetailsDto(
+                                    coopDetails.getId(),
+                                    coopDetails.getPayPerHour(),
+                                    coopDetails.getHoursPerWeek(),
+                                    null, // null employer contact, look up coop details by id to ge
+                                    // employer contact
+                                    null); // null coop since parent
+                    coopDto.setCoopDetails(coopDetailsDto);
+                } else {
+                    coopDto.setCoopDetails(null);
+                }
 
                 Student student = coop.getStudent();
                 StudentDto studentDto =
@@ -551,7 +553,8 @@ public class ControllerUtils {
 
         for (CourseOffering co : courseOfferings) {
             if (co == null) {
-                throw new IllegalArgumentException("Course Offering does not exist!");
+                throw new IllegalArgumentException(
+                        ERROR_PREFIX + "Course Offering does not exist!");
             }
             courseOfferingDtos.add(convertToDto(co));
         }
@@ -560,7 +563,7 @@ public class ControllerUtils {
 
     public static EmployerContactDto convertToDto(EmployerContact e) {
         if (e == null) {
-            throw new IllegalArgumentException("Employer Contact does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Employer Contact does not exist!");
         }
 
         // create employer contact dto
@@ -669,7 +672,8 @@ public class ControllerUtils {
         if (employerContacts != null) {
             for (EmployerContact ec : employerContacts) {
                 if (ec == null) {
-                    throw new IllegalArgumentException("Employer Contact does not exist!");
+                    throw new IllegalArgumentException(
+                            ERROR_PREFIX + "Employer Contact does not exist!");
                 }
                 employerContactDtos.add(convertToDto(ec));
             }
@@ -679,7 +683,7 @@ public class ControllerUtils {
 
     public static EmployerReportDto convertToDto(EmployerReport er) {
         if (er == null) {
-            throw new IllegalArgumentException("Employer Report does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Employer Report does not exist!");
         }
 
         EmployerReportDto employerReportDto =
@@ -749,16 +753,16 @@ public class ControllerUtils {
 
         employerReportDto.setEmployerContact(employerContactDto);
 
-        // create report section dtos
-        Set<ReportSection> reportSections = er.getReportSections();
-        List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
+        // create employer report section dtos
+        Set<EmployerReportSection> reportSections = er.getReportSections();
+        List<EmployerReportSectionDto> reportSectionDtos =
+                new ArrayList<EmployerReportSectionDto>();
         if (reportSections != null) {
-            for (ReportSection reportSection : reportSections) {
-                ReportSectionDto reportSectionDto =
-                        new ReportSectionDto(
+            for (EmployerReportSection reportSection : reportSections) {
+                EmployerReportSectionDto reportSectionDto =
+                        new EmployerReportSectionDto(
                                 reportSection.getId(),
-                                reportSection.getTitle(),
-                                reportSection.getContent(),
+                                reportSection.getResponse(),
                                 null, // null student report since part of employe report
                                 null); // null employer report since parent
                 reportSectionDtos.add(reportSectionDto);
@@ -777,7 +781,8 @@ public class ControllerUtils {
         if (employerReports != null && employerReports.size() > 0) {
             for (EmployerReport er : employerReports) {
                 if (er == null) {
-                    throw new IllegalArgumentException("Employer Report does not exist!");
+                    throw new IllegalArgumentException(
+                            ERROR_PREFIX + "Employer Report does not exist!");
                 }
                 employerReportDtos.add(convertToDto(er));
             }
@@ -786,25 +791,53 @@ public class ControllerUtils {
         return employerReportDtos;
     }
 
-    public static ReportSectionDto convertToDto(ReportSection rs) {
+    public static StudentReportSectionDto convertToDto(StudentReportSection rs) {
         if (rs == null) {
-            throw new IllegalArgumentException("Report section does not exist!");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Student report section does not exist!");
         }
-        return new ReportSectionDto(
+        return new StudentReportSectionDto(
                 rs.getId(),
-                rs.getTitle(),
-                rs.getContent(),
+                rs.getResponse(),
                 null, // ignore StudentReport
-                null); // ignore EmployerReport
+                null); // ignore ReportSectionConfig
     }
 
-    public static List<ReportSectionDto> convertReportSectionListToDto(
-            List<ReportSection> reportSections) {
-        List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
+    public static List<StudentReportSectionDto> convertStudentReportSectionListToDto(
+            List<StudentReportSection> reportSections) {
+        List<StudentReportSectionDto> reportSectionDtos = new ArrayList<StudentReportSectionDto>();
 
-        for (ReportSection rs : reportSections) {
+        for (StudentReportSection rs : reportSections) {
             if (rs == null) {
-                throw new IllegalArgumentException("Report section does not exist!");
+                throw new IllegalArgumentException(
+                        ERROR_PREFIX + "Student report section does not exist!");
+            }
+            reportSectionDtos.add(convertToDto(rs));
+        }
+        return reportSectionDtos;
+    }
+
+    public static EmployerReportSectionDto convertToDto(EmployerReportSection rs) {
+        if (rs == null) {
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Employer report section does not exist!");
+        }
+        return new EmployerReportSectionDto(
+                rs.getId(),
+                rs.getResponse(),
+                null, // ignore EmployerReport
+                null); // ignore ReportSectionConfig
+    }
+
+    public static List<EmployerReportSectionDto> convertEmployerReportSectionListToDto(
+            List<EmployerReportSection> reportSections) {
+        List<EmployerReportSectionDto> reportSectionDtos =
+                new ArrayList<EmployerReportSectionDto>();
+
+        for (EmployerReportSection rs : reportSections) {
+            if (rs == null) {
+                throw new IllegalArgumentException(
+                        ERROR_PREFIX + "Employer report section does not exist!");
             }
             reportSectionDtos.add(convertToDto(rs));
         }
@@ -813,7 +846,7 @@ public class ControllerUtils {
 
     public static NotificationDto convertToDto(Notification n) {
         if (n == null) {
-            throw new IllegalArgumentException("Notification does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Notification does not exist!");
         }
 
         NotificationDto notificationDto =
@@ -822,7 +855,9 @@ public class ControllerUtils {
                         n.getTitle(),
                         n.getBody(),
                         null, // null student
-                        null); // null admin
+                        null, // null admin
+                        n.getSeen(),
+                        n.getTimeStamp());
 
         // create student dto
         Student student = n.getStudent();
@@ -859,7 +894,7 @@ public class ControllerUtils {
 
         for (Notification n : notifs) {
             if (n == null) {
-                throw new IllegalArgumentException("Notification does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Notification does not exist!");
             }
             notifDtos.add(convertToDto(n));
         }
@@ -871,7 +906,7 @@ public class ControllerUtils {
 
         for (Notification n : notifs) {
             if (n == null) {
-                throw new IllegalArgumentException("Notification does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Notification does not exist!");
             }
             notifDtos.add(convertToDto(n));
         }
@@ -880,7 +915,7 @@ public class ControllerUtils {
 
     public static StudentDto convertToDto(Student s) {
         if (s == null) {
-            throw new IllegalArgumentException("Student does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist!");
         }
 
         StudentDto studentDto =
@@ -952,7 +987,9 @@ public class ControllerUtils {
                                 notification.getTitle(),
                                 notification.getBody(),
                                 null, // null student since parent
-                                null); // null admin
+                                null, // null admin
+                                notification.getSeen(),
+                                notification.getTimeStamp());
 
                 Admin admin = notification.getSender();
                 AdminDto adminDto =
@@ -979,7 +1016,7 @@ public class ControllerUtils {
 
         for (Student s : students) {
             if (s == null) {
-                throw new IllegalArgumentException("Student does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist!");
             }
             studentDtos.add(convertToDto(s));
         }
@@ -988,7 +1025,7 @@ public class ControllerUtils {
 
     public static StudentReportDto convertToDto(StudentReport sr) {
         if (sr == null) {
-            throw new IllegalArgumentException("Student Report does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Student Report does not exist!");
         }
 
         StudentReportDto studentReportDto =
@@ -1025,21 +1062,19 @@ public class ControllerUtils {
                         null); // null notifications, look up student by id to get all notifications
 
         coopDto.setStudent(studentDto);
-
         studentReportDto.setCoop(coopDto);
 
         // create report section dtos
-        Set<ReportSection> reportSections = sr.getReportSections();
-        List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
+        Set<StudentReportSection> reportSections = sr.getReportSections();
+        List<StudentReportSectionDto> reportSectionDtos = new ArrayList<StudentReportSectionDto>();
         if (reportSections != null) {
-            for (ReportSection reportSection : reportSections) {
-                ReportSectionDto reportSectionDto =
-                        new ReportSectionDto(
+            for (StudentReportSection reportSection : reportSections) {
+                StudentReportSectionDto reportSectionDto =
+                        new StudentReportSectionDto(
                                 reportSection.getId(),
-                                reportSection.getTitle(),
-                                reportSection.getContent(),
-                                null, // null student report since parent
-                                null); // null employer report since part of student report
+                                reportSection.getResponse(),
+                                null, // null StudentReport since parent
+                                null); // null ReportSectionConfig since parent
                 reportSectionDtos.add(reportSectionDto);
             }
         }
@@ -1055,11 +1090,63 @@ public class ControllerUtils {
 
         for (StudentReport sr : studentReports) {
             if (sr == null) {
-                throw new IllegalArgumentException("Student Report does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Student Report does not exist!");
             }
             studentReportDtos.add(convertToDto(sr));
         }
         return studentReportDtos;
+    }
+
+    public static ReportConfigDto convertToDto(ReportConfig rc) {
+        if (rc == null) {
+            throw new IllegalArgumentException(ERROR_PREFIX + "Report config cannot be null!");
+        }
+        return new ReportConfigDto(
+                rc.getId(),
+                rc.getRequiresFile(),
+                rc.getDeadline(),
+                rc.getIsDeadlineFromStart(),
+                rc.getType(),
+                convertReportSectionConfigListToDto(rc.getReportSectionConfigs()));
+    }
+
+    public static List<ReportConfigDto> convertReportConfigListToDto(
+            Collection<ReportConfig> reportConfigs) {
+        List<ReportConfigDto> reportConfigDtos = new ArrayList<>();
+        for (ReportConfig reportConfig : reportConfigs) {
+            if (reportConfig == null) {
+                throw new IllegalArgumentException(ERROR_PREFIX + "Report config cannot be null!");
+            }
+            reportConfigDtos.add(convertToDto(reportConfig));
+        }
+        return reportConfigDtos;
+    }
+
+    public static ReportSectionConfigDto convertToDto(ReportSectionConfig rsConfig) {
+        if (rsConfig == null) {
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Report section config cannot be null!");
+        }
+        return new ReportSectionConfigDto(
+                rsConfig.getId(),
+                rsConfig.getSectionPrompt(),
+                rsConfig.getResponseType(),
+                null,
+                null,
+                null);
+    }
+
+    public static List<ReportSectionConfigDto> convertReportSectionConfigListToDto(
+            Collection<ReportSectionConfig> rsConfigs) {
+        List<ReportSectionConfigDto> rsConfigDtos = new ArrayList<>();
+        for (ReportSectionConfig rsConfig : rsConfigs) {
+            if (rsConfig == null) {
+                throw new IllegalArgumentException(
+                        ERROR_PREFIX + "Report section config cannot be null!");
+            }
+            rsConfigDtos.add(convertToDto(rsConfig));
+        }
+        return rsConfigDtos;
     }
 
     /*
@@ -1067,45 +1154,83 @@ public class ControllerUtils {
      */
 
     public static List<Notification> convertNotificationListToDomainObject(
-            List<NotificationDto> notifDtos) {
+            NotificationService service, List<NotificationDto> notifDtos) {
         List<Notification> notifs = new ArrayList<Notification>();
         for (NotificationDto nDto : notifDtos) {
-            Notification n = notificationService.getNotification(nDto.getId());
+            Notification n = service.getNotification(nDto.getId());
             notifs.add(n);
         }
         return notifs;
     }
 
-    public static Set<ReportSection> convertReportSectionSetToDomainObject(
-            Set<ReportSectionDto> rsDtos) {
-        Set<ReportSection> reports = new HashSet<ReportSection>();
-        for (ReportSectionDto rsDto : rsDtos) {
-            ReportSection rs = reportSectionService.getReportSection(rsDto.getId());
-            reports.add(rs);
-        }
-        return reports;
-    }
-
-    static Set<Notification> convertNotificationListToDomainObjectSet(
-            List<NotificationDto> notifDtos) {
+    public static Set<Notification> convertNotificationListToDomainObjectSet(
+            NotificationService service, List<NotificationDto> notifDtos) {
         Set<Notification> notifs = new HashSet<>();
         if (notifDtos == null) {
             return notifs;
         }
         for (NotificationDto nDto : notifDtos) {
-            Notification n = notificationService.getNotification(nDto.getId());
+            Notification n = service.getNotification(nDto.getId());
             notifs.add(n);
         }
         return notifs;
     }
 
-    static Set<Coop> convertCoopsListToDomainObject(List<CoopDto> coopDto) {
+    public static Set<StudentReportSection> convertStudentReportSectionsToDomainObjects(
+            StudentReportSectionService service, Collection<StudentReportSectionDto> rsDtos) {
+        Set<StudentReportSection> reports = new HashSet<StudentReportSection>();
+        for (StudentReportSectionDto rsDto : rsDtos) {
+            StudentReportSection rs = service.getReportSection(rsDto.getId());
+            reports.add(rs);
+        }
+        return reports;
+    }
+
+    public static Set<EmployerReportSection> convertEmployerReportSectionsToDomainObjects(
+            EmployerReportSectionService service, Collection<EmployerReportSectionDto> rsDtos) {
+        Set<EmployerReportSection> reports = new HashSet<EmployerReportSection>();
+        for (EmployerReportSectionDto rsDto : rsDtos) {
+            EmployerReportSection rs = service.getReportSection(rsDto.getId());
+            reports.add(rs);
+        }
+        return reports;
+    }
+
+    public static Set<Coop> convertCoopsListToDomainObject(
+            CoopService service, List<CoopDto> coopDto) {
         Set<Coop> coops = new HashSet<>();
         if (coopDto == null) return coops;
         for (CoopDto cDto : coopDto) {
-            Coop c = coopService.getCoopById(cDto.getId());
+            Coop c = service.getCoopById(cDto.getId());
             coops.add(c);
         }
         return coops;
+    }
+
+    public static List<CourseOffering> convertCourseOfferingListToDomainObject(
+            CourseOfferingService service, List<CourseOfferingDto> coDtos) {
+        List<CourseOffering> cos = new ArrayList<>();
+        for (CourseOfferingDto coDto : coDtos) {
+            if (coDto != null) {
+                CourseOffering co = service.getCourseOfferingById(coDto.getId());
+                cos.add(co);
+            }
+        }
+        return cos;
+    }
+
+    public static List<ReportSectionConfig> convertReportSectionConfigDtosToDomainObjects(
+            ReportSectionConfigService service, Collection<ReportSectionConfigDto> rscDtos) {
+        List<ReportSectionConfig> reportSectionConfigs = new ArrayList<>();
+    	if (rscDtos == null) {
+    		return reportSectionConfigs;
+    	}
+        for (ReportSectionConfigDto rscDto : rscDtos) {
+            if (rscDto != null) {
+                ReportSectionConfig rsc = service.getReportSectionConfig(rscDto.getId());
+                reportSectionConfigs.add(rsc);
+            }
+        }
+        return reportSectionConfigs;
     }
 }

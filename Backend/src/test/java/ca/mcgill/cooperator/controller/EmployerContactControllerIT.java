@@ -31,7 +31,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class EmployerContactControllerIT extends ControllerIT {
+public class EmployerContactControllerIT extends BaseControllerIT {
 
     @Autowired private MockMvc mvc;
 

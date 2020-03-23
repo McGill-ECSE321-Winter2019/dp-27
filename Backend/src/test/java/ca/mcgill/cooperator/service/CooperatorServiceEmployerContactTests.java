@@ -13,14 +13,11 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
-import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +30,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class CooperatorServiceEmployerContactTests {
+public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
 
     @Autowired EmployerContactService employerContactService;
     @Autowired CompanyService companyService;
@@ -74,7 +71,7 @@ public class CooperatorServiceEmployerContactTests {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         try {
             employerContactService.createEmployerContact(
@@ -83,6 +80,8 @@ public class CooperatorServiceEmployerContactTests {
             fail();
         }
 
+        c = companyService.getCompany(c.getId());
+        assertEquals(firstName, c.getEmployees().get(0).getFirstName());
         assertEquals(1, employerContactService.getAllEmployerContacts().size());
     }
 
@@ -92,13 +91,14 @@ public class CooperatorServiceEmployerContactTests {
         String lastName = "Hooley";
         String email = "abcdefg";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         try {
             employerContactService.createEmployerContact(
                     firstName, lastName, email, phoneNumber, c);
         } catch (IllegalArgumentException e) {
-            assertEquals("Employer Contact email must be a valid email!", e.getMessage());
+            assertEquals(
+                    ERROR_PREFIX + "Employer Contact email must be a valid email!", e.getMessage());
         }
     }
 
@@ -108,13 +108,15 @@ public class CooperatorServiceEmployerContactTests {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "asdfdgf";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         try {
             employerContactService.createEmployerContact(
                     firstName, lastName, email, phoneNumber, c);
         } catch (IllegalArgumentException e) {
-            assertEquals("Employer Contact phone number must be a valid number!", e.getMessage());
+            assertEquals(
+                    ERROR_PREFIX + "Employer Contact phone number must be a valid number!",
+                    e.getMessage());
         }
     }
 
@@ -135,7 +137,8 @@ public class CooperatorServiceEmployerContactTests {
             error = e.getMessage();
         }
         assertEquals(
-                "Employer Contact first name cannot be empty!"
+                ERROR_PREFIX
+                        + "Employer Contact first name cannot be empty!"
                         + " Employer Contact last name cannot be empty!"
                         + " Employer Contact email cannot be empty!"
                         + " Employer Contact phone number cannot be empty!"
@@ -161,7 +164,8 @@ public class CooperatorServiceEmployerContactTests {
             error = e.getMessage();
         }
         assertEquals(
-                "Employer Contact first name cannot be empty!"
+                ERROR_PREFIX
+                        + "Employer Contact first name cannot be empty!"
                         + " Employer Contact last name cannot be empty!"
                         + " Employer Contact email cannot be empty!"
                         + " Employer Contact phone number cannot be empty!"
@@ -187,7 +191,8 @@ public class CooperatorServiceEmployerContactTests {
             error = e.getMessage();
         }
         assertEquals(
-                "Employer Contact first name cannot be empty!"
+                ERROR_PREFIX
+                        + "Employer Contact first name cannot be empty!"
                         + " Employer Contact last name cannot be empty!"
                         + " Employer Contact email cannot be empty!"
                         + " Employer Contact phone number cannot be empty!"
@@ -202,15 +207,15 @@ public class CooperatorServiceEmployerContactTests {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
         EmployerContact ec = null;
 
         // course->course offering->coops->coop details
         CoopDetails cd = null;
-        Course course = createTestCourse();
-        CourseOffering co = createTestCourseOffering(course);
-        Student s = createTestStudent();
-        Coop coop = createTestCoop(co, s);
+        Course course = createTestCourse(courseService);
+        CourseOffering co = createTestCourseOffering(courseOfferingService, course);
+        Student s = createTestStudent(studentService);
+        Coop coop = createTestCoop(coopService, co, s);
         Set<CoopDetails> coopDetails = new HashSet<CoopDetails>();
 
         try {
@@ -219,7 +224,7 @@ public class CooperatorServiceEmployerContactTests {
                             firstName, lastName, email, phoneNumber, c);
             ec = employerContactService.getEmployerContact(ec.getId());
 
-            cd = createTestCoopDetails(ec, coop);
+            cd = createTestCoopDetails(coopDetailsService, ec, coop);
             coopDetails.add(cd);
 
             Set<EmployerReport> reports = new HashSet<EmployerReport>();
@@ -235,6 +240,10 @@ public class CooperatorServiceEmployerContactTests {
         assertEquals(1, ec.getCoopDetails().size());
         assertEquals(lastName, ec.getLastName());
         assertEquals(1, employerContactService.getAllEmployerContacts().size());
+        c = companyService.getCompany(c.getId());
+        assertEquals(firstName, c.getEmployees().get(0).getFirstName());
+        cd = coopDetailsService.getCoopDetails(cd.getId());
+        assertEquals(firstName, cd.getEmployerContact().getFirstName());
     }
 
     @Test
@@ -243,7 +252,7 @@ public class CooperatorServiceEmployerContactTests {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         EmployerContact ec = null;
         try {
@@ -273,6 +282,8 @@ public class CooperatorServiceEmployerContactTests {
 
         assertEquals(firstName, ec.getFirstName());
         assertEquals(1, employerContactService.getAllEmployerContacts().size());
+        c = companyService.getCompany(c.getId());
+        assertEquals(firstName, c.getEmployees().get(0).getFirstName());
     }
 
     @Test
@@ -281,7 +292,7 @@ public class CooperatorServiceEmployerContactTests {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         EmployerContact ec = null;
         try {
@@ -302,13 +313,11 @@ public class CooperatorServiceEmployerContactTests {
         }
 
         assertEquals(
-                "Employer Contact first name cannot be empty!"
+                ERROR_PREFIX
+                        + "Employer Contact first name cannot be empty!"
                         + " Employer Contact last name cannot be empty!"
                         + " Employer Contact email cannot be empty!"
-                        + " Employer Contact phone number cannot be empty!"
-                        + " Employer Contact company cannot be null!"
-                        + " Employer Contact employer reports cannot be null!"
-                        + " Employer Contact coop details cannot be null!",
+                        + " Employer Contact phone number cannot be empty!",
                 error);
 
         // original EmployerContact should still exist
@@ -326,7 +335,7 @@ public class CooperatorServiceEmployerContactTests {
         String lastName = "Hooley";
         String email = "phooley@gmail.com";
         String phoneNumber = "0123456789";
-        Company c = createTestCompany();
+        Company c = createTestCompany(companyService);
 
         EmployerContact ec = null;
         try {
@@ -351,50 +360,6 @@ public class CooperatorServiceEmployerContactTests {
             error = e.getMessage();
         }
 
-        assertEquals("Employer Contact to delete cannot be null!", error);
-    }
-
-    private Company createTestCompany() {
-        Company c = new Company();
-        c =
-                companyService.createCompany(
-                        "Facebook",
-                        "Menlo Park",
-                        "California",
-                        "USA",
-                        new ArrayList<EmployerContact>());
-
-        return c;
-    }
-
-    private CoopDetails createTestCoopDetails(EmployerContact ec, Coop c) {
-        CoopDetails cd = new CoopDetails();
-        cd = coopDetailsService.createCoopDetails(20, 40, ec, c);
-        return cd;
-    }
-
-    private Course createTestCourse() {
-        Course c = null;
-        c = courseService.createCourse("FACC200");
-        return c;
-    }
-
-    private CourseOffering createTestCourseOffering(Course c) {
-        CourseOffering co = null;
-        co = courseOfferingService.createCourseOffering(2020, Season.WINTER, c);
-        return co;
-    }
-
-    private Student createTestStudent() {
-        Student s = new Student();
-        s = studentService.createStudent("Susan", "Matuszewski", "susan@gmail.com", "260719281");
-
-        return s;
-    }
-
-    private Coop createTestCoop(CourseOffering co, Student s) {
-        Coop coop = new Coop();
-        coop = coopService.createCoop(CoopStatus.FUTURE, co, s);
-        return coop;
+        assertEquals(ERROR_PREFIX + "Employer Contact to delete cannot be null!", error);
     }
 }
