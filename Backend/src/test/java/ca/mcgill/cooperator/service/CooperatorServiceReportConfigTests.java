@@ -53,6 +53,24 @@ public class CooperatorServiceReportConfigTests extends BaseServiceTest {
     }
 
     @Test
+    public void testReportConfigUniqueType() {
+        boolean requiresFile = true;
+        int deadline = 14;
+        boolean isDeadlineFromStart = true;
+        String type = "First Evaluation";
+
+        try {
+            reportConfigService.createReportConfig(
+                    requiresFile, deadline, isDeadlineFromStart, type);
+            // type must be unique so expect a SQLException
+            reportConfigService.createReportConfig(
+                    requiresFile, deadline, isDeadlineFromStart, type);
+        } catch (Exception e) {
+            assertEquals(1, reportConfigService.getAllReportConfigs().size());
+        }
+    }
+
+    @Test
     public void testCreateReportConfigInvalid() {
         try {
             reportConfigService.createReportConfig(true, -1, false, "  ");

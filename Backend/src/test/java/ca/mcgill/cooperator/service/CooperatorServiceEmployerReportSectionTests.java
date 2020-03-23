@@ -233,7 +233,7 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
-        EmployerContact ec = createTestEmployerContact(employerContactService, c);        
+        EmployerContact ec = createTestEmployerContact(employerContactService, c);
         ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);

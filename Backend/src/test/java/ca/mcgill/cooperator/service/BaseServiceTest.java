@@ -151,7 +151,9 @@ public class BaseServiceTest {
     }
 
     ReportSectionConfig createTestReportSectionConfig(
-            ReportConfigService rcService, ReportSectionConfigService rscService, ReportConfig reportConfig) {
+            ReportConfigService rcService,
+            ReportSectionConfigService rscService,
+            ReportConfig reportConfig) {
         return rscService.createReportSectionConfig(
                 "How was your co-op?", ReportResponseType.LONG_TEXT, reportConfig);
     }
