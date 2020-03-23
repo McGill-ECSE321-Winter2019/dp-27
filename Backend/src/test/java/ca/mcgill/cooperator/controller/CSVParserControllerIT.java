@@ -56,7 +56,7 @@ public class CSVParserControllerIT extends ControllerIT {
     }
 
     @Test
-    public void testCheckStudentsREgisteredCorrect() throws Exception {
+    public void testCheckStudentsRegisteredCorrect() throws Exception {
         StudentDto studentDto = new StudentDto();
         studentDto.setEmail("albert.kragl@mail.mcgill.ca");
         studentDto.setFirstName("Albert");
