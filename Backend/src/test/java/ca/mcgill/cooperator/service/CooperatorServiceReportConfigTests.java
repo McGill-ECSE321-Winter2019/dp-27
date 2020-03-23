@@ -2,6 +2,7 @@ package ca.mcgill.cooperator.service;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import ca.mcgill.cooperator.dao.ReportConfigRepository;
@@ -108,8 +109,8 @@ public class CooperatorServiceReportConfigTests extends BaseServiceTest {
         // 5. verify changes
         rc = reportConfigService.getReportConfig(type);
         assertEquals(deadline, rc.getDeadline());
-        assertTrue(!rc.getRequiresFile());
-        assertTrue(!rc.getIsDeadlineFromStart());
+        assertFalse(rc.getRequiresFile());
+        assertFalse(rc.getIsDeadlineFromStart());
     }
 
     @Test
