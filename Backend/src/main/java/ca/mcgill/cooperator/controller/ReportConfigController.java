@@ -8,7 +8,6 @@ import ca.mcgill.cooperator.service.ReportSectionConfigService;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -72,15 +71,15 @@ public class ReportConfigController extends BaseController {
     @PutMapping("")
     public ReportConfigDto updateReportConfig(@RequestBody ReportConfigDto rcDto) {
         ReportConfig rc = reportConfigService.getReportConfig(rcDto.getId());
-        
+
         Set<ReportSectionConfig> rscConfigs = null;
         if (rcDto.getReportSectionConfigs() != null) {
-        	rscConfigs = new HashSet<>(
-                    ControllerUtils.convertReportSectionConfigDtosToDomainObjects(
-                            reportSectionConfigService,
-                            rcDto.getReportSectionConfigs()));
+            rscConfigs =
+                    new HashSet<>(
+                            ControllerUtils.convertReportSectionConfigDtosToDomainObjects(
+                                    reportSectionConfigService, rcDto.getReportSectionConfigs()));
         }
-        
+
         ReportConfig updatedReportConfig =
                 reportConfigService.updateReportConfig(
                         rc,
