@@ -8,6 +8,7 @@ import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.StudentReportSection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class ReportSectionConfigService extends BaseService {
      * Retrieves an existing ReportSectionConfig by ID
      *
      * @param id
-     * @return ReportSectionConfig with matching iD
+     * @return ReportSectionConfig with matching ID
      */
     @Transactional
     public ReportSectionConfig getReportSectionConfig(int id) {
@@ -69,6 +70,16 @@ public class ReportSectionConfigService extends BaseService {
         }
 
         return rsConfig;
+    }
+
+    /**
+     * Retrieves all ReportSectionConfigs
+     *
+     * @return all ReportSectionConfigs
+     */
+    @Transactional
+    public List<ReportSectionConfig> getAllReportSectionConfigs() {
+        return ServiceUtils.toList(reportSectionConfigRepository.findAll());
     }
 
     /**
