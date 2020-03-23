@@ -146,15 +146,12 @@ public class BaseServiceTest {
         return service.createReportSection("This is a response", rsConfig, er);
     }
 
-    ReportConfig createTestReportConfig(ReportConfigService service) {
-        return service.createReportConfig(true, 14, true, "First Evaluation");
+    ReportConfig createTestReportConfig(ReportConfigService service, String type) {
+        return service.createReportConfig(true, 14, true, type);
     }
 
     ReportSectionConfig createTestReportSectionConfig(
-            ReportConfigService rcService, ReportSectionConfigService rscService) {
-        ReportConfig reportConfig =
-                rcService.createReportConfig(true, 14, true, "First Evaluation");
-
+            ReportConfigService rcService, ReportSectionConfigService rscService, ReportConfig reportConfig) {
         return rscService.createReportSectionConfig(
                 "How was your co-op?", ReportResponseType.LONG_TEXT, reportConfig);
     }

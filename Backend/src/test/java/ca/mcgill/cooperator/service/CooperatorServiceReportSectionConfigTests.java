@@ -39,7 +39,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
 
         // 1. create valid ReportSectionConfig
         try {
-            ReportConfig rc = createTestReportConfig(reportConfigService);
+            ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
             reportSectionConfigService.createReportSectionConfig(
                     prompt, ReportResponseType.LONG_TEXT, rc);
         } catch (IllegalArgumentException e) {
@@ -76,7 +76,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
         ReportSectionConfig rsConfig = null;
         ReportConfig rc = null;
         try {
-            rc = createTestReportConfig(reportConfigService);
+        	rc = createTestReportConfig(reportConfigService, "First Evaluation");
             rsConfig =
                     reportSectionConfigService.createReportSectionConfig(
                             prompt, ReportResponseType.LONG_TEXT, rc);
@@ -126,7 +126,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
 
         // 1. create ReportSectionConfig
         try {
-            ReportConfig rc = createTestReportConfig(reportConfigService);
+        	ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
             reportSectionConfigService.createReportSectionConfig(
                     prompt, ReportResponseType.LONG_TEXT, rc);
         } catch (IllegalArgumentException e) {
@@ -158,7 +158,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
 
         // 1. create and delete ReportSectionConfig
         try {
-            ReportConfig rc = createTestReportConfig(reportConfigService);
+        	ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
             ReportSectionConfig rsc =
                     reportSectionConfigService.createReportSectionConfig(
                             prompt, ReportResponseType.LONG_TEXT, rc);
