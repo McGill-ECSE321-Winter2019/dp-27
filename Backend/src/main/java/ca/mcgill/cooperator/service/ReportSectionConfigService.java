@@ -151,9 +151,6 @@ public class ReportSectionConfigService extends BaseService {
         reportConfig.setReportSectionConfigs(rsConfigs);
         reportConfigRepository.save(reportConfig);
 
-        rsConfig.setReportConfig(null);
-        reportSectionConfigRepository.save(rsConfig);
-
         reportSectionConfigRepository.delete(rsConfig);
         return rsConfig;
     }
