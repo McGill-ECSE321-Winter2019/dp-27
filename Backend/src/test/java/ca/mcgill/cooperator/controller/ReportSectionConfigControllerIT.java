@@ -90,8 +90,6 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), ReportSectionConfigDto.class);
 
-        System.out.println(objectMapper.writeValueAsString(rscDto));
-
         // 3. get the ReportSectionConfig by ID, valid
         mvc.perform(
                         get("/report-section-configs/" + rscDto.getId())
