@@ -11,4 +11,5 @@ public interface CourseOfferingRepository extends CrudRepository<CourseOffering,
     List<CourseOffering> findByCourse(Course c);
 
     CourseOffering findByCourseAndYearAndSeason(Course c, int year, Season season);
+    
 }

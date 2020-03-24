@@ -55,6 +55,18 @@ public class StudentController extends BaseController {
 
         return ControllerUtils.convertToDto(s);
     }
+    /*(
+    * Get Student by email
+    *
+    * @param email
+    * @return StudentDto Object
+    */
+    @GetMapping("/{email}")
+    public StudentDto getStudentByEmail(@PathVariable String email) {
+        Student s = studentService.getStudentByEmail(email);
+
+        return ControllerUtils.convertToDto(s);
+    }
 
     /**
      * Create new Student

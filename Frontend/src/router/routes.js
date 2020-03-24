@@ -75,6 +75,10 @@ const routes = [
       {
         path: "report-config",
         component: () => import("pages/admin/AdminReportConfigPage.vue")
+      },
+      {
+        path: "csv-parse",
+        component: () => import("pages/admin/CsvParse.vue")
       }
     ]
   }

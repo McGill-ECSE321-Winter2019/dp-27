@@ -4,8 +4,11 @@ import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
@@ -35,6 +39,24 @@ public class CourseOfferingController extends BaseController {
     public List<CourseOfferingDto> getCourseOfferings() {
         return ControllerUtils.convertCourseOfferingListToDto(
                 courseOfferingService.getAllCourseOfferings());
+    }
+
+    @GetMapping("/years")
+    public List<String> getCourseOfferingYears() {
+    	List<String> years = new ArrayList<>();
+        List<CourseOffering> co = courseOfferingService.getAllCourseOfferings();
+        for(CourseOffering c: co) {
+        	if(!years.contains(String.valueOf(c.getYear()))) years.add(String.valueOf(c.getYear())); 
+        }
+        return years;
+    }
+
+    @GetMapping("/single-offering")
+    public CourseOfferingDto getCourseOffering(@RequestParam Integer year, @RequestParam String season, @RequestParam String courseName) {
+        	Course c = courseService.getCourseByName(courseName);
+        	Season s = Season.valueOf(season);
+        	CourseOffering co = courseOfferingService.getCourseOfferingByCourseAndTerm(c, Integer.valueOf(year), s);
+        	return ControllerUtils.convertToDto(co);
     }
 
     @GetMapping("/course/{id}")

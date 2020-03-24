@@ -71,6 +71,12 @@
           link="/admin/report-config"
           icon="assignment"
         />
+        <Sidebar-link
+          title="Check Enrollment"
+          caption="Check who is enrolled via CSV upload"
+          link="/admin/csv-parse"
+          icon="assignment_ind"
+        />
       </q-list>
     </q-drawer>
 
