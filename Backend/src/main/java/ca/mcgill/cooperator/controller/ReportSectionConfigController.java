@@ -39,7 +39,7 @@ public class ReportSectionConfigController extends BaseController {
      * @return the ReportSectionConfig with specified ID
      */
     @GetMapping("/{id}")
-    public ReportSectionConfigDto getReportConfigById(@PathVariable int id) {
+    public ReportSectionConfigDto getReportSectionConfigById(@PathVariable int id) {
         return ControllerUtils.convertToDto(reportSectionConfigService.getReportSectionConfig(id));
     }
 
@@ -52,6 +52,16 @@ public class ReportSectionConfigController extends BaseController {
     public List<ReportSectionConfigDto> getAllReportSectionConfigs() {
         return ControllerUtils.convertReportSectionConfigListToDto(
                 reportSectionConfigService.getAllReportSectionConfigs());
+    }
+
+	/**
+     * Returns all ReportSectionConfig response types
+     *
+     * @return an array of all the response types
+     */
+    @GetMapping("/response-types")
+    public List<String> getReportSectionConfigResponseTypes() {
+        return reportSectionConfigService.getAllResponseTypes();
     }
 
     /**
@@ -70,7 +80,10 @@ public class ReportSectionConfigController extends BaseController {
 
         ReportSectionConfig reportSectionConfig =
                 reportSectionConfigService.createReportSectionConfig(
-                        rscDto.getSectionPrompt(), rscDto.getResponseType(), reportConfig);
+                        rscDto.getSectionPrompt(),
+                        rscDto.getResponseType(),
+                        rscDto.getQuestionNumber(),
+                        reportConfig);
 
         return ControllerUtils.convertToDto(reportSectionConfig);
     }
@@ -111,6 +124,7 @@ public class ReportSectionConfigController extends BaseController {
                         rsConfig,
                         rscDto.getSectionPrompt(),
                         rscDto.getResponseType(),
+                        rscDto.getQuestionNumber(),
                         reportConfig,
                         employerReportSections,
                         studentReportSections);

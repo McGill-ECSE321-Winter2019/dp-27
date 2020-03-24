@@ -107,9 +107,6 @@ export default {
       this.$axios
         .post("/coops", coop)
         .then(resp => {
-          console.log(resp);
-          console.log("Coop created");
-
           // after coop is created, POST request for offer letter
           const formData = new FormData();
           formData.append("file", this.offerLetterFile);
@@ -122,8 +119,6 @@ export default {
               headers: { "Content-Type": "multipart/form-data" }
             })
             .then(resp => {
-              console.log(resp);
-              console.log("Report (offer letter) created");
               this.submitting = false;
 
               this.$router.push({ path: "/student/home" });
@@ -140,7 +135,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 #container {
   width: 75%;
 }

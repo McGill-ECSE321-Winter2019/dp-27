@@ -57,8 +57,9 @@ Parent: AdminReportConfigPage.vue -->
 
         <q-btn color="primary" type="submit" :label="buttonLabel" />
       </q-form>
-    </q-card-section> </q-card
-></template>
+    </q-card-section>
+  </q-card>
+</template>
 
 <script>
 export default {
