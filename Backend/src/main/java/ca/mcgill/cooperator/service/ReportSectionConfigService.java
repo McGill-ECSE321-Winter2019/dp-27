@@ -193,7 +193,7 @@ public class ReportSectionConfigService extends BaseService {
             }
         }
 
-        // reportSectionConfigRepository.delete(rsConfig);
+        reportSectionConfigRepository.delete(rsConfig);
         return rsConfig;
     }
 }

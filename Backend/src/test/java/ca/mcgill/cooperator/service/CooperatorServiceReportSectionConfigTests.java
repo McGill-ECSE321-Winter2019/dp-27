@@ -63,6 +63,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
                     ERROR_PREFIX
                             + "Section prompt cannot be empty! "
                             + "Response type cannot be null! "
+                            + "Question number cannot be less than 1! "
                             + "Report config cannot be null!",
                     e.getMessage());
         }
@@ -141,7 +142,8 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
             assertEquals(
                     ERROR_PREFIX
                             + "Report section config to update cannot be null! "
-                            + "Section prompt cannot be empty!",
+                            + "Section prompt cannot be empty! "
+                            + "Question number cannot be less than 1!",
                     e.getMessage());
         }
 
