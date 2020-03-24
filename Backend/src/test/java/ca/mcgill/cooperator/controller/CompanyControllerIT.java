@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class CompanyControllerIT extends BaseControllerIT {
+
     @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
@@ -45,8 +46,7 @@ public class CompanyControllerIT extends BaseControllerIT {
     }
 
     @Test
-    public void testCoopDetailsFlow() throws Exception {
-
+    public void testCompanyFlow() throws Exception {
         CompanyDto companyDto = new CompanyDto();
         companyDto.setName("Facebook");
         companyDto.setCity("Seattle");
