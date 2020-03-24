@@ -8,6 +8,7 @@ import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.StudentReportSection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -178,7 +179,7 @@ public class ReportSectionConfigService extends BaseService {
 
         // first delete from parent ReportConfig
         ReportConfig reportConfig = rsConfig.getReportConfig();
-        Set<ReportSectionConfig> rsConfigs = reportConfig.getReportSectionConfigs();
+        Set<ReportSectionConfig> rsConfigs = new HashSet<>(reportConfig.getReportSectionConfigs());
         rsConfigs.remove(rsConfig);
         reportConfig.setReportSectionConfigs(rsConfigs);
         reportConfigRepository.save(reportConfig);
@@ -192,7 +193,7 @@ public class ReportSectionConfigService extends BaseService {
         	}
         }
 
-        reportSectionConfigRepository.delete(rsConfig);
+        //reportSectionConfigRepository.delete(rsConfig);
         return rsConfig;
     }
 }

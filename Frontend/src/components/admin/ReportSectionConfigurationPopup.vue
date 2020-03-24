@@ -26,6 +26,13 @@
         />
 
         <q-btn color="primary" type="submit" :label="buttonLabel" />
+        <q-btn
+          v-if="isEditing"
+          color="primary"
+          label="Delete"
+          flat
+          @click="deleteReportSectionConfig"
+        />
       </q-form>
     </q-card-section>
   </q-card>
@@ -43,17 +50,24 @@ export default {
     };
   },
   props: {
-    reportConfigId: {
-      type: Number,
+    reportSectionConfig: {
+      type: Object,
       required: true
     },
-    numberOfQuestions: {
-      type: Number,
-      required: true
-    },
-    prompt: String,
-    responseType: String,
+    numberOfQuestions: Number,
     isEditing: Boolean
+  },
+  created: function() {
+    this.$axios.get("/report-section-configs/response-types").then(resp => {
+      this.options = resp.data;
+    });
+
+    if (this.isEditing) {
+      this.popupTitle = "Edit Report Section Configuration";
+      this.promptData = this.reportSectionConfig.sectionPrompt;
+      this.responseTypeData = this.reportSectionConfig.responseType;
+      this.buttonLabel = "Update";
+    }
   },
   methods: {
     onSubmit: function() {
@@ -96,18 +110,59 @@ export default {
           });
         });
     },
-    updateReportSectionConfig: function() {}
-  },
-  created: function() {
-    this.$axios.get("/report-section-configs/response-types").then(resp => {
-      this.options = resp.data;
-    });
+    updateReportSectionConfig: function() {
+      const body = {
+        id: this.reportSectionConfig.id,
+        sectionPrompt: this.promptData,
+        responseType: this.responseTypeData
+      };
 
-    if (this.isEditing) {
-      this.popupTitle = "Edit Report Section Configuration";
-      this.promptData = this.prompt;
-      this.responseTypeData = this.responseType;
-      this.buttonLabel = "Update";
+      this.$axios
+        .put("/report-section-configs", body)
+        .then(_resp => {
+          this.$q.notify({
+            color: "green-4",
+            position: "top",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "Updated Successfully"
+          });
+          // let parent know to close the dialog and refresh its list of report configs
+          this.$emit("refresh");
+        })
+        .catch(_err => {
+          this.$q.notify({
+            color: "red-4",
+            position: "top",
+            textColor: "white",
+            icon: "error",
+            message: "Something went wrong, please try again"
+          });
+        });
+    },
+    deleteReportSectionConfig: function() {
+      this.$axios
+        .delete("/report-section-configs/" + this.reportSectionConfig.id)
+        .then(_resp => {
+          this.$q.notify({
+            color: "green-4",
+            position: "top",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "Deleted Successfully"
+          });
+          // let parent know to close the dialog and refresh its list of report configs
+          this.$emit("refresh");
+        })
+        .catch(_err => {
+          this.$q.notify({
+            color: "red-4",
+            position: "top",
+            textColor: "white",
+            icon: "error",
+            message: "Something went wrong, please try again"
+          });
+        });
     }
   }
 };

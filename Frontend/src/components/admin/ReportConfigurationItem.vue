@@ -43,9 +43,9 @@ Parent: AdminReportConfigPage.vue -->
         <div v-if="rsConfigs.length > 0">
           <ReportSectionConfigurationItem
             v-for="rsConfig in rsConfigs"
-            :key="rsConfig.sectionPrompt"
-            :prompt="rsConfig.sectionPrompt"
-            :responseType="rsConfig.responseType"
+            :key="rsConfig.id"
+            :reportSectionConfig="rsConfig"
+            @refresh="notifyParent"
           />
         </div>
         <div v-else class="text-body2">
@@ -108,6 +108,7 @@ export default {
       showEditPopup: false,
       showDeletePopup: false,
       showReportSectionConfigPopup: false,
+      editingReportSection: false,
       rsConfigs: []
     };
   },
@@ -142,6 +143,9 @@ export default {
   methods: {
     notifyParent: function() {
       this.$emit("refresh");
+    },
+    handleReportSectionEdit: function(id) {
+      this.editingReportSection = true;
     },
     compareReportSectionConfigs: function(rsc1, rsc2) {
       // used to sort report section configs by question number
