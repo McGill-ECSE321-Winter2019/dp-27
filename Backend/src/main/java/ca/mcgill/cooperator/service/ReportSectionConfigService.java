@@ -8,7 +8,6 @@ import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.StudentReportSection;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -183,17 +182,18 @@ public class ReportSectionConfigService extends BaseService {
         rsConfigs.remove(rsConfig);
         reportConfig.setReportSectionConfigs(rsConfigs);
         reportConfigRepository.save(reportConfig);
-        
+
         // update question numbers of other ReportSectionConfigs
         List<ReportSectionConfig> allReportSectionConfigs = getAllReportSectionConfigs();
         for (ReportSectionConfig rsc : allReportSectionConfigs) {
-        	if (rsc.getQuestionNumber() > rsConfig.getQuestionNumber()) {
-        		// lower question number by 1
-        		updateReportSectionConfig(rsc, null, null, rsc.getQuestionNumber()-1, null, null, null);
-        	}
+            if (rsc.getQuestionNumber() > rsConfig.getQuestionNumber()) {
+                // lower question number by 1
+                updateReportSectionConfig(
+                        rsc, null, null, rsc.getQuestionNumber() - 1, null, null, null);
+            }
         }
 
-        //reportSectionConfigRepository.delete(rsConfig);
+        // reportSectionConfigRepository.delete(rsConfig);
         return rsConfig;
     }
 }

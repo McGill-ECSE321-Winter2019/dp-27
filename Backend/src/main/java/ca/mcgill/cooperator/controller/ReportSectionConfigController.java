@@ -54,7 +54,7 @@ public class ReportSectionConfigController extends BaseController {
                 reportSectionConfigService.getAllReportSectionConfigs());
     }
 
-	/**
+    /**
      * Returns all ReportSectionConfig response types
      *
      * @return an array of all the response types

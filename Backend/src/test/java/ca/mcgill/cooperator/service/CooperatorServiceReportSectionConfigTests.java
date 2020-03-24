@@ -135,7 +135,8 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
 
         // 2. invalid updates
         try {
-            reportSectionConfigService.updateReportSectionConfig(null, " ", null, -1, null, null, null);
+            reportSectionConfigService.updateReportSectionConfig(
+                    null, " ", null, -1, null, null, null);
         } catch (IllegalArgumentException e) {
             assertEquals(
                     ERROR_PREFIX
