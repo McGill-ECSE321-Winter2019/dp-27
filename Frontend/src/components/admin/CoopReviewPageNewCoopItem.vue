@@ -12,7 +12,7 @@
               <span class="text-subtitle1 text-weight-medium">
                 Term:
               </span>
-              {{ `${coop.courseOffering.season} ${coop.courseOffering.year}` }}
+              {{ term }}
             </div>
           </div>
           <div class="col-6 text-body2">
@@ -47,6 +47,11 @@ export default {
       required: true
     }
   },
+  computed: {
+    term: function() {
+      return `${this.coop.courseOffering.season} ${this.coop.courseOffering.year}`;
+    }
+  },
   created: function() {
     var bytes = this.coop.studentReports[0].data;
 
@@ -77,7 +82,7 @@ export default {
       // also send the student a notification that their coop has been approved
       const notifBody = {
         title: "Co-op Approved",
-        body: `Your co-op for ${this.coop.courseOffering.season} ${this.coop.courseOffering.year} has been approved!`,
+        body: `Your co-op for ${this.term} has been approved!`,
         student: {
           id: this.coop.student.id
         },
