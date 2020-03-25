@@ -46,7 +46,7 @@ public class CooperatorServiceCourseOfferingTests extends BaseServiceTest {
             fail();
         }
         c = courseRepository.findByName(name);
-        CourseOffering co = courseOfferingRepository.findByCourse(c).get(0);
+        CourseOffering co = courseOfferingRepository.findByCourse(c).stream().findFirst().get();
         assertEquals(courseOfferingService.getAllCourseOfferings().size(), 1);
         assertEquals(co.getSeason(), season);
         assertEquals(co.getYear(), year);

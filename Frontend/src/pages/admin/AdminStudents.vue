@@ -1,8 +1,38 @@
 <template>
   <div>
-    <q-card-section>All Students </q-card-section>
+    <q-card-section>All Students</q-card-section>
 
     <q-separator inset />
+    <div class="q-pa-md">
+      <q-select
+        v-model="course_name"
+        :options="course_names"
+        label="Course"
+        style="width:25%"
+      />
+      <q-select
+        v-model="status"
+        :options="statusOptions"
+        label="Coop Status"
+        style="width:25%"
+      />
+      <q-select
+        v-model="year"
+        :options="years"
+        label="Years"
+        style="width:25%"
+      />
+      <q-select
+        v-model="season"
+        :options="seasons"
+        label="Term"
+        style="width:25%"
+      />
+    </div>
+    <div class="q-pa-md">
+      <q-btn @click="applyFilter" class="q-mr-sm">Apply Filter</q-btn>
+      <q-btn @click="clearFilter" class="q-mr-sm">Clear Filter</q-btn>
+    </div>
 
     <div class="q-pa-md">
       <q-table
@@ -19,23 +49,31 @@ export default {
   name: "AdminAllStudents",
   data: () => ({
     students: [],
+    course_names: [],
+    course_name: "",
+    statusOptions: [],
+    status: "",
+    seasons: [],
+    season: "",
+    years: [],
+    year: "",
     columns: [
       {
-        name: "firstName",
+        name: "studentLastName",
         required: true,
-        label: "First Name",
+        label: "Student Last Name",
         align: "left",
-        field: "firstName",
+        field: "lastName",
         sortable: true,
         classes: "my-class",
         style: "width: 500px"
       },
       {
-        name: "lastName",
+        name: "studentFirstName",
         required: true,
-        label: "Last Name",
+        label: "Student First Name",
         align: "left",
-        field: "lastName",
+        field: "firstName",
         sortable: true,
         classes: "my-class",
         style: "width: 500px"
@@ -45,35 +83,24 @@ export default {
         required: true,
         label: "Student ID",
         align: "left",
-        field: "studentId",
+        field: "id",
+        sortable: true,
+        classes: "my-class",
+        style: "width: 500px"
+      },
+      {
+        name: "email",
+        required: true,
+        label: "Email",
+        align: "left",
+        field: "email",
         sortable: true,
         classes: "my-class",
         style: "width: 500px"
       }
-      // {
-      //   name: 'year',
-      //   required: true,
-      //   label: 'Year',
-      //   align: 'left',
-      //   field: 'year',
-      //   sortable: true,
-      //   classes: 'my-class',
-      //   style: 'width: 500px'
-      // },
-      // {
-      //   name: 'coopsCompleted',
-      //   required: true,
-      //   label: 'Coops Completed',
-      //   align: 'left',
-      //   field: 'coopsCompleted',
-      //   sortable: true,
-      //   classes: 'my-class',
-      //   style: 'width: 500px'
-      // }
     ]
   }),
   created: function() {
-    const user = this.$store.state.currentUser;
     this.$axios
       .get("/students", {
         headers: {
@@ -83,10 +110,81 @@ export default {
       .then(resp => {
         this.students = resp.data;
       });
+    this.$axios
+      .get("/coops/status", {
+        headers: {
+          Authorization: this.$store.state.token
+        }
+      })
+      .then(resp => {
+        this.statusOptions = resp.data;
+      });
+    this.$axios
+      .get("/course-offerings/years", {
+        headers: {
+          Authorization: this.$store.state.token
+        }
+      })
+      .then(resp => {
+        this.years = resp.data;
+      });
+    this.$axios
+      .get("/course-offerings/seasons", {
+        headers: {
+          Authorization: this.$store.state.token
+        }
+      })
+      .then(resp => {
+        this.seasons = resp.data;
+      });
+    this.$axios
+      .get("/courses/names", {
+        headers: {
+          Authorization: this.$store.state.token
+        }
+      })
+      .then(resp => {
+        this.course_names = resp.data;
+      });
   },
   methods: {
     goToStudentCoop() {
       this.$router.push("/admin/studentcoops");
+    },
+    clearFilter() {
+      this.course_name = "";
+      this.season = "";
+      this.year = "";
+      this.$axios
+        .get("/students", {
+          headers: {
+            Authorization: this.$store.state.token
+          }
+        })
+        .then(resp => {
+          this.students = resp.data;
+        });
+    },
+    applyFilter() {
+      this.$axios
+        .get(
+          "/students/filter?season=" +
+            this.season +
+            "&year=" +
+            this.year +
+            "&name=" +
+            this.course_name +
+            "&status=" +
+            this.status,
+          {
+            headers: {
+              Authorization: this.$store.state.token
+            }
+          }
+        )
+        .then(resp => {
+          this.students = resp.data;
+        });
     }
   }
 };

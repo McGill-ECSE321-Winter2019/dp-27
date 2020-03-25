@@ -11,6 +11,7 @@ import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.service.CoopDetailsService;
@@ -63,6 +64,12 @@ public class CoopController extends BaseController {
             coops = coopService.getCoopsByStatus(CoopStatus.valueOf(status));
         }
         return ControllerUtils.convertCoopListToDto(coops);
+    }
+
+    @GetMapping("/status")
+    public CoopStatus[] getAllCoopStatuses() {
+        CoopStatus[] status = CoopStatus.values();
+        return status;
     }
 
     @GetMapping("/student/{id}")
