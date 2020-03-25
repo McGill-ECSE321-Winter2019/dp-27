@@ -1,8 +1,14 @@
 import Vue from "vue";
 
-// this object contains functions that are globally available to every component
+/*
+ * This object contains functions that are globally available to every component
+ */
 const common = {
-  // found on SO: https://stackoverflow.com/a/57767153
+  /*
+   * Converts a base64-encoded string to a blob; used for rendering PDFs
+   *
+   * Found on SO: https://stackoverflow.com/a/57767153
+   */
   b64toBlob: function(content, contentType) {
     contentType = contentType || "";
     const sliceSize = 512;
@@ -20,7 +26,6 @@ const common = {
       byteArrays.push(byteArray);
     }
 
-    // statement which creates the blob
     return new Blob(byteArrays, {
       type: contentType
     });

@@ -28,13 +28,17 @@
           <q-tab-panels v-model="currentTab" animated>
             <q-tab-panel name="new_coops">
               <div v-if="newCoops.length > 0">
-                <div class="text-subtitle1 q-mb-lg">
+                <div class="text-subtitle1 q-mb-md">
                   <span class="text-weight-medium"
                     >Number of new co-ops to review:
                   </span>
                   <q-badge align="middle" color="black">
                     {{ newCoops.length }}
                   </q-badge>
+                </div>
+                <div class="text-caption q-mb-lg">
+                  Note that students will enter their co-op details (e.g.
+                  company name, salary) after the co-op is approved.
                 </div>
                 <CoopReviewPageNewCoopItem
                   v-for="coop in newCoops"

@@ -77,7 +77,7 @@ public class CoopService extends BaseService {
 
         return c;
     }
-    
+
     @Transactional
     public List<Coop> getCoopsByStatus(CoopStatus status) {
         if (status == null) {
