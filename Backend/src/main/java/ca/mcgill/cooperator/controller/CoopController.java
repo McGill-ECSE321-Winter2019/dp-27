@@ -8,6 +8,7 @@ import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.dto.StudentReportDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
+import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerReport;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
@@ -54,9 +56,14 @@ public class CoopController extends BaseController {
     }
 
     @GetMapping("")
-    public List<CoopDto> getAllCoops() {
-        List<Coop> coops = coopService.getAllCoops();
-        return ControllerUtils.convertCoopListToDto(coops);
+    public List<CoopDto> getAllCoops(@RequestParam(required = false) String status) {
+    	List<Coop> coops;
+    	if (status == null) {
+    		coops = coopService.getAllCoops();
+    	} else {
+    		coops = coopService.getCoopsByStatus(CoopStatus.valueOf(status));
+    	}
+    	return ControllerUtils.convertCoopListToDto(coops);
     }
 
     @GetMapping("/student/{id}")
