@@ -51,7 +51,8 @@ export default {
   },
   data: function() {
     return {
-      loading: true,
+      newCoopsLoading: true,
+      completedCoopsLoading: true,
       currentTab: "new_coops",
       newCoops: [],
       completedCoops: []
@@ -59,15 +60,17 @@ export default {
   },
   created: function() {
     this.$axios
-      .get(
-        "/coops",
-        { params: { status: "UNDER_REVIEW" } },
-        { responseType: "blob" }
-      )
+      .get("/coops", { params: { status: "UNDER_REVIEW" } })
       .then(resp => {
         this.newCoops = resp.data;
-        this.loading = false;
+        this.newCoopsLoading = false;
       });
+    this.completedCoopsLoading = false;
+  },
+  computed: {
+    loading: function() {
+      return this.newCoopsLoading || this.completedCoopsLoading;
+    }
   }
 };
 </script>
