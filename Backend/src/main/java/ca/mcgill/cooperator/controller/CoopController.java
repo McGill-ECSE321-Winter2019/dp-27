@@ -1,6 +1,5 @@
 package ca.mcgill.cooperator.controller;
 
-import ca.mcgill.cooperator.dto.CoopDetailsDto;
 import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerReportDto;
@@ -8,6 +7,7 @@ import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.dto.StudentReportDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
+import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerReport;
@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
@@ -54,8 +55,13 @@ public class CoopController extends BaseController {
     }
 
     @GetMapping("")
-    public List<CoopDto> getAllCoops() {
-        List<Coop> coops = coopService.getAllCoops();
+    public List<CoopDto> getAllCoops(@RequestParam(required = false) String status) {
+        List<Coop> coops;
+        if (status == null) {
+            coops = coopService.getAllCoops();
+        } else {
+            coops = coopService.getCoopsByStatus(CoopStatus.valueOf(status));
+        }
         return ControllerUtils.convertCoopListToDto(coops);
     }
 
@@ -107,20 +113,29 @@ public class CoopController extends BaseController {
     public CoopDto updateCoop(@RequestBody CoopDto coopDto) {
         Coop coop = coopService.getCoopById(coopDto.getId());
 
-        CourseOfferingDto courseOfferingDto = coopDto.getCourseOffering();
-        CourseOffering courseOffering =
-                courseOfferingService.getCourseOfferingById(courseOfferingDto.getId());
+        // set everything to null initially so that we don't update fields that aren't present
+        CourseOffering courseOffering = null;
+        if (coopDto.getCourseOffering() != null) {
+            courseOffering =
+                    courseOfferingService.getCourseOfferingById(
+                            coopDto.getCourseOffering().getId());
+        }
 
-        StudentDto studentDto = coopDto.getStudent();
-        Student student = studentService.getStudentById(studentDto.getId());
+        Student student = null;
+        if (coopDto.getStudent() != null) {
+            student = studentService.getStudentById(coopDto.getStudent().getId());
+        }
 
-        CoopDetailsDto coopDetailsDto = coopDto.getCoopDetails();
-        CoopDetails coopDetails = coopDetailsService.getCoopDetails(coopDetailsDto.getId());
+        CoopDetails coopDetails = null;
+        if (coopDto.getCoopDetails() != null) {
+            coopDetails = coopDetailsService.getCoopDetails(coopDto.getCoopDetails().getId());
+        }
 
-        List<EmployerReportDto> employerReportDtos = coopDto.getEmployerReports();
-        Set<EmployerReport> employerReports = new HashSet<EmployerReport>();
+        Set<EmployerReport> employerReports = null;
+        if (coopDto.getEmployerReports() != null) {
+            List<EmployerReportDto> employerReportDtos = coopDto.getEmployerReports();
+            employerReports = new HashSet<EmployerReport>();
 
-        if (employerReportDtos != null) {
             for (EmployerReportDto employerReportDto : employerReportDtos) {
                 EmployerReport employerReport =
                         employerReportService.getEmployerReport(employerReportDto.getId());
@@ -128,10 +143,11 @@ public class CoopController extends BaseController {
             }
         }
 
-        List<StudentReportDto> studentReportDtos = coopDto.getStudentReports();
-        Set<StudentReport> studentReports = new HashSet<StudentReport>();
+        Set<StudentReport> studentReports = null;
+        if (coopDto.getStudentReports() != null) {
+            List<StudentReportDto> studentReportDtos = coopDto.getStudentReports();
+            studentReports = new HashSet<StudentReport>();
 
-        if (employerReportDtos != null) {
             for (StudentReportDto studentReportDto : studentReportDtos) {
                 StudentReport studentReport =
                         studentReportService.getStudentReport(studentReportDto.getId());

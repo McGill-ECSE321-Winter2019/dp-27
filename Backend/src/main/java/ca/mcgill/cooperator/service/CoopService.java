@@ -79,6 +79,15 @@ public class CoopService extends BaseService {
     }
 
     @Transactional
+    public List<Coop> getCoopsByStatus(CoopStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException(ERROR_PREFIX + "Status cannot be null.");
+        }
+        List<Coop> coops = coopRepository.findByStatus(status);
+        return coops;
+    }
+
+    @Transactional
     public List<Coop> getAllCoops() {
         return ServiceUtils.toList(coopRepository.findAll());
     }
@@ -86,6 +95,11 @@ public class CoopService extends BaseService {
     @Transactional
     public List<Coop> getAllCoopsByStudent(Student s) {
         return ServiceUtils.toList(coopRepository.findByStudent(s));
+    }
+
+    @Transactional
+    public List<Coop> getAllCoopsForCourseOffering(CourseOffering courseOffering) {
+        return ServiceUtils.toList(coopRepository.findByCourseOffering(courseOffering));
     }
 
     @Transactional
@@ -128,15 +142,6 @@ public class CoopService extends BaseService {
     }
 
     @Transactional
-    public List<Coop> getCoopsByStatus(CoopStatus status) {
-        if (status == null) {
-            throw new IllegalArgumentException(ERROR_PREFIX + "Status cannot be null.");
-        }
-        List<Coop> coops = coopRepository.findByStatus(status);
-        return coops;
-    }
-
-    @Transactional
     public Coop deleteCoop(Coop c) {
         if (c == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Co-op to delete cannot be null!");
@@ -173,10 +178,5 @@ public class CoopService extends BaseService {
         coopRepository.delete(c);
 
         return c;
-    }
-
-    @Transactional
-    public List<Coop> getAllCoopsForCourseOffering(CourseOffering courseOffering) {
-        return ServiceUtils.toList(coopRepository.findByCourseOffering(courseOffering));
     }
 }
