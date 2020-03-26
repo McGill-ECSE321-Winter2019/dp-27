@@ -149,7 +149,7 @@ public class StudentService extends BaseService {
         Student s = studentRepository.findByEmail(email);
         if (s == null) {
             throw new IllegalArgumentException(
-                ERROR_PREFIX + "Student with email " + email + " does not exist.");
+                    ERROR_PREFIX + "Student with email " + email + " does not exist.");
         }
 
         return s;

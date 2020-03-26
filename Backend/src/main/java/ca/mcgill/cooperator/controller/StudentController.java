@@ -56,11 +56,11 @@ public class StudentController extends BaseController {
         return ControllerUtils.convertToDto(s);
     }
     /*(
-    * Get Student by email
-    *
-    * @param email
-    * @return StudentDto Object
-    */
+     * Get Student by email
+     *
+     * @param email
+     * @return StudentDto Object
+     */
     @GetMapping("email/{email}")
     public StudentDto getStudentByEmail(@PathVariable String email) {
         Student s = studentService.getStudentByEmail(email);
