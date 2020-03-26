@@ -22,12 +22,12 @@
                         <div class="text-h6 q-mb-md">Students who have not enrolled</div>
                     </q-card-section>
                     <div v-if="unenrolledStudents.length > 0" class="q-ml-md">
-                        <li v-for="student in unenrolledStudents" :key="student">
+                        <q-chip icon="email" size="md" v-for="student in unenrolledStudents" :key="student">
                             {{ student }}
-                        </li>
+                        </q-chip>
                     </div>
                     <q-card-actions vertical align="right">
-                        <q-btn @click="notifyEnrolled" flat>Notify all</q-btn>
+                        <q-btn @click="showPopup=true" flat>Notify all</q-btn>
                         <q-btn @click="copyEnrolled" flat>Copy List</q-btn>
                     </q-card-actions>
                 </q-card>
@@ -37,23 +37,31 @@
                         <div class="text-h6 q-mb-md">Students who have not created a new Co-op</div>
                     </q-card-section>
                     <div v-if="unregisteredStudents.length > 0" class="q-ml-md">
-                        <li v-for="student in unregisteredStudents" :key="student">
+                        <q-chip icon="email" size="md" v-for="student in unregisteredStudents" :key="student">
                             {{ student }}
-                        </li>
+                        </q-chip>
                     </div>
                     <q-card-actions vertical align="right">
                         <q-btn @click="copyRegistered" flat>Copy List</q-btn>
                     </q-card-actions>
                 </q-card>
+
+                <q-dialog v-model="showPopup">
+                    <NotificationPopup :title="selectedCourse" :course="specificCourse" :students="unenrolledStudents" />
+                </q-dialog>
             </div>
         </div>    
     </q-page>
 </template>
 
 <script>
+import NotificationPopup from "../../components/admin/NotificationPopup.vue";
+
 export default {
     name: "CSVParserPage",
-
+    components: {
+        NotificationPopup,
+    },
     data: function() {
         return {
             selectedYear: "",
@@ -66,7 +74,9 @@ export default {
             unregisteredStudents: [],
             csvFile: null,
             uploading: false,
-            courseOfferingId: ""
+            courseOfferingId: "",
+            showPopup: false,
+            specificCourse: []
 
         };
     },
@@ -98,6 +108,8 @@ export default {
                     courseName: this.selectedCourse
                 }
             }).then(resp => {
+                this.specificCourse = resp.data;
+                console.log(this.specificCourse);
                 this.courseOfferingId = resp.data.id;
                 const formData = new FormData();
                 formData.append("file", this.csvFile);

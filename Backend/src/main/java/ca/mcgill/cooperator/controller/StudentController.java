@@ -49,7 +49,7 @@ public class StudentController extends BaseController {
      * @param id
      * @return StudentDto Object
      */
-    @GetMapping("/{id}")
+    @GetMapping("id/{id}")
     public StudentDto getStudentById(@PathVariable int id) {
         Student s = studentService.getStudentById(id);
 
@@ -61,7 +61,7 @@ public class StudentController extends BaseController {
     * @param email
     * @return StudentDto Object
     */
-    @GetMapping("/{email}")
+    @GetMapping("email/{email}")
     public StudentDto getStudentByEmail(@PathVariable String email) {
         Student s = studentService.getStudentByEmail(email);
 
