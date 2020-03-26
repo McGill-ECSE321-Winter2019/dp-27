@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div id="container" class="row flex justify-center">
+        <div id="container" class="row flex justify-center" v-if="submitted">
             <div class="col">
                 <q-card flat bordered class="q-mb-md">
                     <q-card-section>
@@ -28,7 +28,7 @@
                     </div>
                     <q-card-actions vertical align="right">
                         <q-btn @click="showPopup=true" flat>Notify all</q-btn>
-                        <q-btn @click="copyEnrolled" flat>Copy List</q-btn>
+                        <q-btn v-clipboard:copy="unenrolledStudents" v-clipboard:success="onCopy" flat>Copy List</q-btn>
                     </q-card-actions>
                 </q-card>
 
@@ -42,7 +42,7 @@
                         </q-chip>
                     </div>
                     <q-card-actions vertical align="right">
-                        <q-btn @click="copyRegistered" flat>Copy List</q-btn>
+                        <q-btn v-clipboard:copy="unregisteredStudents" v-clipboard:success="onCopy" flat>Copy List</q-btn>
                     </q-card-actions>
                 </q-card>
 
@@ -76,8 +76,8 @@ export default {
             uploading: false,
             courseOfferingId: "",
             showPopup: false,
-            specificCourse: []
-
+            specificCourse: [],
+            submitted: false,
         };
     },
     created: function() {
@@ -127,13 +127,17 @@ export default {
                 });
 
                 this.uploading = false;
+                this.submitted = true;
                 });
         },
-        copyEnrolled: function(){
-            
-        },
-        copyRegistered: function(){
-
+        onCopy: function(){
+            this.$q.notify({
+                color: "blue-grey-4",
+                position: "top",
+                textColor: "white",
+                icon: "assignment_turned_in",
+                message: "Copied Successfully"
+            });
         },
         notifyEnrolled: function(){
             unenrolledStudents.forEach(email => {
