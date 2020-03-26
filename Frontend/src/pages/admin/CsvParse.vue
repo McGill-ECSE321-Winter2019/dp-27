@@ -109,7 +109,6 @@ export default {
                 }
             }).then(resp => {
                 this.specificCourse = resp.data;
-                console.log(this.specificCourse);
                 this.courseOfferingId = resp.data.id;
                 const formData = new FormData();
                 formData.append("file", this.csvFile);

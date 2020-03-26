@@ -55,8 +55,6 @@ export default {
         onSubmit: function(){
             this.students.forEach(s => {
                 this.$axios.get("/students/email/" + s).then(studentObject => {
-                    console.log(this.$store.state.currentUser);
-                    console.log(studentObject.data);                        
                     const body = {
                             title: this.header,
                             body: this.body,
