@@ -12,7 +12,12 @@
                 This is the school term during which your co-op will take place.
               </div>
 
-              <div class="section">
+              <!-- Show spinner while loading -->
+              <div v-if="loading" class="center-item">
+                <q-spinner color="primary" size="3em" />
+              </div>
+              <!-- Show actual inputs -->
+              <div v-else class="section">
                 <q-select
                   outlined
                   v-model="courseTerm"
@@ -32,6 +37,16 @@
                     val =>
                       (val && val > 2010 && val < 2100) ||
                       'Please enter a valid course year'
+                  ]"
+                />
+                <q-select
+                  outlined
+                  v-model="courseName"
+                  :options="courseNameOptions"
+                  label="Course name"
+                  :rules="[
+                    val =>
+                      (val && val.length > 0) || 'Please select a course name'
                   ]"
                 />
               </div>
@@ -87,8 +102,19 @@ export default {
       courseTerm: "",
       courseTermOptions: ["Winter", "Summer", "Fall"],
       courseYear: new Date().getFullYear(),
-      submitting: false
+      courseName: "",
+      courseNameOptions: [],
+      submitting: false,
+      loading: true
     };
+  },
+  created: function() {
+    this.$axios.get("/courses").then(resp => {
+      resp.data.forEach(course => {
+        this.courseNameOptions.push(course.name);
+        this.loading = false;
+      });
+    });
   },
   methods: {
     onSubmit: function() {
@@ -97,7 +123,10 @@ export default {
         status: "UNDER_REVIEW",
         courseOffering: {
           year: this.courseYear,
-          season: this.courseTerm.toUpperCase()
+          season: this.courseTerm.toUpperCase(),
+          course: {
+            name: this.courseName
+          }
         },
         student: this.$store.state.currentUser
       };
@@ -121,15 +150,40 @@ export default {
             .then(resp => {
               this.submitting = false;
 
+              this.$q.notify({
+                color: "green-4",
+                position: "top",
+                textColor: "white",
+                icon: "cloud_done",
+                message: "Co-op Submitted Successfully"
+              });
               this.$router.push({ path: "/student/home" });
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+              this.$q.notify({
+                color: "red-4",
+                position: "top",
+                textColor: "white",
+                icon: "error",
+                message: "Something went wrong, please try again"
+              });
+            });
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          this.$q.notify({
+            color: "red-4",
+            position: "top",
+            textColor: "white",
+            icon: "error",
+            message: "Something went wrong, please try again"
+          });
+        });
     },
     onReset: function() {
       this.courseTerm = "";
       this.courseYear = null;
+      this.courseName = "";
+      this.offerLetterFile = null;
     }
   }
 };
@@ -138,6 +192,10 @@ export default {
 <style lang="scss" scoped>
 #container {
   width: 75%;
+}
+
+.center-item {
+  text-align: center;
 }
 
 .section {

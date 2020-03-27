@@ -91,12 +91,8 @@ public class CoopController extends BaseController {
         if (courseOfferingDto.getId() > 0) {
             courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingDto.getId());
         } else {
-            // we need to derive the Course Offering if ID is not given
-
-            // this is a bit hacky, but if they have 0 co-ops already (for example) then this
-            // is their first co-op term and they should be taking FACC 200
-            String courseName = "FACC 20" + student.getCoops().size();
-            // all courses (FACC 200-205) should always exist
+        	// if no ID present, get CourseOffering via Course
+            String courseName = courseOfferingDto.getCourse().getName();
             Course course = courseService.getCourseByName(courseName);
 
             courseOffering =
@@ -104,6 +100,7 @@ public class CoopController extends BaseController {
                             course, courseOfferingDto.getYear(), courseOfferingDto.getSeason());
 
             if (courseOffering == null) {
+            	// create the CourseOffering if it doesn't already exist
                 courseOffering =
                         courseOfferingService.createCourseOffering(
                                 courseOfferingDto.getYear(), courseOfferingDto.getSeason(), course);
