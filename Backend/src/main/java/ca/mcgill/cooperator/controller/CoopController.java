@@ -91,7 +91,7 @@ public class CoopController extends BaseController {
         if (courseOfferingDto.getId() > 0) {
             courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingDto.getId());
         } else {
-        	// if no ID present, get CourseOffering via Course
+            // if no ID present, get CourseOffering via Course
             String courseName = courseOfferingDto.getCourse().getName();
             Course course = courseService.getCourseByName(courseName);
 
@@ -100,7 +100,7 @@ public class CoopController extends BaseController {
                             course, courseOfferingDto.getYear(), courseOfferingDto.getSeason());
 
             if (courseOffering == null) {
-            	// create the CourseOffering if it doesn't already exist
+                // create the CourseOffering if it doesn't already exist
                 courseOffering =
                         courseOfferingService.createCourseOffering(
                                 courseOfferingDto.getYear(), courseOfferingDto.getSeason(), course);
