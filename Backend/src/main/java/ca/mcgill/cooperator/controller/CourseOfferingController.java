@@ -7,11 +7,8 @@ import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
-
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -66,13 +63,13 @@ public class CourseOfferingController extends BaseController {
                         courseOfferingDto.getYear(), courseOfferingDto.getSeason(), course);
         return ControllerUtils.convertToDto(courseOffering);
     }
-    
+
     @GetMapping("/seasons")
     public Season[] getAllCoopSeasons() {
         Season[] seasons = Season.values();
         return seasons;
     }
-    
+
     @PutMapping("")
     public CourseOfferingDto updateCourseOfferingDto(@RequestBody CourseOfferingDto coDto) {
         CourseOffering co = courseOfferingService.getCourseOfferingById(coDto.getId());

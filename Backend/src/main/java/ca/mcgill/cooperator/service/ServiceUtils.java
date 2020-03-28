@@ -23,7 +23,7 @@ public class ServiceUtils {
         }
         return resultList;
     }
-    
+
     /**
      * Converts an Iterable to a Set
      *

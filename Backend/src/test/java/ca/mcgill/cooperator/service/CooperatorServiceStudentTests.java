@@ -11,7 +11,6 @@ import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.Notification;
@@ -47,12 +46,12 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-    	notificationRepository.deleteAll();
-    	coopRepository.deleteAll();
-    	courseOfferingRepository.deleteAll();
-    	courseRepository.deleteAll();
-    	adminRepository.deleteAll();    
-    	studentRepository.deleteAll();      
+        notificationRepository.deleteAll();
+        coopRepository.deleteAll();
+        courseOfferingRepository.deleteAll();
+        courseRepository.deleteAll();
+        adminRepository.deleteAll();
+        studentRepository.deleteAll();
     }
 
     @Test
@@ -312,35 +311,36 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         assertEquals(ERROR_PREFIX + "Student to update cannot be null.", error);
         assertEquals(1, studentService.getAllStudents().size());
     }
-    
+
     @Test
     public void testGetMostRecentForStudent() {
         Student s = createTestStudent(studentService);
-    	
-    	Course c = createTestCourse(courseService);
+
+        Course c = createTestCourse(courseService);
         CourseOffering co1 = createTestCourseOffering(courseOfferingService, c, Season.FALL, 2019);
         Coop coop1 = createTestCoop(coopService, co1, s);
-        
-        CourseOffering co2 = createTestCourseOffering(courseOfferingService, c, Season.SUMMER, 2019);
+
+        CourseOffering co2 =
+                createTestCourseOffering(courseOfferingService, c, Season.SUMMER, 2019);
         Coop coop2 = createTestCoop(coopService, co2, s);
-        
+
         s = studentService.getStudentById(s.getId());
         Coop mostRecent = studentService.getMostRecentCoop(s);
-        
+
         assertEquals(mostRecent.getCourseOffering().getSeason(), Season.FALL);
         assertEquals(mostRecent.getCourseOffering().getYear(), 2019);
-        
-        CourseOffering co3 = createTestCourseOffering(courseOfferingService, c, Season.WINTER, 2020);
+
+        CourseOffering co3 =
+                createTestCourseOffering(courseOfferingService, c, Season.WINTER, 2020);
         Coop coop3 = createTestCoop(coopService, co3, s);
 
         s = studentService.getStudentById(s.getId());
         mostRecent = studentService.getMostRecentCoop(s);
-        
+
         assertEquals(mostRecent.getCourseOffering().getSeason(), Season.WINTER);
         assertEquals(mostRecent.getCourseOffering().getYear(), 2020);
-    	
     }
-    
+
     @Test
     public void testDeleteStudent1() {
         String firstName = "Kah";

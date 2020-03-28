@@ -560,7 +560,7 @@ public class ControllerUtils {
         }
         return courseOfferingDtos;
     }
-    
+
     public static Set<CourseOfferingDto> convertCourseOfferingSetToDto(
             Set<CourseOffering> courseOfferings) {
         Set<CourseOfferingDto> courseOfferingDtos = new HashSet<CourseOfferingDto>();
@@ -1036,7 +1036,7 @@ public class ControllerUtils {
         }
         return studentDtos;
     }
-    
+
     public static List<StudentDto> convertStudentListToDto(List<Student> students) {
         List<StudentDto> studentDtos = new ArrayList<StudentDto>();
 

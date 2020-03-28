@@ -47,11 +47,11 @@ public class CourseController extends BaseController {
 
         return ControllerUtils.convertCourseListToDto(courses);
     }
-    
+
     /**
      * Gets all course names
      *
-     * @return List of strings 
+     * @return List of strings
      */
     @GetMapping("/names")
     public List<String> getAllCourseNames() {

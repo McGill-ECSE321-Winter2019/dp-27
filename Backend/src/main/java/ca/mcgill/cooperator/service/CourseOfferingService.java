@@ -9,7 +9,6 @@ import ca.mcgill.cooperator.model.Season;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,17 +84,16 @@ public class CourseOfferingService extends BaseService {
         }
         return c;
     }
-    
+
     @Transactional
-    public Set<CourseOffering> getCourseOfferings(int year){
-    	return ServiceUtils.toSet(courseOfferingRepository.findByYear(year));
+    public Set<CourseOffering> getCourseOfferings(int year) {
+        return ServiceUtils.toSet(courseOfferingRepository.findByYear(year));
     }
-    
+
     @Transactional
-    public Set<CourseOffering> getCourseOfferings(Season season){
-    	return ServiceUtils.toSet(courseOfferingRepository.findBySeason(season));
+    public Set<CourseOffering> getCourseOfferings(Season season) {
+        return ServiceUtils.toSet(courseOfferingRepository.findBySeason(season));
     }
-   
 
     @Transactional
     public Set<CourseOffering> getCourseOfferingsByCourse(Course c) {
@@ -125,7 +123,7 @@ public class CourseOfferingService extends BaseService {
         }
         return co;
     }
-    
+
     @Transactional
     public Set<CourseOffering> getAllCourseOfferingsSet() {
         Set<CourseOffering> co = ServiceUtils.toSet(courseOfferingRepository.findAll());

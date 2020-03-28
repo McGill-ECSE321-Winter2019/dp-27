@@ -61,22 +61,23 @@ public class CourseService extends BaseService {
 
     @Transactional
     public Course getCourseByName(String name) {
-    	Course c = null;
-    	try {
-    		c = courseRepository.findByName(name.trim());
-    		
-    	}
-        catch(IllegalArgumentException e) {
+        Course c = null;
+        try {
+            c = courseRepository.findByName(name.trim());
+
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX + "Course with name " + name + " does not exist!");
         }
         return c;
     }
-    
+
     @Transactional
     public List<String> getAllCourseNames() {
-    	List<String> courseNames = new ArrayList<>();
-    	ServiceUtils.toList(courseRepository.findAll()).stream().forEach(c -> courseNames.add(c.getName()));;
+        List<String> courseNames = new ArrayList<>();
+        ServiceUtils.toList(courseRepository.findAll()).stream()
+                .forEach(c -> courseNames.add(c.getName()));
+        ;
         return courseNames;
     }
 
