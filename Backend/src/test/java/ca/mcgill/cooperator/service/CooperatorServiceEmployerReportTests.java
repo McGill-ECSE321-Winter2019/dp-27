@@ -19,6 +19,7 @@ import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.EmployerReportSection;
+import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Student;
@@ -146,8 +147,9 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company company = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, company);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         MultipartFile multipartFile = null;
         try {
@@ -192,8 +194,9 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company company = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, company);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         MultipartFile multipartFile = null;
         try {

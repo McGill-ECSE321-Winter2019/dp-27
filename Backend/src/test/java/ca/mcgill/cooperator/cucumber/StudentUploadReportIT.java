@@ -9,6 +9,7 @@ import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
+import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.CoopDetailsDto;
@@ -64,6 +65,7 @@ public class StudentUploadReportIT extends BaseControllerIT {
     @Autowired private CourseRepository courseRepository;
     @Autowired private CourseOfferingRepository courseOfferingRepository;
     @Autowired private CoopDetailsRepository coopDetailsRepository;
+    @Autowired private ReportConfigRepository reportConfigRepository;
 
     @Autowired private CoopDetailsService coopDetailsService;
     @Autowired private StudentReportSectionService studentReportSectionService;
@@ -112,6 +114,7 @@ public class StudentUploadReportIT extends BaseControllerIT {
         courseRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         coopDetailsRepository.deleteAll();
+        reportConfigRepository.deleteAll();
     }
 
     @Given("the Student is currently doing a Coop term")

@@ -54,7 +54,7 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
     }
 
     @Test
-    public void testCreateStudent1() {
+    public void testCreateStudent() {
         String firstName = "Albert";
         String lastName = "Kragl";
         String email = "frisbeeGod47@gmail.com";
@@ -72,6 +72,40 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         assertEquals(s.getEmail(), email);
         assertEquals(s.getStudentId(), studentID);
         assertEquals(1, studentService.getAllStudents().size());
+    }
+
+    @Test
+    public void testStudentUniqueEmail() {
+        String firstName = "Albert";
+        String lastName = "Kragl";
+        String email = "frisbeeGod47@gmail.com";
+        String studentID = "260735111";
+        String studentID2 = "260735112";
+
+        try {
+            studentService.createStudent(firstName, lastName, email, studentID);
+            // email must be unique so expect a SQLException
+            studentService.createStudent(firstName, lastName, email, studentID2);
+        } catch (Exception e) {
+            assertEquals(1, studentService.getAllStudents().size());
+        }
+    }
+
+    @Test
+    public void testStudentUniqueStudentID() {
+        String firstName = "Albert";
+        String lastName = "Kragl";
+        String email = "frisbeeGod47@gmail.com";
+        String email2 = "bighucks6@gmail.com";
+        String studentID = "260735111";
+
+        try {
+            studentService.createStudent(firstName, lastName, email, studentID);
+            // studentID must be unique so expect a SQLException
+            studentService.createStudent(firstName, lastName, email2, studentID);
+        } catch (Exception e) {
+            assertEquals(1, studentService.getAllStudents().size());
+        }
     }
 
     @Test

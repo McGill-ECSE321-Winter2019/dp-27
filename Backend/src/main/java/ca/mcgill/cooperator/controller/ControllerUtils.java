@@ -1127,11 +1127,24 @@ public class ControllerUtils {
             throw new IllegalArgumentException(
                     ERROR_PREFIX + "Report section config cannot be null!");
         }
+
+        ReportConfig rc = rsConfig.getReportConfig();
+        // set the ReportSectionConfigs to null so we don't get infinite recursion
+        ReportConfigDto rcDto =
+                new ReportConfigDto(
+                        rc.getId(),
+                        rc.getRequiresFile(),
+                        rc.getDeadline(),
+                        rc.getIsDeadlineFromStart(),
+                        rc.getType(),
+                        null);
+
         return new ReportSectionConfigDto(
                 rsConfig.getId(),
                 rsConfig.getSectionPrompt(),
                 rsConfig.getResponseType(),
-                null,
+                rsConfig.getQuestionNumber(),
+                rcDto,
                 null,
                 null);
     }

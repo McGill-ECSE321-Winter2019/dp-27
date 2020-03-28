@@ -2,6 +2,7 @@ package ca.mcgill.cooperator.model;
 
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,8 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 public class Course {
     @Id @GeneratedValue private int id;
+
+    @Column(unique = true)
     private String name;
 
     @OneToMany(

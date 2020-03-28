@@ -65,6 +65,13 @@
           link="/admin/companies"
           icon="domain"
         />
+        <q-separator />
+        <SidebarLink
+          title="Co-op Review"
+          caption="Review new and completed co-ops"
+          link="/admin/coops/review"
+          icon="playlist_add_check"
+        />
         <SidebarLink
           title="Report Configuration"
           caption="Configure reports to be submitted for co-op terms"

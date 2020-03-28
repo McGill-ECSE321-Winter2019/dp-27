@@ -10,6 +10,7 @@ import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.dao.EmployerReportRepository;
 import ca.mcgill.cooperator.dao.EmployerReportSectionRepository;
+import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Coop;
@@ -18,6 +19,7 @@ import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.EmployerReportSection;
+import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.Student;
 import java.util.List;
@@ -40,6 +42,7 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
     @Autowired CourseRepository courseRepository;
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired StudentRepository studentRepository;
+    @Autowired ReportConfigRepository reportConfigRepository;
 
     @Autowired EmployerContactService employerContactService;
     @Autowired EmployerReportSectionService employerReportSectionService;
@@ -69,6 +72,7 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         employerReportSectionRepository.deleteAll();
         employerReportRepository.deleteAll();
         companyRepository.deleteAll();
+        reportConfigRepository.deleteAll();
     }
 
     @Test
@@ -80,8 +84,9 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
         EmployerReport er = createTestEmployerReport(employerReportService, coop, ec);
 
         try {
@@ -157,8 +162,9 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
         EmployerReport er = createTestEmployerReport(employerReportService, coop, ec);
 
         try {
@@ -194,8 +200,9 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
         EmployerReport er = createTestEmployerReport(employerReportService, coop, ec);
 
         try {
@@ -227,8 +234,9 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
         EmployerReport er = createTestEmployerReport(employerReportService, coop, ec);
 
         try {
@@ -257,8 +265,9 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
         EmployerReport er = createTestEmployerReport(employerReportService, coop, ec);
 
         try {
@@ -285,8 +294,9 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
-                createTestReportSectionConfig(reportConfigService, reportSectionConfigService);
+                createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
         EmployerReport er = createTestEmployerReport(employerReportService, coop, ec);
 
         try {

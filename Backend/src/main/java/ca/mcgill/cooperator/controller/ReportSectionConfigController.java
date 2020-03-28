@@ -1,12 +1,16 @@
 package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.ReportSectionConfigDto;
+import ca.mcgill.cooperator.model.EmployerReportSection;
 import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
+import ca.mcgill.cooperator.model.StudentReportSection;
 import ca.mcgill.cooperator.service.EmployerReportSectionService;
 import ca.mcgill.cooperator.service.ReportConfigService;
 import ca.mcgill.cooperator.service.ReportSectionConfigService;
 import ca.mcgill.cooperator.service.StudentReportSectionService;
+import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("report-section-configs")
-public class ReportSectionConfigController {
+public class ReportSectionConfigController extends BaseController {
 
     @Autowired ReportConfigService reportConfigService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
@@ -35,8 +39,29 @@ public class ReportSectionConfigController {
      * @return the ReportSectionConfig with specified ID
      */
     @GetMapping("/{id}")
-    public ReportSectionConfigDto getReportConfigById(@PathVariable int id) {
+    public ReportSectionConfigDto getReportSectionConfigById(@PathVariable int id) {
         return ControllerUtils.convertToDto(reportSectionConfigService.getReportSectionConfig(id));
+    }
+
+    /**
+     * Returns all ReportSectionConfigs
+     *
+     * @return all ReportSectionConfigs
+     */
+    @GetMapping("")
+    public List<ReportSectionConfigDto> getAllReportSectionConfigs() {
+        return ControllerUtils.convertReportSectionConfigListToDto(
+                reportSectionConfigService.getAllReportSectionConfigs());
+    }
+
+    /**
+     * Returns all ReportSectionConfig response types
+     *
+     * @return an array of all the response types
+     */
+    @GetMapping("/response-types")
+    public List<String> getReportSectionConfigResponseTypes() {
+        return reportSectionConfigService.getAllResponseTypes();
     }
 
     /**
@@ -48,11 +73,17 @@ public class ReportSectionConfigController {
     @PostMapping("")
     public ReportSectionConfigDto createReportSectionConfig(
             @RequestBody ReportSectionConfigDto rscDto) {
-        ReportConfig reportConfig =
-                reportConfigService.getReportConfig(rscDto.getReportConfig().getId());
+        ReportConfig reportConfig = null;
+        if (rscDto.getReportConfig() != null) {
+            reportConfig = reportConfigService.getReportConfig(rscDto.getReportConfig().getId());
+        }
+
         ReportSectionConfig reportSectionConfig =
                 reportSectionConfigService.createReportSectionConfig(
-                        rscDto.getSectionPrompt(), rscDto.getResponseType(), reportConfig);
+                        rscDto.getSectionPrompt(),
+                        rscDto.getResponseType(),
+                        rscDto.getQuestionNumber(),
+                        reportConfig);
 
         return ControllerUtils.convertToDto(reportSectionConfig);
     }
@@ -66,8 +97,25 @@ public class ReportSectionConfigController {
     @PutMapping("")
     public ReportSectionConfigDto updateReportSectionConfig(
             @RequestBody ReportSectionConfigDto rscDto) {
-        ReportConfig reportConfig =
-                reportConfigService.getReportConfig(rscDto.getReportConfig().getId());
+        ReportConfig reportConfig = null;
+        if (rscDto.getReportConfig() != null) {
+            reportConfig = reportConfigService.getReportConfig(rscDto.getReportConfig().getId());
+        }
+
+        Set<EmployerReportSection> employerReportSections = null;
+        if (rscDto.getEmployerReportSections() != null) {
+            employerReportSections =
+                    ControllerUtils.convertEmployerReportSectionsToDomainObjects(
+                            employerReportSectionService, rscDto.getEmployerReportSections());
+        }
+
+        Set<StudentReportSection> studentReportSections = null;
+        if (rscDto.getStudentReportSections() != null) {
+            studentReportSections =
+                    ControllerUtils.convertStudentReportSectionsToDomainObjects(
+                            studentReportSectionService, rscDto.getStudentReportSections());
+        }
+
         ReportSectionConfig rsConfig =
                 reportSectionConfigService.getReportSectionConfig(rscDto.getId());
 
@@ -76,11 +124,10 @@ public class ReportSectionConfigController {
                         rsConfig,
                         rscDto.getSectionPrompt(),
                         rscDto.getResponseType(),
+                        rscDto.getQuestionNumber(),
                         reportConfig,
-                        ControllerUtils.convertEmployerReportSectionsToDomainObjects(
-                                employerReportSectionService, rscDto.getEmployerReportSections()),
-                        ControllerUtils.convertStudentReportSectionsToDomainObjects(
-                                studentReportSectionService, rscDto.getStudentReportSections()));
+                        employerReportSections,
+                        studentReportSections);
 
         return ControllerUtils.convertToDto(updatedReportSectionConfig);
     }
@@ -91,7 +138,7 @@ public class ReportSectionConfigController {
      * @param id
      * @return the deleted ReportSectionConfig
      */
-    @DeleteMapping("/{id")
+    @DeleteMapping("/{id}")
     public ReportSectionConfigDto deleteReportSectionConfig(@PathVariable int id) {
         ReportSectionConfig rsConfig =
                 reportSectionConfigService.deleteReportSectionConfig(

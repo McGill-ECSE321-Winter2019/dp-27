@@ -2,6 +2,7 @@ package ca.mcgill.cooperator.model;
 
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,6 +17,8 @@ public class ReportConfig {
     private boolean requiresFile;
     private int deadline;
     private boolean isDeadlineFromStart;
+
+    @Column(unique = true)
     private String type;
 
     @OneToMany(
