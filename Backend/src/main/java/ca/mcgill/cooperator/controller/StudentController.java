@@ -14,6 +14,7 @@ import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.StudentService;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,35 +40,33 @@ public class StudentController extends BaseController {
     @Autowired private CourseOfferingService courseOfferingService;
     @Autowired private CourseService courseService;
     @Autowired private NotificationService notificationService;
-
-    /**
-     * Get all students
-     *
-     * @return List<StudentDto>
-     */
-    @GetMapping("")
-    public List<StudentDto> getAllStudents() {
-        List<Student> s = studentService.getAllStudents();
-        return ControllerUtils.convertStudentListToDto(s);
-    }
+    
     
     /**
      * Get students with filters
      *
-     * @return List<StudentDto>
+     * @return Set<StudentDto>
      */
-    @GetMapping("/filter")
-    public Set<StudentDto> getStudentFiltered(
-    		@RequestParam Season season, 
-    		@RequestParam Integer year, 
-    		@RequestParam String name, 
-    		@RequestParam CoopStatus status) {
+    @GetMapping("")
+    public Collection<StudentDto> getStudentFiltered(
+    		@RequestParam(required=false) Season season, 
+    		@RequestParam(required=false)  Integer year, 
+    		@RequestParam(required=false)  String name, 
+    		@RequestParam(required=false)  CoopStatus status) {
+    	// if all the request params are empty, return all students
+    	if(year == null && season == null && (name == null || name.trim().length() == 0) && status == null) {
+    		List<Student> s = studentService.getAllStudents();
+            return ControllerUtils.convertStudentListToDto(s);
+    	}
+    	
+    	//find all the course offerings that correspond to the filters and to set intersections
     	Set<CourseOffering> result = courseOfferingService.getAllCourseOfferingsSet();
     	if(year != null) {
     		Set<CourseOffering> yearCO = courseOfferingService.getCourseOfferings(year);
     		result.retainAll(yearCO);
     	}
     	if(season != null) {
+    		
     		Set<CourseOffering> seasonCO = courseOfferingService.getCourseOfferings(season);
     		result.retainAll(seasonCO);
     	}
@@ -77,13 +76,14 @@ public class StudentController extends BaseController {
     		result.retainAll(nameCO);
     	}
     	
+    	//find the students that correspond to those course offerings and check the coop status filter
     	Set<Student> toReturn = new HashSet<>();
     	if(result.size() > 0) {
 	    	result.stream().forEach(co -> 
 	    		co.getCoops().stream().forEach(c -> {
-	    			if(status != null && c.getStatus() == status) {
+	    			if(status == null || (status != null && c.getStatus() == status)) {
 	    				toReturn.add(c.getStudent());
-	    			}
+	    			} 
 	    		}
 	    	));
 	    		

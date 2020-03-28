@@ -73,16 +73,6 @@ public class CourseOfferingController extends BaseController {
         return seasons;
     }
     
-    @GetMapping("/years")
-    public int[] getYearsToDisplay() {
-        int[] years = new int[7];
-        years[0] = Calendar.getInstance().get(Calendar.YEAR);
-        for(int i = 1; i<7; i++) {
-        	years[i] = years[0] - i;
-        }
-        return years;
-    }
-
     @PutMapping("")
     public CourseOfferingDto updateCourseOfferingDto(@RequestBody CourseOfferingDto coDto) {
         CourseOffering co = courseOfferingService.getCourseOfferingById(coDto.getId());

@@ -119,15 +119,8 @@ export default {
       .then(resp => {
         this.statusOptions = resp.data;
       });
-    this.$axios
-      .get("/course-offerings/years", {
-        headers: {
-          Authorization: this.$store.state.token
-        }
-      })
-      .then(resp => {
-        this.years = resp.data;
-      });
+    this.years = this.$common.getYears();
+    console.log(this.$common.getYears());
     this.$axios
       .get("/course-offerings/seasons", {
         headers: {
@@ -137,15 +130,9 @@ export default {
       .then(resp => {
         this.seasons = resp.data;
       });
-    this.$axios
-      .get("/courses/names", {
-        headers: {
-          Authorization: this.$store.state.token
-        }
-      })
-      .then(resp => {
-        this.course_names = resp.data;
-      });
+    this.$axios.get("/courses/names", {}).then(resp => {
+      this.course_names = resp.data;
+    });
   },
   methods: {
     goToStudentCoop() {
@@ -155,6 +142,7 @@ export default {
       this.course_name = "";
       this.season = "";
       this.year = "";
+      this.status = "";
       this.$axios
         .get("/students", {
           headers: {
@@ -168,7 +156,7 @@ export default {
     applyFilter() {
       this.$axios
         .get(
-          "/students/filter?season=" +
+          "/students?season=" +
             this.season +
             "&year=" +
             this.year +
