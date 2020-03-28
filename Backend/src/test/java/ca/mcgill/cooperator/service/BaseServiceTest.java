@@ -155,6 +155,6 @@ public class BaseServiceTest {
             ReportSectionConfigService rscService,
             ReportConfig reportConfig) {
         return rscService.createReportSectionConfig(
-                "How was your co-op?", ReportResponseType.LONG_TEXT, reportConfig);
+                "How was your co-op?", ReportResponseType.LONG_TEXT, 1, reportConfig);
     }
 }

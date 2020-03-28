@@ -16,6 +16,7 @@ public class ReportSectionConfig {
     @Id @GeneratedValue private int id;
     private String sectionPrompt;
     private ReportResponseType responseType;
+    private int questionNumber;
 
     @ManyToOne(optional = false)
     private ReportConfig reportConfig;
@@ -56,6 +57,14 @@ public class ReportSectionConfig {
 
     public void setResponseType(ReportResponseType responseType) {
         this.responseType = responseType;
+    }
+
+    public int getQuestionNumber() {
+        return this.questionNumber;
+    }
+
+    public void setQuestionNumber(int questionNumber) {
+        this.questionNumber = questionNumber;
     }
 
     public ReportConfig getReportConfig() {

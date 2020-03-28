@@ -28,7 +28,13 @@ Parent: AdminReportConfigPage.vue -->
           <div class="col-7">Section Prompt</div>
           <div class="col-3">Response Type</div>
           <div class="col-2">
-            <q-btn label="+ New" color="primary" class="align-right" flat />
+            <q-btn
+              label="+ New"
+              color="primary"
+              class="align-right"
+              flat
+              @click="showReportSectionConfigPopup = true"
+            />
           </div>
         </div>
 
@@ -37,9 +43,9 @@ Parent: AdminReportConfigPage.vue -->
         <div v-if="rsConfigs.length > 0">
           <ReportSectionConfigurationItem
             v-for="rsConfig in rsConfigs"
-            :key="rsConfig.prompt"
-            :prompt="rsConfig.prompt"
-            :responseType="rsConfig.responseType"
+            :key="rsConfig.id"
+            :reportSectionConfig="rsConfig"
+            @refresh="notifyParent"
           />
         </div>
         <div v-else class="text-body2">
@@ -71,6 +77,14 @@ Parent: AdminReportConfigPage.vue -->
       <q-dialog v-model="showDeletePopup">
         <ReportConfigurationDeletePopup :id="this.id" @refresh="notifyParent" />
       </q-dialog>
+
+      <q-dialog v-model="showReportSectionConfigPopup">
+        <ReportSectionConfigurationPopup
+          :reportConfigId="this.id"
+          :numberOfQuestions="this.rsConfigs.length"
+          @refresh="notifyParent"
+        />
+      </q-dialog>
     </q-card-section>
   </q-card>
 </template>
@@ -79,19 +93,23 @@ Parent: AdminReportConfigPage.vue -->
 import ReportConfigurationPopup from "./ReportConfigurationPopup";
 import ReportConfigurationDeletePopup from "./ReportConfigurationDeletePopup.vue";
 import ReportSectionConfigurationItem from "./ReportSectionConfigurationItem.vue";
+import ReportSectionConfigurationPopup from "./ReportSectionConfigurationPopup.vue";
 
 export default {
   name: "ReportConfigurationItem",
   components: {
     ReportConfigurationPopup,
     ReportConfigurationDeletePopup,
-    ReportSectionConfigurationItem
+    ReportSectionConfigurationItem,
+    ReportSectionConfigurationPopup
   },
   data: function() {
     return {
       showEditPopup: false,
       showDeletePopup: false,
-      rsConfigs: this.reportSectionConfigs
+      showReportSectionConfigPopup: false,
+      editingReportSection: false,
+      rsConfigs: []
     };
   },
   props: {
@@ -125,7 +143,19 @@ export default {
   methods: {
     notifyParent: function() {
       this.$emit("refresh");
+    },
+    handleReportSectionEdit: function(id) {
+      this.editingReportSection = true;
+    },
+    compareReportSectionConfigs: function(rsc1, rsc2) {
+      // used to sort report section configs by question number
+      return rsc1.questionNumber - rsc2.questionNumber;
     }
+  },
+  created: function() {
+    this.rsConfigs = this.reportSectionConfigs.sort(
+      this.compareReportSectionConfigs
+    );
   }
 };
 </script>

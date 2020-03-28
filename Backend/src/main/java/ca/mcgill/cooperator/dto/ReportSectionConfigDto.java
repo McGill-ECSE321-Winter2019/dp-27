@@ -7,6 +7,7 @@ public class ReportSectionConfigDto {
     private Integer id;
     private String sectionPrompt;
     private ReportResponseType responseType;
+    private Integer questionNumber;
 
     private ReportConfigDto reportConfig;
     private List<EmployerReportSectionDto> employerReportSections;
@@ -18,12 +19,14 @@ public class ReportSectionConfigDto {
             Integer id,
             String sectionPrompt,
             ReportResponseType responseType,
+            Integer questionNumber,
             ReportConfigDto reportConfig,
             List<EmployerReportSectionDto> employerReportSections,
             List<StudentReportSectionDto> studentReportSections) {
         this.id = id;
         this.sectionPrompt = sectionPrompt;
         this.responseType = responseType;
+        this.questionNumber = questionNumber;
         this.reportConfig = reportConfig;
         this.employerReportSections = employerReportSections;
         this.studentReportSections = studentReportSections;
@@ -49,6 +52,14 @@ public class ReportSectionConfigDto {
 
     public void setResponseType(ReportResponseType responseType) {
         this.responseType = responseType;
+    }
+
+    public Integer getQuestionNumber() {
+        return this.questionNumber;
+    }
+
+    public void setQuestionNumber(Integer questionNumber) {
+        this.questionNumber = questionNumber;
     }
 
     public ReportConfigDto getReportConfig() {

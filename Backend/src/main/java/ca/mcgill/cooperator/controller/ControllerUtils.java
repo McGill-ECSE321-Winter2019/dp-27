@@ -1143,6 +1143,7 @@ public class ControllerUtils {
                 rsConfig.getId(),
                 rsConfig.getSectionPrompt(),
                 rsConfig.getResponseType(),
+                rsConfig.getQuestionNumber(),
                 rcDto,
                 null,
                 null);

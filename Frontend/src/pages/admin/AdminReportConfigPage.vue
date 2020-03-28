@@ -83,6 +83,7 @@ export default {
     refreshList: function() {
       this.showPopup = false;
       this.showDeletePopup = false;
+
       this.loading = true;
       this.$axios.get("/report-configs").then(resp => {
         this.reportConfigs = resp.data;

@@ -7,6 +7,7 @@ import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.StudentReportSection;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,13 +31,19 @@ public class ReportSectionConfigService extends BaseService {
      */
     @Transactional
     public ReportSectionConfig createReportSectionConfig(
-            String sectionPrompt, ReportResponseType responseType, ReportConfig reportConfig) {
+            String sectionPrompt,
+            ReportResponseType responseType,
+            int questionNumber,
+            ReportConfig reportConfig) {
         StringBuilder error = new StringBuilder();
         if (sectionPrompt == null || sectionPrompt.trim().length() == 0) {
             error.append("Section prompt cannot be empty! ");
         }
         if (responseType == null) {
             error.append("Response type cannot be null! ");
+        }
+        if (questionNumber <= 0) {
+            error.append("Question number cannot be less than 1! ");
         }
         if (reportConfig == null) {
             error.append("Report config cannot be null!");
@@ -48,6 +55,7 @@ public class ReportSectionConfigService extends BaseService {
         ReportSectionConfig rsConfig = new ReportSectionConfig();
         rsConfig.setSectionPrompt(sectionPrompt);
         rsConfig.setResponseType(responseType);
+        rsConfig.setQuestionNumber(questionNumber);
         rsConfig.setReportConfig(reportConfig);
         rsConfig.setEmployerReportSections(new HashSet<EmployerReportSection>());
         rsConfig.setStudentReportSections(new HashSet<StudentReportSection>());
@@ -83,6 +91,23 @@ public class ReportSectionConfigService extends BaseService {
     }
 
     /**
+     * Returns all ReportSectionConfig response types
+     *
+     * @return an array of all the response types
+     */
+    @Transactional
+    public List<String> getAllResponseTypes() {
+        ReportResponseType[] responseTypes = ReportResponseType.values();
+        List<String> responseTypeStrings = new ArrayList<>(responseTypes.length);
+
+        for (ReportResponseType rt : responseTypes) {
+            responseTypeStrings.add(rt.name());
+        }
+
+        return responseTypeStrings;
+    }
+
+    /**
      * Updates an existing ReportSectionConfig
      *
      * @param rsConfig
@@ -98,6 +123,7 @@ public class ReportSectionConfigService extends BaseService {
             ReportSectionConfig rsConfig,
             String sectionPrompt,
             ReportResponseType responseType,
+            Integer questionNumber,
             ReportConfig reportConfig,
             Set<EmployerReportSection> employerReportSections,
             Set<StudentReportSection> studentReportSections) {
@@ -108,6 +134,9 @@ public class ReportSectionConfigService extends BaseService {
         if (sectionPrompt != null && sectionPrompt.trim().length() == 0) {
             error.append("Section prompt cannot be empty! ");
         }
+        if (questionNumber != null && questionNumber <= 0) {
+            error.append("Question number cannot be less than 1!");
+        }
         if (error.length() > 0) {
             throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
@@ -117,6 +146,9 @@ public class ReportSectionConfigService extends BaseService {
         }
         if (responseType != null) {
             rsConfig.setResponseType(responseType);
+        }
+        if (questionNumber != null) {
+            rsConfig.setQuestionNumber(questionNumber);
         }
         if (reportConfig != null) {
             rsConfig.setReportConfig(reportConfig);
@@ -146,10 +178,20 @@ public class ReportSectionConfigService extends BaseService {
 
         // first delete from parent ReportConfig
         ReportConfig reportConfig = rsConfig.getReportConfig();
-        Set<ReportSectionConfig> rsConfigs = reportConfig.getReportSectionConfigs();
+        Set<ReportSectionConfig> rsConfigs = new HashSet<>(reportConfig.getReportSectionConfigs());
         rsConfigs.remove(rsConfig);
         reportConfig.setReportSectionConfigs(rsConfigs);
         reportConfigRepository.save(reportConfig);
+
+        // update question numbers of other ReportSectionConfigs
+        List<ReportSectionConfig> allReportSectionConfigs = getAllReportSectionConfigs();
+        for (ReportSectionConfig rsc : allReportSectionConfigs) {
+            if (rsc.getQuestionNumber() > rsConfig.getQuestionNumber()) {
+                // lower question number by 1
+                updateReportSectionConfig(
+                        rsc, null, null, rsc.getQuestionNumber() - 1, null, null, null);
+            }
+        }
 
         reportSectionConfigRepository.delete(rsConfig);
         return rsConfig;

@@ -6,6 +6,7 @@ import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +102,7 @@ public class CoopDetailsService extends BaseService {
         coopRepository.save(c);
 
         EmployerContact ec = cd.getEmployerContact();
-        Set<CoopDetails> details = ec.getCoopDetails();
+        Set<CoopDetails> details = new HashSet<>(ec.getCoopDetails());
         details.remove(cd);
         ec.setCoopDetails(details);
         employerContactRepository.save(ec);

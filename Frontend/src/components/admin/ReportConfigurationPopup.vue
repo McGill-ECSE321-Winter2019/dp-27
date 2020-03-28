@@ -1,5 +1,6 @@
 <!-- This component is a popup for both creating and editing a report config.
-It is rendered slightly differently depending on whether it is in editing mode or not.
+It is rendered slightly differently depending on whether it is in editing mode
+or not.
 
 Parent: AdminReportConfigPage.vue -->
 <template>
@@ -57,8 +58,9 @@ Parent: AdminReportConfigPage.vue -->
 
         <q-btn color="primary" type="submit" :label="buttonLabel" />
       </q-form>
-    </q-card-section> </q-card
-></template>
+    </q-card-section>
+  </q-card>
+</template>
 
 <script>
 export default {

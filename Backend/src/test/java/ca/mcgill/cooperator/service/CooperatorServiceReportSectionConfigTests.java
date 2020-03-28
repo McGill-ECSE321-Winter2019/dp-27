@@ -41,7 +41,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
         try {
             ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
             reportSectionConfigService.createReportSectionConfig(
-                    prompt, ReportResponseType.LONG_TEXT, rc);
+                    prompt, ReportResponseType.LONG_TEXT, 1, rc);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -57,12 +57,13 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
     @Test
     public void testCreateReportSectionConfigInvalid() {
         try {
-            reportSectionConfigService.createReportSectionConfig("  ", null, null);
+            reportSectionConfigService.createReportSectionConfig("  ", null, -1, null);
         } catch (IllegalArgumentException e) {
             assertEquals(
                     ERROR_PREFIX
                             + "Section prompt cannot be empty! "
                             + "Response type cannot be null! "
+                            + "Question number cannot be less than 1! "
                             + "Report config cannot be null!",
                     e.getMessage());
         }
@@ -79,7 +80,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
             rc = createTestReportConfig(reportConfigService, "First Evaluation");
             rsConfig =
                     reportSectionConfigService.createReportSectionConfig(
-                            prompt, ReportResponseType.LONG_TEXT, rc);
+                            prompt, ReportResponseType.LONG_TEXT, 1, rc);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -88,7 +89,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
         prompt = "Which tools did you use during your co-op?";
         try {
             reportSectionConfigService.updateReportSectionConfig(
-                    rsConfig, prompt, null, null, null, null);
+                    rsConfig, prompt, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -108,7 +109,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
                             rc, null, null, null, "Second Evaluation", null);
 
             reportSectionConfigService.updateReportSectionConfig(
-                    rsConfig, prompt, ReportResponseType.SHORT_TEXT, null, null, null);
+                    rsConfig, prompt, ReportResponseType.SHORT_TEXT, 2, null, null, null);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -128,19 +129,21 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
         try {
             ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
             reportSectionConfigService.createReportSectionConfig(
-                    prompt, ReportResponseType.LONG_TEXT, rc);
+                    prompt, ReportResponseType.LONG_TEXT, 1, rc);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
         // 2. invalid updates
         try {
-            reportSectionConfigService.updateReportSectionConfig(null, " ", null, null, null, null);
+            reportSectionConfigService.updateReportSectionConfig(
+                    null, " ", null, -1, null, null, null);
         } catch (IllegalArgumentException e) {
             assertEquals(
                     ERROR_PREFIX
                             + "Report section config to update cannot be null! "
-                            + "Section prompt cannot be empty!",
+                            + "Section prompt cannot be empty! "
+                            + "Question number cannot be less than 1!",
                     e.getMessage());
         }
 
@@ -161,7 +164,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
             ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
             ReportSectionConfig rsc =
                     reportSectionConfigService.createReportSectionConfig(
-                            prompt, ReportResponseType.LONG_TEXT, rc);
+                            prompt, ReportResponseType.LONG_TEXT, 1, rc);
 
             reportSectionConfigService.deleteReportSectionConfig(rsc);
         } catch (IllegalArgumentException e) {
