@@ -86,7 +86,7 @@ export default {
                 this.courseList.push(course.name);
             });
         });
-        this.$axios.get("/season").then(resp => {
+        this.$axios.get("/seasons").then(resp => {
             resp.data.forEach(season => {
                 this.seasonList.push(season);
             });

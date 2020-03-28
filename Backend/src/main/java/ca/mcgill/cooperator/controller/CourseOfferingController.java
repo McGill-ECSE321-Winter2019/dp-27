@@ -7,8 +7,11 @@ import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
-import java.util.ArrayList;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,11 +44,10 @@ public class CourseOfferingController extends BaseController {
     }
 
     @GetMapping("/years")
-    public List<String> getCourseOfferingYears() {
-        List<String> years = new ArrayList<>();
+    public Set<String> getCourseOfferingYears() {
+        Set<String> years = new HashSet<>();
         List<CourseOffering> co = courseOfferingService.getAllCourseOfferings();
         for (CourseOffering c : co) {
-            if (!years.contains(String.valueOf(c.getYear())))
                 years.add(String.valueOf(c.getYear()));
         }
         return years;
