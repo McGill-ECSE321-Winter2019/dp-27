@@ -1,9 +1,13 @@
 package ca.mcgill.cooperator.dto;
 
+import java.sql.Date;
+
 public class CoopDetailsDto {
     private int id;
     private int payPerHour;
     private int hoursPerWeek;
+    private Date startDate;
+    private Date endDate;
 
     private EmployerContactDto employerContact;
     private CoopDto coop;
@@ -14,6 +18,8 @@ public class CoopDetailsDto {
             int id,
             int payPerHour,
             int hoursPerWeek,
+            Date startDate,
+            Date endDate,
             EmployerContactDto employerContact,
             CoopDto coop) {
         this.id = id;
@@ -43,6 +49,22 @@ public class CoopDetailsDto {
 
     public void setHoursPerWeek(int hoursPerWeek) {
         this.hoursPerWeek = hoursPerWeek;
+    }
+
+    public Date getStartDate() {
+        return this.startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return this.endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public EmployerContactDto getEmployerContact() {
