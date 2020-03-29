@@ -39,6 +39,24 @@ const common = {
     return new Blob(byteArrays, {
       type: contentType
     });
+  },
+  /**
+   * Converts enum text (e.g. UNDER_REVIEW) to a more readable format
+   * (e.g. Under Review)
+   */
+  convertEnumTextToReadableString: function(enumText) {
+    const capitalize = s => {
+      if (typeof s !== "string") return "";
+      let lower = s.toLowerCase();
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    };
+
+    let words = enumText.split("_");
+    let result = "";
+    words.forEach(word => {
+      result += capitalize(word) + " ";
+    });
+    return result.trim();
   }
 };
 

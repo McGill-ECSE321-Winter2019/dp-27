@@ -1,34 +1,26 @@
 <template>
   <q-page class="flex justify-center">
-    <div
-      id="container"
-      class="row"
-    >
-      <div class="col-9">
-        <HomeMainInfo />
-      </div>
-      <div class="col-3">
-        <HomeCurrentCoopInfoWidget />
+    <div id="container" class="row">
+      <div class="col">
+        <HomeCoopSection />
       </div>
     </div>
   </q-page>
 </template>
 
 <script>
-import HomeCurrentCoopInfoWidget from 'components/student/HomeCurrentCoopInfoWidget.vue'
-import HomeMainInfo from 'components/student/HomeMainInfo.vue'
+import HomeCoopSection from "components/student/HomeCoopSection.vue";
 
 export default {
-  name: 'StudentHome',
+  name: "StudentHome",
   components: {
-    HomeCurrentCoopInfoWidget,
-    HomeMainInfo
+    HomeCoopSection
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
 #container {
-  width: 85%;
+  width: 75%;
 }
 </style>
