@@ -46,7 +46,7 @@
 </template>
 <script>
 export default {
-  name: "AdminAllStudents",
+  name: "AdminStudentsPage",
   data: () => ({
     students: [],
     course_names: [],

@@ -8,7 +8,8 @@ const common = {
   getYears: function() {
     var current = new Date().getFullYear();
     var yrs = [];
-    for (var i = 0; i < 10; i++) {
+    yrs.push(current + 1);
+    for (var i = 0; i < 9; i++) {
       yrs.push(current - i);
     }
     return yrs;
