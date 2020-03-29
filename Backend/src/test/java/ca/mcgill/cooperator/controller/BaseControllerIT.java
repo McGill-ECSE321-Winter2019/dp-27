@@ -448,6 +448,7 @@ public abstract class BaseControllerIT {
 	                                    .characterEncoding("utf-8"))
 	                                    .andExpect(status().isOk())
 	                                    .andReturn();
+	    
         adminDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), AdminDto.class);
