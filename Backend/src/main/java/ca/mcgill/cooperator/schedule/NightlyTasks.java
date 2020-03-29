@@ -4,6 +4,7 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.service.CoopService;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -27,12 +28,14 @@ public class NightlyTasks {
     /** Checks all existing Coops and updates their status if necessary. */
     @Scheduled(cron = CRON_TEST)
     public void updateCoopStatuses() {
-        System.out.println("[Schedule] Running job to update Coop statuses");
-
         List<Coop> coops = coopService.getAllCoops();
 
         Date currentDate = new Date(System.currentTimeMillis());
         Date coopDate;
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        System.out.println(
+                df.format(currentDate) + " [Schedule] Running job to update Coop statuses");
 
         for (Coop coop : coops) {
             if (coop.getStatus() == CoopStatus.FUTURE) {
