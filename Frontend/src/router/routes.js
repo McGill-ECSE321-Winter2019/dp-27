@@ -62,7 +62,7 @@ const routes = [
       },
       {
         path: "students",
-        component: () => import("pages/admin/AdminStudents.vue")
+        component: () => import("pages/admin/AdminStudentsPage.vue")
       },
       {
         path: "student",

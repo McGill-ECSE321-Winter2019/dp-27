@@ -65,6 +65,12 @@ public class CoopController extends BaseController {
         return ControllerUtils.convertCoopListToDto(coops);
     }
 
+    @GetMapping("/status")
+    public CoopStatus[] getAllCoopStatuses() {
+        CoopStatus[] status = CoopStatus.values();
+        return status;
+    }
+
     @GetMapping("/student/{id}")
     public List<CoopDto> getCoopByStudentId(@PathVariable int id) {
         Student s = studentService.getStudentById(id);

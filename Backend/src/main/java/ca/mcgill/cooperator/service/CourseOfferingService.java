@@ -8,6 +8,7 @@ import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.Season;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,8 +86,18 @@ public class CourseOfferingService extends BaseService {
     }
 
     @Transactional
-    public List<CourseOffering> getCourseOfferingsByCourse(Course c) {
-        List<CourseOffering> co = courseOfferingRepository.findByCourse(c);
+    public Set<CourseOffering> getCourseOfferings(int year) {
+        return ServiceUtils.toSet(courseOfferingRepository.findByYear(year));
+    }
+
+    @Transactional
+    public Set<CourseOffering> getCourseOfferings(Season season) {
+        return ServiceUtils.toSet(courseOfferingRepository.findBySeason(season));
+    }
+
+    @Transactional
+    public Set<CourseOffering> getCourseOfferingsByCourse(Course c) {
+        Set<CourseOffering> co = courseOfferingRepository.findByCourse(c);
         if (co == null) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX
@@ -107,6 +118,15 @@ public class CourseOfferingService extends BaseService {
     @Transactional
     public List<CourseOffering> getAllCourseOfferings() {
         List<CourseOffering> co = ServiceUtils.toList(courseOfferingRepository.findAll());
+        if (co == null) {
+            throw new IllegalArgumentException(ERROR_PREFIX + "There are no course offerings!");
+        }
+        return co;
+    }
+
+    @Transactional
+    public Set<CourseOffering> getAllCourseOfferingsSet() {
+        Set<CourseOffering> co = ServiceUtils.toSet(courseOfferingRepository.findAll());
         if (co == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "There are no course offerings!");
         }

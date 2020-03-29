@@ -49,6 +49,16 @@ public class CourseController extends BaseController {
     }
 
     /**
+     * Gets all course names
+     *
+     * @return List of strings
+     */
+    @GetMapping("/names")
+    public List<String> getAllCourseNames() {
+        return courseService.getAllCourseNames();
+    }
+
+    /**
      * Creates a new Course
      *
      * <p>In request body:

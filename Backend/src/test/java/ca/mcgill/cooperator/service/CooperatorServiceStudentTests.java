@@ -14,6 +14,7 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.Notification;
+import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,12 +46,12 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-        studentRepository.deleteAll();
-        courseRepository.deleteAll();
-        courseOfferingRepository.deleteAll();
-        coopRepository.deleteAll();
         notificationRepository.deleteAll();
+        coopRepository.deleteAll();
+        courseOfferingRepository.deleteAll();
+        courseRepository.deleteAll();
         adminRepository.deleteAll();
+        studentRepository.deleteAll();
     }
 
     @Test
@@ -66,7 +67,7 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
             fail();
         }
 
-        Student s = studentService.getStudentByStudentID(studentID);
+        Student s = studentService.getStudentByStudentId(studentID);
         assertEquals(s.getFirstName(), firstName);
         assertEquals(s.getLastName(), lastName);
         assertEquals(s.getEmail(), email);
@@ -120,7 +121,7 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         } catch (IllegalArgumentException e) {
             fail();
         }
-        Student s = studentService.getStudentByStudentID(studentID);
+        Student s = studentService.getStudentByStudentId(studentID);
         assertEquals(s.getFirstName(), firstName);
         assertEquals(s.getLastName(), lastName);
         assertEquals(s.getEmail(), email);
@@ -202,13 +203,13 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         Set<Notification> notifications = new HashSet<>();
 
         try {
-            Student s = studentService.getStudentByStudentID(studentID);
+            Student s = studentService.getStudentByStudentId(studentID);
             studentService.updateStudent(
                     s, firstName, lastName, email, studentIDNew, coops, notifications);
         } catch (IllegalArgumentException e) {
             fail();
         }
-        Student s = studentService.getStudentByStudentID(studentIDNew);
+        Student s = studentService.getStudentByStudentId(studentIDNew);
         assertEquals(s.getFirstName(), firstName);
         assertEquals(s.getLastName(), lastName);
         assertEquals(s.getEmail(), email);
@@ -272,13 +273,13 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
             fail();
         }
         try {
-            Student s = studentService.getStudentByStudentID(studentID);
+            Student s = studentService.getStudentByStudentId(studentID);
             studentService.updateStudent(s, "  ", "", "", "", null, null);
             fail();
         } catch (IllegalArgumentException e) {
 
         }
-        Student s = studentService.getStudentByStudentID(studentID);
+        Student s = studentService.getStudentByStudentId(studentID);
         assertEquals(s.getFirstName(), firstName);
         assertEquals(s.getLastName(), lastName);
         assertEquals(s.getEmail(), email);
@@ -312,6 +313,35 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
     }
 
     @Test
+    public void testGetMostRecentForStudent() {
+        Student s = createTestStudent(studentService);
+
+        Course c = createTestCourse(courseService);
+        CourseOffering co1 = createTestCourseOffering(courseOfferingService, c, Season.FALL, 2019);
+        Coop coop1 = createTestCoop(coopService, co1, s);
+
+        CourseOffering co2 =
+                createTestCourseOffering(courseOfferingService, c, Season.SUMMER, 2019);
+        Coop coop2 = createTestCoop(coopService, co2, s);
+
+        s = studentService.getStudentById(s.getId());
+        Coop mostRecent = studentService.getMostRecentCoop(s);
+
+        assertEquals(mostRecent.getCourseOffering().getSeason(), Season.FALL);
+        assertEquals(mostRecent.getCourseOffering().getYear(), 2019);
+
+        CourseOffering co3 =
+                createTestCourseOffering(courseOfferingService, c, Season.WINTER, 2020);
+        Coop coop3 = createTestCoop(coopService, co3, s);
+
+        s = studentService.getStudentById(s.getId());
+        mostRecent = studentService.getMostRecentCoop(s);
+
+        assertEquals(mostRecent.getCourseOffering().getSeason(), Season.WINTER);
+        assertEquals(mostRecent.getCourseOffering().getYear(), 2020);
+    }
+
+    @Test
     public void testDeleteStudent1() {
         String firstName = "Kah";
         String lastName = "Shew";
@@ -324,7 +354,7 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
             fail();
         }
 
-        Student s = studentService.getStudentByStudentID(studentID);
+        Student s = studentService.getStudentByStudentId(studentID);
         assertEquals(s.getFirstName(), firstName);
         assertEquals(s.getLastName(), lastName);
         assertEquals(s.getEmail(), email);

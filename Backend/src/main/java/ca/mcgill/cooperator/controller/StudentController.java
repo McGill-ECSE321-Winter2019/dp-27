@@ -4,10 +4,15 @@ import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopStatus;
+import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.CoopService;
+import ca.mcgill.cooperator.service.CourseOfferingService;
+import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.StudentService;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,17 +35,68 @@ public class StudentController extends BaseController {
 
     @Autowired private StudentService studentService;
     @Autowired private CoopService coopService;
+    @Autowired private CourseOfferingService courseOfferingService;
+    @Autowired private CourseService courseService;
     @Autowired private NotificationService notificationService;
 
     /**
-     * Get all students
+     * Get students with filters
      *
-     * @return List<StudentDto>
+     * @return Set<StudentDto>
      */
     @GetMapping("")
-    public List<StudentDto> getAllStudents() {
-        List<Student> s = studentService.getAllStudents();
-        return ControllerUtils.convertToDto(s);
+    public Collection<StudentDto> getStudentFiltered(
+            @RequestParam(required = false) Season season,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) CoopStatus status) {
+        // if all the request params are empty, return all students
+        if (year == null
+                && season == null
+                && (name == null || name.trim().length() == 0)
+                && status == null) {
+            List<Student> s = studentService.getAllStudents();
+            return ControllerUtils.convertStudentListToDto(s);
+        }
+
+        // find all the course offerings that correspond to the filters and to set intersections
+        Set<CourseOffering> result = courseOfferingService.getAllCourseOfferingsSet();
+        if (year != null) {
+            Set<CourseOffering> yearCO = courseOfferingService.getCourseOfferings(year);
+            result.retainAll(yearCO);
+        }
+        if (season != null) {
+
+            Set<CourseOffering> seasonCO = courseOfferingService.getCourseOfferings(season);
+            result.retainAll(seasonCO);
+        }
+        if (name != null && name.trim().length() != 0) {
+            Set<CourseOffering> nameCO =
+                    courseOfferingService.getCourseOfferingsByCourse(
+                            courseService.getCourseByName(name));
+            result.retainAll(nameCO);
+        }
+
+        // find the students that correspond to those course offerings and check the coop status
+        // filter
+        Set<Student> toReturn = new HashSet<>();
+        if (result.size() > 0) {
+            result.stream()
+                    .forEach(
+                            co ->
+                                    co.getCoops().stream()
+                                            .forEach(
+                                                    c -> {
+                                                        if (status == null
+                                                                || (status != null
+                                                                        && c.getStatus()
+                                                                                == status)) {
+                                                            toReturn.add(c.getStudent());
+                                                        }
+                                                    }));
+        }
+
+        return ControllerUtils.convertStudentSetToDto(toReturn);
     }
 
     /**
@@ -95,7 +151,7 @@ public class StudentController extends BaseController {
      */
     @PutMapping("")
     public StudentDto updateStudent(@RequestBody StudentDto s) {
-        Student student = studentService.getStudentByStudentID(s.getStudentId());
+        Student student = studentService.getStudentByStudentId(s.getStudentId());
         studentService.updateStudent(
                 student,
                 s.getFirstName(),
