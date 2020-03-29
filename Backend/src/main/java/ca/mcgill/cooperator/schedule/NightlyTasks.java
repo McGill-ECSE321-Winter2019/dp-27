@@ -24,9 +24,7 @@ public class NightlyTasks {
     // runs every 5 minutes, use this for testing
     static final String CRON_TEST = "0 */5 * ? * *";
 
-    /**
-     * Checks all existing Coops and updates their status if necessary.
-     */
+    /** Checks all existing Coops and updates their status if necessary. */
     @Scheduled(cron = CRON_TEST)
     public void updateCoopStatuses() {
         System.out.println("[Schedule] Running job to update Coop statuses");
