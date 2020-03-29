@@ -1,5 +1,6 @@
 package ca.mcgill.cooperator.model;
 
+import java.sql.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,6 +12,8 @@ public class CoopDetails {
     @Id @GeneratedValue private int id;
     private int payPerHour;
     private int hoursPerWeek;
+    private Date startDate;
+    private Date endDate;
 
     @ManyToOne(optional = false)
     private EmployerContact employerContact;
@@ -37,6 +40,22 @@ public class CoopDetails {
 
     public void setHoursPerWeek(int hoursPerWeek) {
         this.hoursPerWeek = hoursPerWeek;
+    }
+
+    public Date getStartDate() {
+        return this.startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return this.endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     public EmployerContact getEmployerContact() {

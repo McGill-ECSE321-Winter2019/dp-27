@@ -22,6 +22,7 @@ import ca.mcgill.cooperator.model.StudentReportSection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,7 +65,9 @@ public class BaseServiceTest {
 
     CoopDetails createTestCoopDetails(CoopDetailsService service, EmployerContact ec, Coop c) {
         CoopDetails cd = new CoopDetails();
-        cd = service.createCoopDetails(20, 40, ec, c);
+        cd =
+                service.createCoopDetails(
+                        20, 40, Date.valueOf("2020-05-11"), Date.valueOf("2020-07-31"), ec, c);
         return cd;
     }
 

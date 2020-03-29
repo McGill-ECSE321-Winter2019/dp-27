@@ -53,6 +53,8 @@ public class CoopDetailsController extends BaseController {
                 coopDetailsService.createCoopDetails(
                         coopDetailsDto.getPayPerHour(),
                         coopDetailsDto.getHoursPerWeek(),
+                        coopDetailsDto.getStartDate(),
+                        coopDetailsDto.getEndDate(),
                         employerContact,
                         coop);
 
@@ -61,12 +63,17 @@ public class CoopDetailsController extends BaseController {
 
     @PutMapping("")
     public CoopDetailsDto updateCoopDetails(@RequestBody CoopDetailsDto coopDetailsDto) {
-        EmployerContactDto employerContactDto = coopDetailsDto.getEmployerContact();
-        EmployerContact employerContact =
-                employerContactService.getEmployerContact(employerContactDto.getId());
+        EmployerContact employerContact = null;
+        if (coopDetailsDto.getEmployerContact() != null) {
+            employerContact =
+                    employerContactService.getEmployerContact(
+                            coopDetailsDto.getEmployerContact().getId());
+        }
 
-        CoopDto coopDto = coopDetailsDto.getCoop();
-        Coop coop = coopService.getCoopById(coopDto.getId());
+        Coop coop = null;
+        if (coopDetailsDto.getCoop() != null) {
+            coop = coopService.getCoopById(coopDetailsDto.getCoop().getId());
+        }
 
         CoopDetails coopDetails = coopDetailsService.getCoopDetails(coopDetailsDto.getId());
 
@@ -75,6 +82,8 @@ public class CoopDetailsController extends BaseController {
                         coopDetails,
                         coopDetailsDto.getPayPerHour(),
                         coopDetailsDto.getHoursPerWeek(),
+                        coopDetailsDto.getStartDate(),
+                        coopDetailsDto.getEndDate(),
                         employerContact,
                         coop);
 
