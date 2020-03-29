@@ -109,9 +109,9 @@ export default {
     };
   },
   created: function() {
-    this.$axios.get("/courses").then(resp => {
-      resp.data.forEach(course => {
-        this.courseNameOptions.push(course.name);
+    this.$axios.get("/courses/names").then(resp => {
+      resp.data.forEach(name => {
+        this.courseNameOptions.push(name);
         this.loading = false;
       });
     });
