@@ -45,8 +45,8 @@ export default {
   props: {},
   created: function() {
     const studentId = this.$store.state.currentUser.id;
-    // get all coops for the currently logged in student
-    this.$axios.get("/coops/student/" + studentId).then(resp => {
+    // get all upcoming coops for the currently logged in student
+    this.$axios.get(`/students/${studentId}/upcoming-coops`).then(resp => {
       this.coops = resp.data;
       this.loading = false;
     });

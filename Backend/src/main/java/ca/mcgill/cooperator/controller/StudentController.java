@@ -13,6 +13,7 @@ import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.StudentService;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -202,10 +203,10 @@ public class StudentController extends BaseController {
     }
 
     /**
-     * Gets current coop
+     * Gets current coop for the specified Student
      *
      * @param id
-     * @return coop or null if not in a coop currently
+     * @return Coop or null if not in a Coop currently
      */
     @GetMapping("/{id}/current-coop")
     public CoopDto getCurrentStudentCoop(@PathVariable int id) {
@@ -215,6 +216,26 @@ public class StudentController extends BaseController {
             if (c.getStatus() == CoopStatus.IN_PROGRESS) return ControllerUtils.convertToDto(c);
         }
         return null;
+    }
+
+    /**
+     * Gets the upcoming Coop(s) for the specified Student
+     *
+     * @param id
+     * @return Coop(s) or empty list if no upcoming Coops
+     */
+    @GetMapping("/{id}/upcoming-coops")
+    public List<CoopDto> getUpcomingStudentCoops(@PathVariable int id) {
+        Student s = studentService.getStudentById(id);
+        Set<Coop> coops = s.getCoops();
+        List<CoopDto> result = new ArrayList<>();
+        for (Coop c : coops) {
+            if (c.getStatus() == CoopStatus.FUTURE
+                    || c.getStatus() == CoopStatus.UNDER_REVIEW
+                    || c.getStatus() == CoopStatus.INCOMPLETE)
+                result.add(ControllerUtils.convertToDto(c));
+        }
+        return result;
     }
 
     /**

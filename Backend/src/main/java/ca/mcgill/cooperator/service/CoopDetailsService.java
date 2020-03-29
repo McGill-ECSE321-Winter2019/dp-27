@@ -116,8 +116,8 @@ public class CoopDetailsService extends BaseService {
     @Transactional
     public CoopDetails updateCoopDetails(
             CoopDetails cd,
-            int payPerHour,
-            int hoursPerWeek,
+            Integer payPerHour,
+            Integer hoursPerWeek,
             Date startDate,
             Date endDate,
             EmployerContact ec,
@@ -130,10 +130,10 @@ public class CoopDetailsService extends BaseService {
             throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
-        if (payPerHour >= 0) {
+        if (payPerHour != null && payPerHour >= 0) {
             cd.setPayPerHour(payPerHour);
         }
-        if (hoursPerWeek > 0) {
+        if (hoursPerWeek != null && hoursPerWeek > 0) {
             cd.setHoursPerWeek(hoursPerWeek);
         }
         if (startDate != null) {

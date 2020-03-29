@@ -1,5 +1,5 @@
 <template>
-  <q-card bordered class="q-mb-md">
+  <q-card bordered square class="q-mb-md">
     <q-card-section>
       <div class="text-h6">{{ term }}</div>
     </q-card-section>
@@ -40,7 +40,9 @@
 
       <div v-if="!underReview && !coopDetailsRequired">
         <!-- Show co-op details -->
-        <div class="text-body2 q-mb-md">{{ coop.company.name }}</div>
+        <div class="text-body2 q-mb-md">
+          {{ coop.coopDetails.employerContact.company.name }}
+        </div>
       </div>
 
       <q-dialog v-model="showCoopDetailsPopup">
@@ -54,7 +56,7 @@
 import CoopDetailsPopup from "./CoopDetailsPopup.vue";
 
 export default {
-  name: "HomeCoopSectionItem",
+  name: "HomeUpcomingCoopsSectionItem",
   components: {
     CoopDetailsPopup
   },

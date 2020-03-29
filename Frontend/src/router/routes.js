@@ -14,11 +14,6 @@ const routes = [
         component: () => import("pages/student/StudentProfile.vue")
       },
       {
-        path: "coops/:id",
-        component: () => import("pages/student/StudentSpecificCoop.vue"),
-        props: true
-      },
-      {
         path: "coops",
         component: () => import("pages/student/StudentCoops.vue")
       },
