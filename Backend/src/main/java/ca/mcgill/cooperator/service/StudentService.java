@@ -196,6 +196,17 @@ public class StudentService extends BaseService {
     }
 
     @Transactional
+    public Student getStudentByEmail(String email) {
+        Student s = studentRepository.findByEmail(email);
+        if (s == null) {
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Student with email " + email + " does not exist.");
+        }
+
+        return s;
+    }
+
+    @Transactional
     public List<Student> getAllStudents() {
         return ServiceUtils.toList(studentRepository.findAll());
     }
