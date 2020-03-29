@@ -59,7 +59,7 @@ const common = {
     return result.trim();
   },
   /**
-   * Converts a SQL-formatted string (e.g. 2020-01-01) to a readable format
+   * Converts a SQL-formatted date (e.g. 2020-01-01) to a readable format
    * (e.g. January 1st, 2020)
    */
   convertSQLDateToReadableString: function(date) {

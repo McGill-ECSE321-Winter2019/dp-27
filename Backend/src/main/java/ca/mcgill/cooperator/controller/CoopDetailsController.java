@@ -83,8 +83,6 @@ public class CoopDetailsController extends BaseController {
 
         CoopDetails coopDetails = coopDetailsService.getCoopDetails(id);
 
-        System.out.println(coopDetailsDto.getStartDate());
-
         coopDetails =
                 coopDetailsService.updateCoopDetails(
                         coopDetails,
