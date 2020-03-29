@@ -561,6 +561,20 @@ public class ControllerUtils {
         return courseOfferingDtos;
     }
 
+    public static Set<CourseOfferingDto> convertCourseOfferingSetToDto(
+            Set<CourseOffering> courseOfferings) {
+        Set<CourseOfferingDto> courseOfferingDtos = new HashSet<CourseOfferingDto>();
+
+        for (CourseOffering co : courseOfferings) {
+            if (co == null) {
+                throw new IllegalArgumentException(
+                        ERROR_PREFIX + "Course Offering does not exist!");
+            }
+            courseOfferingDtos.add(convertToDto(co));
+        }
+        return courseOfferingDtos;
+    }
+
     public static EmployerContactDto convertToDto(EmployerContact e) {
         if (e == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Employer Contact does not exist!");
@@ -1011,7 +1025,19 @@ public class ControllerUtils {
         return studentDto;
     }
 
-    public static List<StudentDto> convertToDto(List<Student> students) {
+    public static Set<StudentDto> convertStudentSetToDto(Set<Student> students) {
+        Set<StudentDto> studentDtos = new HashSet<StudentDto>();
+
+        for (Student s : students) {
+            if (s == null) {
+                throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist!");
+            }
+            studentDtos.add(convertToDto(s));
+        }
+        return studentDtos;
+    }
+
+    public static List<StudentDto> convertStudentListToDto(List<Student> students) {
         List<StudentDto> studentDtos = new ArrayList<StudentDto>();
 
         for (Student s : students) {

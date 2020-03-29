@@ -49,6 +49,13 @@ public class BaseServiceTest {
         return co;
     }
 
+    CourseOffering createTestCourseOffering(
+            CourseOfferingService service, Course c, Season s, int y) {
+        CourseOffering co = null;
+        co = service.createCourseOffering(y, s, c);
+        return co;
+    }
+
     Coop createTestCoop(CoopService service, CourseOffering co, Student s) {
         Coop coop = new Coop();
         coop = service.createCoop(CoopStatus.FUTURE, co, s);

@@ -4,7 +4,9 @@ import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Notification;
+import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import java.util.HashSet;
 import java.util.List;
@@ -110,38 +112,87 @@ public class StudentService extends BaseService {
     }
 
     @Transactional
-    public Student getStudentByStudentID(String id) {
+    public Student getStudentByStudentId(String id) {
         if (id == null || id.trim().length() != 9) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Student ID is invalid.");
         }
         Student s = studentRepository.findByStudentId(id);
         if (s == null) {
-            throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist.");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Student with ID " + id + " does not exist.");
         }
         return s;
     }
 
     @Transactional
-    public Student getStudentByID(Integer id) {
+    public Student getStudentById(Integer id) {
         if (id == null || id < 0) {
             throw new IllegalArgumentException(ERROR_PREFIX + "ID is invalid.");
         }
         Student s = studentRepository.findById(id).orElse(null);
         if (s == null) {
-            throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist.");
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Student with ID " + id + " does not exist.");
         }
         return s;
     }
 
     @Transactional
-    public Student getStudentById(int id) {
-        Student s = studentRepository.findById(id).orElse(null);
+    public Coop getMostRecentCoop(Student s) {
         if (s == null) {
-            throw new IllegalArgumentException(
-                    ERROR_PREFIX + "Student with ID " + id + " does not exist.");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist.");
         }
+        Coop mostRecent = null;
+        for (Coop c : s.getCoops()) {
+            if (mostRecent == null) {
+                mostRecent = c;
+            } else {
+                // c is a bigger year, more recent
+                if (mostRecent.getCourseOffering().getYear() < c.getCourseOffering().getYear()) {
+                    mostRecent = c;
+                }
+                // same year, check seasons
+                else if (mostRecent.getCourseOffering().getYear()
+                        == c.getCourseOffering().getYear()) {
+                    // if current mostRecent is Winter, update most recent to c
+                    if (mostRecent.getCourseOffering().getSeason() == Season.WINTER) {
+                        mostRecent = c;
+                    }
+                    // if current mostRecent is Summer, update most recent to c if c is Fall
+                    else if (mostRecent.getCourseOffering().getSeason() == Season.SUMMER
+                            && c.getCourseOffering().getSeason() == Season.FALL) {
+                        mostRecent = c;
+                    }
+                }
+            }
+        }
+        return mostRecent;
+    }
 
-        return s;
+    @Transactional
+    public Set<Student> getStudentsByCourse(int numCoops, CoopStatus status) {
+        if (numCoops < 0) {
+            throw new IllegalArgumentException(ERROR_PREFIX + "Please enter valid number of coops");
+        }
+        Set<Student> allStudents = ServiceUtils.toSet(studentRepository.findAll());
+        Set<Student> studentsToReturn = ServiceUtils.toSet(studentRepository.findAll());
+        for (Student s : allStudents) {
+            int count = 0;
+            if (status != null) {
+                for (Coop c : s.getCoops()) {
+                    if (c.getStatus() == status) count++;
+                }
+            } else {
+                count = s.getCoops().size();
+            }
+            if (count == numCoops) studentsToReturn.add(s);
+        }
+        return studentsToReturn;
+    }
+
+    @Transactional
+    public Set<Student> getAllStudentsSet() {
+        return ServiceUtils.toSet(studentRepository.findAll());
     }
 
     @Transactional

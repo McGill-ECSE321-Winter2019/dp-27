@@ -66,10 +66,10 @@ public class CourseOfferingController extends BaseController {
     }
 
     @GetMapping("/course/{id}")
-    public List<CourseOfferingDto> getCourseOfferingsByCourse(@PathVariable int id) {
+    public Set<CourseOfferingDto> getCourseOfferingsByCourse(@PathVariable int id) {
         Course course = courseService.getCourseById(id);
-        List<CourseOffering> cos = courseOfferingService.getCourseOfferingsByCourse(course);
-        return ControllerUtils.convertCourseOfferingListToDto(cos);
+        Set<CourseOffering> cos = courseOfferingService.getCourseOfferingsByCourse(course);
+        return ControllerUtils.convertCourseOfferingSetToDto(cos);
     }
 
     @PostMapping("")
@@ -88,6 +88,12 @@ public class CourseOfferingController extends BaseController {
                 courseOfferingService.createCourseOffering(
                         courseOfferingDto.getYear(), courseOfferingDto.getSeason(), course);
         return ControllerUtils.convertToDto(courseOffering);
+    }
+
+    @GetMapping("/seasons")
+    public Season[] getAllCoopSeasons() {
+        Season[] seasons = Season.values();
+        return seasons;
     }
 
     @PutMapping("")

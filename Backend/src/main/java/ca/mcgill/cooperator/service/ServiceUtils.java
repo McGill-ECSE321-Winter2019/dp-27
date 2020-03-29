@@ -1,7 +1,9 @@
 package ca.mcgill.cooperator.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +22,21 @@ public class ServiceUtils {
             resultList.add(t);
         }
         return resultList;
+    }
+
+    /**
+     * Converts an Iterable to a Set
+     *
+     * @param <T>
+     * @param iterable
+     * @return Iterable in Set format
+     */
+    public static <T> Set<T> toSet(Iterable<T> iterable) {
+        Set<T> resultSet = new HashSet<T>();
+        for (T t : iterable) {
+            resultSet.add(t);
+        }
+        return resultSet;
     }
 
     /**

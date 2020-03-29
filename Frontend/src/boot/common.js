@@ -3,7 +3,17 @@ import Vue from "vue";
 /*
  * This object contains functions that are globally available to every component
  */
+
 const common = {
+  getYears: function() {
+    var current = new Date().getFullYear();
+    var yrs = [];
+    yrs.push(current + 1);
+    for (var i = 0; i < 9; i++) {
+      yrs.push(current - i);
+    }
+    return yrs;
+  },
   /*
    * Converts a base64-encoded string to a blob; used for rendering PDFs
    *
