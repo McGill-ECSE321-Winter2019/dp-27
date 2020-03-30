@@ -17,7 +17,14 @@
         class="dashBtn"
         label="View Offers to Approve"
         color="primary"
-        @click="viewToApprove"
+        @click="viewApprovalsPage('new_coops')"
+      />
+      <q-btn
+        class="dashBtn"
+        label="View
+      Completed Coops to Approve"
+        color="primary"
+        @click="viewApprovalsPage('completed_coops')"
       />
       <q-btn
         class="dashBtn"
@@ -41,27 +48,13 @@
 <script>
 export default {
   name: "HomeMainInfo",
-  props: {
-    course_name_p: {
-      type: String
-    },
-    season_p: {
-      type: String
-    },
-    status_p: {
-      type: String
-    },
-    year_p: {
-      type: String
-    }
-  },
   data() {
     return {
       course_names: [],
-      course_name: "",
-      season: "",
-      year: "",
-      status: ""
+      course_name_data: "",
+      season_data: "",
+      year_data: "",
+      status_data: ""
     };
   },
   created: function() {
@@ -78,20 +71,20 @@ export default {
       var term = this.$common.getCurrentTerm();
       this.$router.push({
         path: "/admin/students",
-        name: "loadofshit",
+        name: "AdminViewStudents",
         params: {
-          course_name_p: cname,
-          year_p: year,
-          term_p: term
+          course_name: cname,
+          year: year,
+          term: term
         }
       });
     },
-    viewToApprove() {
+    viewApprovalsPage(tab) {
       this.$router.push({
         path: "/admin/coops/review",
         name: "Review",
         params: {
-          currentTab_p: "new_coop"
+          currentTab: tab
         }
       });
     },
@@ -102,8 +95,8 @@ export default {
         path: "/admin/students",
         name: "loadofshit",
         params: {
-          year_p: year,
-          term_p: term
+          year: year,
+          term: term
         }
       });
     }
@@ -122,8 +115,8 @@ h6 {
 }
 
 .dashBtn {
-  height: 60%;
-  width: 40%;
+  width: 46%;
   margin: 2%;
+  align: center;
 }
 </style>

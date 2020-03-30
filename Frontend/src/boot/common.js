@@ -20,11 +20,11 @@ const common = {
   getCurrentTerm: function() {
     var date = new Date();
     var month = date.getMonth();
-    if (month == 0 || month == 1 || month == 2 || month == 3) {
+    if (month >= 0 || month <= 3) {
       return "WINTER";
-    } else if (month == 4 || month == 5 || month == 6 || month == 7) {
+    } else if (month >= 4 || month <= 7) {
       return "SUMMER";
-    } else if (month == 8 || month == 9 || month == 10 || month == 11) {
+    } else if (month >= 8 || month <= 11) {
       term = "FALL";
     }
     return "";

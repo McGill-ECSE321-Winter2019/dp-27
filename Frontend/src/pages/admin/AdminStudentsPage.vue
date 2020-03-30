@@ -5,25 +5,25 @@
     <q-separator inset />
     <div class="q-pa-md">
       <q-select
-        v-model="course_name"
+        v-model="course_name_data"
         :options="course_names"
         label="Course"
         style="width:25%"
       />
       <q-select
-        v-model="status"
+        v-model="status_data"
         :options="statusOptions"
         label="Coop Status"
         style="width:25%"
       />
       <q-select
-        v-model="year"
+        v-model="year_data"
         :options="years"
         label="Years"
         style="width:25%"
       />
       <q-select
-        v-model="term"
+        v-model="term_data"
         :options="terms"
         label="Term"
         style="width:25%"
@@ -47,22 +47,22 @@
 <script>
 export default {
   props: {
-    course_name_p: {
+    course_name: {
       type: String,
       required: false,
       default: ""
     },
-    year_p: {
+    year: {
       type: String,
       required: false,
       default: ""
     },
-    status_p: {
+    status: {
       type: String,
       required: false,
       default: ""
     },
-    term_p: {
+    term: {
       type: String,
       required: false,
       default: ""
@@ -72,13 +72,13 @@ export default {
   data: () => ({
     students: [],
     course_names: [],
-    course_name: "",
+    course_name_data: "",
     statusOptions: [],
-    status: "",
+    status_data: "",
     terms: [],
-    term: "",
+    term_date: "",
     years: [],
-    year: "",
+    year_data: "",
     columns: [
       {
         name: "studentLastName",
@@ -123,21 +123,21 @@ export default {
     ]
   }),
   created: function() {
-    this.course_name = this.course_name_p;
-    this.year = this.year_p;
-    this.term = this.term_p;
-    this.status = this.status_p;
+    this.course_name_data = this.course_name;
+    this.year_data = this.year;
+    this.term_data = this.term;
+    this.status_data = this.status;
 
     this.$axios
       .get(
         "/students?season=" +
-          this.term +
+          this.term_data +
           "&year=" +
-          this.year +
+          this.year_data +
           "&name=" +
-          this.course_name_p +
+          this.course_name_data +
           "&status=" +
-          this.status,
+          this.status_data,
         {
           headers: {
             Authorization: this.$store.state.token
@@ -175,10 +175,10 @@ export default {
       this.$router.push("/admin/studentcoops");
     },
     clearFilter() {
-      this.course_name = "";
-      this.term = "";
-      this.year = "";
-      this.status = "";
+      this.course_name_data = "";
+      this.term_data = "";
+      this.year_data = "";
+      this.status_data = "";
       this.$axios
         .get("/students", {
           headers: {
@@ -193,13 +193,13 @@ export default {
       this.$axios
         .get(
           "/students?season=" +
-            this.term +
+            this.term_data +
             "&year=" +
-            this.year +
+            this.year_data +
             "&name=" +
-            this.course_name +
+            this.course_name_data +
             "&status=" +
-            this.status,
+            this.status_data,
           {
             headers: {
               Authorization: this.$store.state.token

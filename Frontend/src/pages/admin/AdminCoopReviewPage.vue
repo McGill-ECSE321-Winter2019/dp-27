@@ -6,7 +6,7 @@
 
         <q-card flat bordered class="q-mb-md">
           <q-tabs
-            v-model="currentTab"
+            v-model="currentTabData"
             dense
             class="text-grey"
             active-color="primary"
@@ -25,7 +25,7 @@
         </div>
         <!-- Show actual data -->
         <div v-else>
-          <q-tab-panels v-model="currentTab" animated>
+          <q-tab-panels v-model="currentTabData" animated>
             <q-tab-panel name="new_coops">
               <div v-if="newCoops.length > 0">
                 <div class="text-subtitle1 q-mb-md">
@@ -71,10 +71,9 @@ import CoopReviewPageNewCoopItem from "../../components/admin/CoopReviewPageNewC
 export default {
   name: "AdminCoopReviewPage",
   props: {
-    currentTab_p: {
+    currentTab: {
       type: String,
-      required: false,
-      default: "new_coops"
+      required: false
     }
   },
   components: {
@@ -84,13 +83,14 @@ export default {
     return {
       newCoopsLoading: true,
       completedCoopsLoading: true,
-      currentTab: "new_coops",
+      currentTabData: "new_coops",
       newCoops: [],
       completedCoops: []
     };
   },
   created: function() {
-    this.currentTab = this.currentTab_p;
+    console.log(this.currentTab);
+    this.currentTabData = this.currentTab;
     this.$axios
       .get("/coops", { params: { status: "UNDER_REVIEW" } })
       .then(resp => {

@@ -62,10 +62,11 @@ const routes = [
       {
         name: "Review",
         path: "coops/review",
-        component: () => import("pages/admin/AdminCoopReviewPage.vue")
+        component: () => import("pages/admin/AdminCoopReviewPage.vue"),
+        props: true
       },
       {
-        name: "loadofshit",
+        name: "AdminViewStudents",
         path: "students",
         component: () => import("pages/admin/AdminStudentsPage.vue"),
         props: true
