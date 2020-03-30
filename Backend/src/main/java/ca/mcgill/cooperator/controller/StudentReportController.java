@@ -127,8 +127,9 @@ public class StudentReportController extends BaseController {
 
         Set<StudentReportSection> sections = null;
         if (rsDtos != null) {
-        	sections = ControllerUtils.convertStudentReportSectionsToDomainObjects(
-                        studentReportSectionService, rsDtos);
+            sections =
+                    ControllerUtils.convertStudentReportSectionsToDomainObjects(
+                            studentReportSectionService, rsDtos);
         }
 
         Coop coop = coopService.getCoopById(coopId);

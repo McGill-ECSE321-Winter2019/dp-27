@@ -69,7 +69,8 @@ public class ReportConfigController extends BaseController {
      * @return the updated ReportConfig
      */
     @PutMapping("/{id}")
-    public ReportConfigDto updateReportConfig(@PathVariable int id, @RequestBody ReportConfigDto rcDto) {
+    public ReportConfigDto updateReportConfig(
+            @PathVariable int id, @RequestBody ReportConfigDto rcDto) {
         ReportConfig rc = reportConfigService.getReportConfig(id);
 
         Set<ReportSectionConfig> rscConfigs = null;

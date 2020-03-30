@@ -119,8 +119,9 @@ public class EmployerReportController extends BaseController {
         ReportStatus reportStatus = ReportStatus.valueOf(status);
         Set<EmployerReportSection> sections = null;
         if (rsDtos != null) {
-        	sections = ControllerUtils.convertEmployerReportSectionsToDomainObjects(
-                        employerReportSectionService, rsDtos);
+            sections =
+                    ControllerUtils.convertEmployerReportSectionsToDomainObjects(
+                            employerReportSectionService, rsDtos);
         }
 
         EmployerReport updatedReport =

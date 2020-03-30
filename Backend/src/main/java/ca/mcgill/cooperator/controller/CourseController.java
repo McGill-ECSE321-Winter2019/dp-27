@@ -85,18 +85,15 @@ public class CourseController extends BaseController {
     @PutMapping("/{id}")
     public CourseDto updateCourse(@PathVariable int id, @RequestBody CourseDto c) {
         Course course = courseService.getCourseById(id);
-        
+
         List<CourseOffering> courseOfferings = null;
         if (c.getCourseOfferings() != null) {
-        	courseOfferings = ControllerUtils.convertCourseOfferingListToDomainObject(
-                    courseOfferingService, c.getCourseOfferings());
+            courseOfferings =
+                    ControllerUtils.convertCourseOfferingListToDomainObject(
+                            courseOfferingService, c.getCourseOfferings());
         }
-        
-        Course updatedCourse =
-                courseService.updateCourse(
-                        course,
-                        c.getName(),
-                        courseOfferings);
+
+        Course updatedCourse = courseService.updateCourse(course, c.getName(), courseOfferings);
 
         return ControllerUtils.convertToDto(updatedCourse);
     }

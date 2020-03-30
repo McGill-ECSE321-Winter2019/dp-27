@@ -201,16 +201,19 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
         rscDto.setQuestionNumber(3);
 
         // valid create so that we have a ReportSectionConfig to work with
-        mvcResult = mvc.perform(
-                        post("/report-section-configs")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(rscDto))
-                                .characterEncoding("utf-8"))
-                .andExpect(status().isOk()).andReturn();
+        mvcResult =
+                mvc.perform(
+                                post("/report-section-configs")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(rscDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
 
-        rscDto = objectMapper.readValue(
-                mvcResult.getResponse().getContentAsString(), ReportSectionConfigDto.class);
-        
+        rscDto =
+                objectMapper.readValue(
+                        mvcResult.getResponse().getContentAsString(), ReportSectionConfigDto.class);
+
         rscDto.setSectionPrompt(" ");
 
         // 2. invalid update: empty prompt, expect null pointer exception

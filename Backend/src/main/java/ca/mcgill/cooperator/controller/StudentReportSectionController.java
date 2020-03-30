@@ -48,12 +48,13 @@ public class StudentReportSectionController extends BaseController {
             @RequestBody StudentReportSectionDto reportSectionDto) {
         ReportSectionConfig rsConfig = null;
         if (reportSectionDto.getReportSectionConfig() != null) {
-        	rsConfig = reportSectionConfigService.getReportSectionConfig(
-                        reportSectionDto.getReportSectionConfig().getId());
+            rsConfig =
+                    reportSectionConfigService.getReportSectionConfig(
+                            reportSectionDto.getReportSectionConfig().getId());
         }
         StudentReport sr = null;
         if (reportSectionDto.getStudentReport() != null) {
-        	sr = studentReportService.getStudentReport(reportSectionDto.getStudentReport().getId());
+            sr = studentReportService.getStudentReport(reportSectionDto.getStudentReport().getId());
         }
 
         StudentReportSection reportSection =
@@ -65,8 +66,7 @@ public class StudentReportSectionController extends BaseController {
     @PutMapping("/{id}")
     public StudentReportSectionDto updateReportSection(
             @PathVariable int id, @RequestBody StudentReportSectionDto reportSectionDto) {
-        StudentReportSection reportSection =
-                studentReportSectionService.getReportSection(id);
+        StudentReportSection reportSection = studentReportSectionService.getReportSection(id);
         ReportSectionConfig reportSectionConfig = null;
         StudentReport studentReport = null;
 

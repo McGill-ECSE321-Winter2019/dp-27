@@ -72,7 +72,9 @@ public class CompanyController extends BaseController {
         List<EmployerContact> employerContacts = null;
         List<EmployerContactDto> employerContactDtos = companyDto.getEmployees();
         if (employerContactDtos != null) {
-        	employerContacts = ControllerUtils.covertEmployerContactDtosToDomainObjects(employerContactService, employerContactDtos);
+            employerContacts =
+                    ControllerUtils.covertEmployerContactDtosToDomainObjects(
+                            employerContactService, employerContactDtos);
         }
 
         Company company =
@@ -103,7 +105,9 @@ public class CompanyController extends BaseController {
         List<EmployerContactDto> employerContactDtos = companyDto.getEmployees();
         List<EmployerContact> employerContacts = null;
         if (employerContactDtos != null) {
-        	employerContacts = ControllerUtils.covertEmployerContactDtosToDomainObjects(employerContactService, employerContactDtos);
+            employerContacts =
+                    ControllerUtils.covertEmployerContactDtosToDomainObjects(
+                            employerContactService, employerContactDtos);
         }
 
         company =

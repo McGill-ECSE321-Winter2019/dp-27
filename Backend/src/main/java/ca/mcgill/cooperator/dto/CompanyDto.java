@@ -15,7 +15,7 @@ public class CompanyDto {
     public CompanyDto() {}
 
     public CompanyDto(
-    		Integer id,
+            Integer id,
             String name,
             String city,
             String region,

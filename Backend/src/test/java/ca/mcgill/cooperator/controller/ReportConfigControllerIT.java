@@ -155,16 +155,18 @@ public class ReportConfigControllerIT extends BaseControllerIT {
         rcDto.setType("First Evaluation");
 
         // valid create so that we have a ReportConfig to work with
-        MvcResult mvcResult = mvc.perform(
-                        post("/report-configs")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(rcDto))
-                                .characterEncoding("utf-8"))
-                .andExpect(status().isOk()).andReturn();
-        
-        rcDto = objectMapper.readValue(
-                	mvcResult.getResponse().getContentAsString(),
-                	ReportConfigDto.class);
+        MvcResult mvcResult =
+                mvc.perform(
+                                post("/report-configs")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(rcDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
+        rcDto =
+                objectMapper.readValue(
+                        mvcResult.getResponse().getContentAsString(), ReportConfigDto.class);
 
         rcDto.setType("");
         rcDto.setDeadline(-1);

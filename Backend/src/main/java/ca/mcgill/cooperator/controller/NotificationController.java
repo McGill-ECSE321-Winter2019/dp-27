@@ -115,15 +115,15 @@ public class NotificationController extends BaseController {
         StudentDto studentDto = n.getStudent();
         Student student = null;
         if (studentDto != null) {
-        	student = studentService.getStudentById(studentDto.getId());
+            student = studentService.getStudentById(studentDto.getId());
         }
 
         AdminDto adminDto = n.getSender();
         Admin sender = null;
         if (adminDto != null) {
-        	sender = adminService.getAdmin(adminDto.getId());
+            sender = adminService.getAdmin(adminDto.getId());
         }
-        
+
         Notification notification =
                 notificationService.createNotification(title, body, student, sender);
 
@@ -136,21 +136,22 @@ public class NotificationController extends BaseController {
      * @return updated notification
      */
     @PutMapping("/{id}")
-    public NotificationDto updateNotification(@PathVariable int id, @RequestBody NotificationDto n) {
+    public NotificationDto updateNotification(
+            @PathVariable int id, @RequestBody NotificationDto n) {
         Notification notification = notificationService.getNotification(id);
-        
+
         StudentDto studentDto = n.getStudent();
         Student student = null;
         if (studentDto != null) {
-        	student = studentService.getStudentById(studentDto.getId());
+            student = studentService.getStudentById(studentDto.getId());
         }
 
         AdminDto adminDto = n.getSender();
         Admin sender = null;
         if (adminDto != null) {
-        	sender = adminService.getAdmin(adminDto.getId());
+            sender = adminService.getAdmin(adminDto.getId());
         }
-        
+
         Notification notifs =
                 notificationService.updateNotification(
                         notification, n.getTitle(), n.getBody(), student, sender);

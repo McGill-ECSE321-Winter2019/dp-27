@@ -4,7 +4,6 @@ import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.EmployerContact;
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;

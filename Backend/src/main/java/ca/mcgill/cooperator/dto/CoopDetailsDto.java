@@ -11,9 +11,9 @@ public class CoopDetailsDto {
     public CoopDetailsDto() {}
 
     public CoopDetailsDto(
-    		Integer id,
-    		Integer payPerHour,
-    		Integer hoursPerWeek,
+            Integer id,
+            Integer payPerHour,
+            Integer hoursPerWeek,
             EmployerContactDto employerContact,
             CoopDto coop) {
         this.id = id;

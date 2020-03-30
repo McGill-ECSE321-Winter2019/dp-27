@@ -53,7 +53,7 @@ public class EmployerContactController extends BaseController {
         CompanyDto companyDto = employerContactDto.getCompany();
         Company company = null;
         if (companyDto != null) {
-        	company = companyService.getCompany(companyDto.getId());
+            company = companyService.getCompany(companyDto.getId());
         }
         EmployerContact ec =
                 employerContactService.createEmployerContact(
@@ -73,19 +73,23 @@ public class EmployerContactController extends BaseController {
         CompanyDto companyDto = employerContactDto.getCompany();
         Company company = null;
         if (companyDto != null) {
-        	company = companyService.getCompany(companyDto.getId());
+            company = companyService.getCompany(companyDto.getId());
         }
 
         List<EmployerReportDto> employerReportDtos = employerContactDto.getEmployerReports();
         Set<EmployerReport> employerReports = null;
         if (employerReportDtos != null) {
-        	employerReports = ControllerUtils.convertEmployerReportDtosToDomainObjects(employerReportService, employerReportDtos);
+            employerReports =
+                    ControllerUtils.convertEmployerReportDtosToDomainObjects(
+                            employerReportService, employerReportDtos);
         }
 
         List<CoopDetailsDto> coopDetailsDtos = employerContactDto.getCoopDetails();
         Set<CoopDetails> coopDetails = null;
         if (coopDetailsDtos != null) {
-        	coopDetails = ControllerUtils.convertCoopDetailsDtosToDomainObjects(coopDetailsService, coopDetailsDtos);
+            coopDetails =
+                    ControllerUtils.convertCoopDetailsDtosToDomainObjects(
+                            coopDetailsService, coopDetailsDtos);
         }
 
         ec =

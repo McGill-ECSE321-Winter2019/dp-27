@@ -12,7 +12,11 @@ public class AdminDto {
     private List<NotificationDto> sent;
 
     public AdminDto(
-    		Integer id, String firstName, String lastName, String email, List<NotificationDto> sent) {
+            Integer id,
+            String firstName,
+            String lastName,
+            String email,
+            List<NotificationDto> sent) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

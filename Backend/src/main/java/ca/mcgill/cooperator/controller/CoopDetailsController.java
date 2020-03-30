@@ -45,13 +45,13 @@ public class CoopDetailsController extends BaseController {
         EmployerContactDto employerContactDto = coopDetailsDto.getEmployerContact();
         EmployerContact employerContact = null;
         if (employerContactDto != null) {
-        	employerContact = employerContactService.getEmployerContact(employerContactDto.getId());
+            employerContact = employerContactService.getEmployerContact(employerContactDto.getId());
         }
 
         CoopDto coopDto = coopDetailsDto.getCoop();
         Coop coop = null;
         if (coopDto != null) {
-        	coop = coopService.getCoopById(coopDto.getId());
+            coop = coopService.getCoopById(coopDto.getId());
         }
 
         CoopDetails coopDetails =
@@ -65,17 +65,18 @@ public class CoopDetailsController extends BaseController {
     }
 
     @PutMapping("/{id}")
-    public CoopDetailsDto updateCoopDetails(@PathVariable int id, @RequestBody CoopDetailsDto coopDetailsDto) {
+    public CoopDetailsDto updateCoopDetails(
+            @PathVariable int id, @RequestBody CoopDetailsDto coopDetailsDto) {
         EmployerContactDto employerContactDto = coopDetailsDto.getEmployerContact();
         EmployerContact employerContact = null;
         if (employerContactDto != null) {
-        	employerContact = employerContactService.getEmployerContact(employerContactDto.getId());
+            employerContact = employerContactService.getEmployerContact(employerContactDto.getId());
         }
 
         CoopDto coopDto = coopDetailsDto.getCoop();
         Coop coop = null;
         if (coopDto != null) {
-        	coop = coopService.getCoopById(coopDto.getId());
+            coop = coopService.getCoopById(coopDto.getId());
         }
 
         CoopDetails coopDetails = coopDetailsService.getCoopDetails(id);

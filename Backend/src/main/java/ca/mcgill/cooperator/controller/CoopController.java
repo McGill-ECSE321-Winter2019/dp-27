@@ -142,13 +142,17 @@ public class CoopController extends BaseController {
         Set<EmployerReport> employerReports = null;
         if (coopDto.getEmployerReports() != null) {
             List<EmployerReportDto> employerReportDtos = coopDto.getEmployerReports();
-            employerReports = ControllerUtils.convertEmployerReportDtosToDomainObjects(employerReportService, employerReportDtos);
+            employerReports =
+                    ControllerUtils.convertEmployerReportDtosToDomainObjects(
+                            employerReportService, employerReportDtos);
         }
 
         Set<StudentReport> studentReports = null;
         if (coopDto.getStudentReports() != null) {
             List<StudentReportDto> studentReportDtos = coopDto.getStudentReports();
-            studentReports = ControllerUtils.convertStudentReportDtosToDomainObjects(studentReportService, studentReportDtos);
+            studentReports =
+                    ControllerUtils.convertStudentReportDtosToDomainObjects(
+                            studentReportService, studentReportDtos);
         }
 
         coop =

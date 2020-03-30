@@ -46,7 +46,7 @@ public class EmployerReportSectionController extends BaseController {
     @PostMapping("")
     public EmployerReportSectionDto createReportSection(
             @RequestBody EmployerReportSectionDto reportSectionDto) {
-    	ReportSectionConfig reportSectionConfig = null;
+        ReportSectionConfig reportSectionConfig = null;
         EmployerReport employerReport = null;
 
         if (reportSectionDto.getReportSectionConfig() != null) {
@@ -68,9 +68,8 @@ public class EmployerReportSectionController extends BaseController {
     @PutMapping("/{id}")
     public EmployerReportSectionDto updateReportSection(
             @PathVariable int id, @RequestBody EmployerReportSectionDto reportSectionDto) {
-        EmployerReportSection reportSection =
-                employerReportSectionService.getReportSection(id);
-        
+        EmployerReportSection reportSection = employerReportSectionService.getReportSection(id);
+
         ReportSectionConfig reportSectionConfig = null;
         EmployerReport employerReport = null;
 

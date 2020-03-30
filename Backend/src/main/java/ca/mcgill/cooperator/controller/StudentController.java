@@ -153,18 +153,19 @@ public class StudentController extends BaseController {
     @PutMapping("/{id}")
     public StudentDto updateStudent(@PathVariable int id, @RequestBody StudentDto s) {
         Student student = studentService.getStudentById(id);
-        
+
         Set<Coop> coops = null;
         if (s.getCoops() != null) {
-        	coops = ControllerUtils.convertCoopsListToDomainObject(coopService, s.getCoops());
+            coops = ControllerUtils.convertCoopsListToDomainObject(coopService, s.getCoops());
         }
-        
+
         Set<Notification> notifs = null;
         if (s.getNotifications() != null) {
-        	notifs = ControllerUtils.convertNotificationListToDomainObjectSet(
-                    notificationService, s.getNotifications());
+            notifs =
+                    ControllerUtils.convertNotificationListToDomainObjectSet(
+                            notificationService, s.getNotifications());
         }
-        
+
         studentService.updateStudent(
                 student,
                 s.getFirstName(),

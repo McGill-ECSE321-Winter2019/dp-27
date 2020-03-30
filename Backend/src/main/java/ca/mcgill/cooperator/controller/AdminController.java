@@ -5,8 +5,6 @@ import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.service.AdminService;
 import ca.mcgill.cooperator.service.NotificationService;
-
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -84,22 +82,19 @@ public class AdminController extends BaseController {
      */
     @PutMapping("/{id}")
     public AdminDto updateAdmin(@PathVariable int id, @RequestBody AdminDto a) {
-    	Admin admin = adminService.getAdmin(id);
-        
+        Admin admin = adminService.getAdmin(id);
+
         List<Notification> notifs = null;
-        
+
         if (a.getSentNotifications() != null) {
-        	notifs = new ArrayList<Notification>();
-        	notifs = ControllerUtils.convertNotificationListToDomainObject(notifService, a.getSentNotifications());
+            notifs =
+                    ControllerUtils.convertNotificationListToDomainObject(
+                            notifService, a.getSentNotifications());
         }
-        
+
         Admin updatedAdmin =
                 adminService.updateAdmin(
-                        admin,
-                        a.getFirstName(),
-                        a.getLastName(),
-                        a.getEmail(),
-                        notifs);
+                        admin, a.getFirstName(), a.getLastName(), a.getEmail(), notifs);
 
         return ControllerUtils.convertToDto(updatedAdmin);
     }

@@ -17,7 +17,7 @@ public class CoopDto {
     public CoopDto() {}
 
     public CoopDto(
-    		Integer id,
+            Integer id,
             CoopStatus status,
             CourseOfferingDto courseOffering,
             CoopDetailsDto details,

@@ -116,8 +116,7 @@ public class ReportSectionConfigController extends BaseController {
                             studentReportSectionService, rscDto.getStudentReportSections());
         }
 
-        ReportSectionConfig rsConfig =
-                reportSectionConfigService.getReportSectionConfig(id);
+        ReportSectionConfig rsConfig = reportSectionConfigService.getReportSectionConfig(id);
 
         ReportSectionConfig updatedReportSectionConfig =
                 reportSectionConfigService.updateReportSectionConfig(
