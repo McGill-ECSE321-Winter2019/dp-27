@@ -197,6 +197,8 @@ public class ControllerUtils {
                             coopDetails.getId(),
                             coopDetails.getPayPerHour(),
                             coopDetails.getHoursPerWeek(),
+                            coopDetails.getStartDate(),
+                            coopDetails.getEndDate(),
                             null, // null employer contact
                             null); // null coop since coop is parent
             EmployerContact employerContact = coopDetails.getEmployerContact();
@@ -345,6 +347,8 @@ public class ControllerUtils {
                         cd.getId(),
                         cd.getPayPerHour(),
                         cd.getHoursPerWeek(),
+                        cd.getStartDate(),
+                        cd.getEndDate(),
                         null, // null employer contact
                         null); // null coop
 
@@ -522,6 +526,8 @@ public class ControllerUtils {
                                     coopDetails.getId(),
                                     coopDetails.getPayPerHour(),
                                     coopDetails.getHoursPerWeek(),
+                                    coopDetails.getStartDate(),
+                                    coopDetails.getEndDate(),
                                     null, // null employer contact, look up coop details by id to ge
                                     // employer contact
                                     null); // null coop since parent
@@ -619,6 +625,8 @@ public class ControllerUtils {
                                 coopDetail.getId(),
                                 coopDetail.getPayPerHour(),
                                 coopDetail.getHoursPerWeek(),
+                                coopDetail.getStartDate(),
+                                coopDetail.getEndDate(),
                                 null, // null employer contact since parent
                                 null); // null coop, look up coop details by id to get coop
 
@@ -981,6 +989,8 @@ public class ControllerUtils {
                                     coopDetails.getId(),
                                     coopDetails.getPayPerHour(),
                                     coopDetails.getHoursPerWeek(),
+                                    coopDetails.getStartDate(),
+                                    coopDetails.getEndDate(),
                                     null, // null employer contact, look up coop details by id to
                                     // get employer contact
                                     null); // null coop since parent

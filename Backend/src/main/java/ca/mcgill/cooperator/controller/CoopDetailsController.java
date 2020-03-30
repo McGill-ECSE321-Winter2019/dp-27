@@ -58,6 +58,8 @@ public class CoopDetailsController extends BaseController {
                 coopDetailsService.createCoopDetails(
                         coopDetailsDto.getPayPerHour(),
                         coopDetailsDto.getHoursPerWeek(),
+                        coopDetailsDto.getStartDate(),
+                        coopDetailsDto.getEndDate(),
                         employerContact,
                         coop);
 
@@ -86,6 +88,8 @@ public class CoopDetailsController extends BaseController {
                         coopDetails,
                         coopDetailsDto.getPayPerHour(),
                         coopDetailsDto.getHoursPerWeek(),
+                        coopDetailsDto.getStartDate(),
+                        coopDetailsDto.getEndDate(),
                         employerContact,
                         coop);
 
