@@ -82,7 +82,7 @@ public class AuthController {
                     ctx.search(LDAP_BASE, searchFilter, searchControls);
             SearchResult searchResult = result.nextElement();
 
-            Student s = toUser(searchResult, ctx);
+            Student s = convertToStudent(searchResult, ctx);
 
             if (ctx != null) {
                 ctx.close();
@@ -115,7 +115,7 @@ public class AuthController {
         return env;
     }
 
-    private Student toUser(SearchResult searchResult, LdapContext ctx) {
+    private Student convertToStudent(SearchResult searchResult, LdapContext ctx) {
         try {
             Attributes attributes = searchResult.getAttributes();
 
