@@ -101,7 +101,7 @@ public class CourseControllerIT extends BaseControllerIT {
         // 4. update the Course with a PUT request
         mvcResult =
                 mvc.perform(
-                                put("/courses")
+                                put("/courses/" + courseToUpdate.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(courseToUpdate))
                                         .characterEncoding("utf-8"))

@@ -5,6 +5,7 @@ import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.CoopService;
@@ -149,18 +150,29 @@ public class StudentController extends BaseController {
      * @param List<Notifications>
      * @return updated Student
      */
-    @PutMapping("")
-    public StudentDto updateStudent(@RequestBody StudentDto s) {
-        Student student = studentService.getStudentByStudentId(s.getStudentId());
+    @PutMapping("/{id}")
+    public StudentDto updateStudent(@PathVariable int id, @RequestBody StudentDto s) {
+        Student student = studentService.getStudentById(id);
+        
+        Set<Coop> coops = null;
+        if (s.getCoops() != null) {
+        	coops = ControllerUtils.convertCoopsListToDomainObject(coopService, s.getCoops());
+        }
+        
+        Set<Notification> notifs = null;
+        if (s.getNotifications() != null) {
+        	notifs = ControllerUtils.convertNotificationListToDomainObjectSet(
+                    notificationService, s.getNotifications());
+        }
+        
         studentService.updateStudent(
                 student,
                 s.getFirstName(),
                 s.getLastName(),
                 s.getEmail(),
                 s.getStudentId(),
-                ControllerUtils.convertCoopsListToDomainObject(coopService, s.getCoops()),
-                ControllerUtils.convertNotificationListToDomainObjectSet(
-                        notificationService, s.getNotifications()));
+                coops,
+                notifs);
         return ControllerUtils.convertToDto(student);
     }
 

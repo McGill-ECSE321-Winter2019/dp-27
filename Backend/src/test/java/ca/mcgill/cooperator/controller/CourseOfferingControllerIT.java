@@ -123,7 +123,7 @@ public class CourseOfferingControllerIT extends BaseControllerIT {
 
         mvcResult =
                 mvc.perform(
-                                put("/course-offerings")
+                                put("/course-offerings/" + coToUpdate.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(coToUpdate))
                                         .characterEncoding("utf-8"))

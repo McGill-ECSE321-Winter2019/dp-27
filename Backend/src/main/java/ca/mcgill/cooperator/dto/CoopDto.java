@@ -5,7 +5,7 @@ import java.util.List;
 
 public class CoopDto {
 
-    private int id;
+    private Integer id;
     private CoopStatus status;
 
     private CourseOfferingDto courseOffering;
@@ -17,7 +17,7 @@ public class CoopDto {
     public CoopDto() {}
 
     public CoopDto(
-            int id,
+    		Integer id,
             CoopStatus status,
             CourseOfferingDto courseOffering,
             CoopDetailsDto details,
@@ -35,7 +35,7 @@ public class CoopDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

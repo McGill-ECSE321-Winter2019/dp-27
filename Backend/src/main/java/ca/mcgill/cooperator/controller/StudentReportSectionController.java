@@ -46,11 +46,15 @@ public class StudentReportSectionController extends BaseController {
     @PostMapping("")
     public StudentReportSectionDto createReportSection(
             @RequestBody StudentReportSectionDto reportSectionDto) {
-        ReportSectionConfig rsConfig =
-                reportSectionConfigService.getReportSectionConfig(
+        ReportSectionConfig rsConfig = null;
+        if (reportSectionDto.getReportSectionConfig() != null) {
+        	rsConfig = reportSectionConfigService.getReportSectionConfig(
                         reportSectionDto.getReportSectionConfig().getId());
-        StudentReport sr =
-                studentReportService.getStudentReport(reportSectionDto.getStudentReport().getId());
+        }
+        StudentReport sr = null;
+        if (reportSectionDto.getStudentReport() != null) {
+        	sr = studentReportService.getStudentReport(reportSectionDto.getStudentReport().getId());
+        }
 
         StudentReportSection reportSection =
                 studentReportSectionService.createReportSection(
@@ -58,11 +62,11 @@ public class StudentReportSectionController extends BaseController {
         return ControllerUtils.convertToDto(reportSection);
     }
 
-    @PutMapping("")
+    @PutMapping("/{id}")
     public StudentReportSectionDto updateReportSection(
-            @RequestBody StudentReportSectionDto reportSectionDto) {
+            @PathVariable int id, @RequestBody StudentReportSectionDto reportSectionDto) {
         StudentReportSection reportSection =
-                studentReportSectionService.getReportSection(reportSectionDto.getId());
+                studentReportSectionService.getReportSection(id);
         ReportSectionConfig reportSectionConfig = null;
         StudentReport studentReport = null;
 

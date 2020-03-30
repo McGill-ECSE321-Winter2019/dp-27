@@ -88,7 +88,7 @@ public class ReportConfigControllerIT extends BaseControllerIT {
         rcDto.setRequiresFile(false);
 
         mvc.perform(
-                        put("/report-configs")
+                        put("/report-configs/" + rcDto.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(rcDto))
                                 .characterEncoding("utf-8"))
@@ -167,7 +167,7 @@ public class ReportConfigControllerIT extends BaseControllerIT {
 
         // 2. invalid update: invalid fields and no ID provided
         mvc.perform(
-                        put("/report-configs")
+                        put("/report-configs/" + rcDto.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(rcDto))
                                 .characterEncoding("utf-8"))

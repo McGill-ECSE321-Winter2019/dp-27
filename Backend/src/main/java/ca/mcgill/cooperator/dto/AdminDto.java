@@ -4,7 +4,7 @@ import java.util.List;
 
 public class AdminDto {
 
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String email;
@@ -12,7 +12,7 @@ public class AdminDto {
     private List<NotificationDto> sent;
 
     public AdminDto(
-            int id, String firstName, String lastName, String email, List<NotificationDto> sent) {
+    		Integer id, String firstName, String lastName, String email, List<NotificationDto> sent) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -20,7 +20,7 @@ public class AdminDto {
         this.sent = sent;
     }
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

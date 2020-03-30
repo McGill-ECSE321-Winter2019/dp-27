@@ -94,9 +94,9 @@ public class ReportSectionConfigController extends BaseController {
      * @param rscDto
      * @return the updated ReportSectionConfig
      */
-    @PutMapping("")
+    @PutMapping("/{id}")
     public ReportSectionConfigDto updateReportSectionConfig(
-            @RequestBody ReportSectionConfigDto rscDto) {
+            @PathVariable int id, @RequestBody ReportSectionConfigDto rscDto) {
         ReportConfig reportConfig = null;
         if (rscDto.getReportConfig() != null) {
             reportConfig = reportConfigService.getReportConfig(rscDto.getReportConfig().getId());
@@ -117,7 +117,7 @@ public class ReportSectionConfigController extends BaseController {
         }
 
         ReportSectionConfig rsConfig =
-                reportSectionConfigService.getReportSectionConfig(rscDto.getId());
+                reportSectionConfigService.getReportSectionConfig(id);
 
         ReportSectionConfig updatedReportSectionConfig =
                 reportSectionConfigService.updateReportSectionConfig(

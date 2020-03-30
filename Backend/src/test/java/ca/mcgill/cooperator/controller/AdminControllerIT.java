@@ -94,7 +94,7 @@ public class AdminControllerIT extends BaseControllerIT {
         // 4. update the Admin with a PUT request
         mvcResult =
                 mvc.perform(
-                                put("/admins")
+                                put("/admins/" + adminToUpdate.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(adminToUpdate))
                                         .characterEncoding("utf-8"))
@@ -181,7 +181,7 @@ public class AdminControllerIT extends BaseControllerIT {
 
         // 3. invalid update
         mvc.perform(
-                        put("/admins")
+                        put("/admins/" + returnedAdmin.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(returnedAdmin))
                                 .characterEncoding("utf-8"))

@@ -4,7 +4,7 @@ import ca.mcgill.cooperator.model.ReportStatus;
 import java.util.List;
 
 public class EmployerReportDto {
-    private int id;
+    private Integer id;
     private String title;
     private ReportStatus status;
 
@@ -17,7 +17,7 @@ public class EmployerReportDto {
     public EmployerReportDto() {}
 
     public EmployerReportDto(
-            int id,
+            Integer id,
             String title,
             ReportStatus status,
             byte[] data,
@@ -35,7 +35,7 @@ public class EmployerReportDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

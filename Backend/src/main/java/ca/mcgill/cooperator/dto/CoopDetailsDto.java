@@ -1,9 +1,9 @@
 package ca.mcgill.cooperator.dto;
 
 public class CoopDetailsDto {
-    private int id;
-    private int payPerHour;
-    private int hoursPerWeek;
+    private Integer id;
+    private Integer payPerHour;
+    private Integer hoursPerWeek;
 
     private EmployerContactDto employerContact;
     private CoopDto coop;
@@ -11,9 +11,9 @@ public class CoopDetailsDto {
     public CoopDetailsDto() {}
 
     public CoopDetailsDto(
-            int id,
-            int payPerHour,
-            int hoursPerWeek,
+    		Integer id,
+    		Integer payPerHour,
+    		Integer hoursPerWeek,
             EmployerContactDto employerContact,
             CoopDto coop) {
         this.id = id;
@@ -25,23 +25,23 @@ public class CoopDetailsDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public int getPayPerHour() {
+    public Integer getPayPerHour() {
         return this.payPerHour;
     }
 
-    public void setPayPerHour(int payPerHour) {
+    public void setPayPerHour(Integer payPerHour) {
         this.payPerHour = payPerHour;
     }
 
-    public int getHoursPerWeek() {
+    public Integer getHoursPerWeek() {
         return this.hoursPerWeek;
     }
 
-    public void setHoursPerWeek(int hoursPerWeek) {
+    public void setHoursPerWeek(Integer hoursPerWeek) {
         this.hoursPerWeek = hoursPerWeek;
     }
 

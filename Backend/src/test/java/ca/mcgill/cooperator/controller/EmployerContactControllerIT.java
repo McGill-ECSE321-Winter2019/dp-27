@@ -122,7 +122,7 @@ public class EmployerContactControllerIT extends BaseControllerIT {
         // 4. update the Employer Contact with a PUT request
         mvcResult =
                 mvc.perform(
-                                put("/employer-contacts")
+                                put("/employer-contacts/" + employerContactToUpdate.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(
                                                 objectMapper.writeValueAsString(

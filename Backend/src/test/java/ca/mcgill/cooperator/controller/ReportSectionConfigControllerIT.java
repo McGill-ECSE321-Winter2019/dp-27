@@ -115,7 +115,7 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
         rscDto.setResponseType(ReportResponseType.NUMBER);
 
         mvc.perform(
-                        put("/report-section-configs")
+                        put("/report-section-configs/" + rscDto.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(rscDto))
                                 .characterEncoding("utf-8"))
@@ -210,7 +210,7 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
 
         // 2. invalid update: empty prompt and no ID provided
         mvc.perform(
-                        put("/report-section-configs")
+                        put("/report-section-configs/" + rscDto.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(rscDto))
                                 .characterEncoding("utf-8"))

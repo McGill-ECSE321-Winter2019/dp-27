@@ -46,24 +46,31 @@ public class EmployerReportSectionController extends BaseController {
     @PostMapping("")
     public EmployerReportSectionDto createReportSection(
             @RequestBody EmployerReportSectionDto reportSectionDto) {
-        ReportSectionConfig rsConfig =
-                reportSectionConfigService.getReportSectionConfig(
-                        reportSectionDto.getReportSectionConfig().getId());
-        EmployerReport er =
-                employerReportService.getEmployerReport(
-                        reportSectionDto.getEmployerReport().getId());
+    	ReportSectionConfig reportSectionConfig = null;
+        EmployerReport employerReport = null;
+
+        if (reportSectionDto.getReportSectionConfig() != null) {
+            ReportSectionConfigDto rsConfigDto = reportSectionDto.getReportSectionConfig();
+            reportSectionConfig =
+                    reportSectionConfigService.getReportSectionConfig(rsConfigDto.getId());
+        }
+        if (reportSectionDto.getEmployerReport() != null) {
+            EmployerReportDto employerReportDto = reportSectionDto.getEmployerReport();
+            employerReport = employerReportService.getEmployerReport(employerReportDto.getId());
+        }
 
         EmployerReportSection reportSection =
                 employerReportSectionService.createReportSection(
-                        reportSectionDto.getResponse(), rsConfig, er);
+                        reportSectionDto.getResponse(), reportSectionConfig, employerReport);
         return ControllerUtils.convertToDto(reportSection);
     }
 
-    @PutMapping("")
+    @PutMapping("/{id}")
     public EmployerReportSectionDto updateReportSection(
-            @RequestBody EmployerReportSectionDto reportSectionDto) {
+            @PathVariable int id, @RequestBody EmployerReportSectionDto reportSectionDto) {
         EmployerReportSection reportSection =
-                employerReportSectionService.getReportSection(reportSectionDto.getId());
+                employerReportSectionService.getReportSection(id);
+        
         ReportSectionConfig reportSectionConfig = null;
         EmployerReport employerReport = null;
 

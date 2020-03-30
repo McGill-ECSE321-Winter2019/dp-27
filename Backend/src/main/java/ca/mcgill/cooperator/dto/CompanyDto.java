@@ -4,7 +4,7 @@ import java.util.List;
 
 public class CompanyDto {
 
-    private int id;
+    private Integer id;
     private String name;
     private String city;
     private String region;
@@ -15,7 +15,7 @@ public class CompanyDto {
     public CompanyDto() {}
 
     public CompanyDto(
-            int id,
+    		Integer id,
             String name,
             String city,
             String region,
@@ -31,7 +31,7 @@ public class CompanyDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

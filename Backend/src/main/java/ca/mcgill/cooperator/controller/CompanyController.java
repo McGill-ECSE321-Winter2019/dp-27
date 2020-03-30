@@ -6,7 +6,6 @@ import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.EmployerContactService;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -70,14 +69,10 @@ public class CompanyController extends BaseController {
      */
     @PostMapping("")
     public CompanyDto createCompany(@RequestBody CompanyDto companyDto) {
-        List<EmployerContact> employerContacts = new ArrayList<EmployerContact>();
+        List<EmployerContact> employerContacts = null;
         List<EmployerContactDto> employerContactDtos = companyDto.getEmployees();
         if (employerContactDtos != null) {
-            for (EmployerContactDto employerContactDto : employerContactDtos) {
-                EmployerContact employerContact =
-                        employerContactService.getEmployerContact(employerContactDto.getId());
-                employerContacts.add(employerContact);
-            }
+        	employerContacts = ControllerUtils.covertEmployerContactDtosToDomainObjects(employerContactService, employerContactDtos);
         }
 
         Company company =
@@ -101,18 +96,14 @@ public class CompanyController extends BaseController {
      * @param employees
      * @return updated Company
      */
-    @PutMapping("")
-    public CompanyDto updateCompany(@RequestBody CompanyDto companyDto) {
-        Company company = companyService.getCompany(companyDto.getId());
+    @PutMapping("/{id}")
+    public CompanyDto updateCompany(@PathVariable int id, @RequestBody CompanyDto companyDto) {
+        Company company = companyService.getCompany(id);
 
         List<EmployerContactDto> employerContactDtos = companyDto.getEmployees();
-        List<EmployerContact> employerContacts = new ArrayList<EmployerContact>();
+        List<EmployerContact> employerContacts = null;
         if (employerContactDtos != null) {
-            for (EmployerContactDto employerContactDto : employerContactDtos) {
-                EmployerContact employerContact =
-                        employerContactService.getEmployerContact(employerContactDto.getId());
-                employerContacts.add(employerContact);
-            }
+        	employerContacts = ControllerUtils.covertEmployerContactDtosToDomainObjects(employerContactService, employerContactDtos);
         }
 
         company =

@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class NotificationDto {
-    private int id;
+    private Integer id;
     private String title;
     private String body;
     private Boolean seen;
@@ -14,7 +14,7 @@ public class NotificationDto {
     private AdminDto sender;
 
     public NotificationDto(
-            int id,
+            Integer id,
             String title,
             String body,
             StudentDto student,
@@ -33,7 +33,7 @@ public class NotificationDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
