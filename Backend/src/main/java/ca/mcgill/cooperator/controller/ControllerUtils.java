@@ -30,12 +30,16 @@ import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.model.StudentReportSection;
+import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
+import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.EmployerReportSectionService;
+import ca.mcgill.cooperator.service.EmployerReportService;
 import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.ReportSectionConfigService;
 import ca.mcgill.cooperator.service.StudentReportSectionService;
+import ca.mcgill.cooperator.service.StudentReportService;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -1281,5 +1285,67 @@ public class ControllerUtils {
             }
         }
         return reportSectionConfigs;
+    }
+
+    public static List<EmployerContact> covertEmployerContactDtosToDomainObjects(
+            EmployerContactService service, List<EmployerContactDto> employerContactDtos) {
+        List<EmployerContact> employerContacts = new ArrayList<EmployerContact>();
+        if (employerContactDtos == null) {
+            return employerContacts;
+        }
+
+        for (EmployerContactDto employerContactDto : employerContactDtos) {
+            if (employerContactDto != null) {
+                EmployerContact employerContact =
+                        service.getEmployerContact(employerContactDto.getId());
+                employerContacts.add(employerContact);
+            }
+        }
+        return employerContacts;
+    }
+
+    public static Set<EmployerReport> convertEmployerReportDtosToDomainObjects(
+            EmployerReportService service, List<EmployerReportDto> employerReportDtos) {
+        Set<EmployerReport> employerReports = new HashSet<EmployerReport>();
+        if (employerReportDtos == null) {
+            return employerReports;
+        }
+
+        for (EmployerReportDto employerReportDto : employerReportDtos) {
+            EmployerReport employerReport = service.getEmployerReport(employerReportDto.getId());
+            employerReports.add(employerReport);
+        }
+
+        return employerReports;
+    }
+
+    public static Set<StudentReport> convertStudentReportDtosToDomainObjects(
+            StudentReportService service, List<StudentReportDto> studentReportDtos) {
+        Set<StudentReport> studentReports = new HashSet<StudentReport>();
+        if (studentReportDtos == null) {
+            return studentReports;
+        }
+
+        for (StudentReportDto studentReportDto : studentReportDtos) {
+            StudentReport studentReport = service.getStudentReport(studentReportDto.getId());
+            studentReports.add(studentReport);
+        }
+
+        return studentReports;
+    }
+
+    public static Set<CoopDetails> convertCoopDetailsDtosToDomainObjects(
+            CoopDetailsService service, List<CoopDetailsDto> coopDetailsDtos) {
+        Set<CoopDetails> coopDetails = new HashSet<CoopDetails>();
+        if (coopDetailsDtos == null) {
+            return coopDetails;
+        }
+
+        for (CoopDetailsDto coopDetailsDto : coopDetailsDtos) {
+            CoopDetails cd = service.getCoopDetails(coopDetailsDto.getId());
+            coopDetails.add(cd);
+        }
+
+        return coopDetails;
     }
 }

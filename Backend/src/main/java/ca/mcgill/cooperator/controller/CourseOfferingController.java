@@ -77,11 +77,13 @@ public class CourseOfferingController extends BaseController {
             @RequestBody CourseOfferingDto courseOfferingDto) {
         CourseDto courseDto = courseOfferingDto.getCourse();
 
-        Course course;
-        if (courseDto.getId() != 0) {
-            course = courseService.getCourseById(courseDto.getId());
-        } else {
-            course = courseService.getCourseByName(courseDto.getName());
+        Course course = null;
+        if (courseDto != null) {
+            if (courseDto.getId() != null) {
+                course = courseService.getCourseById(courseDto.getId());
+            } else {
+                course = courseService.getCourseByName(courseDto.getName());
+            }
         }
 
         CourseOffering courseOffering =
@@ -96,10 +98,14 @@ public class CourseOfferingController extends BaseController {
         return seasons;
     }
 
-    @PutMapping("")
-    public CourseOfferingDto updateCourseOfferingDto(@RequestBody CourseOfferingDto coDto) {
-        CourseOffering co = courseOfferingService.getCourseOfferingById(coDto.getId());
-        Course course = courseService.getCourseById(coDto.getCourse().getId());
+    @PutMapping("/{id}")
+    public CourseOfferingDto updateCourseOfferingDto(
+            @PathVariable int id, @RequestBody CourseOfferingDto coDto) {
+        CourseOffering co = courseOfferingService.getCourseOfferingById(id);
+        Course course = null;
+        if (coDto.getCourse() != null) {
+            course = courseService.getCourseById(coDto.getCourse().getId());
+        }
 
         CourseOffering courseOffering =
                 courseOfferingService.updateCourseOffering(

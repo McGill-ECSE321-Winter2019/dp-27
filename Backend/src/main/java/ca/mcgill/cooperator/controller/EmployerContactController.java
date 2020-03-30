@@ -12,7 +12,6 @@ import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.EmployerReportService;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,10 @@ public class EmployerContactController extends BaseController {
     public EmployerContactDto createEmployerContact(
             @RequestBody EmployerContactDto employerContactDto) {
         CompanyDto companyDto = employerContactDto.getCompany();
-        Company company = companyService.getCompany(companyDto.getId());
+        Company company = null;
+        if (companyDto != null) {
+            company = companyService.getCompany(companyDto.getId());
+        }
         EmployerContact ec =
                 employerContactService.createEmployerContact(
                         employerContactDto.getFirstName(),
@@ -63,31 +65,31 @@ public class EmployerContactController extends BaseController {
         return ControllerUtils.convertToDto(ec);
     }
 
-    @PutMapping("")
+    @PutMapping("/{id}")
     public EmployerContactDto updateEmployerContact(
-            @RequestBody EmployerContactDto employerContactDto) {
+            @PathVariable int id, @RequestBody EmployerContactDto employerContactDto) {
 
-        EmployerContact ec = employerContactService.getEmployerContact(employerContactDto.getId());
+        EmployerContact ec = employerContactService.getEmployerContact(id);
         CompanyDto companyDto = employerContactDto.getCompany();
-        Company company = companyService.getCompany(companyDto.getId());
+        Company company = null;
+        if (companyDto != null) {
+            company = companyService.getCompany(companyDto.getId());
+        }
 
         List<EmployerReportDto> employerReportDtos = employerContactDto.getEmployerReports();
-        Set<EmployerReport> employerReports = new HashSet<EmployerReport>();
+        Set<EmployerReport> employerReports = null;
         if (employerReportDtos != null) {
-            for (EmployerReportDto employerReportDto : employerReportDtos) {
-                EmployerReport er =
-                        employerReportService.getEmployerReport(employerReportDto.getId());
-                employerReports.add(er);
-            }
+            employerReports =
+                    ControllerUtils.convertEmployerReportDtosToDomainObjects(
+                            employerReportService, employerReportDtos);
         }
 
         List<CoopDetailsDto> coopDetailsDtos = employerContactDto.getCoopDetails();
-        Set<CoopDetails> coopDetails = new HashSet<CoopDetails>();
+        Set<CoopDetails> coopDetails = null;
         if (coopDetailsDtos != null) {
-            for (CoopDetailsDto coopDetailsDto : coopDetailsDtos) {
-                CoopDetails cd = coopDetailsService.getCoopDetails(coopDetailsDto.getId());
-                coopDetails.add(cd);
-            }
+            coopDetails =
+                    ControllerUtils.convertCoopDetailsDtosToDomainObjects(
+                            coopDetailsService, coopDetailsDtos);
         }
 
         ec =

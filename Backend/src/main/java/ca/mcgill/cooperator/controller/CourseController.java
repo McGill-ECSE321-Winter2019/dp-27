@@ -2,6 +2,7 @@ package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.model.Course;
+import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 import java.util.List;
@@ -81,15 +82,18 @@ public class CourseController extends BaseController {
      * @param CourseDto object
      * @return CourseDto object
      */
-    @PutMapping("")
-    public CourseDto updateCourse(@RequestBody CourseDto c) {
-        Course course = courseService.getCourseById(c.getId());
-        Course updatedCourse =
-                courseService.updateCourse(
-                        course,
-                        c.getName(),
-                        ControllerUtils.convertCourseOfferingListToDomainObject(
-                                courseOfferingService, c.getCourseOfferings()));
+    @PutMapping("/{id}")
+    public CourseDto updateCourse(@PathVariable int id, @RequestBody CourseDto c) {
+        Course course = courseService.getCourseById(id);
+
+        List<CourseOffering> courseOfferings = null;
+        if (c.getCourseOfferings() != null) {
+            courseOfferings =
+                    ControllerUtils.convertCourseOfferingListToDomainObject(
+                            courseOfferingService, c.getCourseOfferings());
+        }
+
+        Course updatedCourse = courseService.updateCourse(course, c.getName(), courseOfferings);
 
         return ControllerUtils.convertToDto(updatedCourse);
     }

@@ -88,7 +88,7 @@ public class ReportConfigControllerIT extends BaseControllerIT {
         rcDto.setRequiresFile(false);
 
         mvc.perform(
-                        put("/report-configs")
+                        put("/report-configs/" + rcDto.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(rcDto))
                                 .characterEncoding("utf-8"))
@@ -155,26 +155,32 @@ public class ReportConfigControllerIT extends BaseControllerIT {
         rcDto.setType("First Evaluation");
 
         // valid create so that we have a ReportConfig to work with
-        mvc.perform(
-                        post("/report-configs")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(rcDto))
-                                .characterEncoding("utf-8"))
-                .andExpect(status().isOk());
+        MvcResult mvcResult =
+                mvc.perform(
+                                post("/report-configs")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(rcDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
+        rcDto =
+                objectMapper.readValue(
+                        mvcResult.getResponse().getContentAsString(), ReportConfigDto.class);
 
         rcDto.setType("");
         rcDto.setDeadline(-1);
 
-        // 2. invalid update: invalid fields and no ID provided
+        // 2. invalid update: invalid fields
         mvc.perform(
-                        put("/report-configs")
+                        put("/report-configs/" + rcDto.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(rcDto))
                                 .characterEncoding("utf-8"))
                 .andExpect(status().is5xxServerError());
 
         // get the created ReportConfig
-        MvcResult mvcResult =
+        mvcResult =
                 mvc.perform(get("/report-configs").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andReturn();

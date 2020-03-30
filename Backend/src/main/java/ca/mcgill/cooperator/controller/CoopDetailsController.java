@@ -43,11 +43,16 @@ public class CoopDetailsController extends BaseController {
     @PostMapping("")
     public CoopDetailsDto createCoopDetails(@RequestBody CoopDetailsDto coopDetailsDto) {
         EmployerContactDto employerContactDto = coopDetailsDto.getEmployerContact();
-        EmployerContact employerContact =
-                employerContactService.getEmployerContact(employerContactDto.getId());
+        EmployerContact employerContact = null;
+        if (employerContactDto != null) {
+            employerContact = employerContactService.getEmployerContact(employerContactDto.getId());
+        }
 
         CoopDto coopDto = coopDetailsDto.getCoop();
-        Coop coop = coopService.getCoopById(coopDto.getId());
+        Coop coop = null;
+        if (coopDto != null) {
+            coop = coopService.getCoopById(coopDto.getId());
+        }
 
         CoopDetails coopDetails =
                 coopDetailsService.createCoopDetails(
@@ -61,21 +66,22 @@ public class CoopDetailsController extends BaseController {
         return ControllerUtils.convertToDto(coopDetails);
     }
 
-    @PutMapping("")
-    public CoopDetailsDto updateCoopDetails(@RequestBody CoopDetailsDto coopDetailsDto) {
+    @PutMapping("/{id}")
+    public CoopDetailsDto updateCoopDetails(
+            @PathVariable int id, @RequestBody CoopDetailsDto coopDetailsDto) {
+        EmployerContactDto employerContactDto = coopDetailsDto.getEmployerContact();
         EmployerContact employerContact = null;
-        if (coopDetailsDto.getEmployerContact() != null) {
-            employerContact =
-                    employerContactService.getEmployerContact(
-                            coopDetailsDto.getEmployerContact().getId());
+        if (employerContactDto != null) {
+            employerContact = employerContactService.getEmployerContact(employerContactDto.getId());
         }
 
+        CoopDto coopDto = coopDetailsDto.getCoop();
         Coop coop = null;
-        if (coopDetailsDto.getCoop() != null) {
-            coop = coopService.getCoopById(coopDetailsDto.getCoop().getId());
+        if (coopDto != null) {
+            coop = coopService.getCoopById(coopDto.getId());
         }
 
-        CoopDetails coopDetails = coopDetailsService.getCoopDetails(coopDetailsDto.getId());
+        CoopDetails coopDetails = coopDetailsService.getCoopDetails(id);
 
         coopDetails =
                 coopDetailsService.updateCoopDetails(

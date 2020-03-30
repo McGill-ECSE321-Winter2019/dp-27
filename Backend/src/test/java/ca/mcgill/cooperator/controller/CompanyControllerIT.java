@@ -95,7 +95,7 @@ public class CompanyControllerIT extends BaseControllerIT {
         // 4. update the Company with a PUT request
         mvcResult =
                 mvc.perform(
-                                put("/companies")
+                                put("/companies/" + companyDto.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(companyDto))
                                         .characterEncoding("utf-8"))

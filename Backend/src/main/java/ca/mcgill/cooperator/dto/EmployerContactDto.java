@@ -4,7 +4,7 @@ import java.util.List;
 
 public class EmployerContactDto {
 
-    private int id;
+    private Integer id;
     private String email;
     private String firstName;
     private String lastName;
@@ -17,7 +17,7 @@ public class EmployerContactDto {
     public EmployerContactDto() {}
 
     public EmployerContactDto(
-            int id,
+            Integer id,
             String email,
             String firstName,
             String lastName,
@@ -37,7 +37,7 @@ public class EmployerContactDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

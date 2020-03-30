@@ -414,6 +414,7 @@ public abstract class BaseControllerIT {
         rsConfigDto.setSectionPrompt(sectionPrompt);
         rsConfigDto.setResponseType(responseType);
         rsConfigDto.setReportConfig(rcConfigDto);
+        rsConfigDto.setQuestionNumber(11);
 
         MvcResult mvcResult =
                 mvc.perform(

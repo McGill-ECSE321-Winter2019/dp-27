@@ -3,7 +3,7 @@ package ca.mcgill.cooperator.dto;
 import java.util.List;
 
 public class StudentDto {
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String email;
@@ -15,7 +15,7 @@ public class StudentDto {
     public StudentDto() {}
 
     public StudentDto(
-            int id,
+            Integer id,
             String firstName,
             String lastName,
             String email,
@@ -33,7 +33,7 @@ public class StudentDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 

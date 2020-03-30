@@ -69,8 +69,7 @@ public class CooperatorServiceCompanyTests extends BaseServiceTest {
                         + "Company name cannot be empty! "
                         + "Company city cannot be empty! "
                         + "Company region cannot be empty! "
-                        + "Company country cannot be empty! "
-                        + "Company employees cannot be null!",
+                        + "Company country cannot be empty!",
                 error);
         assertEquals(companyService.getAllCompanies().size(), 0);
     }
@@ -89,8 +88,7 @@ public class CooperatorServiceCompanyTests extends BaseServiceTest {
                         + "Company name cannot be empty! "
                         + "Company city cannot be empty! "
                         + "Company region cannot be empty! "
-                        + "Company country cannot be empty! "
-                        + "Company employees cannot be null!",
+                        + "Company country cannot be empty!",
                 error);
         assertEquals(companyService.getAllCompanies().size(), 0);
     }

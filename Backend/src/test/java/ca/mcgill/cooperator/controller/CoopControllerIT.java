@@ -130,7 +130,7 @@ public class CoopControllerIT extends BaseControllerIT {
         // 4. update the co-op with a PUT request
         mvcResult =
                 mvc.perform(
-                                put("/coops")
+                                put("/coops/" + coopToUpdate.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(coopToUpdate))
                                         .characterEncoding("utf-8"))

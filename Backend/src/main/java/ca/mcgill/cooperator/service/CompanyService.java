@@ -4,6 +4,7 @@ import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.EmployerContact;
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,6 @@ public class CompanyService extends BaseService {
         if (country == null || country.trim().length() == 0) {
             error.append("Company country cannot be empty! ");
         }
-        // employees cannot be null but can be empty
-        if (employees == null) {
-            error.append("Company employees cannot be null! ");
-        }
         if (companyExists(name, city, region, country)) {
             error.append("Company with this name and location already exists!");
         }
@@ -61,6 +58,9 @@ public class CompanyService extends BaseService {
         c.setCity(city);
         c.setRegion(region);
         c.setCountry(country);
+        if (employees == null) {
+            employees = new ArrayList<EmployerContact>();
+        }
         c.setEmployees(employees);
         companyRepository.save(c);
 

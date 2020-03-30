@@ -117,9 +117,12 @@ public class EmployerReportController extends BaseController {
         Coop coop = coopService.getCoopById(coopId);
         EmployerContact ec = employerContactService.getEmployerContact(employerId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
-        Set<EmployerReportSection> sections =
-                ControllerUtils.convertEmployerReportSectionsToDomainObjects(
-                        employerReportSectionService, rsDtos);
+        Set<EmployerReportSection> sections = null;
+        if (rsDtos != null) {
+            sections =
+                    ControllerUtils.convertEmployerReportSectionsToDomainObjects(
+                            employerReportSectionService, rsDtos);
+        }
 
         EmployerReport updatedReport =
                 employerReportService.updateEmployerReport(

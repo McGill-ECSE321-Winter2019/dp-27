@@ -4,14 +4,14 @@ import java.util.List;
 
 public class CourseDto {
 
-    private int id;
+    private Integer id;
     private String name;
 
     private List<CourseOfferingDto> courseOfferings;
 
     public CourseDto() {}
 
-    public CourseDto(int id, String name, List<CourseOfferingDto> courseOfferings) {
+    public CourseDto(Integer id, String name, List<CourseOfferingDto> courseOfferings) {
         this.id = id;
         this.name = name;
         this.courseOfferings = courseOfferings;
@@ -19,7 +19,7 @@ public class CourseDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
