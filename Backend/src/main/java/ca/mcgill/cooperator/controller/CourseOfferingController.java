@@ -53,7 +53,7 @@ public class CourseOfferingController extends BaseController {
 
         Course course = null;
         if (courseDto != null) {
-	        if (courseDto.getId() != 0) {
+	        if (courseDto.getId() != null) {
 	            course = courseService.getCourseById(courseDto.getId());
 	        } else {
 	            course = courseService.getCourseByName(courseDto.getName());

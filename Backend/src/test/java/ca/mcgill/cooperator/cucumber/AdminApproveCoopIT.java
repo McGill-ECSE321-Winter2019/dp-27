@@ -179,7 +179,7 @@ public class AdminApproveCoopIT extends BaseControllerIT {
 
         mvcResult =
                 mvc.perform(
-                                put("/coops")
+                                put("/coops/" + coopDto.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(coopDto))
                                         .characterEncoding("utf-8"))
@@ -278,7 +278,7 @@ public class AdminApproveCoopIT extends BaseControllerIT {
 
         mvcResult =
                 mvc.perform(
-                                put("/coops")
+                                put("/coops/" + coopDto.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(coopDto))
                                         .characterEncoding("utf-8"))

@@ -186,7 +186,7 @@ public class CourseControllerIT extends BaseControllerIT {
 
         // 3. invalid update
         mvc.perform(
-                        put("/courses")
+                        put("/courses/" + returnedCourse.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(returnedCourse))
                                 .characterEncoding("utf-8"))
