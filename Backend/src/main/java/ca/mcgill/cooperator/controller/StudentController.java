@@ -232,7 +232,7 @@ public class StudentController extends BaseController {
         for (Coop c : coops) {
             if (c.getStatus() == CoopStatus.FUTURE
                     || c.getStatus() == CoopStatus.UNDER_REVIEW
-                    || c.getStatus() == CoopStatus.INCOMPLETE)
+                    || c.getStatus() == CoopStatus.REJECTED)
                 result.add(ControllerUtils.convertToDto(c));
         }
         return result;

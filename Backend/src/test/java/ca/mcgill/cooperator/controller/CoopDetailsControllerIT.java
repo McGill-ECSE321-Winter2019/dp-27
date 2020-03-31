@@ -25,6 +25,8 @@ import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -91,6 +93,8 @@ public class CoopDetailsControllerIT extends BaseControllerIT {
         CoopDetailsDto coopDetailsDto = new CoopDetailsDto();
         coopDetailsDto.setCoop(coopDto);
         coopDetailsDto.setEmployerContact(employerContactDto);
+        coopDetailsDto.setStartDate(Date.valueOf("2020-01-01"));
+        coopDetailsDto.setEndDate(Date.valueOf("2020-04-01"));
         coopDetailsDto.setHoursPerWeek(40);
         coopDetailsDto.setPayPerHour(300);
 

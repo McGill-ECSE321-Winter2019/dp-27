@@ -1,10 +1,11 @@
 package ca.mcgill.cooperator.model;
 
 public enum CoopStatus {
-    FINISHED,
-    COMPLETED,
+	UNDER_REVIEW,
+    REJECTED,
+    FUTURE,
     IN_PROGRESS,
-    INCOMPLETE,
-    UNDER_REVIEW,
-    FUTURE;
+    FINISHED,
+    FAILED,
+    COMPLETED;
 }

@@ -3,6 +3,8 @@ package ca.mcgill.cooperator.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.sql.Date;
+
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.CoopDetailsDto;
 import ca.mcgill.cooperator.dto.CoopDto;
@@ -175,6 +177,8 @@ public abstract class BaseControllerIT {
         CoopDetailsDto coopDetailsDto = new CoopDetailsDto();
         coopDetailsDto.setPayPerHour(20);
         coopDetailsDto.setHoursPerWeek(40);
+        coopDetailsDto.setStartDate(Date.valueOf("2020-01-01"));
+        coopDetailsDto.setEndDate(Date.valueOf("2020-04-01"));
         coopDetailsDto.setCoop(coopDto);
         coopDetailsDto.setEmployerContact(employerContactDto);
 
@@ -203,6 +207,8 @@ public abstract class BaseControllerIT {
         CoopDetailsDto coopDetailsDto = new CoopDetailsDto();
         coopDetailsDto.setPayPerHour(payPerHour);
         coopDetailsDto.setHoursPerWeek(hoursPerWeek);
+        coopDetailsDto.setStartDate(Date.valueOf("2020-01-01"));
+        coopDetailsDto.setEndDate(Date.valueOf("2020-04-01"));
         coopDetailsDto.setCoop(coopDto);
         coopDetailsDto.setEmployerContact(employerContactDto);
 
