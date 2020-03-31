@@ -8,12 +8,12 @@
           <b v-if="!notification.seen" style="color:red">
             NEW &nbsp;
           </b>
-          <b
-            >From {{ notification.sender.firstName }}
-            {{ notification.sender.lastName }}</b
-          >
+          <b>
+            From {{ notification.sender.firstName }}
+            {{ notification.sender.lastName }}
+          </b>
         </div>
-        <div>{{ notification.timeStamp }}</div>
+        <div>{{ timestamp }}</div>
         <div>
           <b>{{ notification.title }}</b>
         </div>
@@ -31,7 +31,13 @@ export default {
       required: true
     }
   },
-  created() {}
+  computed: {
+    timestamp: function() {
+      return this.$common.convertTimestampLongToString(
+        this.notification.timeStamp
+      );
+    }
+  }
 };
 </script>
 
