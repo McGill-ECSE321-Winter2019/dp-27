@@ -3,8 +3,6 @@ package ca.mcgill.cooperator.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.sql.Date;
-
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.CoopDetailsDto;
 import ca.mcgill.cooperator.dto.CoopDto;
@@ -22,6 +20,7 @@ import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.Season;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.sql.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;

@@ -25,7 +25,6 @@ import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
