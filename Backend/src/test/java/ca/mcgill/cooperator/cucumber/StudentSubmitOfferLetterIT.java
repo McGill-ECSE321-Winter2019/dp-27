@@ -38,6 +38,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
 import java.io.FileInputStream;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -127,6 +128,8 @@ public class StudentSubmitOfferLetterIT {
         coopDetails.setHoursPerWeek(40);
         // pay per hour is in cents, this is $30 per hour
         coopDetails.setPayPerHour(3000);
+        coopDetails.setStartDate(Date.valueOf("2020-01-01"));
+        coopDetails.setEndDate(Date.valueOf("2020-04-01"));
 
         // create the coop details with a POST request
         mvc.perform(

@@ -7,16 +7,11 @@ const routes = [
       { path: "", redirect: "home" },
       {
         path: "home",
-        component: () => import("pages/student/StudentHome.vue")
+        component: () => import("pages/student/StudentHomePage.vue")
       },
       {
         path: "profile",
         component: () => import("pages/student/StudentProfile.vue")
-      },
-      {
-        path: "coops/:id",
-        component: () => import("pages/student/StudentSpecificCoop.vue"),
-        props: true
       },
       {
         path: "coops",

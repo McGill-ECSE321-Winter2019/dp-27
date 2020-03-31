@@ -72,8 +72,9 @@ export default {
       this.$axios.put("/coops", coopBody);
 
       // set the status of the offer letter to COMPLETED
+      // assuming the offer letter is the only StudentReport, which it should be
       const studentReportBody = {
-        id: this.coop.studentReport.id,
+        id: this.coop.studentReports[0].id,
         status: "COMPLETED"
       };
       // update the student report status
