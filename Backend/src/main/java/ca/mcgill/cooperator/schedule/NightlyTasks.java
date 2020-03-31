@@ -27,8 +27,8 @@ public class NightlyTasks {
     // runs once every weekday at 4am
     static final String CRON_WEEKDAY = "0 0 4 * * MON-FRI";
 
-    // runs every 5 minutes, use this for testing
-    static final String CRON_TEST = "0 */5 * ? * *";
+    // runs every 15 minutes, use this for testing
+    static final String CRON_TEST = "0 */15 * ? * *";
 
     /** Checks all existing Coops and updates their status if necessary. */
     @Async

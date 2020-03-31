@@ -90,7 +90,7 @@ public class CoopController extends BaseController {
         CourseOfferingDto courseOfferingDto = coopDto.getCourseOffering();
 
         CourseOffering courseOffering = null;
-        if (courseOfferingDto.getId() > 0) {
+        if (courseOfferingDto.getId() != null && courseOfferingDto.getId() > 0) {
             courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingDto.getId());
         } else {
             // if no ID present, get CourseOffering via Course

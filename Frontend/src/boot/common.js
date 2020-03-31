@@ -94,6 +94,11 @@ const common = {
       dollarAmount = dollarAmount * -1;
       return "-$" + dollarAmount.toFixed(2);
     }
+  },
+  convertTimestampLongToString: function(timestamp) {
+    return moment(timestamp)
+      .utc()
+      .format("MMMM Do, YYYY HH:mm");
   }
 };
 
