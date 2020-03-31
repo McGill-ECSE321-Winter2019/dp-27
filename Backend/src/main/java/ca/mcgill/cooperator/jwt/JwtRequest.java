@@ -5,13 +5,15 @@ public class JwtRequest {
     private String user;
     private String password;
     private String role;
+    private String token;
 
     public JwtRequest() {}
 
-    public JwtRequest(String user, String password, String role) {
+    public JwtRequest(String user, String password, String role, String token) {
         this.user = user;
         this.password = password;
         this.role = role;
+        this.token = token;
     }
 
     public String getUser() {
@@ -36,5 +38,13 @@ public class JwtRequest {
 
     public void setRole(String role) {
         this.role = role;
+    }
+    
+    public String getToken() {
+        return this.token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
