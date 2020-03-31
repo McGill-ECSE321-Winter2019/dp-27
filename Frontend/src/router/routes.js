@@ -50,14 +50,21 @@ const routes = [
         path: "profile",
         component: () => import("pages/admin/AdminProfile.vue")
       },
-      { path: "coops", component: () => import("pages/admin/AdminCoops.vue") },
       {
-        path: "coops/review",
-        component: () => import("pages/admin/AdminCoopReviewPage.vue")
+        path: "coops",
+        component: () => import("pages/admin/AdminCoops.vue")
       },
       {
+        name: "Review",
+        path: "coops/review",
+        component: () => import("pages/admin/AdminCoopReviewPage.vue"),
+        props: true
+      },
+      {
+        name: "AdminViewStudents",
         path: "students",
-        component: () => import("pages/admin/AdminStudentsPage.vue")
+        component: () => import("pages/admin/AdminStudentsPage.vue"),
+        props: true
       },
       {
         path: "student",
