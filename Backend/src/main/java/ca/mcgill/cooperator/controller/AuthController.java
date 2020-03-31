@@ -36,7 +36,7 @@ public class AuthController {
 
     private String shortUserRegex = "[a-zA-Z]+[0-9]*";
     private String studentIdRegex = "[0-9]+";
-    private String longUserRegex = "[a-zA-Z]+\\.[a-zA-Z]+";
+    private String longUserRegex = "[a-zA-Z]+(\\.[a-zA-Z]+)+";
 
     /**
      * Searches for a Student given a user and password

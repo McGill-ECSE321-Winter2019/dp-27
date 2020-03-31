@@ -38,6 +38,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>io.github.cdimascio</groupId>
 			<artifactId>java-dotenv</artifactId>
 			<version>5.1.3</version>
@@ -67,7 +71,7 @@
 		</dependency>
 		<dependency>
           <groupId>org.springframework.security</groupId>
-          <artifactId>spring-security-ldap</artifactId>
+          <artifactId>spring-security-core</artifactId>
         </dependency>
 	</dependencies>
 
