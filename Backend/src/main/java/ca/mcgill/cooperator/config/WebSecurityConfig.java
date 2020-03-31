@@ -31,15 +31,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired private UserDetailsService jwtUserDetailsService;
 
     @Autowired private JwtRequestFilter jwtRequestFilter;
-    //
-    //	@Autowired
-    //	private JwtAuthenticationProvider jwtAuthenticationProvider;
-
-    //	@Autowired
-    //	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    //
-    //		auth.auth
-    //	}
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -66,10 +57,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and()
                 // make sure we use stateless session; session won't be used to
                 // store user's state.
-                //				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                //				.and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

@@ -43,11 +43,11 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
-    private Student authenticate(String username, String password) throws Exception {
+    private Student authenticate(String user, String password) throws Exception {
         try {
             Authentication auth =
                     authenticationManager.authenticate(
-                            new UsernamePasswordAuthenticationToken(username, password));
+                            new UsernamePasswordAuthenticationToken(user, password));
             String email = auth.getPrincipal().toString();
 
             return studentService.getStudentByEmail(email);

@@ -1,5 +1,6 @@
 package ca.mcgill.cooperator.jwt;
 
+import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.StudentService;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
      * Overrides the default authenticate method that comes with Spring Security.
      *
      * @param authentication
+     * @return Authentication object containing only the user's email
      */
     @Override
     public Authentication authenticate(Authentication authentication)
@@ -55,11 +57,17 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         String user = authentication.getPrincipal().toString();
         String password = authentication.getCredentials().toString();
 
-        Student student = queryUser(user, password);
+        // try querying for a Student first
+        Student student = queryStudent(user, password);
         if (student == null) {
-            throw new BadCredentialsException("Invalid Credentials");
+            // see if the credentials are for an Admin instead
+            Admin admin = queryAdmin(user, password);
+            if (admin == null) {
+                throw new BadCredentialsException("Invalid Credentials");
+            }
+            return new UsernamePasswordAuthenticationToken(
+                    admin.getEmail(), null, new ArrayList<>());
         }
-
         return new UsernamePasswordAuthenticationToken(student.getEmail(), null, new ArrayList<>());
     }
 
@@ -68,9 +76,16 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 
-    /* Helper methods */
+    /*--- Helper methods ---*/
 
-    private Student queryUser(String user, String password) {
+    /**
+     * Queries the McGill LDAP system with the given Student credentials to see if there is a match.
+     *
+     * @param user
+     * @param password
+     * @return Student if query is successful
+     */
+    private Student queryStudent(String user, String password) {
         try {
             Sam usernameType = getSamType(user);
             if (usernameType != Sam.SHORT_USER && usernameType != Sam.LONG_USER) {
@@ -105,13 +120,61 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
             Student s = convertToStudent(searchResult, ctx);
 
-            if (ctx != null) {
-                ctx.close();
-            }
+            if (ctx != null) ctx.close();
 
             return s;
         } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    /**
+     * Queries the McGill LDAP system with the given Admin credentials to see if there is a match.
+     *
+     * @param user
+     * @param password
+     * @return Admin if query is successful
+     */
+    private Admin queryAdmin(String user, String password) {
+        try {
+            Sam usernameType = getSamType(user);
+            if (usernameType != Sam.SHORT_USER && usernameType != Sam.LONG_USER) {
+                System.out.println("Cannot query " + user + " with type " + usernameType);
+                return null;
+            }
+
+            String searchName;
+            if (usernameType == Sam.LONG_USER) {
+                searchName = "userPrincipalName=" + user + "@mcgill.ca";
+            } else {
+                searchName = "sAMAccountName=" + user;
+            }
+
+            String searchFilter = "(&(objectClass=user)(" + searchName + "))";
+
+            SearchControls searchControls = new SearchControls();
+            searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+
+            String userForAuthMap;
+            if (usernameType == Sam.LONG_USER) userForAuthMap = user + "@mcgill.ca";
+            else userForAuthMap = "CAMPUS\\" + user;
+
+            Hashtable<String, String> env = createAuthMap(userForAuthMap, password);
+
+            // bind LDAP
+            LdapContext ctx = new InitialLdapContext(env, null);
+
+            NamingEnumeration<SearchResult> result =
+                    ctx.search(LDAP_BASE, searchFilter, searchControls);
+            SearchResult searchResult = result.nextElement();
+
+            Admin a = convertToAdmin(searchResult, ctx);
+
+            if (ctx != null) ctx.close();
+
+            return a;
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -145,6 +208,21 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             s.setLastName(attr(attributes, "sn"));
 
             return s;
+        } catch (NamingException e) {
+            throw new BadCredentialsException(e.getMessage());
+        }
+    }
+
+    private Admin convertToAdmin(SearchResult searchResult, LdapContext ctx) {
+        try {
+            Attributes attributes = searchResult.getAttributes();
+
+            Admin a = new Admin();
+            a.setEmail(attr(attributes, "mail"));
+            a.setFirstName(attr(attributes, "givenName"));
+            a.setLastName(attr(attributes, "sn"));
+
+            return a;
         } catch (NamingException e) {
             throw new BadCredentialsException(e.getMessage());
         }
