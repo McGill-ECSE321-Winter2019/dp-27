@@ -34,7 +34,7 @@
       />
       <q-btn class="dashBtn" label="View Incoming Students" color="primary" />
       <q-btn
-        v-for="cname in course_names"
+        v-for="cname in courseNames"
         :key="cname"
         class="dashBtn"
         :label="cname"
@@ -50,16 +50,12 @@ export default {
   name: "HomeMainInfo",
   data() {
     return {
-      course_names: [],
-      course_name_data: "",
-      season_data: "",
-      year_data: "",
-      status_data: ""
+      courseNames: []
     };
   },
   created: function() {
     this.$axios.get("/courses/names", {}).then(resp => {
-      this.course_names = resp.data;
+      this.courseNames = resp.data;
     });
   },
   methods: {
@@ -73,7 +69,7 @@ export default {
         path: "/admin/students",
         name: "AdminViewStudents",
         params: {
-          course_name: cname,
+          courseName: cname,
           year: year,
           term: term
         }
