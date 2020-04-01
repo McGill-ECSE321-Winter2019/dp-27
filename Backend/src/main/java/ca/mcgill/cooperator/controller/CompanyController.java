@@ -26,7 +26,7 @@ public class CompanyController extends BaseController {
 
     @Autowired private CompanyService companyService;
     @Autowired private EmployerContactService employerContactService;
-    
+
     /**
      * Creates a new Company
      *

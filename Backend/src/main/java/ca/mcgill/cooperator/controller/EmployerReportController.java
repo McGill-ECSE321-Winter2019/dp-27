@@ -64,7 +64,7 @@ public class EmployerReportController extends BaseController {
 
         return ControllerUtils.convertToDto(createdReport);
     }
-    
+
     /**
      * Gets an EmployerReport by ID
      *

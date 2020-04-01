@@ -29,12 +29,12 @@ public class CourseOfferingController extends BaseController {
 
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired CourseService courseService;
-    
+
     /**
      * Creates a new CourseOffering
-     * 
-     * In request body:
-     * 
+     *
+     * <p>In request body:
+     *
      * @param year
      * @param season
      * @param course
@@ -62,7 +62,7 @@ public class CourseOfferingController extends BaseController {
 
     /**
      * Gets a CourseOffering by ID
-     * 
+     *
      * @param id
      * @return CourseOfferingDto object
      */
@@ -73,7 +73,7 @@ public class CourseOfferingController extends BaseController {
 
     /**
      * Gets all CourseOfferings
-     * 
+     *
      * @return List of CourseOfferingDtos
      */
     @GetMapping("")
@@ -84,7 +84,7 @@ public class CourseOfferingController extends BaseController {
 
     /**
      * Gets all years that CourseOfferings were offered
-     * 
+     *
      * @return Set of years as Strings
      */
     @GetMapping("/years")
@@ -99,7 +99,7 @@ public class CourseOfferingController extends BaseController {
 
     /**
      * Gets the CourseOffering for the specified Course and term
-     * 
+     *
      * @param year
      * @param season
      * @param courseName
@@ -119,7 +119,7 @@ public class CourseOfferingController extends BaseController {
 
     /**
      * Gets all CourseOfferings for the specified Course
-     * 
+     *
      * @param id
      * @return Set of CourseOfferingDtos
      */
@@ -132,7 +132,7 @@ public class CourseOfferingController extends BaseController {
 
     /**
      * Gets all Coop seasons
-     * 
+     *
      * @return array of Seasons
      */
     @GetMapping("/seasons")
@@ -143,11 +143,9 @@ public class CourseOfferingController extends BaseController {
 
     /**
      * Updates an existing CourseOffering
-     * 
+     *
      * @param id
-     * 
-     * In request body:
-     * 
+     *     <p>In request body:
      * @param year
      * @param season
      * @param course
@@ -170,7 +168,7 @@ public class CourseOfferingController extends BaseController {
 
     /**
      * Deletes an existing CourseOffering
-     * 
+     *
      * @param id
      * @return the deleted CourseOffering
      */

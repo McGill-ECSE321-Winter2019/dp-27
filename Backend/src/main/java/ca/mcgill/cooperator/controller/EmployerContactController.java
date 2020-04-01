@@ -37,9 +37,9 @@ public class EmployerContactController extends BaseController {
 
     /**
      * Creates a new EmployerContact
-     * 
-     * In request body:
-     * 
+     *
+     * <p>In request body:
+     *
      * @param firstName
      * @param lastName
      * @param email
@@ -64,10 +64,10 @@ public class EmployerContactController extends BaseController {
                         company);
         return ControllerUtils.convertToDto(ec);
     }
-    
+
     /**
      * Gets an EmployerContact by ID
-     * 
+     *
      * @param id
      * @return EmployerContactDto object
      */
@@ -79,7 +79,7 @@ public class EmployerContactController extends BaseController {
 
     /**
      * Gets all EmployerContacts
-     * 
+     *
      * @return List of EmployerContactDtos
      */
     @GetMapping("")
@@ -90,11 +90,9 @@ public class EmployerContactController extends BaseController {
 
     /**
      * Updates an existing EmployerContact
-     * 
+     *
      * @param id
-     * 
-     * In request body:
-     * 
+     *     <p>In request body:
      * @param firstName
      * @param lastName
      * @param email
@@ -146,7 +144,7 @@ public class EmployerContactController extends BaseController {
 
     /**
      * Deletes an existing EmployerContact
-     * 
+     *
      * @param id
      * @return the deleted EmployerContact
      */

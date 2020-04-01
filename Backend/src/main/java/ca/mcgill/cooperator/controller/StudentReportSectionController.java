@@ -29,12 +29,12 @@ public class StudentReportSectionController extends BaseController {
     @Autowired StudentReportSectionService studentReportSectionService;
     @Autowired StudentReportService studentReportService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
-    
+
     /**
      * Creates a new StudentReportSection
-     * 
-     * In request body:
-     * 
+     *
+     * <p>In request body:
+     *
      * @param response
      * @param reportSectionConfig
      * @param studentReport
@@ -62,7 +62,7 @@ public class StudentReportSectionController extends BaseController {
 
     /**
      * Gets a StudentReportSection by ID
-     * 
+     *
      * @param id
      * @return StudentReportSectionDto
      */
@@ -74,7 +74,7 @@ public class StudentReportSectionController extends BaseController {
 
     /**
      * Gets all StudentReportSections
-     * 
+     *
      * @return list of StudentReportSectionDtos
      */
     @GetMapping("")
@@ -86,11 +86,9 @@ public class StudentReportSectionController extends BaseController {
 
     /**
      * Updates an existing StudentReportSection
-     * 
+     *
      * @param id
-     * 
-     * In request body:
-     * 
+     *     <p>In request body:
      * @param response
      * @param reportSectionConfig
      * @param studentReport
@@ -125,7 +123,7 @@ public class StudentReportSectionController extends BaseController {
 
     /**
      * Deletes an existing StudentReportSection
-     * 
+     *
      * @param id
      * @return the deleted StudentReportSection
      */

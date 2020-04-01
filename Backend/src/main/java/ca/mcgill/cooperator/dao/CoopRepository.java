@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 public interface CoopRepository extends CrudRepository<Coop, Integer> {
-	
+
     List<Coop> findByStatus(CoopStatus coopStatus);
 
     List<Coop> findByCourseOffering(CourseOffering courseOffering);

@@ -30,7 +30,7 @@ public class NotificationController extends BaseController {
     @Autowired NotificationService notificationService;
     @Autowired StudentService studentService;
     @Autowired AdminService adminService;
-    
+
     /**
      * Creates a new Notification
      *
@@ -130,14 +130,11 @@ public class NotificationController extends BaseController {
         return ControllerUtils.convertNotifListToDto(n);
     }
 
-    
     /**
      * Updates an existing Notification
      *
      * @param id
-     * 
-     * In request body:
-     * 
+     *     <p>In request body:
      * @param title
      * @param body
      * @param student

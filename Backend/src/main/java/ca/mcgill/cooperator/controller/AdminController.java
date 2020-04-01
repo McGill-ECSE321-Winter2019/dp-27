@@ -24,7 +24,7 @@ public class AdminController extends BaseController {
 
     @Autowired private AdminService adminService;
     @Autowired private NotificationService notifService;
-    
+
     /**
      * Creates a new Admin
      *

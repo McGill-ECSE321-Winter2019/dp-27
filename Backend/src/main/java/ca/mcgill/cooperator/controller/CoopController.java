@@ -46,12 +46,12 @@ public class CoopController extends BaseController {
     @Autowired CoopDetailsService coopDetailsService;
     @Autowired EmployerReportService employerReportService;
     @Autowired StudentReportService studentReportService;
-    
+
     /**
      * Creates a new Coop
-     * 
-     * In request body:
-     * 
+     *
+     * <p>In request body:
+     *
      * @param status
      * @param student
      * @param courseOffering
@@ -97,7 +97,7 @@ public class CoopController extends BaseController {
 
     /**
      * Gets a Coop by ID
-     * 
+     *
      * @param id
      * @return CoopDto object
      */
@@ -109,7 +109,7 @@ public class CoopController extends BaseController {
 
     /**
      * Gets all Coops
-     * 
+     *
      * @param status
      * @return List of CoopDtos
      */
@@ -126,7 +126,7 @@ public class CoopController extends BaseController {
 
     /**
      * Gets a list of all Coop statuses
-     * 
+     *
      * @return array of all Coop statuses
      */
     @GetMapping("/status")
@@ -137,7 +137,7 @@ public class CoopController extends BaseController {
 
     /**
      * Gets all Coops for the specified Student ID
-     * 
+     *
      * @param id
      * @return list of CoopDtos
      */
@@ -150,11 +150,9 @@ public class CoopController extends BaseController {
 
     /**
      * Updates an existing Coop
-     * 
+     *
      * @param id
-     * 
-     * In request body:
-     * 
+     *     <p>In request body:
      * @param status
      * @param student
      * @param courseOffering
@@ -210,13 +208,13 @@ public class CoopController extends BaseController {
                         coopDetails,
                         employerReports,
                         studentReports);
-        
+
         return ControllerUtils.convertToDto(coop);
     }
 
     /**
      * Deletes an existing Coop
-     * 
+     *
      * @param id
      * @return the deleted Coop
      */

@@ -37,7 +37,7 @@ public class StudentReportController extends BaseController {
     @Autowired StudentReportSectionService studentReportSectionService;
     @Autowired StudentService studentService;
     @Autowired CoopService coopService;
-    
+
     /**
      * Creates a StudentReport using multipart form data
      *
@@ -106,11 +106,9 @@ public class StudentReportController extends BaseController {
 
     /**
      * Updates an existing StudentReport
-     * 
-     * @param id
-     * 
-     * In request body:
      *
+     * @param id
+     *     <p>In request body:
      * @param reportId
      * @param file
      * @param status

@@ -24,7 +24,7 @@ public class CourseController extends BaseController {
 
     @Autowired private CourseService courseService;
     @Autowired private CourseOfferingService courseOfferingService;
-    
+
     /**
      * Creates a new Course
      *
@@ -76,11 +76,9 @@ public class CourseController extends BaseController {
 
     /**
      * Updates an existing Course
-     * 
+     *
      * @param id
-     *
-     * <p>In request body:
-     *
+     *     <p>In request body:
      * @param name
      * @param courseOfferings
      * @return the updated Course

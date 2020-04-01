@@ -32,9 +32,9 @@ public class EmployerReportSectionController extends BaseController {
 
     /**
      * Creates a new EmployerReportSection
-     * 
-     * In request body:
-     * 
+     *
+     * <p>In request body:
+     *
      * @param response
      * @param reportSectionConfig
      * @param employerReport
@@ -61,10 +61,10 @@ public class EmployerReportSectionController extends BaseController {
                         reportSectionDto.getResponse(), reportSectionConfig, employerReport);
         return ControllerUtils.convertToDto(reportSection);
     }
-    
+
     /**
      * Gets a EmployerReportSection by ID
-     * 
+     *
      * @param id
      * @return EmployerReportSectionDto object
      */
@@ -76,7 +76,7 @@ public class EmployerReportSectionController extends BaseController {
 
     /**
      * Gets all EmployerReportSections
-     * 
+     *
      * @return list of all EmployerReportSections
      */
     @GetMapping("")
@@ -88,11 +88,9 @@ public class EmployerReportSectionController extends BaseController {
 
     /**
      * Updates an existing EmployerReportSection
-     * 
+     *
      * @param id
-     * 
-     * In request body:
-     * 
+     *     <p>In request body:
      * @param response
      * @param reportSectionConfig
      * @param employerReport
@@ -128,7 +126,7 @@ public class EmployerReportSectionController extends BaseController {
 
     /**
      * Deletes an existing EmployerReportSection
-     * 
+     *
      * @param id
      * @return the deleted EmployerReportSection
      */

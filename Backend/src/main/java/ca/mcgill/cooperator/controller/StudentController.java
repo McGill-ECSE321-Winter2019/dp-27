@@ -40,7 +40,7 @@ public class StudentController extends BaseController {
     @Autowired private CourseOfferingService courseOfferingService;
     @Autowired private CourseService courseService;
     @Autowired private NotificationService notificationService;
-    
+
     /**
      * Creates a new Student
      *
@@ -137,7 +137,7 @@ public class StudentController extends BaseController {
 
         return ControllerUtils.convertToDto(s);
     }
-    
+
     /**
      * Gets a Student by email
      *
@@ -150,7 +150,7 @@ public class StudentController extends BaseController {
 
         return ControllerUtils.convertToDto(s);
     }
-    
+
     /**
      * Gets current Coop for the specified Student
      *
@@ -191,8 +191,7 @@ public class StudentController extends BaseController {
      * Get a Student's Coops by status
      *
      * @param id
-     * 
-     * <p>In request body:
+     *     <p>In request body:
      * @param status
      * @return set of CoopDtos with that status
      */

@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
 /**
- * This class sets up the default datasource for the application. Environment variables
- * must be defined in a dotenv (.env) file.
- * 
+ * This class sets up the default datasource for the application. Environment variables must be
+ * defined in a dotenv (.env) file.
+ *
  * @see TestDataSourceConfig.java for test datasource configuration
  */
 @Configuration

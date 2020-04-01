@@ -32,9 +32,9 @@ public class CoopDetailsController extends BaseController {
 
     /**
      * Creates a new CoopDetails
-     * 
-     * In request body:
-     * 
+     *
+     * <p>In request body:
+     *
      * @param payPerHour
      * @param hoursPerWeek
      * @param startDate
@@ -68,10 +68,10 @@ public class CoopDetailsController extends BaseController {
 
         return ControllerUtils.convertToDto(coopDetails);
     }
-    
+
     /**
      * Gets a CoopDetails by ID
-     * 
+     *
      * @param id
      * @return CoopDetailsDto object
      */
@@ -82,7 +82,7 @@ public class CoopDetailsController extends BaseController {
 
     /**
      * Gets all CoopDetails
-     * 
+     *
      * @return list of CoopDetailsDtos
      */
     @GetMapping("")
@@ -92,11 +92,9 @@ public class CoopDetailsController extends BaseController {
 
     /**
      * Updates an existing CoopDetails
-     * 
+     *
      * @param id
-     * 
-     * In request body:
-     * 
+     *     <p>In request body:
      * @param payPerHour
      * @param hoursPerWeek
      * @param startDate
@@ -137,7 +135,7 @@ public class CoopDetailsController extends BaseController {
 
     /**
      * Deletes an existing CoopDetails
-     * 
+     *
      * @param id
      * @return the deleted CoopDetails
      */

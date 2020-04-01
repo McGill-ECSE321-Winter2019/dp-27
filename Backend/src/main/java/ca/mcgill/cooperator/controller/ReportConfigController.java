@@ -26,12 +26,12 @@ public class ReportConfigController extends BaseController {
 
     @Autowired ReportConfigService reportConfigService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
-    
+
     /**
      * Creates a new ReportConfig
      *
-     * In request body:
-     * 
+     * <p>In request body:
+     *
      * @param requiresFile
      * @param deadline
      * @param isDeadlineFromStart
@@ -63,7 +63,7 @@ public class ReportConfigController extends BaseController {
 
     /**
      * Gets all ReportConfigs
-     * 
+     *
      * @return list of ReportConfigDtos
      */
     @GetMapping("")
@@ -76,9 +76,7 @@ public class ReportConfigController extends BaseController {
      * Updates an existing ReportConfig
      *
      * @param id
-     * 
-     * In request body:
-     * 
+     *     <p>In request body:
      * @param requiresFile
      * @param deadline
      * @param isDeadlineFromStart

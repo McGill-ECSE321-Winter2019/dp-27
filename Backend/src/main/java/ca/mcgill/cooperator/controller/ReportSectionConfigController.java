@@ -31,12 +31,12 @@ public class ReportSectionConfigController extends BaseController {
     @Autowired ReportSectionConfigService reportSectionConfigService;
     @Autowired StudentReportSectionService studentReportSectionService;
     @Autowired EmployerReportSectionService employerReportSectionService;
-    
+
     /**
      * Creates a new ReportSectionConfig
      *
-     * In request body:
-     * 
+     * <p>In request body:
+     *
      * @param sectionPrompt
      * @param responseType
      * @param questionNumber
@@ -97,9 +97,7 @@ public class ReportSectionConfigController extends BaseController {
      * Updates an existing ReportSectionConfig
      *
      * @param id
-     * 
-     * In request body:
-     * 
+     *     <p>In request body:
      * @param sectionPrompt
      * @param responseType
      * @param questionNumber
