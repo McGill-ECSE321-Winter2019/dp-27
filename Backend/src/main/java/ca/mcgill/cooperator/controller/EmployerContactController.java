@@ -35,18 +35,18 @@ public class EmployerContactController extends BaseController {
     @Autowired EmployerReportService employerReportService;
     @Autowired CoopDetailsService coopDetailsService;
 
-    @GetMapping("/{id}")
-    public EmployerContactDto getEmployerContactById(@PathVariable int id) {
-        EmployerContact ec = employerContactService.getEmployerContact(id);
-        return ControllerUtils.convertToDto(ec);
-    }
-
-    @GetMapping("")
-    public List<EmployerContactDto> getAllEmployerContacts() {
-        List<EmployerContact> employerContacts = employerContactService.getAllEmployerContacts();
-        return ControllerUtils.convertEmployerContactListToDto(employerContacts);
-    }
-
+    /**
+     * Creates a new EmployerContact
+     * 
+     * In request body:
+     * 
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param phoneNumber
+     * @param company
+     * @return the created EmployerContact
+     */
     @PostMapping("")
     public EmployerContactDto createEmployerContact(
             @RequestBody EmployerContactDto employerContactDto) {
@@ -64,11 +64,49 @@ public class EmployerContactController extends BaseController {
                         company);
         return ControllerUtils.convertToDto(ec);
     }
+    
+    /**
+     * Gets an EmployerContact by ID
+     * 
+     * @param id
+     * @return EmployerContactDto object
+     */
+    @GetMapping("/{id}")
+    public EmployerContactDto getEmployerContactById(@PathVariable int id) {
+        EmployerContact ec = employerContactService.getEmployerContact(id);
+        return ControllerUtils.convertToDto(ec);
+    }
 
+    /**
+     * Gets all EmployerContacts
+     * 
+     * @return List of EmployerContactDtos
+     */
+    @GetMapping("")
+    public List<EmployerContactDto> getAllEmployerContacts() {
+        List<EmployerContact> employerContacts = employerContactService.getAllEmployerContacts();
+        return ControllerUtils.convertEmployerContactListToDto(employerContacts);
+    }
+
+    /**
+     * Updates an existing EmployerContact
+     * 
+     * @param id
+     * 
+     * In request body:
+     * 
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param phoneNumber
+     * @param company
+     * @param employerReports
+     * @param coopDetails
+     * @return the updated EmployerContact
+     */
     @PutMapping("/{id}")
     public EmployerContactDto updateEmployerContact(
             @PathVariable int id, @RequestBody EmployerContactDto employerContactDto) {
-
         EmployerContact ec = employerContactService.getEmployerContact(id);
         CompanyDto companyDto = employerContactDto.getCompany();
         Company company = null;
@@ -106,9 +144,15 @@ public class EmployerContactController extends BaseController {
         return ControllerUtils.convertToDto(ec);
     }
 
+    /**
+     * Deletes an existing EmployerContact
+     * 
+     * @param id
+     * @return the deleted EmployerContact
+     */
     @DeleteMapping("/{id}")
-    public void deleteEmployerContact(@PathVariable int id) {
+    public EmployerContactDto deleteEmployerContact(@PathVariable int id) {
         EmployerContact ec = employerContactService.getEmployerContact(id);
-        employerContactService.deleteEmployerContact(ec);
+        return ControllerUtils.convertToDto(employerContactService.deleteEmployerContact(ec));
     }
 }

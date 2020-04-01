@@ -6,6 +6,7 @@ import ca.mcgill.cooperator.dao.ReportSectionConfigRepository;
 import ca.mcgill.cooperator.model.EmployerReport;
 import ca.mcgill.cooperator.model.EmployerReportSection;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,12 @@ public class EmployerReportSectionService extends BaseService {
     @Autowired ReportSectionConfigRepository reportSectionConfigRepository;
 
     /**
-     * Creates new employer report section in the database
+     * Creates a new EmployerReportSection
      *
      * @param response
      * @param reportSectionConfig
      * @param employerReport
-     * @return created report section
+     * @return the created EmployerReportSection
      */
     @Transactional
     public EmployerReportSection createReportSection(
@@ -55,10 +56,10 @@ public class EmployerReportSectionService extends BaseService {
     }
 
     /**
-     * Retrieves specified existing report section from database
+     * Gets a EmployerReportSection by ID
      *
      * @param id
-     * @return specifed report section
+     * @return EmployerReportSection with specified ID
      */
     @Transactional
     public EmployerReportSection getReportSection(int id) {
@@ -72,9 +73,9 @@ public class EmployerReportSectionService extends BaseService {
     }
 
     /**
-     * Returns all employer report sections from the database
+     * Gets all EmployerReportSections
      *
-     * @return list of report sections
+     * @return all EmployerReportSection
      */
     @Transactional
     public List<EmployerReportSection> getAllReportSections() {
@@ -82,22 +83,22 @@ public class EmployerReportSectionService extends BaseService {
     }
 
     /**
-     * Updates existing report section in database
+     * Updates an existing EmployerReportSection
      *
-     * @param rs
+     * @param employerReportSection
      * @param response
      * @param reportSectionConfig
      * @param employerReport
-     * @return updated report section
+     * @return the updated EmployerReportSection
      */
     @Transactional
     public EmployerReportSection updateReportSection(
-            EmployerReportSection rs,
+            EmployerReportSection employerReportSection,
             String response,
             ReportSectionConfig reportSectionConfig,
             EmployerReport employerReport) {
         StringBuilder error = new StringBuilder();
-        if (rs == null) {
+        if (employerReportSection == null) {
             error.append("Employer report section cannot be null! ");
         }
         if (response != null && response.trim().length() == 0) {
@@ -108,53 +109,55 @@ public class EmployerReportSectionService extends BaseService {
         }
 
         if (response != null) {
-            rs.setResponse(response.trim());
+            employerReportSection.setResponse(response.trim());
         }
         if (reportSectionConfig != null) {
-            rs.setReportSectionConfig(reportSectionConfig);
+            employerReportSection.setReportSectionConfig(reportSectionConfig);
         }
         if (employerReport != null) {
-            rs.setEmployerReport(employerReport);
+            employerReportSection.setEmployerReport(employerReport);
         }
 
-        return employerReportSectionRepository.save(rs);
+        return employerReportSectionRepository.save(employerReportSection);
     }
 
     /**
-     * Delete specified report section from database
+     * Deletes an existing EmployerReportSection
      *
-     * @param rs
-     * @return deleted report section
+     * @param employerReportSection
+     * @return the deleted EmployerReportSection
      */
     @Transactional
-    public EmployerReportSection deleteReportSection(EmployerReportSection rs) {
-        if (rs == null) {
+    public EmployerReportSection deleteReportSection(EmployerReportSection employerReportSection) {
+        if (employerReportSection == null) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX + "Employer report section to delete cannot be null!");
         }
 
         // first delete from parents
-        EmployerReport er = rs.getEmployerReport();
+        EmployerReport er = employerReportSection.getEmployerReport();
         if (er != null) {
-            Set<EmployerReportSection> sections = er.getReportSections();
-            sections.remove(rs);
+            // make a new HashSet to avoid pointer issues
+            Set<EmployerReportSection> sections = new HashSet<>(er.getReportSections());
+            sections.remove(employerReportSection);
             er.setReportSections(sections);
             employerReportRepository.save(er);
         }
 
-        ReportSectionConfig rsConfig = rs.getReportSectionConfig();
+        ReportSectionConfig rsConfig = employerReportSection.getReportSectionConfig();
         if (rsConfig != null) {
-            Set<EmployerReportSection> sections = rsConfig.getEmployerReportSections();
-            sections.remove(rs);
+            Set<EmployerReportSection> sections =
+                    new HashSet<>(rsConfig.getEmployerReportSections());
+            sections.remove(employerReportSection);
             rsConfig.setEmployerReportSections(sections);
             reportSectionConfigRepository.save(rsConfig);
         }
 
-        rs.setEmployerReport(null);
-        rs.setReportSectionConfig(null);
-        employerReportSectionRepository.save(rs);
+        employerReportSection.setEmployerReport(null);
+        employerReportSection.setReportSectionConfig(null);
+        employerReportSectionRepository.save(employerReportSection);
 
-        employerReportSectionRepository.delete(rs);
-        return rs;
+        employerReportSectionRepository.delete(employerReportSection);
+        return employerReportSection;
     }
 }

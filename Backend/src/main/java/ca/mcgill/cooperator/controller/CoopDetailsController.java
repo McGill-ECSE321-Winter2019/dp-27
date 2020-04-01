@@ -30,16 +30,19 @@ public class CoopDetailsController extends BaseController {
     @Autowired EmployerContactService employerContactService;
     @Autowired CoopService coopService;
 
-    @GetMapping("/{id}")
-    public CoopDetailsDto getCoopDetailsById(@PathVariable int id) {
-        return ControllerUtils.convertToDto(coopDetailsService.getCoopDetails(id));
-    }
-
-    @GetMapping("")
-    public List<CoopDetailsDto> getAllCoopDetails() {
-        return ControllerUtils.convertCoopDetailsListToDto(coopDetailsService.getAllCoopDetails());
-    }
-
+    /**
+     * Creates a new CoopDetails
+     * 
+     * In request body:
+     * 
+     * @param payPerHour
+     * @param hoursPerWeek
+     * @param startDate
+     * @param endDate
+     * @param employerContact
+     * @param coop
+     * @return the created CoopDetails
+     */
     @PostMapping("")
     public CoopDetailsDto createCoopDetails(@RequestBody CoopDetailsDto coopDetailsDto) {
         EmployerContactDto employerContactDto = coopDetailsDto.getEmployerContact();
@@ -65,7 +68,43 @@ public class CoopDetailsController extends BaseController {
 
         return ControllerUtils.convertToDto(coopDetails);
     }
+    
+    /**
+     * Gets a CoopDetails by ID
+     * 
+     * @param id
+     * @return CoopDetailsDto object
+     */
+    @GetMapping("/{id}")
+    public CoopDetailsDto getCoopDetailsById(@PathVariable int id) {
+        return ControllerUtils.convertToDto(coopDetailsService.getCoopDetails(id));
+    }
 
+    /**
+     * Gets all CoopDetails
+     * 
+     * @return list of CoopDetailsDtos
+     */
+    @GetMapping("")
+    public List<CoopDetailsDto> getAllCoopDetails() {
+        return ControllerUtils.convertCoopDetailsListToDto(coopDetailsService.getAllCoopDetails());
+    }
+
+    /**
+     * Updates an existing CoopDetails
+     * 
+     * @param id
+     * 
+     * In request body:
+     * 
+     * @param payPerHour
+     * @param hoursPerWeek
+     * @param startDate
+     * @param endDate
+     * @param employerContact
+     * @param coop
+     * @return the updated CoopDetails
+     */
     @PutMapping("/{id}")
     public CoopDetailsDto updateCoopDetails(
             @PathVariable int id, @RequestBody CoopDetailsDto coopDetailsDto) {
@@ -96,9 +135,15 @@ public class CoopDetailsController extends BaseController {
         return ControllerUtils.convertToDto(coopDetails);
     }
 
+    /**
+     * Deletes an existing CoopDetails
+     * 
+     * @param id
+     * @return the deleted CoopDetails
+     */
     @DeleteMapping("/{id}")
-    public void deleteCoopDetails(@PathVariable int id) {
+    public CoopDetails deleteCoopDetails(@PathVariable int id) {
         CoopDetails cd = coopDetailsService.getCoopDetails(id);
-        coopDetailsService.deleteCoopDetails(cd);
+        return coopDetailsService.deleteCoopDetails(cd);
     }
 }

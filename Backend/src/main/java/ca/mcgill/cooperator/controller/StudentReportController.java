@@ -37,6 +37,29 @@ public class StudentReportController extends BaseController {
     @Autowired StudentReportSectionService studentReportSectionService;
     @Autowired StudentService studentService;
     @Autowired CoopService coopService;
+    
+    /**
+     * Creates a StudentReport using multipart form data
+     *
+     * @param file
+     * @param status
+     * @param title
+     * @param coop_id
+     * @return the created StudentReport
+     */
+    @PostMapping("")
+    public StudentReportDto createStudentReport(
+            @ModelAttribute("file") MultipartFile file,
+            @RequestParam("status") String status,
+            @RequestParam("title") String title,
+            @RequestParam("coop_id") int coopId) {
+        ReportStatus reportStatus = ReportStatus.valueOf(status);
+        Coop coop = coopService.getCoopById(coopId);
+        StudentReport createdReport =
+                studentReportService.createStudentReport(reportStatus, coop, title, file);
+
+        return ControllerUtils.convertToDto(createdReport);
+    }
 
     /**
      * Gets a StudentReport by ID
@@ -82,37 +105,18 @@ public class StudentReportController extends BaseController {
     }
 
     /**
-     * Creates a StudentReport using multipart form data
-     *
-     * @param file
-     * @param status
-     * @param title
-     * @param coop_id
-     * @return the created StudentReport
-     */
-    @PostMapping("")
-    public StudentReportDto createStudentReport(
-            @ModelAttribute("file") MultipartFile file,
-            @RequestParam("status") String status,
-            @RequestParam("title") String title,
-            @RequestParam("coop_id") int coopId) {
-        ReportStatus reportStatus = ReportStatus.valueOf(status);
-        Coop coop = coopService.getCoopById(coopId);
-        StudentReport createdReport =
-                studentReportService.createStudentReport(reportStatus, coop, title, file);
-
-        return ControllerUtils.convertToDto(createdReport);
-    }
-
-    /**
-     * Updates a StudentReport
+     * Updates an existing StudentReport
+     * 
+     * @param id
+     * 
+     * In request body:
      *
      * @param reportId
      * @param file
      * @param status
      * @param title
-     * @param rsDtos
      * @param coopId
+     * @param rsDtos
      * @return the updated StudentReport
      */
     @PutMapping("/{id}")
@@ -143,7 +147,7 @@ public class StudentReportController extends BaseController {
     }
 
     /**
-     * Deletes a StudentReport
+     * Deletes an existing StudentReport
      *
      * @param id
      * @return the deleted StudentReport

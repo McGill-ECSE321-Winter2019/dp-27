@@ -30,81 +30,17 @@ public class NotificationController extends BaseController {
     @Autowired NotificationService notificationService;
     @Autowired StudentService studentService;
     @Autowired AdminService adminService;
-
+    
     /**
-     * Gets notification by id
+     * Creates a new Notification
      *
-     * @param id
-     * @return NotificationDto
-     */
-    @GetMapping("/{id}")
-    public NotificationDto getNotificationById(@RequestParam int id) {
-        Notification n = notificationService.getNotification(id);
-
-        return ControllerUtils.convertToDto(n);
-    }
-
-    /**
-     * Sets notification seen by id
-     *
-     * @param id
-     * @return NotificationDto
-     */
-    @PutMapping("/{id}/mark-as-read")
-    public List<NotificationDto> setNotificationsSeen(@PathVariable int id) {
-        Student student = studentService.getStudentById(id);
-        List<Notification> all = notificationService.markAllAsRead(student);
-        return ControllerUtils.convertNotifListToDto(all);
-    }
-
-    /**
-     * Gets all Notifications
-     *
-     * @return List<NotificationDto>
-     */
-    @GetMapping("")
-    public List<NotificationDto> getAllNotifications() {
-        List<Notification> n = notificationService.getAllNotifications();
-
-        return ControllerUtils.convertNotifListToDto(n);
-    }
-
-    /**
-     * Get unseen Notifications for student
-     *
-     * @return List<NotificationDto>
-     */
-    @GetMapping("/{id}/unread")
-    public List<NotificationDto> getUnreadForStudent(@PathVariable int id) {
-        Student student = studentService.getStudentById(id);
-        List<Notification> n = notificationService.getUnreadForStudent(student);
-
-        return ControllerUtils.convertNotifListToDto(n);
-    }
-
-    /**
-     * Get all Notifications for student
-     *
-     * @return List<NotificationDto>
-     */
-    @GetMapping("/student/{id}")
-    public List<NotificationDto> getAllForStudent(@PathVariable int id) {
-        Student student = studentService.getStudentById(id);
-        List<Notification> n = notificationService.getAllNotificationsOfStudent(student);
-
-        return ControllerUtils.convertNotifListToDto(n);
-    }
-
-    /**
-     * Creates Notification
-     *
-     * <p>
+     * <p>In request body:
      *
      * @param title
      * @param body
      * @param student
      * @param sender
-     * @return created Notification
+     * @return the created Notification
      */
     @PostMapping("")
     public NotificationDto createNotification(@RequestBody NotificationDto n) {
@@ -129,11 +65,84 @@ public class NotificationController extends BaseController {
 
         return ControllerUtils.convertToDto(notification);
     }
+
     /**
-     * Updates notification
+     * Gets a Notification by ID
      *
-     * @param n
-     * @return updated notification
+     * @param id
+     * @return NotificationDto object
+     */
+    @GetMapping("/{id}")
+    public NotificationDto getNotificationById(@RequestParam int id) {
+        Notification n = notificationService.getNotification(id);
+
+        return ControllerUtils.convertToDto(n);
+    }
+
+    /**
+     * Sets Notification seen by id
+     *
+     * @param id
+     * @return list of NotificationDtos
+     */
+    @PutMapping("/{id}/mark-as-read")
+    public List<NotificationDto> setNotificationsSeen(@PathVariable int id) {
+        Student student = studentService.getStudentById(id);
+        List<Notification> all = notificationService.markAllAsRead(student);
+        return ControllerUtils.convertNotifListToDto(all);
+    }
+
+    /**
+     * Gets all Notifications
+     *
+     * @return list of NotificationDtos
+     */
+    @GetMapping("")
+    public List<NotificationDto> getAllNotifications() {
+        List<Notification> n = notificationService.getAllNotifications();
+
+        return ControllerUtils.convertNotifListToDto(n);
+    }
+
+    /**
+     * Gets unseen Notifications by Student
+     *
+     * @return list of NotificationDtos
+     */
+    @GetMapping("/{id}/unread")
+    public List<NotificationDto> getUnreadForStudent(@PathVariable int id) {
+        Student student = studentService.getStudentById(id);
+        List<Notification> n = notificationService.getUnreadForStudent(student);
+
+        return ControllerUtils.convertNotifListToDto(n);
+    }
+
+    /**
+     * Gets all Notifications for Student
+     *
+     * @return list of NotificationDtos
+     */
+    @GetMapping("/student/{id}")
+    public List<NotificationDto> getAllForStudent(@PathVariable int id) {
+        Student student = studentService.getStudentById(id);
+        List<Notification> n = notificationService.getAllNotificationsOfStudent(student);
+
+        return ControllerUtils.convertNotifListToDto(n);
+    }
+
+    
+    /**
+     * Updates an existing Notification
+     *
+     * @param id
+     * 
+     * In request body:
+     * 
+     * @param title
+     * @param body
+     * @param student
+     * @param sender
+     * @return the updated Notification
      */
     @PutMapping("/{id}")
     public NotificationDto updateNotification(
@@ -160,10 +169,10 @@ public class NotificationController extends BaseController {
     }
 
     /**
-     * Deletes Notification
+     * Deletes an existing Notification
      *
      * @param id
-     * @return deleted Notification
+     * @return the deleted Notification
      */
     @DeleteMapping("/{id}")
     public NotificationDto deleteNotification(@PathVariable int id) {

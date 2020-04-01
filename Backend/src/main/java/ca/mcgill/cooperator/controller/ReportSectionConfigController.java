@@ -31,43 +31,16 @@ public class ReportSectionConfigController extends BaseController {
     @Autowired ReportSectionConfigService reportSectionConfigService;
     @Autowired StudentReportSectionService studentReportSectionService;
     @Autowired EmployerReportSectionService employerReportSectionService;
-
-    /**
-     * Returns the ReportSectionConfig with specified ID
-     *
-     * @param id
-     * @return the ReportSectionConfig with specified ID
-     */
-    @GetMapping("/{id}")
-    public ReportSectionConfigDto getReportSectionConfigById(@PathVariable int id) {
-        return ControllerUtils.convertToDto(reportSectionConfigService.getReportSectionConfig(id));
-    }
-
-    /**
-     * Returns all ReportSectionConfigs
-     *
-     * @return all ReportSectionConfigs
-     */
-    @GetMapping("")
-    public List<ReportSectionConfigDto> getAllReportSectionConfigs() {
-        return ControllerUtils.convertReportSectionConfigListToDto(
-                reportSectionConfigService.getAllReportSectionConfigs());
-    }
-
-    /**
-     * Returns all ReportSectionConfig response types
-     *
-     * @return an array of all the response types
-     */
-    @GetMapping("/response-types")
-    public List<String> getReportSectionConfigResponseTypes() {
-        return reportSectionConfigService.getAllResponseTypes();
-    }
-
+    
     /**
      * Creates a new ReportSectionConfig
      *
-     * @param rcDto
+     * In request body:
+     * 
+     * @param sectionPrompt
+     * @param responseType
+     * @param questionNumber
+     * @param reportConfig
      * @return the created ReportSectionConfig
      */
     @PostMapping("")
@@ -89,9 +62,50 @@ public class ReportSectionConfigController extends BaseController {
     }
 
     /**
+     * Gets the ReportSectionConfig with specified ID
+     *
+     * @param id
+     * @return ReportSectionConfigDto object
+     */
+    @GetMapping("/{id}")
+    public ReportSectionConfigDto getReportSectionConfigById(@PathVariable int id) {
+        return ControllerUtils.convertToDto(reportSectionConfigService.getReportSectionConfig(id));
+    }
+
+    /**
+     * Gets all ReportSectionConfigs
+     *
+     * @return list of ReportSectionConfigDtos
+     */
+    @GetMapping("")
+    public List<ReportSectionConfigDto> getAllReportSectionConfigs() {
+        return ControllerUtils.convertReportSectionConfigListToDto(
+                reportSectionConfigService.getAllReportSectionConfigs());
+    }
+
+    /**
+     * Gets all ReportSectionConfig response types
+     *
+     * @return list of all the response types
+     */
+    @GetMapping("/response-types")
+    public List<String> getReportSectionConfigResponseTypes() {
+        return reportSectionConfigService.getAllResponseTypes();
+    }
+
+    /**
      * Updates an existing ReportSectionConfig
      *
-     * @param rscDto
+     * @param id
+     * 
+     * In request body:
+     * 
+     * @param sectionPrompt
+     * @param responseType
+     * @param questionNumber
+     * @param reportConfig
+     * @param employerReportSections
+     * @param studentReportSections
      * @return the updated ReportSectionConfig
      */
     @PutMapping("/{id}")

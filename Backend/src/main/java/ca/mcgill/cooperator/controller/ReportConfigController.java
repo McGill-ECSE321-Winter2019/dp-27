@@ -26,28 +26,16 @@ public class ReportConfigController extends BaseController {
 
     @Autowired ReportConfigService reportConfigService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
-
-    /**
-     * Returns the ReportConfig with specified ID
-     *
-     * @param id
-     * @return the ReportConfig with specified ID
-     */
-    @GetMapping("/{id}")
-    public ReportConfigDto getReportConfigById(@PathVariable int id) {
-        return ControllerUtils.convertToDto(reportConfigService.getReportConfig(id));
-    }
-
-    @GetMapping("")
-    public List<ReportConfigDto> getAllReportConfigs() {
-        return ControllerUtils.convertReportConfigListToDto(
-                reportConfigService.getAllReportConfigs());
-    }
-
+    
     /**
      * Creates a new ReportConfig
      *
-     * @param rcDto
+     * In request body:
+     * 
+     * @param requiresFile
+     * @param deadline
+     * @param isDeadlineFromStart
+     * @param type
      * @return the created ReportConfig
      */
     @PostMapping("")
@@ -63,9 +51,39 @@ public class ReportConfigController extends BaseController {
     }
 
     /**
+     * Gets the ReportConfig with specified ID
+     *
+     * @param id
+     * @return the ReportConfig with specified ID
+     */
+    @GetMapping("/{id}")
+    public ReportConfigDto getReportConfigById(@PathVariable int id) {
+        return ControllerUtils.convertToDto(reportConfigService.getReportConfig(id));
+    }
+
+    /**
+     * Gets all ReportConfigs
+     * 
+     * @return list of ReportConfigDtos
+     */
+    @GetMapping("")
+    public List<ReportConfigDto> getAllReportConfigs() {
+        return ControllerUtils.convertReportConfigListToDto(
+                reportConfigService.getAllReportConfigs());
+    }
+
+    /**
      * Updates an existing ReportConfig
      *
-     * @param rcDto
+     * @param id
+     * 
+     * In request body:
+     * 
+     * @param requiresFile
+     * @param deadline
+     * @param isDeadlineFromStart
+     * @param type
+     * @param reportSectionConfigs
      * @return the updated ReportConfig
      */
     @PutMapping("/{id}")

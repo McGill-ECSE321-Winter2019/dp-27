@@ -29,20 +29,17 @@ public class StudentReportSectionController extends BaseController {
     @Autowired StudentReportSectionService studentReportSectionService;
     @Autowired StudentReportService studentReportService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
-
-    @GetMapping("/{id}")
-    public StudentReportSectionDto getReportSectionById(@PathVariable int id) {
-        StudentReportSection reportSection = studentReportSectionService.getReportSection(id);
-        return ControllerUtils.convertToDto(reportSection);
-    }
-
-    @GetMapping("")
-    public List<StudentReportSectionDto> getAllReportSections() {
-        List<StudentReportSection> reportSections =
-                studentReportSectionService.getAllReportSections();
-        return ControllerUtils.convertStudentReportSectionListToDto(reportSections);
-    }
-
+    
+    /**
+     * Creates a new StudentReportSection
+     * 
+     * In request body:
+     * 
+     * @param response
+     * @param reportSectionConfig
+     * @param studentReport
+     * @return the created StudentReportSection
+     */
     @PostMapping("")
     public StudentReportSectionDto createReportSection(
             @RequestBody StudentReportSectionDto reportSectionDto) {
@@ -63,6 +60,42 @@ public class StudentReportSectionController extends BaseController {
         return ControllerUtils.convertToDto(reportSection);
     }
 
+    /**
+     * Gets a StudentReportSection by ID
+     * 
+     * @param id
+     * @return StudentReportSectionDto
+     */
+    @GetMapping("/{id}")
+    public StudentReportSectionDto getReportSectionById(@PathVariable int id) {
+        StudentReportSection reportSection = studentReportSectionService.getReportSection(id);
+        return ControllerUtils.convertToDto(reportSection);
+    }
+
+    /**
+     * Gets all StudentReportSections
+     * 
+     * @return list of StudentReportSectionDtos
+     */
+    @GetMapping("")
+    public List<StudentReportSectionDto> getAllReportSections() {
+        List<StudentReportSection> reportSections =
+                studentReportSectionService.getAllReportSections();
+        return ControllerUtils.convertStudentReportSectionListToDto(reportSections);
+    }
+
+    /**
+     * Updates an existing StudentReportSection
+     * 
+     * @param id
+     * 
+     * In request body:
+     * 
+     * @param response
+     * @param reportSectionConfig
+     * @param studentReport
+     * @return the updated StudentReportSection
+     */
     @PutMapping("/{id}")
     public StudentReportSectionDto updateReportSection(
             @PathVariable int id, @RequestBody StudentReportSectionDto reportSectionDto) {
@@ -90,6 +123,12 @@ public class StudentReportSectionController extends BaseController {
         return ControllerUtils.convertToDto(reportSection);
     }
 
+    /**
+     * Deletes an existing StudentReportSection
+     * 
+     * @param id
+     * @return the deleted StudentReportSection
+     */
     @DeleteMapping("/{id}")
     public StudentReportSectionDto deleteReportSection(@PathVariable int id) {
         StudentReportSection reportSection = studentReportSectionService.getReportSection(id);

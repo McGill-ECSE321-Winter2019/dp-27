@@ -8,6 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 
+/**
+ * This class sets up a datasource to be used when running tests. Environment variables
+ * must be defined in a dotenv (.env) file.
+ * 
+ * @see DataSourceConfig.java for default datasource configuration
+ */
 @Configuration
 @Profile("test")
 @PropertySource("classpath:application-test.properties")

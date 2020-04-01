@@ -6,6 +6,7 @@ import ca.mcgill.cooperator.dao.StudentReportSectionRepository;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.model.StudentReportSection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,12 @@ public class StudentReportSectionService extends BaseService {
     @Autowired StudentReportRepository studentReportRepository;
 
     /**
-     * Creates new student report section in the database
+     * Creates a new StudentReportSection
      *
      * @param response
      * @param reportSectionConfig
      * @param studentReport
-     * @return created report section
+     * @return the created StudentReportSection
      */
     @Transactional
     public StudentReportSection createReportSection(
@@ -53,10 +54,10 @@ public class StudentReportSectionService extends BaseService {
     }
 
     /**
-     * Retrieves specified existing report section from database
+     * Gets an existing StudentReportSection by ID
      *
      * @param id
-     * @return specifed report section
+     * @return StudentReportSection with specified ID
      */
     @Transactional
     public StudentReportSection getReportSection(int id) {
@@ -70,9 +71,9 @@ public class StudentReportSectionService extends BaseService {
     }
 
     /**
-     * Returns all student report sections from the database
+     * Gets all StudentReportSections
      *
-     * @return list of report sections
+     * @return all StudentReportSections
      */
     @Transactional
     public List<StudentReportSection> getAllReportSections() {
@@ -80,22 +81,22 @@ public class StudentReportSectionService extends BaseService {
     }
 
     /**
-     * Updates existing report section in database
+     * Updates an existing StudentReportSection
      *
-     * @param rs
+     * @param studentReportSection
      * @param response
      * @param reportSectionConfig
      * @param studentReport
-     * @return updated report section
+     * @return the updated StudentReportSection
      */
     @Transactional
     public StudentReportSection updateReportSection(
-            StudentReportSection rs,
+            StudentReportSection studentReportSection,
             String response,
             ReportSectionConfig reportSectionConfig,
             StudentReport studentReport) {
         StringBuilder error = new StringBuilder();
-        if (rs == null) {
+        if (studentReportSection == null) {
             error.append("Student report section cannot be null! ");
         }
         if (response != null && response.trim().length() == 0) {
@@ -106,53 +107,54 @@ public class StudentReportSectionService extends BaseService {
         }
 
         if (response != null) {
-            rs.setResponse(response.trim());
+            studentReportSection.setResponse(response.trim());
         }
         if (reportSectionConfig != null) {
-            rs.setReportSectionConfig(reportSectionConfig);
+            studentReportSection.setReportSectionConfig(reportSectionConfig);
         }
         if (studentReport != null) {
-            rs.setStudentReport(studentReport);
+            studentReportSection.setStudentReport(studentReport);
         }
 
-        return studentReportSectionRepository.save(rs);
+        return studentReportSectionRepository.save(studentReportSection);
     }
 
     /**
-     * Delete specified report section from database
+     * Deletes an existing StudentReportSection
      *
-     * @param rs
-     * @return deleted report section
+     * @param studentReportSection
+     * @return the deleted StudentReportSection
      */
     @Transactional
-    public StudentReportSection deleteReportSection(StudentReportSection rs) {
-        if (rs == null) {
+    public StudentReportSection deleteReportSection(StudentReportSection studentReportSection) {
+        if (studentReportSection == null) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX + "Student report section to delete cannot be null!");
         }
 
         // first delete from parents
-        StudentReport sr = rs.getStudentReport();
+        StudentReport sr = studentReportSection.getStudentReport();
         if (sr != null) {
-            Set<StudentReportSection> sections = sr.getReportSections();
-            sections.remove(rs);
+            // make a new Set to avoid pointer issues
+            Set<StudentReportSection> sections = new HashSet<>(sr.getReportSections());
+            sections.remove(studentReportSection);
             sr.setReportSections(sections);
             studentReportRepository.save(sr);
         }
 
-        ReportSectionConfig rsConfig = rs.getReportSectionConfig();
+        ReportSectionConfig rsConfig = studentReportSection.getReportSectionConfig();
         if (rsConfig != null) {
-            Set<StudentReportSection> sections = rsConfig.getStudentReportSections();
-            sections.remove(rs);
+            Set<StudentReportSection> sections = new HashSet<>(rsConfig.getStudentReportSections());
+            sections.remove(studentReportSection);
             rsConfig.setStudentReportSections(sections);
             reportSectionConfigRepository.save(rsConfig);
         }
 
-        rs.setStudentReport(null);
-        rs.setReportSectionConfig(null);
-        studentReportSectionRepository.save(rs);
+        studentReportSection.setStudentReport(null);
+        studentReportSection.setReportSectionConfig(null);
+        studentReportSectionRepository.save(studentReportSection);
 
-        studentReportSectionRepository.delete(rs);
-        return rs;
+        studentReportSectionRepository.delete(studentReportSection);
+        return studentReportSection;
     }
 }

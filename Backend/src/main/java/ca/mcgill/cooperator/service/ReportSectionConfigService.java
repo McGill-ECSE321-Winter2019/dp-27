@@ -27,7 +27,7 @@ public class ReportSectionConfigService extends BaseService {
      * @param sectionPrompt
      * @param responseType
      * @param reportConfig
-     * @return created ReportSectionConfig
+     * @return the created ReportSectionConfig
      */
     @Transactional
     public ReportSectionConfig createReportSectionConfig(
@@ -64,10 +64,10 @@ public class ReportSectionConfigService extends BaseService {
     }
 
     /**
-     * Retrieves an existing ReportSectionConfig by ID
+     * Gets an existing ReportSectionConfig by ID
      *
      * @param id
-     * @return ReportSectionConfig with matching ID
+     * @return ReportSectionConfig with specified ID
      */
     @Transactional
     public ReportSectionConfig getReportSectionConfig(int id) {
@@ -81,7 +81,7 @@ public class ReportSectionConfigService extends BaseService {
     }
 
     /**
-     * Retrieves all ReportSectionConfigs
+     * Gets all ReportSectionConfigs
      *
      * @return all ReportSectionConfigs
      */
@@ -91,9 +91,9 @@ public class ReportSectionConfigService extends BaseService {
     }
 
     /**
-     * Returns all ReportSectionConfig response types
+     * Gets all ReportSectionConfig response types
      *
-     * @return an array of all the response types
+     * @return a list of all response types
      */
     @Transactional
     public List<String> getAllResponseTypes() {
@@ -110,7 +110,7 @@ public class ReportSectionConfigService extends BaseService {
     /**
      * Updates an existing ReportSectionConfig
      *
-     * @param rsConfig
+     * @param reportSectionConfig
      * @param sectionPrompt
      * @param responseType
      * @param reportConfig
@@ -120,7 +120,7 @@ public class ReportSectionConfigService extends BaseService {
      */
     @Transactional
     public ReportSectionConfig updateReportSectionConfig(
-            ReportSectionConfig rsConfig,
+            ReportSectionConfig reportSectionConfig,
             String sectionPrompt,
             ReportResponseType responseType,
             Integer questionNumber,
@@ -128,7 +128,7 @@ public class ReportSectionConfigService extends BaseService {
             Set<EmployerReportSection> employerReportSections,
             Set<StudentReportSection> studentReportSections) {
         StringBuilder error = new StringBuilder();
-        if (rsConfig == null) {
+        if (reportSectionConfig == null) {
             error.append("Report section config to update cannot be null! ");
         }
         if (sectionPrompt != null && sectionPrompt.trim().length() == 0) {
@@ -142,58 +142,58 @@ public class ReportSectionConfigService extends BaseService {
         }
 
         if (sectionPrompt != null) {
-            rsConfig.setSectionPrompt(sectionPrompt);
+            reportSectionConfig.setSectionPrompt(sectionPrompt);
         }
         if (responseType != null) {
-            rsConfig.setResponseType(responseType);
+            reportSectionConfig.setResponseType(responseType);
         }
         if (questionNumber != null) {
-            rsConfig.setQuestionNumber(questionNumber);
+            reportSectionConfig.setQuestionNumber(questionNumber);
         }
         if (reportConfig != null) {
-            rsConfig.setReportConfig(reportConfig);
+            reportSectionConfig.setReportConfig(reportConfig);
         }
         if (employerReportSections != null) {
-            rsConfig.setEmployerReportSections(employerReportSections);
+            reportSectionConfig.setEmployerReportSections(employerReportSections);
         }
         if (studentReportSections != null) {
-            rsConfig.setStudentReportSections(studentReportSections);
+            reportSectionConfig.setStudentReportSections(studentReportSections);
         }
 
-        return reportSectionConfigRepository.save(rsConfig);
+        return reportSectionConfigRepository.save(reportSectionConfig);
     }
 
     /**
      * Deletes an existing ReportSectionConfig
      *
-     * @param rsConfig
+     * @param reportSectionConfig
      * @return the deleted ReportSectionConfig
      */
     @Transactional
-    public ReportSectionConfig deleteReportSectionConfig(ReportSectionConfig rsConfig) {
-        if (rsConfig == null) {
+    public ReportSectionConfig deleteReportSectionConfig(ReportSectionConfig reportSectionConfig) {
+        if (reportSectionConfig == null) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX + "Report section config to delete cannot be null!");
         }
 
         // first delete from parent ReportConfig
-        ReportConfig reportConfig = rsConfig.getReportConfig();
+        ReportConfig reportConfig = reportSectionConfig.getReportConfig();
         Set<ReportSectionConfig> rsConfigs = new HashSet<>(reportConfig.getReportSectionConfigs());
-        rsConfigs.remove(rsConfig);
+        rsConfigs.remove(reportSectionConfig);
         reportConfig.setReportSectionConfigs(rsConfigs);
         reportConfigRepository.save(reportConfig);
 
         // update question numbers of other ReportSectionConfigs
         List<ReportSectionConfig> allReportSectionConfigs = getAllReportSectionConfigs();
         for (ReportSectionConfig rsc : allReportSectionConfigs) {
-            if (rsc.getQuestionNumber() > rsConfig.getQuestionNumber()) {
+            if (rsc.getQuestionNumber() > reportSectionConfig.getQuestionNumber()) {
                 // lower question number by 1
                 updateReportSectionConfig(
                         rsc, null, null, rsc.getQuestionNumber() - 1, null, null, null);
             }
         }
 
-        reportSectionConfigRepository.delete(rsConfig);
-        return rsConfig;
+        reportSectionConfigRepository.delete(reportSectionConfig);
+        return reportSectionConfig;
     }
 }
