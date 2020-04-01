@@ -39,7 +39,7 @@ public class JwtRequest {
     public void setRole(String role) {
         this.role = role;
     }
-    
+
     public String getToken() {
         return this.token;
     }

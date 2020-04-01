@@ -46,7 +46,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     private String longUserRegex = "[a-zA-Z]+(\\.[a-zA-Z]+)+";
 
     /**
-     * Overrides the default authenticate method that comes with Spring Security.
+     * Overrides the default authenticate method that comes with Spring Security
      *
      * @param authentication
      * @return Authentication object containing only the user's email
@@ -79,7 +79,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     /*--- Helper methods ---*/
 
     /**
-     * Queries the McGill LDAP system with the given Student credentials to see if there is a match.
+     * Queries the McGill LDAP system with the given Student credentials to see if there is a match
      *
      * @param user
      * @param password

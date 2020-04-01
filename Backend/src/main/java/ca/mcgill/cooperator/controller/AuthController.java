@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("auth")
 public class AuthController {
-	
-	@Autowired private AdminService adminService;
+
+    @Autowired private AdminService adminService;
 
     @Autowired private StudentService studentService;
 
@@ -38,9 +38,9 @@ public class AuthController {
     @Autowired private JwtStudentDetailsService userDetailsService;
 
     /**
-     * Logs a user in by generating a token for them after the authenticate successfully with the
-     * McGill LDAP system.
-     * 
+     * Logs in a user by generating a token for them after they authenticate successfully with the
+     * McGill LDAP system
+     *
      * @param authRequest
      * @return the generated token for the user
      * @throws Exception
@@ -55,10 +55,10 @@ public class AuthController {
 
         return ResponseEntity.ok(token);
     }
-    
+
     /**
      * Accepts a token in the body of the request and checks if it is associated with any user
-     * 
+     *
      * @param token in body
      * @return user if token matches
      * @throws Exception
@@ -68,19 +68,20 @@ public class AuthController {
         String email = jwtTokenUtil.getSubjectFromToken(tokenRequest.getToken());
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-        
+
         try {
-        	Student s = studentService.getStudentByEmail(userDetails.getUsername());
-        	
-        	return ResponseEntity.ok(ControllerUtils.convertToDto(s));
+            Student s = studentService.getStudentByEmail(userDetails.getUsername());
+
+            return ResponseEntity.ok(ControllerUtils.convertToDto(s));
         } catch (IllegalArgumentException _e) {
-        	try {
-        		Admin a = adminService.getAdmin(userDetails.getUsername());
-            	
-            	return ResponseEntity.ok(ControllerUtils.convertToDto(a));
-        	} catch (IllegalArgumentException e) {
-        		return new ResponseEntity<String>("Token does not match any logged in user", HttpStatus.BAD_REQUEST);
-        	}	
+            try {
+                Admin a = adminService.getAdmin(userDetails.getUsername());
+
+                return ResponseEntity.ok(ControllerUtils.convertToDto(a));
+            } catch (IllegalArgumentException e) {
+                return new ResponseEntity<String>(
+                        "Token does not match any logged in user", HttpStatus.BAD_REQUEST);
+            }
         }
     }
 

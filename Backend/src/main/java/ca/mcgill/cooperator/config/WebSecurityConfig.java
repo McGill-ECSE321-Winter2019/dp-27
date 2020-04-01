@@ -75,7 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
         String securityEnabled = dotenv.get("SECURITY_ENABLED");
 
-        if (securityEnabled != null && securityEnabled.toLowerCase().equals("yes")) {
+        if (securityEnabled != null && securityEnabled.toLowerCase().equals("true")) {
             webSecurity
                     // don't authenticate these routes
                     .ignoring()
