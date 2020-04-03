@@ -1,8 +1,5 @@
 package ca.mcgill.cooperator.dto;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 public class NotificationDto {
     private Integer id;
     private String title;

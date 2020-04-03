@@ -30,19 +30,16 @@ public class EmployerReportSectionController extends BaseController {
     @Autowired EmployerReportService employerReportService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
 
-    @GetMapping("/{id}")
-    public EmployerReportSectionDto getReportSectionById(@PathVariable int id) {
-        EmployerReportSection reportSection = employerReportSectionService.getReportSection(id);
-        return ControllerUtils.convertToDto(reportSection);
-    }
-
-    @GetMapping("")
-    public List<EmployerReportSectionDto> getAllReportSections() {
-        List<EmployerReportSection> reportSections =
-                employerReportSectionService.getAllReportSections();
-        return ControllerUtils.convertEmployerReportSectionListToDto(reportSections);
-    }
-
+    /**
+     * Creates a new EmployerReportSection
+     *
+     * <p>In request body:
+     *
+     * @param response
+     * @param reportSectionConfig
+     * @param employerReport
+     * @return the created EmployerReportSection
+     */
     @PostMapping("")
     public EmployerReportSectionDto createReportSection(
             @RequestBody EmployerReportSectionDto reportSectionDto) {
@@ -65,6 +62,40 @@ public class EmployerReportSectionController extends BaseController {
         return ControllerUtils.convertToDto(reportSection);
     }
 
+    /**
+     * Gets a EmployerReportSection by ID
+     *
+     * @param id
+     * @return EmployerReportSectionDto object
+     */
+    @GetMapping("/{id}")
+    public EmployerReportSectionDto getReportSectionById(@PathVariable int id) {
+        EmployerReportSection reportSection = employerReportSectionService.getReportSection(id);
+        return ControllerUtils.convertToDto(reportSection);
+    }
+
+    /**
+     * Gets all EmployerReportSections
+     *
+     * @return list of all EmployerReportSections
+     */
+    @GetMapping("")
+    public List<EmployerReportSectionDto> getAllReportSections() {
+        List<EmployerReportSection> reportSections =
+                employerReportSectionService.getAllReportSections();
+        return ControllerUtils.convertEmployerReportSectionListToDto(reportSections);
+    }
+
+    /**
+     * Updates an existing EmployerReportSection
+     *
+     * @param id
+     *     <p>In request body:
+     * @param response
+     * @param reportSectionConfig
+     * @param employerReport
+     * @return the updated EmployerReportSection
+     */
     @PutMapping("/{id}")
     public EmployerReportSectionDto updateReportSection(
             @PathVariable int id, @RequestBody EmployerReportSectionDto reportSectionDto) {
@@ -93,6 +124,12 @@ public class EmployerReportSectionController extends BaseController {
         return ControllerUtils.convertToDto(reportSection);
     }
 
+    /**
+     * Deletes an existing EmployerReportSection
+     *
+     * @param id
+     * @return the deleted EmployerReportSection
+     */
     @DeleteMapping("/{id}")
     public EmployerReportSectionDto deleteReportSection(@PathVariable int id) {
         EmployerReportSection reportSection = employerReportSectionService.getReportSection(id);

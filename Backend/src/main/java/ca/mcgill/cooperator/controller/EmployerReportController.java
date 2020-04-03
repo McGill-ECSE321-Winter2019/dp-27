@@ -38,33 +38,7 @@ public class EmployerReportController extends BaseController {
     @Autowired EmployerReportSectionService employerReportSectionService;
 
     /**
-     * Gets an EmployerReport by ID
-     *
-     * @param id
-     * @return EmployerReportDto
-     */
-    @GetMapping("/{id}")
-    public EmployerReportDto getEmployerReportById(@PathVariable int id) {
-        EmployerReport er = employerReportService.getEmployerReport(id);
-
-        return ControllerUtils.convertToDto(er);
-    }
-
-    /**
-     * Gets all EmployerReports associated with the specified EmployerContact
-     *
-     * @param id
-     * @return list of EmployerReportDto
-     */
-    @GetMapping("/employer/{id}")
-    public List<EmployerReportDto> getEmployerReportByEmployerContactId(@PathVariable int id) {
-        EmployerContact ec = employerContactService.getEmployerContact(id);
-
-        return ControllerUtils.convertEmployerReportListToDto(ec.getEmployerReports());
-    }
-
-    /**
-     * Creates a EmployerReport using multipart form data
+     * Creates an EmployerReport using multipart form data
      *
      * @param file
      * @param status
@@ -92,6 +66,32 @@ public class EmployerReportController extends BaseController {
     }
 
     /**
+     * Gets an EmployerReport by ID
+     *
+     * @param id
+     * @return EmployerReportDto object
+     */
+    @GetMapping("/{id}")
+    public EmployerReportDto getEmployerReportById(@PathVariable int id) {
+        EmployerReport er = employerReportService.getEmployerReport(id);
+
+        return ControllerUtils.convertToDto(er);
+    }
+
+    /**
+     * Gets all EmployerReports associated with the specified EmployerContact
+     *
+     * @param id
+     * @return list of EmployerReportDtos
+     */
+    @GetMapping("/employer/{id}")
+    public List<EmployerReportDto> getEmployerReportByEmployerContactId(@PathVariable int id) {
+        EmployerContact ec = employerContactService.getEmployerContact(id);
+
+        return ControllerUtils.convertEmployerReportListToDto(ec.getEmployerReports());
+    }
+
+    /**
      * Updates an existing EmployerReport
      *
      * @param id
@@ -101,7 +101,7 @@ public class EmployerReportController extends BaseController {
      * @param coopId
      * @param rsDtos
      * @param employerId
-     * @return updated EmployerReport
+     * @return the updated EmployerReport
      */
     @PutMapping("/{id}")
     public EmployerReportDto updateEmployerReport(
@@ -132,7 +132,7 @@ public class EmployerReportController extends BaseController {
     }
 
     /**
-     * Deletes an EmployerReport
+     * Deletes an existing EmployerReport
      *
      * @param id
      * @return the deleted EmployerReport

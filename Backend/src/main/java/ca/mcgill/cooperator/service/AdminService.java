@@ -55,7 +55,7 @@ public class AdminService extends BaseService {
      * Returns the Admin with specified ID
      *
      * @param id
-     * @return Admin, if it exists
+     * @return Admin, if they exist
      */
     @Transactional
     public Admin getAdmin(int id) {
@@ -72,7 +72,7 @@ public class AdminService extends BaseService {
      * Returns the Admin with specified email
      *
      * @param email
-     * @return Admin, if it exists
+     * @return Admin, if they exist
      */
     @Transactional
     public Admin getAdmin(String email) {
@@ -98,7 +98,7 @@ public class AdminService extends BaseService {
     /**
      * Updates the specified Admin
      *
-     * @param a
+     * @param admin
      * @param firstName
      * @param lastName
      * @param email
@@ -107,13 +107,13 @@ public class AdminService extends BaseService {
      */
     @Transactional
     public Admin updateAdmin(
-            Admin a,
+            Admin admin,
             String firstName,
             String lastName,
             String email,
             List<Notification> sentNotifications) {
         StringBuilder error = new StringBuilder();
-        if (a == null) {
+        if (admin == null) {
             error.append("Admin to update cannot be null! ");
         }
         if (firstName != null && firstName.trim().length() == 0) {
@@ -131,22 +131,20 @@ public class AdminService extends BaseService {
             throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
         // set fields if they're not null
-
         if (firstName != null) {
-            a.setFirstName(firstName.trim());
+            admin.setFirstName(firstName.trim());
         }
         if (lastName != null) {
-            a.setLastName(lastName.trim());
+            admin.setLastName(lastName.trim());
         }
         if (email != null) {
-            a.setEmail(email.trim());
+            admin.setEmail(email.trim());
         }
-
         if (sentNotifications != null) {
-            a.setSentNotifications(sentNotifications);
+            admin.setSentNotifications(sentNotifications);
         }
 
-        return adminRepository.save(a);
+        return adminRepository.save(admin);
     }
 
     /**
@@ -156,12 +154,12 @@ public class AdminService extends BaseService {
      * @return the deleted Admin
      */
     @Transactional
-    public Admin deleteAdmin(Admin a) {
-        if (a == null) {
+    public Admin deleteAdmin(Admin admin) {
+        if (admin == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Admin to delete cannot be null!");
         }
-        adminRepository.delete(a);
+        adminRepository.delete(admin);
 
-        return a;
+        return admin;
     }
 }

@@ -4,7 +4,6 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
-import ca.mcgill.cooperator.service.StudentService;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 @CrossOrigin(origins = "*")
 public class CSVParserController {
 
-    @Autowired private StudentService studentService;
     @Autowired private CoopService coopService;
     @Autowired private CourseOfferingService courseOfferingService;
 

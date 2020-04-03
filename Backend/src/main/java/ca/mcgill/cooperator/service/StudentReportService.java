@@ -24,22 +24,22 @@ public class StudentReportService extends BaseService {
     @Autowired StudentReportSectionRepository studentReportSectionRepository;
 
     /**
-     * Creates new student report in database
+     * Creates a new StudentReport
      *
      * @param status
-     * @param c
+     * @param coop
      * @param title
      * @param file object
-     * @return created student report
+     * @return the created StudentReport
      */
     @Transactional
     public StudentReport createStudentReport(
-            ReportStatus status, Coop c, String title, MultipartFile file) {
+            ReportStatus status, Coop coop, String title, MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (status == null) {
             error.append("Report Status cannot be null! ");
         }
-        if (c == null) {
+        if (coop == null) {
             error.append("Coop cannot be null! ");
         }
         if (title == null || title.trim().length() == 0) {
@@ -52,7 +52,7 @@ public class StudentReportService extends BaseService {
         StudentReport sr = new StudentReport();
 
         sr.setStatus(status);
-        sr.setCoop(c);
+        sr.setCoop(coop);
         sr.setReportSections(new HashSet<StudentReportSection>());
         sr.setTitle(title);
         if (file != null) {
@@ -67,10 +67,10 @@ public class StudentReportService extends BaseService {
     }
 
     /**
-     * Retrieves specified existing student report from database
+     * Gets an existing StudentReport by ID
      *
      * @param id
-     * @return specified student report
+     * @return StudentReport with specified ID
      */
     @Transactional
     public StudentReport getStudentReport(int id) {
@@ -84,33 +84,33 @@ public class StudentReportService extends BaseService {
     }
 
     /**
-     * Retrieves all student reports from database
+     * Gets all StudentReports
      *
-     * @return list of student reports
+     * @return all StudentReports
      */
     @Transactional
     public List<StudentReport> getAllStudentReports() {
         return ServiceUtils.toList(studentReportRepository.findAll());
     }
     /**
-     * Updates existing student report in database
+     * Updates an existing StudentReport
      *
-     * @param sr
+     * @param studentReport
      * @param status
-     * @param c
+     * @param coop
      * @param sections
-     * @return updated student report
+     * @return the updated StudentReport
      */
     @Transactional
     public StudentReport updateStudentReport(
-            StudentReport sr,
+            StudentReport studentReport,
             ReportStatus status,
             String title,
-            Coop c,
+            Coop coop,
             Set<StudentReportSection> sections,
             MultipartFile file) {
         StringBuilder error = new StringBuilder();
-        if (sr == null) {
+        if (studentReport == null) {
             error.append("Student Report cannot be null! ");
         }
         if (title != null && title.trim().length() == 0) {
@@ -121,63 +121,63 @@ public class StudentReportService extends BaseService {
         }
 
         if (status != null) {
-            sr.setStatus(status);
+            studentReport.setStatus(status);
         }
-        if (c != null) {
-            sr.setCoop(c);
+        if (coop != null) {
+            studentReport.setCoop(coop);
         }
         if (title != null) {
-            sr.setTitle(title);
+            studentReport.setTitle(title);
         }
         if (sections != null) {
-            sr.setReportSections(sections);
+            studentReport.setReportSections(sections);
         }
 
         if (file != null) {
             try {
-                sr.setData(file.getBytes());
+                studentReport.setData(file.getBytes());
             } catch (IOException e) {
                 throw new IllegalArgumentException(e.getMessage());
             }
         }
 
-        sr = studentReportRepository.save(sr);
+        studentReport = studentReportRepository.save(studentReport);
 
         // update student report side of relation since it doesn't sync
         if (sections != null) {
             // set student report as parent for all report sections
             for (StudentReportSection section : sections) {
-                section.setStudentReport(sr);
+                section.setStudentReport(studentReport);
                 studentReportSectionRepository.save(section);
             }
         }
 
-        return studentReportRepository.save(sr);
+        return studentReportRepository.save(studentReport);
     }
 
     /**
-     * Deletes specified student report from database
+     * Deletes an existing StudentReport
      *
-     * @param sr
-     * @return deleted student report
+     * @param studentReport
+     * @return the deleted StudentReport
      */
     @Transactional
-    public StudentReport deleteStudentReport(StudentReport sr) {
-        if (sr == null) {
+    public StudentReport deleteStudentReport(StudentReport studentReport) {
+        if (studentReport == null) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX + "Student Report to delete cannot be null!");
         }
 
         // first delete from all parents
-        Coop c = sr.getCoop();
-        Set<StudentReport> coopReports = c.getStudentReports();
-        coopReports.remove(sr);
+        Coop c = studentReport.getCoop();
+        // make a new Set to avoid pointer issues
+        Set<StudentReport> coopReports = new HashSet<>(c.getStudentReports());
+        coopReports.remove(studentReport);
         c.setStudentReports(coopReports);
 
         coopRepository.save(c);
 
-        studentReportRepository.delete(sr);
-
-        return sr;
+        studentReportRepository.delete(studentReport);
+        return studentReport;
     }
 }

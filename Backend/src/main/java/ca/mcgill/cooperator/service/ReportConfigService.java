@@ -50,7 +50,7 @@ public class ReportConfigService extends BaseService {
     }
 
     /**
-     * Returns ReportConfig with specified ID
+     * Gets the ReportConfig with specified ID
      *
      * @param id
      * @return ReportConfig with specified ID
@@ -67,7 +67,7 @@ public class ReportConfigService extends BaseService {
     }
 
     /**
-     * Returns ReportConfig with specified type
+     * Gets the ReportConfig with specified type
      *
      * @param type
      * @return ReportConfig with specified type
@@ -84,7 +84,7 @@ public class ReportConfigService extends BaseService {
     }
 
     /**
-     * Returns all ReportConfigs in the database
+     * Gets all ReportConfigs
      *
      * @return all ReportConfigs
      */

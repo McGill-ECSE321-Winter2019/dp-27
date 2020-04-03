@@ -34,15 +34,15 @@ public class CoopService extends BaseService {
     @Autowired EmployerContactRepository employerContactRepository;
 
     /**
-     * create new coop in database
+     * Creates a new Coop
      *
      * @param status
      * @param courseOffering
-     * @param s
-     * @return created coop
+     * @param student
+     * @return created Coop
      */
     @Transactional
-    public Coop createCoop(CoopStatus status, CourseOffering courseOffering, Student s) {
+    public Coop createCoop(CoopStatus status, CourseOffering courseOffering, Student student) {
         StringBuilder error = new StringBuilder();
         if (status == null) {
             error.append("Co-op Status cannot be null. ");
@@ -50,7 +50,7 @@ public class CoopService extends BaseService {
         if (courseOffering == null) {
             error.append("Course Offering cannot be null. ");
         }
-        if (s == null) {
+        if (student == null) {
             error.append("Student cannot be null.");
         }
         if (error.length() > 0) {
@@ -60,13 +60,19 @@ public class CoopService extends BaseService {
         Coop c = new Coop();
         c.setStatus(status);
         c.setCourseOffering(courseOffering);
-        c.setStudent(s);
+        c.setStudent(student);
         c.setEmployerReports(new HashSet<EmployerReport>());
         c.setStudentReports(new HashSet<StudentReport>());
 
         return coopRepository.save(c);
     }
 
+    /**
+     * Retrieves a Coop by ID
+     *
+     * @param id
+     * @return Coop with specified ID
+     */
     @Transactional
     public Coop getCoopById(int id) {
         Coop c = coopRepository.findById(id).orElse(null);
@@ -78,6 +84,12 @@ public class CoopService extends BaseService {
         return c;
     }
 
+    /**
+     * Gets all Coops with specified status
+     *
+     * @param status
+     * @return all Coops with the specified status
+     */
     @Transactional
     public List<Coop> getCoopsByStatus(CoopStatus status) {
         if (status == null) {
@@ -87,32 +99,61 @@ public class CoopService extends BaseService {
         return coops;
     }
 
+    /**
+     * Gets all Coops
+     *
+     * @return all Coops
+     */
     @Transactional
     public List<Coop> getAllCoops() {
         return ServiceUtils.toList(coopRepository.findAll());
     }
 
+    /**
+     * Gets all Coops for the specified Student
+     *
+     * @param student
+     * @return all Coops for specified Student
+     */
     @Transactional
-    public List<Coop> getAllCoopsByStudent(Student s) {
-        return ServiceUtils.toList(coopRepository.findByStudent(s));
+    public List<Coop> getAllCoopsByStudent(Student student) {
+        return ServiceUtils.toList(coopRepository.findByStudent(student));
     }
 
+    /**
+     * Gets all Coops for the specified CourseOffering
+     *
+     * @param courseOffering
+     * @return all Coops for the specified CourseOffering
+     */
     @Transactional
     public List<Coop> getAllCoopsForCourseOffering(CourseOffering courseOffering) {
         return ServiceUtils.toList(coopRepository.findByCourseOffering(courseOffering));
     }
 
+    /**
+     * Updates an existing Coop
+     *
+     * @param coop
+     * @param status
+     * @param courseOffering
+     * @param student
+     * @param coopDetails
+     * @param employerReports
+     * @param studentReports
+     * @return the updated Coop
+     */
     @Transactional
     public Coop updateCoop(
-            Coop c,
+            Coop coop,
             CoopStatus status,
             CourseOffering courseOffering,
-            Student s,
-            CoopDetails cd,
+            Student student,
+            CoopDetails coopDetails,
             Set<EmployerReport> employerReports,
             Set<StudentReport> studentReports) {
         StringBuilder error = new StringBuilder();
-        if (c == null) {
+        if (coop == null) {
             error.append("Co-op to update cannot be null! ");
         }
         if (error.length() > 0) {
@@ -120,52 +161,58 @@ public class CoopService extends BaseService {
         }
 
         if (status != null) {
-            c.setStatus(status);
+            coop.setStatus(status);
         }
         if (courseOffering != null) {
-            c.setCourseOffering(courseOffering);
+            coop.setCourseOffering(courseOffering);
         }
-        if (s != null) {
-            c.setStudent(s);
+        if (student != null) {
+            coop.setStudent(student);
         }
-        if (cd != null) {
-            c.setCoopDetails(cd);
+        if (coopDetails != null) {
+            coop.setCoopDetails(coopDetails);
         }
         if (employerReports != null) {
-            c.setEmployerReports(employerReports);
+            coop.setEmployerReports(employerReports);
         }
         if (studentReports != null) {
-            c.setStudentReports(studentReports);
+            coop.setStudentReports(studentReports);
         }
 
-        return coopRepository.save(c);
+        return coopRepository.save(coop);
     }
 
+    /**
+     * Deletes an existing Coop
+     *
+     * @param coop
+     * @return the deleted Coop
+     */
     @Transactional
-    public Coop deleteCoop(Coop c) {
-        if (c == null) {
+    public Coop deleteCoop(Coop coop) {
+        if (coop == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Co-op to delete cannot be null!");
         }
 
-        Student s = c.getStudent();
+        Student s = coop.getStudent();
         Set<Coop> studentCoops = s.getCoops();
-        studentCoops.remove(c);
+        studentCoops.remove(coop);
         s.setCoops(studentCoops);
         studentRepository.save(s);
 
-        CourseOffering courseOffering = c.getCourseOffering();
+        CourseOffering courseOffering = coop.getCourseOffering();
         List<Coop> courseOfferingCoops = courseOffering.getCoops();
-        courseOfferingCoops.remove(c);
+        courseOfferingCoops.remove(coop);
         courseOffering.setCoops(courseOfferingCoops);
         courseOfferingRepository.save(courseOffering);
 
-        CoopDetails coopDetails = c.getCoopDetails();
+        CoopDetails coopDetails = coop.getCoopDetails();
         if (coopDetails != null) {
             coopDetails.setCoop(null);
             coopDetailsRepository.save(coopDetails);
 
-            c.setCoopDetails(null);
-            coopRepository.save(c);
+            coop.setCoopDetails(null);
+            coopRepository.save(coop);
 
             EmployerContact ec = coopDetails.getEmployerContact();
             Set<CoopDetails> details = ec.getCoopDetails();
@@ -175,8 +222,8 @@ public class CoopService extends BaseService {
             employerContactRepository.save(ec);
             coopDetailsRepository.delete(coopDetails);
         }
-        coopRepository.delete(c);
+        coopRepository.delete(coop);
 
-        return c;
+        return coop;
     }
 }
