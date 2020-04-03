@@ -129,8 +129,8 @@ public class CompanyController extends BaseController {
      * @return the deleted Company
      */
     @DeleteMapping("/{id}")
-    public void deleteCompany(@PathVariable int id) {
+    public CompanyDto deleteCompany(@PathVariable int id) {
         Company c = companyService.getCompany(id);
-        companyService.deleteCompany(c);
+        return ControllerUtils.convertToDto(companyService.deleteCompany(c));
     }
 }

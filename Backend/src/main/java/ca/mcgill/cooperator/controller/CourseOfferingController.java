@@ -145,7 +145,9 @@ public class CourseOfferingController extends BaseController {
      * Updates an existing CourseOffering
      *
      * @param id
-     *     <p>In request body:
+     * 
+     * <p>In request body:
+     * 
      * @param year
      * @param season
      * @param course

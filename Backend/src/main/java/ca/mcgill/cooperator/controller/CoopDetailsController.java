@@ -140,8 +140,8 @@ public class CoopDetailsController extends BaseController {
      * @return the deleted CoopDetails
      */
     @DeleteMapping("/{id}")
-    public CoopDetails deleteCoopDetails(@PathVariable int id) {
+    public CoopDetailsDto deleteCoopDetails(@PathVariable int id) {
         CoopDetails cd = coopDetailsService.getCoopDetails(id);
-        return coopDetailsService.deleteCoopDetails(cd);
+        return ControllerUtils.convertToDto(coopDetailsService.deleteCoopDetails(cd));
     }
 }

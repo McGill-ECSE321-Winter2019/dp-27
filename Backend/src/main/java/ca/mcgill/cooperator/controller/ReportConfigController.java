@@ -76,7 +76,9 @@ public class ReportConfigController extends BaseController {
      * Updates an existing ReportConfig
      *
      * @param id
-     *     <p>In request body:
+     * 
+     * <p>In request body:
+     *     
      * @param requiresFile
      * @param deadline
      * @param isDeadlineFromStart

@@ -38,7 +38,7 @@ public class EmployerReportController extends BaseController {
     @Autowired EmployerReportSectionService employerReportSectionService;
 
     /**
-     * Creates a EmployerReport using multipart form data
+     * Creates an EmployerReport using multipart form data
      *
      * @param file
      * @param status
