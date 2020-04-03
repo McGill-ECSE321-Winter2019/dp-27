@@ -1,5 +1,9 @@
 const routes = [
   {
+    path: "/login",
+    component: () => import("layouts/LoginLayout.vue")
+  },
+  {
     path: "/student",
     component: () => import("layouts/StudentLoggedInLayout.vue"),
     meta: { requiresStudentAuth: true },
