@@ -4,7 +4,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -23,17 +22,11 @@ public class Student {
     @Column(unique = true)
     private String studentId;
 
-    @OneToMany(
-            mappedBy = "student",
-            cascade = CascadeType.PERSIST,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Coop> coops;
 
-    @OneToMany(
-            mappedBy = "student",
-            cascade = CascadeType.PERSIST,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Notification> studentReceived;
 
