@@ -26,16 +26,14 @@ public class Student {
     @OneToMany(
             mappedBy = "student",
             cascade = CascadeType.PERSIST,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
+            orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Coop> coops;
 
     @OneToMany(
             mappedBy = "student",
             cascade = CascadeType.PERSIST,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
+            orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Notification> studentReceived;
 

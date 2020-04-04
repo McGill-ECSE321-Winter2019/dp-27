@@ -19,7 +19,7 @@ public class EmployerReport {
     private String type;
     private ReportStatus status;
 
-    @Lob private byte[] data;
+    private byte[] data;
 
     @ManyToOne private Coop coop;
 

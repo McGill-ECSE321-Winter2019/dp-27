@@ -122,8 +122,8 @@ export default {
     this.$axios.get("/courses/names").then(resp => {
       resp.data.forEach(name => {
         this.courseNameOptions.push(name);
-        this.loading = false;
       });
+      this.loading = false;
     });
   },
   methods: {

@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class StudentReportSection {
     @Id @GeneratedValue private int id;
-    @Lob private String response;
+    private String response;
 
     @ManyToOne(optional = false)
     private StudentReport studentReport;
