@@ -1,3 +1,6 @@
+<!-- Represents a summary of an upcoming Coop on a Student's homepage.
+
+Parent: HomeUpcomingCoopsSection.vue -->
 <template>
   <q-card bordered square class="q-mb-md">
     <q-card-section>
@@ -30,12 +33,38 @@
 
       <!-- Co-op status -->
       <div class="text-subtitle1">
-        <span class="text-subtitle1 text-weight-medium">
-          Status:
-        </span>
-        <q-badge :color="statusColor">
-          {{ this.$common.convertEnumTextToReadableString(this.coop.status) }}
-        </q-badge>
+        <div class="row">
+          <div class="col-6">
+            <span class="text-subtitle1 text-weight-medium">
+              Status:
+            </span>
+            <q-badge :color="statusColor">
+              {{
+                this.$common.convertEnumTextToReadableString(this.coop.status)
+              }}
+            </q-badge>
+            <!-- Allow editing of offer letter if Coop is still under review -->
+            <div v-if="underReview">
+              <q-btn
+                color="primary"
+                class="q-mt-md"
+                flat
+                label="Edit Offer Letter"
+                @click="showEditOfferLetterPopup = true"
+              />
+            </div>
+          </div>
+          <div v-if="underReview" class="col-6 text-body2">
+            <q-btn
+              color="primary"
+              class="float-right"
+              flat
+              icon-right="open_in_new"
+              label="View Offer Letter"
+              @click="openPDF"
+            />
+          </div>
+        </div>
       </div>
 
       <div v-if="!underReview && !coopDetailsRequired">
@@ -48,17 +77,26 @@
       <q-dialog v-model="showCoopDetailsPopup">
         <CoopDetailsPopup :coopId="this.coop.id" />
       </q-dialog>
+
+      <q-dialog v-model="showEditOfferLetterPopup">
+        <EditOfferLetterPopup
+          :reportId="this.coop.studentReports[0].id"
+          @refresh-upcoming-coops="notifyParentToRefreshUpcomingCoops"
+        />
+      </q-dialog>
     </q-card-section>
   </q-card>
 </template>
 
 <script>
 import CoopDetailsPopup from "./CoopDetailsPopup.vue";
+import EditOfferLetterPopup from "./EditOfferLetterPopup.vue";
 
 export default {
   name: "HomeUpcomingCoopsSectionItem",
   components: {
-    CoopDetailsPopup
+    CoopDetailsPopup,
+    EditOfferLetterPopup
   },
   props: {
     coop: {
@@ -68,7 +106,10 @@ export default {
   },
   data: function() {
     return {
-      showCoopDetailsPopup: false
+      offerLetterURL: null,
+      showCoopDetailsPopup: false,
+      showEditOfferLetterPopup: false,
+      statusColor: this.$common.getCoopStatusColor(this.coop.status)
     };
   },
   computed: {
@@ -85,13 +126,21 @@ export default {
         this.coop.courseOffering.season
       );
       return `${season} ${this.coop.courseOffering.year}`;
+    }
+  },
+  created: function() {
+    var bytes = this.coop.studentReports[0].data;
+
+    let blob = this.$common.b64toBlob(bytes, "application/pdf");
+    this.offerLetterURL = window.URL.createObjectURL(blob);
+  },
+  methods: {
+    openPDF: function() {
+      window.open(this.offerLetterURL);
     },
-    statusColor: function() {
-      if (this.coop.status === "UNDER_REVIEW") return "orange";
-      if (this.coop.status === "IN_PROGRESS") return "blue";
-      if (this.coop.status === "FUTURE") return "light-blue";
-      if (this.coop.status === "INCOMPLETE") return "primary";
-      else return "black";
+    notifyParentToRefreshUpcomingCoops: function() {
+      this.showEditOfferLetterPopup = false;
+      this.$emit("refresh-upcoming-coops");
     }
   }
 };

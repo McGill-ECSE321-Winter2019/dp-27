@@ -29,6 +29,13 @@ const common = {
     }
     return "";
   },
+  getCoopStatusColor: function(status) {
+    if (status === "UNDER_REVIEW") return "orange";
+    if (status === "IN_PROGRESS") return "blue";
+    if (status === "FUTURE") return "light-blue";
+    if (status === "INCOMPLETE") return "primary";
+    else return "black";
+  },
   /*
    * Converts a base64-encoded string to a blob; used for rendering PDFs
    *

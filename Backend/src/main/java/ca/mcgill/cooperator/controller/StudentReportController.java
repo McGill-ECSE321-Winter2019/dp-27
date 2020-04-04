@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -121,10 +120,10 @@ public class StudentReportController extends BaseController {
     public StudentReportDto updateStudentReport(
             @PathVariable int id,
             @ModelAttribute("file") MultipartFile file,
-            @RequestParam("status") String status,
-            @RequestParam("title") String title,
-            @RequestParam("coop_id") int coopId,
-            @RequestBody Set<StudentReportSectionDto> rsDtos) {
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Integer coopId,
+            @RequestParam(required = false) Set<StudentReportSectionDto> rsDtos) {
         StudentReport reportToUpdate = studentReportService.getStudentReport(id);
 
         Set<StudentReportSection> sections = null;
@@ -134,8 +133,15 @@ public class StudentReportController extends BaseController {
                             studentReportSectionService, rsDtos);
         }
 
-        Coop coop = coopService.getCoopById(coopId);
-        ReportStatus reportStatus = ReportStatus.valueOf(status);
+        Coop coop = null;
+        if (coopId != null) {
+            coop = coopService.getCoopById(coopId);
+        }
+
+        ReportStatus reportStatus = null;
+        if (status != null) {
+            reportStatus = ReportStatus.valueOf(status);
+        }
 
         StudentReport updatedReport =
                 studentReportService.updateStudentReport(
