@@ -18,6 +18,7 @@
             v-for="coop in coops"
             :key="coop.id"
             :coop="coop"
+            @refresh-upcoming-coops="refreshUpcomingCoops"
           />
         </div>
         <div v-else class="text-subtitle1 center-item">
@@ -44,12 +45,18 @@ export default {
   },
   props: {},
   created: function() {
-    const studentId = this.$store.state.currentUser.id;
-    // get all upcoming coops for the currently logged in student
-    this.$axios.get(`/students/${studentId}/upcoming-coops`).then(resp => {
-      this.coops = resp.data;
-      this.loading = false;
-    });
+    this.refreshUpcomingCoops();
+  },
+  methods: {
+    refreshUpcomingCoops: function() {
+      this.loading = true;
+      const studentId = this.$store.state.currentUser.id;
+      // get all upcoming coops for the currently logged in student
+      this.$axios.get(`/students/${studentId}/upcoming-coops`).then(resp => {
+        this.coops = resp.data;
+        this.loading = false;
+      });
+    }
   }
 };
 </script>

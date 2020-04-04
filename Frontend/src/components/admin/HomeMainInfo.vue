@@ -89,7 +89,7 @@ export default {
       var term = this.$common.getCurrentTerm();
       this.$router.push({
         path: "/admin/students",
-        name: "loadofshit",
+        name: "AdminViewStudents",
         params: {
           year: year,
           term: term
@@ -113,6 +113,6 @@ h6 {
 .dashBtn {
   width: 46%;
   margin: 2%;
-  align: center;
+  text-align: center;
 }
 </style>

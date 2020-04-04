@@ -50,7 +50,7 @@ export default {
         this.notifications = resp.data;
         this.loading = false;
       });
-    this.$axios.put("/notifications/" + user.id + "/mark-as-read", {
+    this.$axios.put(`/notifications/${user.id}/mark-as-read`, {
       headers: {
         Authorization: this.$store.state.token
       }
