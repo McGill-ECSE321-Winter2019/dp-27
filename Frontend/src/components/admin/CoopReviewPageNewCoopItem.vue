@@ -14,6 +14,12 @@
               </span>
               {{ term }}
             </div>
+            <div class="text-subtitle1">
+              <span class="text-subtitle1 text-weight-medium">
+                Course:
+              </span>
+              {{ coop.courseOffering.course.name }}
+            </div>
           </div>
           <div class="col-6 text-body2">
             <q-btn
@@ -25,9 +31,24 @@
               @click="openPDF"
             />
           </div>
-          <q-btn label="Approve" color="primary" @click="approveCoop" />
-          <q-btn label="Reject" color="primary" flat @click="rejectCoop" />
         </div>
+
+        <!-- Disable buttons while submitting -->
+        <q-btn
+          label="Approve"
+          color="primary"
+          @click="approveCoop"
+          :disabled="submitting"
+        />
+        <q-btn
+          label="Reject"
+          color="primary"
+          flat
+          @click="rejectCoop"
+          :disabled="submitting"
+        />
+        <!-- Show spinner while submitting -->
+        <q-spinner v-if="submitting" color="primary" size="2.5em" />
       </div>
     </q-card-section>
   </q-card>
@@ -38,7 +59,8 @@ export default {
   name: "CoopReviewPageNewCoopItem",
   data: function() {
     return {
-      offerLetterURL: null
+      offerLetterURL: null,
+      submitting: false
     };
   },
   props: {
@@ -49,7 +71,8 @@ export default {
   },
   computed: {
     term: function() {
-      return `${this.coop.courseOffering.season} ${this.coop.courseOffering.year}`;
+      const term = `${this.coop.courseOffering.season} ${this.coop.courseOffering.year}`;
+      return this.$common.convertEnumTextToReadableString(term);
     }
   },
   created: function() {
@@ -63,6 +86,7 @@ export default {
       window.open(this.offerLetterURL);
     },
     approveCoop: function() {
+      this.submitting = true;
       // set the status of the coop to FUTURE
       const coopBody = {
         status: "FUTURE"
@@ -103,6 +127,9 @@ export default {
             icon: "cloud_done",
             message: "Co-op Approved Successfully"
           });
+          this.submitting = false;
+
+          this.$emit("refresh-new-coops");
         })
         .catch(_err => {
           this.$q.notify({
