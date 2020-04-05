@@ -32,6 +32,8 @@
         @click="viewCurrentStudents"
       />
       <q-btn class="dashBtn" label="View Incoming Students" color="primary" />
+      <q-separator inset />
+      <h6>View Current Students by Course</h6>
       <q-btn
         v-for="cname in courseNames"
         :key="cname"
@@ -101,7 +103,8 @@ export default {
 
 <style scoped lang="scss">
 h6 {
-  margin: 10px;
+  margin: 1%;
+  font-size: 1.2em;
 }
 #card {
   width: 100%;
