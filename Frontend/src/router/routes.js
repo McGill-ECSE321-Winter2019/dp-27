@@ -22,6 +22,11 @@ const routes = [
         component: () => import("pages/student/StudentCoops.vue")
       },
       {
+        name: "StudentEditCoopDetailsPage",
+        path: "coop-details/:coopId",
+        component: () => import("pages/student/StudentEditCoopDetailsPage.vue")
+      },
+      {
         path: "new-coop",
         component: () => import("pages/student/StudentAddNewCoop.vue")
       },

@@ -21,8 +21,7 @@
       />
       <q-btn
         class="dashBtn"
-        label="View
-      Completed Coops to Approve"
+        label="View Completed Coops to Approve"
         color="primary"
         @click="viewApprovalsPage('completed_coops')"
       />

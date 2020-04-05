@@ -25,7 +25,7 @@ Parent: HomeUpcomingCoopsSection.vue -->
             <q-btn
               flat
               label="Add Co-op Details"
-              @click="showCoopDetailsPopup = true"
+              @click="goToCoopDetailsPage"
             />
           </template>
         </q-banner>
@@ -74,10 +74,6 @@ Parent: HomeUpcomingCoopsSection.vue -->
         </div>
       </div>
 
-      <q-dialog v-model="showCoopDetailsPopup">
-        <CoopDetailsPopup :coopId="this.coop.id" />
-      </q-dialog>
-
       <q-dialog v-model="showEditOfferLetterPopup">
         <EditOfferLetterPopup
           :reportId="this.coop.studentReports[0].id"
@@ -89,13 +85,11 @@ Parent: HomeUpcomingCoopsSection.vue -->
 </template>
 
 <script>
-import CoopDetailsPopup from "./CoopDetailsPopup.vue";
 import EditOfferLetterPopup from "./EditOfferLetterPopup.vue";
 
 export default {
   name: "HomeUpcomingCoopsSectionItem",
   components: {
-    CoopDetailsPopup,
     EditOfferLetterPopup
   },
   props: {
@@ -141,6 +135,12 @@ export default {
     notifyParentToRefreshUpcomingCoops: function() {
       this.showEditOfferLetterPopup = false;
       this.$emit("refresh-upcoming-coops");
+    },
+    goToCoopDetailsPage: function() {
+      // go to the Coop Details page for this specific Coop
+      this.$router.push({
+        path: `/student/coop-details/${this.coop.id}`
+      });
     }
   }
 };
