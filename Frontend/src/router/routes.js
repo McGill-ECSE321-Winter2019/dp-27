@@ -47,7 +47,7 @@ const routes = [
       { path: "", redirect: "home" },
       { path: "home", component: () => import("pages/admin/AdminHome.vue") },
       {
-        path: "studentCoops",
+        path: "student-coops",
         component: () => import("pages/admin/AdminStudentCoops.vue")
       },
       {

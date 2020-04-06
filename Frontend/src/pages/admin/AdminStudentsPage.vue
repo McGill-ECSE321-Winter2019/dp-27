@@ -1,74 +1,77 @@
 <template>
-  <div>
-    <q-card-section>All Students</q-card-section>
+  <BasePage title="Students">
+    <q-card flat bordered>
+      <q-card-section>
+        <div class="q-pa-md">
+          <q-select
+            v-model="courseNameData"
+            :options="courseNames"
+            label="Course"
+            style="width:25%"
+          />
+          <q-select
+            v-model="statsData"
+            :options="statusOptions"
+            label="Coop Status"
+            style="width:25%"
+          />
+          <q-select
+            v-model="yearData"
+            :options="years"
+            label="Years"
+            style="width:25%"
+          />
+          <q-select
+            v-model="termData"
+            :options="terms"
+            label="Term"
+            style="width:25%"
+          />
+        </div>
+        <div class="q-pa-md">
+          <q-btn @click="applyFilter" class="q-mr-sm">Apply Filter</q-btn>
+          <q-btn @click="clearFilter" class="q-mr-sm">Clear Filter</q-btn>
+        </div>
 
-    <q-separator inset />
-    <div class="q-pa-md">
-      <q-select
-        v-model="courseNameData"
-        :options="courseNames"
-        label="Course"
-        style="width:25%"
-      />
-      <q-select
-        v-model="statsData"
-        :options="statusOptions"
-        label="Coop Status"
-        style="width:25%"
-      />
-      <q-select
-        v-model="yearData"
-        :options="years"
-        label="Years"
-        style="width:25%"
-      />
-      <q-select
-        v-model="termData"
-        :options="terms"
-        label="Term"
-        style="width:25%"
-      />
-    </div>
-    <div class="q-pa-md">
-      <q-btn @click="applyFilter" class="q-mr-sm">Apply Filter</q-btn>
-      <q-btn @click="clearFilter" class="q-mr-sm">Clear Filter</q-btn>
-    </div>
-
-    <div class="q-pa-md">
-      <q-table
-        :data="students"
-        :columns="columns"
-        row-key="studentName"
-        @row-click="goToStudentCoop"
-      />
-    </div>
-  </div>
+        <div class="q-pa-md">
+          <q-table
+            :data="students"
+            :columns="columns"
+            row-key="studentName"
+            @row-click="goToStudentCoop"
+          />
+        </div>
+      </q-card-section>
+    </q-card>
+  </BasePage>
 </template>
+
 <script>
+import BasePage from "../BasePage.vue";
+
 export default {
+  name: "AdminStudentsPage",
+  components: {
+    BasePage
+  },
   props: {
     courseName: {
       type: String,
-      required: false,
       default: ""
     },
     year: {
       type: String,
-      required: false,
       default: ""
     },
     status: {
       type: String,
-      required: false,
       default: ""
     },
     term: {
       type: String,
-      required: false,
       default: ""
     }
   },
-  name: "AdminStudentsPage",
   data: () => ({
     students: [],
     courseNames: [],
@@ -172,7 +175,7 @@ export default {
   },
   methods: {
     goToStudentCoop() {
-      this.$router.push("/admin/studentcoops");
+      this.$router.push("/admin/student-coops");
     },
     clearFilter() {
       this.courseNameData = "";
@@ -214,4 +217,4 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped></style>

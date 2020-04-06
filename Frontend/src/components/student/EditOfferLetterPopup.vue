@@ -22,6 +22,7 @@ Parent: HomeUpcomingCoopsSectionItem.vue -->
           label="Attach offer letter"
           class="file-input"
           lazy-rules
+          accept=".pdf"
           :rules="[val => val != null || 'Please upload a file']"
         >
           <template v-slot:prepend>

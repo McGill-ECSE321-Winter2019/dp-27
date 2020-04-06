@@ -1,43 +1,61 @@
 <template>
-  <q-page class="flex justify-center">
-    <div id="container" class="row">
-      <div class="col">
-        <h4>Check Enrollment</h4>
-        <div class="text-body2">
-          Select the semester that you would like to check the students
-          enrollment in their respective courses or if they have created a
-          corresponding coop yet
+  <BasePage title="Check Enrollment">
+    <q-card bordered flat>
+      <q-card-section>
+        <div v-if="loading" class="center-item">
+          <!-- Show spinner while loading -->
+          <q-spinner color="primary" size="3em" />
         </div>
-        <q-select
-          v-model="selectedYear"
-          :options="yearList"
-          label="Select Year"
-        />
-        <q-select
-          v-model="selectedSeason"
-          :options="seasonList"
-          label="Select Season"
-        />
-        <q-select
-          v-model="selectedCourse"
-          :options="courseList"
-          label="Select Course"
-        />
-        <q-file
-          v-model="csvFile"
-          label="Upload Course CSV"
-          rounded
-          accept=".csv"
-        />
-        <q-btn
-          class="q-mt-md"
-          color="primary"
-          label="Check Students"
-          :loading="uploading"
-          @click="parseCsv"
-        />
-      </div>
-    </div>
+        <div v-else>
+          <div class="text-caption q-mb-md">
+            Select the semester where you would like to check students'
+            enrollment in their respective courses and/or if they have created a
+            corresponding co-op yet.
+          </div>
+          <div class="input-section">
+            <q-select
+              outlined
+              class="q-mb-sm"
+              v-model="selectedYear"
+              :options="yearList"
+              label="Select Year"
+            />
+            <q-select
+              outlined
+              class="q-mb-sm"
+              v-model="selectedSeason"
+              :options="seasonList"
+              label="Select Season"
+            />
+            <q-select
+              outlined
+              class="q-mb-sm"
+              v-model="selectedCourse"
+              :options="courseList"
+              label="Select Course"
+            />
+            <q-file
+              outlined
+              class="q-mb-sm"
+              v-model="csvFile"
+              label="Upload Course CSV"
+              accept=".csv"
+            >
+              <template v-slot:prepend>
+                <q-icon name="attach_file" />
+              </template>
+            </q-file>
+
+            <q-btn
+              color="primary"
+              label="Check Students"
+              :loading="uploading"
+              @click="parseCsv"
+            />
+          </div>
+        </div>
+      </q-card-section>
+    </q-card>
 
     <div id="container" class="row flex justify-center" v-if="submitted">
       <div class="col">
@@ -101,19 +119,24 @@
         </q-dialog>
       </div>
     </div>
-  </q-page>
+  </BasePage>
 </template>
 
 <script>
+import BasePage from "../BasePage.vue";
 import NotificationPopup from "../../components/admin/NotificationPopup.vue";
 
 export default {
   name: "CSVParserPage",
   components: {
+    BasePage,
     NotificationPopup
   },
   data: function() {
     return {
+      coursesLoading: true,
+      seasonsLoading: true,
+      yearsLoading: true,
       selectedYear: "",
       yearList: [],
       seasonList: [],
@@ -134,18 +157,26 @@ export default {
     this.$axios.get("/courses").then(resp => {
       resp.data.forEach(course => {
         this.courseList.push(course.name);
+        this.coursesLoading = false;
       });
     });
     this.$axios.get("/seasons").then(resp => {
       resp.data.forEach(season => {
         this.seasonList.push(season);
+        this.seasonsLoading = false;
       });
     });
     this.$axios.get("/course-offerings/years").then(resp => {
       resp.data.forEach(year => {
         this.yearList.push(year);
+        this.yearsLoading = false;
       });
     });
+  },
+  computed: {
+    loading: function() {
+      return this.coursesLoading || this.seasonsLoading || this.yearsLoading;
+    }
   },
   methods: {
     parseCsv: function() {
@@ -213,12 +244,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#container {
-  width: 60%;
-}
-
-.section {
-  max-width: 100%;
+.input-section {
+  width: 50%;
 }
 
 .center-item {
