@@ -18,16 +18,31 @@
               </div>
 
               <div class="q-gutter-sm">
-                <q-input
+                <q-select
                   outlined
                   v-model="companyName"
+                  use-input
+                  hide-selected
+                  fill-input
+                  input-debounce="0"
+                  :options="companyNames"
+                  @filter="filterFn"
                   label="Company name"
                   hint="Company name"
                   :rules="[
                     val =>
                       (val && val.length > 0) || 'Please enter a company name'
                   ]"
-                />
+                >
+                  <template v-slot:no-option>
+                    <q-item>
+                      <q-item-section class="text-grey">
+                        No results
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
+
                 <q-input
                   outlined
                   v-model="companyCountry"
@@ -227,6 +242,7 @@ export default {
       submitting: false,
       loading: true,
       coopId: this.$route.params.coopId,
+      companyNames: [],
       companyName: "",
       companyCountry: "",
       companyRegion: "",
@@ -265,6 +281,14 @@ export default {
           this.companyCity = company.city;
         }
         this.loading = false;
+      });
+    },
+    filterFn: function(val, update, abort) {
+      update(() => {
+        const needle = val.toLowerCase();
+        this.options = stringOptions.filter(
+          v => v.toLowerCase().indexOf(needle) > -1
+        );
       });
     }
   }

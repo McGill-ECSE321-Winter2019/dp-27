@@ -63,7 +63,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
                     ERROR_PREFIX
                             + "Section prompt cannot be empty! "
                             + "Response type cannot be null! "
-                            + "Question number cannot be less than 1! "
+                            + "Invalid question number! "
                             + "Report config cannot be null!",
                     e.getMessage());
         }
