@@ -31,6 +31,10 @@
                   @input-value="setCompanyName"
                   label="Company name"
                   hint="Company name"
+                  :rules="[
+                    val =>
+                      (val && val.length > 0) || 'Please enter a company name'
+                  ]"
                 />
 
                 <q-select
@@ -45,6 +49,9 @@
                   @input-value="setCompanyCountry"
                   label="Country"
                   hint="Country"
+                  :rules="[
+                    val => (val && val.length > 0) || 'Please enter a country'
+                  ]"
                 />
                 <q-select
                   outlined
@@ -58,6 +65,9 @@
                   @input-value="setCompanyRegion"
                   label="Region (e.g. state or province)"
                   hint="Region"
+                  :rules="[
+                    val => (val && val.length > 0) || 'Please enter a region'
+                  ]"
                 />
                 <q-select
                   outlined
@@ -71,6 +81,9 @@
                   @input-value="setCompanyCity"
                   label="City"
                   hint="City"
+                  :rules="[
+                    val => (val && val.length > 0) || 'Please enter a city'
+                  ]"
                 />
               </div>
             </q-card-section>
@@ -92,6 +105,10 @@
                     v-model="employerContactFirstName"
                     label="First Name"
                     hint="First Name"
+                    :rules="[
+                      val =>
+                        (val && val.length > 0) || 'Please enter a first name'
+                    ]"
                   />
                 </div>
                 <div class="col-6">
@@ -100,6 +117,10 @@
                     v-model="employerContactLastName"
                     label="Last Name"
                     hint="Last Name"
+                    :rules="[
+                      val =>
+                        (val && val.length > 0) || 'Please enter a last name'
+                    ]"
                   />
                 </div>
               </div>
@@ -109,6 +130,9 @@
                   v-model="employerContactEmail"
                   label="Email"
                   hint="Email"
+                  :rules="[
+                    val => (val && val.length > 0) || 'Please enter an email'
+                  ]"
                 />
 
                 <q-input
@@ -116,6 +140,10 @@
                   v-model="employerContactPhoneNumber"
                   label="Phone Number"
                   hint="Phone Number"
+                  :rules="[
+                    val =>
+                      (val && val.length > 0) || 'Please enter a phone number'
+                  ]"
                 />
               </div>
             </q-card-section>
@@ -224,6 +252,7 @@
                 label="Submit"
                 type="submit"
                 color="primary"
+                class="q-mr-md"
                 :disabled="submitting"
               />
               <!-- Show spinner while submitting -->
