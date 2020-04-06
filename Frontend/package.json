@@ -12,14 +12,14 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.5.1",
+    "@quasar/extras": "^1.6.1",
     "axios": "^0.18.1",
     "moment": "^2.24.0",
-    "quasar": "^1.9.3",
+    "quasar": "^1.9.13",
     "vue-clipboard2": "^0.3.1"
   },
   "devDependencies": {
-    "@quasar/app": "^1.5.8",
+    "@quasar/app": "^1.6.1",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^4.0.0",

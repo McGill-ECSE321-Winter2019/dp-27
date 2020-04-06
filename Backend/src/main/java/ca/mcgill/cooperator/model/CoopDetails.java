@@ -15,8 +15,7 @@ public class CoopDetails {
     private Date startDate;
     private Date endDate;
 
-    @ManyToOne(optional = false)
-    private EmployerContact employerContact;
+    @ManyToOne private EmployerContact employerContact;
 
     @OneToOne private Coop coop;
 

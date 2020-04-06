@@ -10,6 +10,7 @@
             <q-spinner color="primary" size="3em" />
           </div>
           <q-form v-else @submit="onSubmit">
+            <!-- Company section -->
             <q-card-section>
               <div class="text-h6 q-mb-sm">Company Information</div>
               <div class="text-caption q-mb-md">
@@ -20,61 +21,62 @@
               <div class="q-gutter-sm">
                 <q-select
                   outlined
-                  v-model="companyName"
+                  :value="companyName"
                   use-input
                   hide-selected
                   fill-input
                   input-debounce="0"
                   :options="companyNames"
-                  @filter="filterFn"
+                  @filter="filterCompanyNames"
+                  @input-value="setCompanyName"
                   label="Company name"
                   hint="Company name"
-                  :rules="[
-                    val =>
-                      (val && val.length > 0) || 'Please enter a company name'
-                  ]"
-                >
-                  <template v-slot:no-option>
-                    <q-item>
-                      <q-item-section class="text-grey">
-                        No results
-                      </q-item-section>
-                    </q-item>
-                  </template>
-                </q-select>
+                />
 
-                <q-input
+                <q-select
                   outlined
-                  v-model="companyCountry"
+                  :value="companyCountry"
+                  use-input
+                  hide-selected
+                  fill-input
+                  input-debounce="0"
+                  :options="countries"
+                  @filter="filterCompanyCountries"
+                  @input-value="setCompanyCountry"
                   label="Country"
                   hint="Country"
-                  :rules="[
-                    val => (val && val.length > 0) || 'Please enter a country'
-                  ]"
                 />
-                <q-input
+                <q-select
                   outlined
-                  v-model="companyRegion"
+                  :value="companyRegion"
+                  use-input
+                  hide-selected
+                  fill-input
+                  input-debounce="0"
+                  :options="regions"
+                  @filter="filterCompanyRegions"
+                  @input-value="setCompanyRegion"
                   label="Region (e.g. state or province)"
                   hint="Region"
-                  :rules="[
-                    val => (val && val.length > 0) || 'Please enter a region'
-                  ]"
                 />
-                <q-input
+                <q-select
                   outlined
-                  v-model="companyCity"
+                  :value="companyCity"
+                  use-input
+                  hide-selected
+                  fill-input
+                  input-debounce="0"
+                  :options="cities"
+                  @filter="filterCompanyCities"
+                  @input-value="setCompanyCity"
                   label="City"
                   hint="City"
-                  :rules="[
-                    val => (val && val.length > 0) || 'Please enter a city'
-                  ]"
                 />
               </div>
             </q-card-section>
 
             <q-separator inset />
-
+            <!-- Employer Contact section -->
             <q-card-section>
               <div class="text-h6 q-mb-sm">Employer Contact Information</div>
               <div class="text-caption q-mb-md">
@@ -119,7 +121,7 @@
             </q-card-section>
 
             <q-separator inset />
-
+            <!-- Coop section -->
             <q-card-section>
               <div class="text-h6 q-mb-sm">Co-op Information</div>
               <div class="text-caption q-mb-md">
@@ -195,8 +197,9 @@
                     v-model="payPerHour"
                     label="Pay Per Hour"
                     hint="Per Per Hour"
-                    mask="$#.##"
+                    mask="#.##"
                     fill-mask="0"
+                    prefix="$"
                     reverse-fill-mask
                     input-class="text-right"
                   />
@@ -243,6 +246,9 @@ export default {
       loading: true,
       coopId: this.$route.params.coopId,
       companyNames: [],
+      countries: [],
+      regions: [],
+      cities: [],
       companyName: "",
       companyCountry: "",
       companyRegion: "",
@@ -253,7 +259,7 @@ export default {
       employerContactPhoneNumber: "",
       startDate: "",
       endDate: "",
-      payPerHour: null,
+      payPerHour: "",
       hoursPerWeek: null
     };
   },
@@ -261,7 +267,62 @@ export default {
     this.getCoop();
   },
   methods: {
-    onSubmit: function() {},
+    onSubmit: function() {
+      this.submitting = true;
+
+      const body = {
+        coop: this.coop,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        payPerHour: parseFloat(this.payPerHour) * 100,
+        hoursPerWeek: this.hoursPerWeek,
+        employerContact: {
+          email: this.employerContactEmail,
+          phoneNumber: this.employerContactPhoneNumber,
+          firstName: this.employerContactFirstName,
+          lastName: this.employerContactLastName,
+          company: {
+            name: this.companyName,
+            country: this.companyCountry,
+            region: this.companyRegion,
+            city: this.companyCity
+          }
+        }
+      };
+
+      if (this.coop.coopDetails === null) {
+        // create the coop details
+        this.$axios.post("/coop-details", body).then(resp => {
+          this.coop.coopDetails = resp.data;
+
+          this.$q.notify({
+            color: "green-4",
+            position: "top",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "Updated Successfully"
+          });
+
+          this.submitting = false;
+        });
+      } else {
+        // update the coop details
+        const coopDetailsId = this.coop.coopDetails.id;
+        this.$axios.put(`/coop-details/${coopDetailsId}`, body).then(resp => {
+          this.coop.coopDetails = resp.data;
+
+          this.$q.notify({
+            color: "green-4",
+            position: "top",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "Updated Successfully"
+          });
+
+          this.submitting = false;
+        });
+      }
+    },
     getCoop: function() {
       this.loading = true;
       this.$axios.get(`/coops/${this.coopId}`).then(resp => {
@@ -279,14 +340,83 @@ export default {
           this.companyCountry = company.country;
           this.companyRegion = company.region;
           this.companyCity = company.city;
+
+          this.startDate = this.coop.coopDetails.startDate;
+          this.endDate = this.coop.coopDetails.endDate;
+          this.payPerHour = parseFloat(
+            this.coop.coopDetails.payPerHour / 100
+          ).toFixed(2);
+          this.hoursPerWeek = this.coop.coopDetails.hoursPerWeek;
         }
         this.loading = false;
       });
     },
-    filterFn: function(val, update, abort) {
+    getCompaniesInfo: function() {
+      // this is used in the Company section to let the student filter
+      // by existing options
+      this.$axios.get("/companies").then(resp => {
+        let namesSet = new Set();
+        let countriesSet = new Set();
+        let regionsSet = new Set();
+        let citiesSet = new Set();
+        namesSet.add("");
+        countriesSet.add("");
+        regionsSet.add("");
+        citiesSet.add("");
+
+        resp.data.forEach(company => {
+          namesSet.add(company.name);
+          countriesSet.add(company.country);
+          regionsSet.add(company.region);
+          citiesSet.add(company.city);
+        });
+
+        this.companyNames = Array.from(namesSet);
+        this.countries = Array.from(countriesSet);
+        this.regions = Array.from(regionsSet);
+        this.cities = Array.from(citiesSet);
+      });
+    },
+    setCompanyName: function(val) {
+      this.companyName = val;
+    },
+    setCompanyCountry: function(val) {
+      this.companyCountry = val;
+    },
+    setCompanyRegion: function(val) {
+      this.companyRegion = val;
+    },
+    setCompanyCity: function(val) {
+      this.companyCity = val;
+    },
+    filterCompanyNames: function(val, update, abort) {
       update(() => {
         const needle = val.toLowerCase();
-        this.options = stringOptions.filter(
+        this.companyNames = this.companyNames.filter(
+          v => v.toLowerCase().indexOf(needle) > -1
+        );
+      });
+    },
+    filterCompanyCountries: function(val, update, abort) {
+      update(() => {
+        const needle = val.toLowerCase();
+        this.countries = this.countries.filter(
+          v => v.toLowerCase().indexOf(needle) > -1
+        );
+      });
+    },
+    filterCompanyRegions: function(val, update, abort) {
+      update(() => {
+        const needle = val.toLowerCase();
+        this.regions = this.regions.filter(
+          v => v.toLowerCase().indexOf(needle) > -1
+        );
+      });
+    },
+    filterCompanyCities: function(val, update, abort) {
+      update(() => {
+        const needle = val.toLowerCase();
+        this.cities = this.cities.filter(
           v => v.toLowerCase().indexOf(needle) > -1
         );
       });
