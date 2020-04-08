@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import ca.mcgill.cooperator.dao.AdminRepository;
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
@@ -28,10 +29,12 @@ public class CooperatorServiceAdminTests extends BaseServiceTest {
     @Autowired AdminRepository adminRepository;
     @Autowired NotificationRepository notificationRepository;
     @Autowired StudentRepository studentRepository;
+    @Autowired AuthorRepository authorRepository;
 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
+    	authorRepository.deleteAll();
         adminRepository.deleteAll();
         notificationRepository.deleteAll();
         studentRepository.deleteAll();
