@@ -114,17 +114,17 @@ public class ReportController extends BaseController {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Integer coopId,
             @RequestParam(required = false) Integer authorId,
-            @RequestBody Set<ReportSectionDto> rsDtos) {
+            @RequestBody(required = false) Set<ReportSectionDto> reportSections) {
         Report reportToUpdate = reportService.getReport(id);
 
         Coop coop = coopService.getCoopById(coopId);
         Author a = authorService.getAuthorById(authorId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
         Set<ReportSection> sections = null;
-        if (rsDtos != null) {
+        if (reportSections != null) {
             sections =
                     ControllerUtils.convertReportSectionsToDomainObjects(
-                            reportSectionService, rsDtos);
+                            reportSectionService, reportSections);
         }
 
         Report updatedReport =
