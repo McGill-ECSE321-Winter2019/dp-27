@@ -86,7 +86,7 @@
           icon="playlist_add_check"
         />
         <SidebarLink
-          title="Report Configuration"
+          title="Report Configurations"
           caption="Configure reports to be submitted for co-op terms"
           link="/admin/report-config"
           icon="assignment"

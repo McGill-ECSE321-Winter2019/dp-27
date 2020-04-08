@@ -1,29 +1,23 @@
 <template>
-  <q-page class="flex justify-center">
-    <div id="container" class="row">
-      <div class="col">
-        <HomeCurrentCoopSection />
-        <HomeUpcomingCoopsSection />
-      </div>
-    </div>
-  </q-page>
+  <BasePage>
+    <HomeCurrentCoopSection />
+    <HomeUpcomingCoopsSection />
+  </BasePage>
 </template>
 
 <script>
+import BasePage from "../BasePage.vue";
 import HomeCurrentCoopSection from "components/student/HomeCurrentCoopSection.vue";
 import HomeUpcomingCoopsSection from "components/student/HomeUpcomingCoopsSection.vue";
 
 export default {
   name: "StudentHomePage",
   components: {
+    BasePage,
     HomeCurrentCoopSection,
     HomeUpcomingCoopsSection
   }
 };
 </script>
 
-<style scoped lang="scss">
-#container {
-  width: 75%;
-}
-</style>
+<style scoped lang="scss"></style>

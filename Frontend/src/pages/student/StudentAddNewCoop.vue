@@ -1,111 +1,108 @@
 <template>
-  <q-page class="flex justify-center">
-    <div id="container" class="row">
-      <div class="col">
-        <h4>Submit a New Co-op</h4>
+  <BasePage title="Submit a New Co-op">
+    <q-card flat bordered class="q-mb-md">
+      <q-form @submit="onSubmit" @reset="onReset">
+        <q-card-section>
+          <div class="text-h6 q-mb-sm">Course Information</div>
+          <div class="text-caption q-mb-md">
+            This is the school term during which your co-op will take place.
+          </div>
 
-        <q-card flat bordered class="q-mb-md">
-          <q-form @submit="onSubmit" @reset="onReset">
-            <q-card-section>
-              <div class="text-h6 q-mb-sm">Course Information</div>
-              <div class="text-caption q-mb-md">
-                This is the school term during which your co-op will take place.
-              </div>
+          <!-- Show spinner while loading -->
+          <div v-if="loading" class="center-item">
+            <q-spinner color="primary" size="3em" />
+          </div>
+          <!-- Show actual inputs -->
+          <div v-else class="section">
+            <q-select
+              outlined
+              v-model="courseTerm"
+              :options="courseTermOptions"
+              label="Course term"
+              :rules="[
+                val => (val && val.length > 0) || 'Please select a course term'
+              ]"
+            />
+            <q-input
+              outlined
+              v-model.number="courseYear"
+              type="number"
+              label="Course year"
+              :rules="[
+                val =>
+                  (val && val > 2010 && val < 2100) ||
+                  'Please enter a valid course year'
+              ]"
+            />
+            <q-select
+              outlined
+              v-model="courseName"
+              :options="courseNameOptions"
+              label="Course name"
+              :rules="[
+                val => (val && val.length > 0) || 'Please select a course name'
+              ]"
+            />
+          </div>
+        </q-card-section>
 
-              <!-- Show spinner while loading -->
-              <div v-if="loading" class="center-item">
-                <q-spinner color="primary" size="3em" />
-              </div>
-              <!-- Show actual inputs -->
-              <div v-else class="section">
-                <q-select
-                  outlined
-                  v-model="courseTerm"
-                  :options="courseTermOptions"
-                  label="Course term"
-                  :rules="[
-                    val =>
-                      (val && val.length > 0) || 'Please select a course term'
-                  ]"
-                />
-                <q-input
-                  outlined
-                  v-model.number="courseYear"
-                  type="number"
-                  label="Course year"
-                  :rules="[
-                    val =>
-                      (val && val > 2010 && val < 2100) ||
-                      'Please enter a valid course year'
-                  ]"
-                />
-                <q-select
-                  outlined
-                  v-model="courseName"
-                  :options="courseNameOptions"
-                  label="Course name"
-                  :rules="[
-                    val =>
-                      (val && val.length > 0) || 'Please select a course name'
-                  ]"
-                />
-              </div>
-            </q-card-section>
+        <q-separator inset />
 
-            <q-separator inset />
+        <q-card-section>
+          <div class="text-h6 q-mb-sm">Offer Letter</div>
+          <div class="text-caption q-mb-md">
+            Please attach your signed offer letter indicating you have accepted
+            a co-op position. The offer letter will be reviewed by a co-op
+            administrator, who will then approve or reject your application.
+          </div>
 
-            <q-card-section>
-              <div class="text-h6 q-mb-sm">Offer Letter</div>
-              <div class="text-caption q-mb-md">
-                Please attach your signed offer letter indicating you have
-                accepted a co-op position. The offer letter will be reviewed by
-                a co-op administrator, who will then approve or reject your
-                application.
-              </div>
+          <div class="section">
+            <q-file
+              outlined
+              v-model="offerLetterFile"
+              label="Attach offer letter"
+              class="q-mb-md"
+              lazy-rules
+              accept=".pdf"
+              :rules="[val => val != null || 'Please upload a file']"
+            >
+              <template v-slot:prepend>
+                <q-icon name="attach_file" />
+              </template>
+            </q-file>
+          </div>
 
-              <div class="section">
-                <q-file
-                  outlined
-                  v-model="offerLetterFile"
-                  label="Attach offer letter"
-                  class="q-mb-md"
-                  lazy-rules
-                  :rules="[val => val != null || 'Please upload a file']"
-                >
-                  <template v-slot:prepend>
-                    <q-icon name="attach_file" />
-                  </template>
-                </q-file>
-              </div>
-
-              <!-- Disable buttons while submitting -->
-              <q-btn
-                label="Submit"
-                type="submit"
-                color="primary"
-                :disabled="submitting"
-              />
-              <q-btn
-                label="Reset"
-                type="reset"
-                color="primary"
-                flat
-                class="q-ml-sm"
-                :disabled="submitting"
-              />
-              <!-- Show spinner while submitting -->
-              <q-spinner v-if="submitting" color="primary" size="3em" />
-            </q-card-section>
-          </q-form>
-        </q-card>
-      </div>
-    </div>
-  </q-page>
+          <!-- Disable buttons while submitting -->
+          <q-btn
+            label="Submit"
+            type="submit"
+            color="primary"
+            :disabled="submitting"
+          />
+          <q-btn
+            label="Reset"
+            type="reset"
+            color="primary"
+            flat
+            class="q-ml-sm"
+            :disabled="submitting"
+          />
+          <!-- Show spinner while submitting -->
+          <q-spinner v-if="submitting" color="primary" size="3em" />
+        </q-card-section>
+      </q-form>
+    </q-card>
+  </BasePage>
 </template>
 
 <script>
+import BasePage from "../BasePage.vue";
+
 export default {
   name: "StudentAddNewCoop",
+  components: {
+    BasePage
+  },
   data() {
     return {
       offerLetterFile: null,

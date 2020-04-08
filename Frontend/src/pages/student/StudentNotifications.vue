@@ -1,23 +1,19 @@
 <template>
-  <q-page class="flex justify-center">
-    <div id="container">
-      <NotifsList />
-    </div>
-  </q-page>
+  <BasePage title="Notifications">
+    <NotificationsList />
+  </BasePage>
 </template>
 
 <script>
-import NotifsList from "components/student/NotificationsList.vue";
+import BasePage from "../BasePage.vue";
+import NotificationsList from "components/student/NotificationsList.vue";
 
 export default {
   components: {
-    NotifsList
+    BasePage,
+    NotificationsList
   }
 };
 </script>
 
-<style lang="scss" scoped>
-#container {
-  width: 85%;
-}
-</style>
+<style lang="scss" scoped></style>

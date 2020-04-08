@@ -1,24 +1,20 @@
 <template>
-  <q-page class="flex justify-center">
-    <div id="container">
-      <CoopsList />
-    </div>
-  </q-page>
+  <BasePage title="My Co-ops">
+    <CoopsList />
+  </BasePage>
 </template>
 
 <script>
-import CoopsList from 'components/student/CoopsList.vue'
+import BasePage from "../BasePage.vue";
+import CoopsList from "components/student/CoopsList.vue";
 
 export default {
-  name: 'StudentCoops',
+  name: "StudentCoops",
   components: {
+    BasePage,
     CoopsList
   }
-}
+};
 </script>
 
-<style lang="scss" scoped>
-#container {
-  width: 85%;
-}
-</style>
+<style lang="scss" scoped></style>
