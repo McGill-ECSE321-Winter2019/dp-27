@@ -23,13 +23,13 @@ public class StudentService extends BaseService {
     @Autowired NotificationRepository notificationRepository;
 
     /**
-     * create new student in database
+     * Creates a new Student
      *
      * @param firstName
      * @param lastName
      * @param email
      * @param studentId
-     * @return newly created student
+     * @return the created Student
      */
     @Transactional
     public Student createStudent(
@@ -65,6 +65,13 @@ public class StudentService extends BaseService {
         return studentRepository.save(s);
     }
 
+    /**
+     * Gets all Students with the specified name
+     *
+     * @param firstName
+     * @param lastName
+     * @return all Students with specified name
+     */
     @Transactional
     public List<Student> getStudentByFirstAndLast(String firstName, String lastName) {
         StringBuilder error = new StringBuilder();
@@ -85,6 +92,12 @@ public class StudentService extends BaseService {
         return s;
     }
 
+    /**
+     * Gets all Students with the specified first name
+     *
+     * @param firstName
+     * @return all Students with the specified first name
+     */
     @Transactional
     public List<Student> getStudentByFirstName(String firstName) {
         if (firstName == null || firstName.trim().length() == 0) {
@@ -99,6 +112,12 @@ public class StudentService extends BaseService {
         return s;
     }
 
+    /**
+     * Gets all Students with the specified last name
+     *
+     * @param lastName
+     * @return all Students with the specified last name
+     */
     @Transactional
     public List<Student> getStudentByLastName(String lastName) {
         if (lastName == null || lastName.trim().length() == 0) {
@@ -113,6 +132,12 @@ public class StudentService extends BaseService {
         return s;
     }
 
+    /**
+     * Gets a Student by student ID
+     *
+     * @param id
+     * @return Student with specified student ID
+     */
     @Transactional
     public Student getStudentByStudentId(String id) {
         if (id == null || id.trim().length() != 9) {
@@ -126,6 +151,12 @@ public class StudentService extends BaseService {
         return s;
     }
 
+    /**
+     * Gets a Student by ID
+     *
+     * @param id
+     * @return Student with specified ID
+     */
     @Transactional
     public Student getStudentById(Integer id) {
         if (id == null || id < 0) {
@@ -139,13 +170,19 @@ public class StudentService extends BaseService {
         return s;
     }
 
+    /**
+     * Gets the most recent Coop for the specified Student
+     *
+     * @param student
+     * @return most recent Coop for the specified Student, if any
+     */
     @Transactional
-    public Coop getMostRecentCoop(Student s) {
-        if (s == null) {
+    public Coop getMostRecentCoop(Student student) {
+        if (student == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Student does not exist.");
         }
         Coop mostRecent = null;
-        for (Coop c : s.getCoops()) {
+        for (Coop c : student.getCoops()) {
             if (mostRecent == null) {
                 mostRecent = c;
             } else {
@@ -171,6 +208,13 @@ public class StudentService extends BaseService {
         return mostRecent;
     }
 
+    /**
+     * Gets all Students that have done the specified number of Coops
+     *
+     * @param numCoops
+     * @param status
+     * @return all Students that have done the specified number of Coops
+     */
     @Transactional
     public Set<Student> getStudentsByCourse(int numCoops, CoopStatus status) {
         if (numCoops < 0) {
@@ -192,11 +236,32 @@ public class StudentService extends BaseService {
         return studentsToReturn;
     }
 
+    /**
+     * Gets all Students
+     *
+     * @return all Students
+     */
+    @Transactional
+    public List<Student> getAllStudents() {
+        return ServiceUtils.toList(studentRepository.findAll());
+    }
+
+    /**
+     * Gets all Students as a Set
+     *
+     * @return Set of all Students
+     */
     @Transactional
     public Set<Student> getAllStudentsSet() {
         return ServiceUtils.toSet(studentRepository.findAll());
     }
 
+    /**
+     * Gets a Student by email
+     *
+     * @param email
+     * @return Student with specified email
+     */
     @Transactional
     public Student getStudentByEmail(String email) {
         Student s = studentRepository.findByEmail(email);
@@ -208,14 +273,21 @@ public class StudentService extends BaseService {
         return s;
     }
 
-    @Transactional
-    public List<Student> getAllStudents() {
-        return ServiceUtils.toList(studentRepository.findAll());
-    }
-
+    /**
+     * Updates an existing Student
+     *
+     * @param student
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param studentId
+     * @param coops
+     * @param notifs
+     * @return the updated Student
+     */
     @Transactional
     public Student updateStudent(
-            Student s,
+            Student student,
             String firstName,
             String lastName,
             String email,
@@ -225,7 +297,7 @@ public class StudentService extends BaseService {
             Set<Report> reports) {
 
         StringBuilder error = new StringBuilder();
-        if (s == null) {
+        if (student == null) {
             error.append("Student to update cannot be null. ");
         }
         if (firstName != null && firstName.trim().length() == 0) {
@@ -247,40 +319,52 @@ public class StudentService extends BaseService {
         }
 
         if (firstName != null) {
-            s.setFirstName(firstName.trim());
+            student.setFirstName(firstName.trim());
         }
         if (lastName != null) {
-            s.setLastName(lastName.trim());
+            student.setLastName(lastName.trim());
         }
         if (email != null) {
-            s.setEmail(email.trim());
+            student.setEmail(email.trim());
         }
         if (studentId != null) {
-            s.setStudentId(studentId);
+            student.setStudentId(studentId);
         }
         if (notifs != null) {
-            s.setNotifications(notifs);
+            student.setNotifications(notifs);
         }
         if (coops != null) {
-            s.setCoops(coops);
+            student.setCoops(coops);
         }
         if (reports!= null) {
-        	s.setReports(reports);
+        	student.setReports(reports);
         }
 
-        return studentRepository.save(s);
+        return studentRepository.save(student);
     }
 
+    /**
+     * Deletes an existing Student
+     *
+     * @param student
+     * @return the deleted Student
+     */
     @Transactional
-    public Student deleteStudent(Student s) {
-        if (s == null) {
+    public Student deleteStudent(Student student) {
+        if (student == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Student to delete cannot be null.");
         }
 
-        studentRepository.delete(s);
-        return s;
+        studentRepository.delete(student);
+        return student;
     }
 
+    /**
+     * Deletes an existing Student by student ID
+     *
+     * @param id
+     * @return the deleted Student
+     */
     @Transactional
     public Student deleteStudentByStudentID(String id) {
         if (id == null || id.trim().length() != 9) {

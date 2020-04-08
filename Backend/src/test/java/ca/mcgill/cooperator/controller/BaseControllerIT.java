@@ -20,6 +20,7 @@ import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.Season;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.sql.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -175,6 +176,8 @@ public abstract class BaseControllerIT {
         CoopDetailsDto coopDetailsDto = new CoopDetailsDto();
         coopDetailsDto.setPayPerHour(20);
         coopDetailsDto.setHoursPerWeek(40);
+        coopDetailsDto.setStartDate(Date.valueOf("2020-01-01"));
+        coopDetailsDto.setEndDate(Date.valueOf("2020-04-01"));
         coopDetailsDto.setCoop(coopDto);
         coopDetailsDto.setEmployerContact(employerContactDto);
         coopDetailsDto.setStartDate(Date.valueOf("2020-05-11"));
@@ -205,6 +208,8 @@ public abstract class BaseControllerIT {
         CoopDetailsDto coopDetailsDto = new CoopDetailsDto();
         coopDetailsDto.setPayPerHour(payPerHour);
         coopDetailsDto.setHoursPerWeek(hoursPerWeek);
+        coopDetailsDto.setStartDate(Date.valueOf("2020-01-01"));
+        coopDetailsDto.setEndDate(Date.valueOf("2020-04-01"));
         coopDetailsDto.setCoop(coopDto);
         coopDetailsDto.setEmployerContact(employerContactDto);
         coopDetailsDto.setStartDate(Date.valueOf("2020-05-11"));

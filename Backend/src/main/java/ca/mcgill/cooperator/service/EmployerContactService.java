@@ -72,10 +72,10 @@ public class EmployerContactService extends BaseService {
     }
 
     /**
-     * Returns the EmployerContact with specified ID
+     * Gets the EmployerContact with specified ID
      *
      * @param id
-     * @return EmployerContact, if it exists
+     * @return EmployerContact, if they exist
      */
     @Transactional
     public EmployerContact getEmployerContact(int id) {
@@ -89,10 +89,10 @@ public class EmployerContactService extends BaseService {
     }
 
     /**
-     * Returns the EmployerContact with specified email
+     * Gets the EmployerContact with specified email
      *
      * @param email
-     * @return EmployerContact, if it exists
+     * @return EmployerContact, if they exist
      */
     @Transactional
     public EmployerContact getEmployerContact(String email) {
@@ -109,7 +109,7 @@ public class EmployerContactService extends BaseService {
     }
 
     /**
-     * Returns all EmployerContacts that exist
+     * Gets all EmployerContacts that exist
      *
      * @return all EmployerContacts
      */
@@ -121,7 +121,7 @@ public class EmployerContactService extends BaseService {
     /**
      * Updates the specified EmployerContact
      *
-     * @param ec
+     * @param employerContact
      * @param firstName
      * @param lastName
      * @param email
@@ -133,7 +133,7 @@ public class EmployerContactService extends BaseService {
      */
     @Transactional
     public EmployerContact updateEmployerContact(
-            EmployerContact ec,
+            EmployerContact employerContact,
             String firstName,
             String lastName,
             String email,
@@ -143,7 +143,7 @@ public class EmployerContactService extends BaseService {
             Set<CoopDetails> coopDetails) {
 
         StringBuilder error = new StringBuilder();
-        if (ec == null) {
+        if (employerContact == null) {
             error.append("Employer Contact to update cannot be null! ");
         }
         if (firstName != null && firstName.trim().length() == 0) {
@@ -167,53 +167,53 @@ public class EmployerContactService extends BaseService {
         }
 
         if (firstName != null) {
-            ec.setFirstName(firstName.trim());
+            employerContact.setFirstName(firstName.trim());
         }
         if (lastName != null) {
-            ec.setLastName(lastName.trim());
+            employerContact.setLastName(lastName.trim());
         }
         if (email != null) {
-            ec.setEmail(email.trim());
+            employerContact.setEmail(email.trim());
         }
         if (phoneNumber != null) {
-            ec.setPhoneNumber(phoneNumber.trim());
+            employerContact.setPhoneNumber(phoneNumber.trim());
         }
         if (reports != null) {
-            ec.setReports(reports);
+        	employerContact.setReports(reports);
         }
         if (coopDetails != null) {
-            ec.setCoopDetails(coopDetails);
+            employerContact.setCoopDetails(coopDetails);
         }
         if (company != null) {
-            ec.setCompany(company);
+            employerContact.setCompany(company);
         }
 
-        return employerContactRepository.save(ec);
+        return employerContactRepository.save(employerContact);
     }
 
     /**
      * Deletes the specified EmployerContact
      *
-     * @param ec
+     * @param employerContact
      * @return the deleted EmployerContact
      */
     @Transactional
-    public EmployerContact deleteEmployerContact(EmployerContact ec) {
-        if (ec == null) {
+    public EmployerContact deleteEmployerContact(EmployerContact employerContact) {
+        if (employerContact == null) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX + "Employer Contact to delete cannot be null!");
         }
 
-        Company c = ec.getCompany();
+        Company c = employerContact.getCompany();
 
         List<EmployerContact> employers = c.getEmployees();
-        employers.remove(ec);
+        employers.remove(employerContact);
         c.setEmployees(employers);
 
         companyRepository.save(c);
 
-        employerContactRepository.delete(ec);
+        employerContactRepository.delete(employerContact);
 
-        return ec;
+        return employerContact;
     }
 }

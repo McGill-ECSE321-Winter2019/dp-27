@@ -132,8 +132,8 @@ public class StudentSubmitOfferLetterIT {
         coopDetails.setHoursPerWeek(40);
         // pay per hour is in cents, this is $30 per hour
         coopDetails.setPayPerHour(3000);
-        coopDetails.setStartDate(Date.valueOf("2020-05-11"));
-        coopDetails.setEndDate(Date.valueOf("2020-08-31"));
+        coopDetails.setStartDate(Date.valueOf("2020-01-01"));
+        coopDetails.setEndDate(Date.valueOf("2020-04-01"));
 
         // create the coop details with a POST request
         mvc.perform(

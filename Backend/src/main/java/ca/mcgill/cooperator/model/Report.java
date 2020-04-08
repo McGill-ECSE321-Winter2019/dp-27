@@ -19,7 +19,6 @@ public class Report {
     private String title;
     private String type;
     private ReportStatus status;
-    
     private byte[] data;
 
     @ManyToOne private Coop coop;

@@ -50,7 +50,7 @@ export default function(/* { store, ssrContext } */) {
       } else if (Store.getters.isLoggedIn && !Store.state.userExists) {
         console.log("User ID specified, but no current user in Store");
         // get user with stored ID
-        AXIOS.get("/students/" + Store.state.userId)
+        AXIOS.get("/students/id/" + Store.state.userId)
           .then(resp => {
             Store.commit("set_user", resp.data);
             next();

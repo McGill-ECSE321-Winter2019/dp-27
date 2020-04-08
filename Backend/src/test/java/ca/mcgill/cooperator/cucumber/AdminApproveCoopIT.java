@@ -276,7 +276,7 @@ public class AdminApproveCoopIT extends BaseControllerIT {
                 objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CoopDto.class);
 
         // update coop status
-        coopDto.setStatus(CoopStatus.INCOMPLETE);
+        coopDto.setStatus(CoopStatus.REJECTED);
         companyDto = createTestCompany();
         employerContactDto = createTestEmployerContact(companyDto);
         coopDetailsDto = createTestCoopDetails(coopDto, employerContactDto);
@@ -333,7 +333,7 @@ public class AdminApproveCoopIT extends BaseControllerIT {
                         mvcResult.getResponse().getContentAsString(), ReportDto.class);
 
         assertEquals(ReportStatus.COMPLETED, reportDto.getStatus());
-        assertEquals(CoopStatus.INCOMPLETE, reportDto.getCoop().getStatus());
+        assertEquals(CoopStatus.REJECTED, reportDto.getCoop().getStatus());
         assertEquals("susan@gmail.com", reportDto.getCoop().getStudent().getEmail());
     }
 }

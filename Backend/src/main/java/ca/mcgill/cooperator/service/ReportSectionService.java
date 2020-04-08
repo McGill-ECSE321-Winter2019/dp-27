@@ -1,5 +1,7 @@
 package ca.mcgill.cooperator.service;
 
+import ca.mcgill.cooperator.dao.ReportSectionConfigRepository;
+import ca.mcgill.cooperator.model.ReportSectionConfig;
 import java.util.List;
 import java.util.Set;
 
@@ -8,11 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ca.mcgill.cooperator.dao.ReportRepository;
-import ca.mcgill.cooperator.dao.ReportSectionConfigRepository;
 import ca.mcgill.cooperator.dao.ReportSectionRepository;
 import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.ReportSection;
-import ca.mcgill.cooperator.model.ReportSectionConfig;
 
 @Service
 public class ReportSectionService extends BaseService {
@@ -56,10 +56,10 @@ public class ReportSectionService extends BaseService {
     }
     
     /**
-     * Retrieves specified existing report section from database
+     * Gets a EmployerReportSection by ID
      *
      * @param id
-     * @return specifed report section
+     * @return EmployerReportSection with specified ID
      */
     @Transactional
     public ReportSection getReportSection(int id) {
@@ -75,7 +75,7 @@ public class ReportSectionService extends BaseService {
     /**
      * Returns all report sections from the database
      *
-     * @return list of report sections
+     * @return all EmployerReportSection
      */
     @Transactional
     public List<ReportSection> getAllReportSections() {
@@ -83,11 +83,12 @@ public class ReportSectionService extends BaseService {
     }
     
     /**
-     * Updates existing report section in database
+     * Updates an existing EmployerReportSection
      *
-     * @param rs
+     * @param employerReportSection
      * @param response
      * @param reportSectionConfig
+<<<<<<< HEAD:Backend/src/main/java/ca/mcgill/cooperator/service/ReportSectionService.java
      * @param report
      * @return updated report section
      */
@@ -109,10 +110,10 @@ public class ReportSectionService extends BaseService {
         }
 
         if (response != null) {
-            rs.setResponse(response.trim());
+        	rs.setResponse(response.trim());
         }
         if (reportSectionConfig != null) {
-            rs.setReportSectionConfig(reportSectionConfig);
+        	rs.setReportSectionConfig(reportSectionConfig);
         }
         if (report != null) {
             rs.setReport(report);
@@ -122,10 +123,10 @@ public class ReportSectionService extends BaseService {
     }
     
     /**
-     * Delete specified report section from database
+     * Deletes an existing EmployerReportSection
      *
-     * @param rs
-     * @return deleted report section
+     * @param employerReportSection
+     * @return the deleted EmployerReportSection
      */
     @Transactional
     public ReportSection deleteReportSection(ReportSection rs) {

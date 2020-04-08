@@ -28,44 +28,13 @@ public class CompanyController extends BaseController {
     @Autowired private EmployerContactService employerContactService;
 
     /**
-     * Gets a Company by ID
-     *
-     * @param id
-     * @return Company with specified ID
-     */
-    @GetMapping("/{id}")
-    public CompanyDto getCompanyById(@PathVariable int id) {
-        Company c = companyService.getCompany(id);
-        return ControllerUtils.convertToDto(c);
-    }
-
-    /**
-     * Gets all Companies or all Companies with specified name
-     *
-     * @param name
-     * @return Companies that match filter
-     */
-    @GetMapping("")
-    public List<CompanyDto> getAllCompanies(@RequestParam(required = false) String name) {
-        if (name == null) {
-            // return all companies
-            List<Company> companies = companyService.getAllCompanies();
-            return ControllerUtils.convertCompanyListToDto(companies);
-        } else {
-            // filter by name
-            List<Company> companies = companyService.getCompanies(name);
-            return ControllerUtils.convertCompanyListToDto(companies);
-        }
-    }
-
-    /**
      * Creates a new Company
      *
      * @param name
      * @param city
      * @param region
      * @param county
-     * @return created Company
+     * @return the created Company
      */
     @PostMapping("")
     public CompanyDto createCompany(@RequestBody CompanyDto companyDto) {
@@ -89,6 +58,37 @@ public class CompanyController extends BaseController {
     }
 
     /**
+     * Gets a Company by ID
+     *
+     * @param id
+     * @return CompanyDto object
+     */
+    @GetMapping("/{id}")
+    public CompanyDto getCompanyById(@PathVariable int id) {
+        Company c = companyService.getCompany(id);
+        return ControllerUtils.convertToDto(c);
+    }
+
+    /**
+     * Gets all Companies or all Companies with specified name
+     *
+     * @param name
+     * @return List of CompanyDtos that match filter
+     */
+    @GetMapping("")
+    public List<CompanyDto> getAllCompanies(@RequestParam(required = false) String name) {
+        if (name == null) {
+            // return all companies
+            List<Company> companies = companyService.getAllCompanies();
+            return ControllerUtils.convertCompanyListToDto(companies);
+        } else {
+            // filter by name
+            List<Company> companies = companyService.getCompanies(name);
+            return ControllerUtils.convertCompanyListToDto(companies);
+        }
+    }
+
+    /**
      * Updates an existing Company
      *
      * @param name
@@ -96,7 +96,7 @@ public class CompanyController extends BaseController {
      * @param region
      * @param county
      * @param employees
-     * @return updated Company
+     * @return the updated Company
      */
     @PutMapping("/{id}")
     public CompanyDto updateCompany(@PathVariable int id, @RequestBody CompanyDto companyDto) {
@@ -126,11 +126,11 @@ public class CompanyController extends BaseController {
      * Deletes a Company by ID
      *
      * @param id
-     * @return deleted Company
+     * @return the deleted Company
      */
     @DeleteMapping("/{id}")
-    public void deleteCompany(@PathVariable int id) {
+    public CompanyDto deleteCompany(@PathVariable int id) {
         Company c = companyService.getCompany(id);
-        companyService.deleteCompany(c);
+        return ControllerUtils.convertToDto(companyService.deleteCompany(c));
     }
 }

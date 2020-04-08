@@ -32,7 +32,25 @@ public class AdminController extends BaseController {
     @Autowired private ReportService reportService;
 
     /**
-     * Get all Admins
+     * Creates a new Admin
+     *
+     * <p>In request body:
+     *
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @return the created Admin
+     */
+    @PostMapping("")
+    public AdminDto createAdmin(@RequestBody AdminDto a) {
+        Admin createdAdmin =
+                adminService.createAdmin(a.getFirstName(), a.getLastName(), a.getEmail());
+
+        return ControllerUtils.convertToDto(createdAdmin);
+    }
+
+    /**
+     * Gets all Admins
      *
      * @return List of AdminDto objects
      */
@@ -44,7 +62,7 @@ public class AdminController extends BaseController {
     }
 
     /**
-     * Get an Admin by ID
+     * Gets an Admin by ID
      *
      * @param id
      * @return AdminDto object
@@ -57,25 +75,7 @@ public class AdminController extends BaseController {
     }
 
     /**
-     * Create a new Admin
-     *
-     * <p>In request body:
-     *
-     * @param firstName
-     * @param lastName
-     * @param email
-     * @return created Admin
-     */
-    @PostMapping("")
-    public AdminDto createAdmin(@RequestBody AdminDto a) {
-        Admin createdAdmin =
-                adminService.createAdmin(a.getFirstName(), a.getLastName(), a.getEmail());
-
-        return ControllerUtils.convertToDto(createdAdmin);
-    }
-
-    /**
-     * Update an existing Admin
+     * Updates an existing Admin
      *
      * <p>In request body:
      *
@@ -84,7 +84,7 @@ public class AdminController extends BaseController {
      * @param lastName
      * @param email
      * @param sentNotifications
-     * @return updated Admin
+     * @return the updated Admin
      */
     @PutMapping("/{id}")
     public AdminDto updateAdmin(@PathVariable int id, @RequestBody AdminDto a) {
@@ -112,10 +112,10 @@ public class AdminController extends BaseController {
     }
 
     /**
-     * Delete an existing Admin
+     * Deletes an existing Admin
      *
      * @param id
-     * @return deleted Admin
+     * @return the deleted Admin
      */
     @DeleteMapping("/{id}")
     public AdminDto deleteAdmin(@PathVariable int id) {

@@ -69,6 +69,8 @@
                   v-model="offerLetterFile"
                   label="Attach offer letter"
                   class="q-mb-md"
+                  lazy-rules
+                  :rules="[val => val != null || 'Please upload a file']"
                 >
                   <template v-slot:prepend>
                     <q-icon name="attach_file" />
@@ -76,14 +78,22 @@
                 </q-file>
               </div>
 
-              <q-btn label="Submit" type="submit" color="primary" />
+              <!-- Disable buttons while submitting -->
+              <q-btn
+                label="Submit"
+                type="submit"
+                color="primary"
+                :disabled="submitting"
+              />
               <q-btn
                 label="Reset"
                 type="reset"
                 color="primary"
                 flat
                 class="q-ml-sm"
+                :disabled="submitting"
               />
+              <!-- Show spinner while submitting -->
               <q-spinner v-if="submitting" color="primary" size="3em" />
             </q-card-section>
           </q-form>
@@ -112,8 +122,8 @@ export default {
     this.$axios.get("/courses/names").then(resp => {
       resp.data.forEach(name => {
         this.courseNameOptions.push(name);
-        this.loading = false;
       });
+      this.loading = false;
     });
   },
   methods: {
