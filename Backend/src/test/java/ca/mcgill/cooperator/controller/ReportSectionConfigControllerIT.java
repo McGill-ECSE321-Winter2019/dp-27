@@ -243,6 +243,6 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
                         delete("/report-section-configs/" + (rscDto.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 }

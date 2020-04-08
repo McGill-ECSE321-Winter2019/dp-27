@@ -173,7 +173,7 @@ public class AdminControllerIT extends BaseControllerIT {
         mvc.perform(
                         get("/admins/" + (returnedAdmin.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         returnedAdmin.setFirstName("");
         returnedAdmin.setLastName("");
@@ -185,13 +185,13 @@ public class AdminControllerIT extends BaseControllerIT {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(returnedAdmin))
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         // 4. invalid delete
         mvc.perform(
                         delete("/admins/" + (returnedAdmin.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 }
