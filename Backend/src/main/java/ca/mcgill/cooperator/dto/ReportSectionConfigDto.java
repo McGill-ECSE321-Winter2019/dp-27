@@ -10,8 +10,7 @@ public class ReportSectionConfigDto {
     private Integer questionNumber;
 
     private ReportConfigDto reportConfig;
-    private List<EmployerReportSectionDto> employerReportSections;
-    private List<StudentReportSectionDto> studentReportSections;
+    private List<ReportSectionDto> reportSections;
 
     public ReportSectionConfigDto() {}
 
@@ -21,15 +20,13 @@ public class ReportSectionConfigDto {
             ReportResponseType responseType,
             Integer questionNumber,
             ReportConfigDto reportConfig,
-            List<EmployerReportSectionDto> employerReportSections,
-            List<StudentReportSectionDto> studentReportSections) {
+            List<ReportSectionDto> reportSections) {
         this.id = id;
         this.sectionPrompt = sectionPrompt;
         this.responseType = responseType;
         this.questionNumber = questionNumber;
         this.reportConfig = reportConfig;
-        this.employerReportSections = employerReportSections;
-        this.studentReportSections = studentReportSections;
+        this.reportSections = reportSections;
     }
 
     /*--- Getters and Setters ---*/
@@ -70,19 +67,11 @@ public class ReportSectionConfigDto {
         this.reportConfig = reportConfig;
     }
 
-    public List<EmployerReportSectionDto> getEmployerReportSections() {
-        return this.employerReportSections;
+    public List<ReportSectionDto> getReportSections() {
+        return this.reportSections;
     }
 
-    public void setEmployerReportSections(List<EmployerReportSectionDto> employerReportSections) {
-        this.employerReportSections = employerReportSections;
-    }
-
-    public List<StudentReportSectionDto> getStudentReportSections() {
-        return this.studentReportSections;
-    }
-
-    public void setStudentReportSections(List<StudentReportSectionDto> studentReportSections) {
-        this.studentReportSections = studentReportSections;
+    public void setReportSections(List<ReportSectionDto> reportSections) {
+        this.reportSections = reportSections;
     }
 }

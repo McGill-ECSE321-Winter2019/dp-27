@@ -8,7 +8,8 @@ import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
-import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -157,7 +158,7 @@ public class CooperatorServiceAdminTests extends BaseServiceTest {
         lastName = "Eagles";
         email = "jeagles@gmail.com";
         try {
-            adminService.updateAdmin(a, firstName, lastName, email, a.getSentNotifications());
+            adminService.updateAdmin(a, firstName, lastName, email, a.getSentNotifications(), null);
             a = adminService.getAdmin(email);
         } catch (IllegalArgumentException e) {
             fail();
@@ -180,10 +181,10 @@ public class CooperatorServiceAdminTests extends BaseServiceTest {
             a = adminService.getAdmin(email);
 
             n = createTestNotification(studentService, notificationService, a);
-            List<Notification> notifications = a.getSentNotifications();
+            Set<Notification> notifications = a.getSentNotifications();
             notifications.add(n);
 
-            adminService.updateAdmin(a, firstName, lastName, email, notifications);
+            adminService.updateAdmin(a, firstName, lastName, email, notifications, null);
             a = adminService.getAdmin(email);
         } catch (IllegalArgumentException e) {
             fail();
@@ -214,7 +215,7 @@ public class CooperatorServiceAdminTests extends BaseServiceTest {
 
         String error = "";
         try {
-            adminService.updateAdmin(a, "", "   ", "", null);
+            adminService.updateAdmin(a, "", "   ", "", null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }

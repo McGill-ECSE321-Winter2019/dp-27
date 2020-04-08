@@ -4,8 +4,12 @@ import ca.mcgill.cooperator.dao.AdminRepository;
 import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
-import java.util.ArrayList;
+import ca.mcgill.cooperator.model.Report;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +50,8 @@ public class AdminService extends BaseService {
         a.setFirstName(firstName.trim());
         a.setLastName(lastName.trim());
         a.setEmail(email.trim());
-        a.setSentNotifications(new ArrayList<Notification>());
+        a.setSentNotifications(new HashSet<Notification>());
+        a.setReports(new HashSet<Report>());
 
         return adminRepository.save(a);
     }
@@ -111,7 +116,8 @@ public class AdminService extends BaseService {
             String firstName,
             String lastName,
             String email,
-            List<Notification> sentNotifications) {
+            Set<Notification> sentNotifications,
+            Set<Report> reports) {
         StringBuilder error = new StringBuilder();
         if (a == null) {
             error.append("Admin to update cannot be null! ");
@@ -141,9 +147,11 @@ public class AdminService extends BaseService {
         if (email != null) {
             a.setEmail(email.trim());
         }
-
         if (sentNotifications != null) {
             a.setSentNotifications(sentNotifications);
+        }
+        if (reports != null) {
+        	a.setReports(reports);
         }
 
         return adminRepository.save(a);

@@ -206,7 +206,7 @@ public class NotificationService extends BaseService {
         studentRepository.save(s);
 
         Admin a = n.getSender();
-        List<Notification> adminNotifs = a.getSentNotifications();
+        Set<Notification> adminNotifs = a.getSentNotifications();
         adminNotifs.remove(n);
         a.setSentNotifications(adminNotifs);
         adminRepository.save(a);

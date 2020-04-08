@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ca.mcgill.cooperator.controller.BaseControllerIT;
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
@@ -18,15 +19,16 @@ import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
+import ca.mcgill.cooperator.dto.ReportDto;
+import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.dto.StudentDto;
-import ca.mcgill.cooperator.dto.StudentReportDto;
-import ca.mcgill.cooperator.dto.StudentReportSectionDto;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
-import ca.mcgill.cooperator.model.StudentReportSection;
 import ca.mcgill.cooperator.service.CoopDetailsService;
-import ca.mcgill.cooperator.service.StudentReportSectionService;
+import ca.mcgill.cooperator.service.ReportSectionService;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -61,16 +63,17 @@ public class AdminApproveCoopIT extends BaseControllerIT {
     @Autowired private CourseRepository courseRepository;
     @Autowired private CourseOfferingRepository courseOfferingRepository;
     @Autowired private CoopDetailsRepository coopDetailsRepository;
+    @Autowired AuthorRepository authorRepository;
 
     @Autowired private CoopDetailsService coopDetailsService;
-    @Autowired private StudentReportSectionService studentReportSectionService;
+    @Autowired private ReportSectionService reportSectionService;
 
     /* Global test variables */
     StudentDto studentDto;
     CourseDto courseDto;
     CourseOfferingDto courseOfferingDto;
     CoopDto coopDto;
-    StudentReportDto studentReportDto;
+    ReportDto reportDto;
     CoopDetailsDto coopDetailsDto;
     EmployerContactDto employerContactDto;
     CompanyDto companyDto;
@@ -85,14 +88,15 @@ public class AdminApproveCoopIT extends BaseControllerIT {
             coopDetailsRepository.save(cd);
         }
 
-        List<StudentReportSection> reportSections =
-                studentReportSectionService.getAllReportSections();
-        for (StudentReportSection reportSection : reportSections) {
-            studentReportSectionService.deleteReportSection(reportSection);
+        List<ReportSection> reportSections =
+                reportSectionService.getAllReportSections();
+        for (ReportSection reportSection : reportSections) {
+            reportSectionService.deleteReportSection(reportSection);
         }
 
         // deleting all students will also delete all coops
         studentRepository.deleteAll();
+        authorRepository.deleteAll();
         // deleting all companies will also delete all employer contacts
         companyRepository.deleteAll();
         courseRepository.deleteAll();
@@ -118,46 +122,47 @@ public class AdminApproveCoopIT extends BaseControllerIT {
         // upload the StudentReport with a POST request
         MvcResult mvcResult =
                 mvc.perform(
-                                multipart("/student-reports")
+                                multipart("/reports")
                                         .file("file", multipartFile.getBytes())
                                         .param("status", "UNDER_REVIEW")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
+                                        .param("author_id", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
-        studentReportDto =
+        reportDto =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), StudentReportDto.class);
-        assertEquals(studentReportDto.getTitle(), "Offer Letter");
+                        mvcResult.getResponse().getContentAsString(), ReportDto.class);
+        assertEquals(reportDto.getTitle(), "Offer Letter");
     }
 
     @Then("the Admin approves the Coop term")
     public void adminApprovesCoopTerm() throws Exception {
         MvcResult mvcResult =
                 mvc.perform(
-                                get("/student-reports")
+                                get("/reports")
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
         // get object from response
-        List<StudentReportDto> studentReportDtos =
+        List<ReportDto> studentReportDtos =
                 Arrays.asList(
                         objectMapper.readValue(
                                 mvcResult.getResponse().getContentAsString(),
-                                StudentReportDto[].class));
+                                ReportDto[].class));
 
         assertEquals(1, studentReportDtos.size());
 
-        studentReportDto = studentReportDtos.get(0);
+        reportDto = studentReportDtos.get(0);
 
-        assertEquals(ReportStatus.UNDER_REVIEW, studentReportDto.getStatus());
-        assertEquals(CoopStatus.UNDER_REVIEW, studentReportDto.getCoop().getStatus());
-        assertEquals("susan@gmail.com", studentReportDto.getCoop().getStudent().getEmail());
+        assertEquals(ReportStatus.UNDER_REVIEW, reportDto.getStatus());
+        assertEquals(CoopStatus.UNDER_REVIEW, reportDto.getCoop().getStatus());
+        assertEquals("susan@gmail.com", reportDto.getCoop().getStudent().getEmail());
 
         mvcResult =
                 mvc.perform(
@@ -187,12 +192,12 @@ public class AdminApproveCoopIT extends BaseControllerIT {
                         .andReturn();
 
         // update student report status
-        studentReportDto.setStatus(ReportStatus.COMPLETED);
+        reportDto.setStatus(ReportStatus.COMPLETED);
 
-        Set<StudentReportSectionDto> rsDtos = new HashSet<StudentReportSectionDto>();
+        Set<ReportSectionDto> rsDtos = new HashSet<ReportSectionDto>();
 
         MockMultipartHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.multipart("/student-reports/" + studentReportDto.getId());
+                MockMvcRequestBuilders.multipart("/reports/" + reportDto.getId());
         builder.with(
                 new RequestPostProcessor() {
                     @Override
@@ -208,6 +213,7 @@ public class AdminApproveCoopIT extends BaseControllerIT {
                                         .param("status", "COMPLETED")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
+                                        .param("author_id",  String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))
@@ -218,45 +224,45 @@ public class AdminApproveCoopIT extends BaseControllerIT {
         // get student report dto
         mvcResult =
                 mvc.perform(
-                                get("/student-reports/" + studentReportDto.getId())
+                                get("/reports/" + reportDto.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
-        studentReportDto =
+        reportDto =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), StudentReportDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportDto.class);
 
-        assertEquals(ReportStatus.COMPLETED, studentReportDto.getStatus());
-        assertEquals(CoopStatus.FUTURE, studentReportDto.getCoop().getStatus());
-        assertEquals("susan@gmail.com", studentReportDto.getCoop().getStudent().getEmail());
+        assertEquals(ReportStatus.COMPLETED, reportDto.getStatus());
+        assertEquals(CoopStatus.FUTURE, reportDto.getCoop().getStatus());
+        assertEquals("susan@gmail.com", reportDto.getCoop().getStudent().getEmail());
     }
 
     @Then("the Admin rejects the Coop term")
     public void adminRejectsCoopTerm() throws Exception {
         MvcResult mvcResult =
                 mvc.perform(
-                                get("/student-reports")
+                                get("/reports")
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
         // get object from response
-        List<StudentReportDto> studentReportDtos =
+        List<ReportDto> studentReportDtos =
                 Arrays.asList(
                         objectMapper.readValue(
                                 mvcResult.getResponse().getContentAsString(),
-                                StudentReportDto[].class));
+                                ReportDto[].class));
 
         assertEquals(1, studentReportDtos.size());
 
-        studentReportDto = studentReportDtos.get(0);
+        reportDto = studentReportDtos.get(0);
 
-        assertEquals(ReportStatus.UNDER_REVIEW, studentReportDto.getStatus());
-        assertEquals(CoopStatus.UNDER_REVIEW, studentReportDto.getCoop().getStatus());
-        assertEquals("susan@gmail.com", studentReportDto.getCoop().getStudent().getEmail());
+        assertEquals(ReportStatus.UNDER_REVIEW, reportDto.getStatus());
+        assertEquals(CoopStatus.UNDER_REVIEW, reportDto.getCoop().getStatus());
+        assertEquals("susan@gmail.com", reportDto.getCoop().getStudent().getEmail());
 
         mvcResult =
                 mvc.perform(
@@ -286,10 +292,10 @@ public class AdminApproveCoopIT extends BaseControllerIT {
                         .andReturn();
 
         // update student report status
-        Set<StudentReportSectionDto> rsDtos = new HashSet<StudentReportSectionDto>();
+        Set<ReportSectionDto> rsDtos = new HashSet<ReportSectionDto>();
 
         MockMultipartHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.multipart("/student-reports/" + studentReportDto.getId());
+                MockMvcRequestBuilders.multipart("/reports/" + reportDto.getId());
         builder.with(
                 new RequestPostProcessor() {
                     @Override
@@ -305,6 +311,7 @@ public class AdminApproveCoopIT extends BaseControllerIT {
                                         .param("status", "COMPLETED")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
+                                        .param("author_id", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))
@@ -315,18 +322,18 @@ public class AdminApproveCoopIT extends BaseControllerIT {
         // get student report dto
         mvcResult =
                 mvc.perform(
-                                get("/student-reports/" + studentReportDto.getId())
+                                get("/reports/" + reportDto.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
-        studentReportDto =
+        reportDto =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), StudentReportDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportDto.class);
 
-        assertEquals(ReportStatus.COMPLETED, studentReportDto.getStatus());
-        assertEquals(CoopStatus.INCOMPLETE, studentReportDto.getCoop().getStatus());
-        assertEquals("susan@gmail.com", studentReportDto.getCoop().getStudent().getEmail());
+        assertEquals(ReportStatus.COMPLETED, reportDto.getStatus());
+        assertEquals(CoopStatus.INCOMPLETE, reportDto.getCoop().getStatus());
+        assertEquals("susan@gmail.com", reportDto.getCoop().getStudent().getEmail());
     }
 }

@@ -1,16 +1,13 @@
 package ca.mcgill.cooperator.dto;
 
-import java.util.List;
+import java.util.Set;
 
-public class StudentDto {
-    private Integer id;
-    private String firstName;
-    private String lastName;
-    private String email;
+public class StudentDto extends AuthorDto{
+	
     private String studentId;
 
-    private List<CoopDto> coops;
-    private List<NotificationDto> studentReceived;
+    private Set<CoopDto> coops;
+    private Set<NotificationDto> studentReceived;
 
     public StudentDto() {}
 
@@ -20,8 +17,8 @@ public class StudentDto {
             String lastName,
             String email,
             String studentId,
-            List<CoopDto> coops,
-            List<NotificationDto> studentReceived) {
+            Set<CoopDto> coops,
+            Set<NotificationDto> studentReceived) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -33,34 +30,6 @@ public class StudentDto {
 
     /*--- Getters and Setters ---*/
 
-    public Integer getId() {
-        return this.id;
-    }
-
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return this.lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getStudentId() {
         return this.studentId;
     }
@@ -69,19 +38,19 @@ public class StudentDto {
         this.studentId = studentId;
     }
 
-    public List<CoopDto> getCoops() {
+    public Set<CoopDto> getCoops() {
         return this.coops;
     }
 
-    public void setCoops(List<CoopDto> coops) {
+    public void setCoops(Set<CoopDto> coops) {
         this.coops = coops;
     }
 
-    public List<NotificationDto> getNotifications() {
+    public Set<NotificationDto> getNotifications() {
         return this.studentReceived;
     }
 
-    public void setNotifications(List<NotificationDto> notifications) {
+    public void setNotifications(Set<NotificationDto> notifications) {
         this.studentReceived = notifications;
     }
 }

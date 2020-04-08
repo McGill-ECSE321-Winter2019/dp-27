@@ -38,15 +38,7 @@ public class Coop {
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<StudentReport> studentReports;
-
-    @OneToMany(
-            mappedBy = "coop",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<EmployerReport> employerReports;
+    private Set<Report> reports;
 
     /*--- Getters and Setters ---*/
 
@@ -86,29 +78,16 @@ public class Coop {
         this.student = student;
     }
 
-    public Set<StudentReport> getStudentReports() {
-        return this.studentReports;
+    public Set<Report> getReports() {
+        return this.reports;
     }
 
-    public void setStudentReports(Set<StudentReport> srs) {
-        if (this.studentReports == null) {
-            this.studentReports = srs;
+    public void setReports(Set<Report> reports) {
+        if (this.reports == null) {
+            this.reports = reports;
         } else {
-            this.studentReports.clear();
-            this.studentReports.addAll(srs);
-        }
-    }
-
-    public Set<EmployerReport> getEmployerReports() {
-        return this.employerReports;
-    }
-
-    public void setEmployerReports(Set<EmployerReport> employerReports) {
-        if (this.employerReports == null) {
-            this.employerReports = employerReports;
-        } else {
-            this.employerReports.clear();
-            this.employerReports.addAll(employerReports);
+            this.reports.clear();
+            this.reports.addAll(reports);
         }
     }
 }

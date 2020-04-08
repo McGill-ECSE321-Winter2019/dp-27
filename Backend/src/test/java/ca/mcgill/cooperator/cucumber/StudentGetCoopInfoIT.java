@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ca.mcgill.cooperator.controller.BaseControllerIT;
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
@@ -62,6 +63,7 @@ public class StudentGetCoopInfoIT extends BaseControllerIT {
     @Autowired private CourseRepository courseRepository;
     @Autowired private CourseOfferingRepository courseOfferingRepository;
     @Autowired private CoopDetailsRepository coopDetailsRepository;
+    @Autowired AuthorRepository authorRepository;
 
     @Autowired private CoopDetailsService coopDetailsService;
 
@@ -76,6 +78,7 @@ public class StudentGetCoopInfoIT extends BaseControllerIT {
 
         // deleting all students will also delete all coops
         studentRepository.deleteAll();
+        authorRepository.deleteAll();
         // deleting all companies will also delete all employer contacts
         companyRepository.deleteAll();
         courseRepository.deleteAll();

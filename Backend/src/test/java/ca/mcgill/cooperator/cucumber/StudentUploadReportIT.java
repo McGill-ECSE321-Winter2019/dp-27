@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ca.mcgill.cooperator.controller.BaseControllerIT;
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
@@ -18,18 +19,18 @@ import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.ReportConfigDto;
+import ca.mcgill.cooperator.dto.ReportDto;
 import ca.mcgill.cooperator.dto.ReportSectionConfigDto;
+import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.dto.StudentDto;
-import ca.mcgill.cooperator.dto.StudentReportDto;
-import ca.mcgill.cooperator.dto.StudentReportSectionDto;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.ReportResponseType;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
-import ca.mcgill.cooperator.model.StudentReportSection;
 import ca.mcgill.cooperator.service.CoopDetailsService;
-import ca.mcgill.cooperator.service.StudentReportSectionService;
+import ca.mcgill.cooperator.service.ReportSectionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -66,9 +67,10 @@ public class StudentUploadReportIT extends BaseControllerIT {
     @Autowired private CourseOfferingRepository courseOfferingRepository;
     @Autowired private CoopDetailsRepository coopDetailsRepository;
     @Autowired private ReportConfigRepository reportConfigRepository;
+    @Autowired AuthorRepository authorRepository;
 
     @Autowired private CoopDetailsService coopDetailsService;
-    @Autowired private StudentReportSectionService studentReportSectionService;
+    @Autowired private ReportSectionService reportSectionService;
 
     MvcResult mvcResult;
 
@@ -81,8 +83,8 @@ public class StudentUploadReportIT extends BaseControllerIT {
     CoopDetailsDto coopDetailsDto;
     CompanyDto companyDto;
     EmployerContactDto employerContactDto;
-    StudentReportDto studentReportDto;
-    StudentReportSectionDto studentReportSectionDto;
+    ReportDto reportDto;
+    ReportSectionDto reportSectionDto;
     ReportConfigDto reportConfigDto;
     ReportSectionConfigDto reportSectionConfigDto;
 
@@ -96,19 +98,20 @@ public class StudentUploadReportIT extends BaseControllerIT {
             coopDetailsRepository.save(cd);
         }
 
-        List<StudentReportSection> reportSections =
-                studentReportSectionService.getAllReportSections();
-        for (StudentReportSection reportSection : reportSections) {
-            studentReportSectionService.deleteReportSection(reportSection);
+        List<ReportSection> reportSections =
+                reportSectionService.getAllReportSections();
+        for (ReportSection reportSection : reportSections) {
+            reportSectionService.deleteReportSection(reportSection);
         }
 
-        reportSections = studentReportSectionService.getAllReportSections();
+        reportSections = reportSectionService.getAllReportSections();
         assertEquals(0, reportSections.size());
 
         studentReportRepository.deleteAll();
 
         // deleting all students will also delete all coops
         studentRepository.deleteAll();
+        authorRepository.deleteAll();
         // deleting all companies will also delete all employer contacts
         companyRepository.deleteAll();
         courseRepository.deleteAll();
@@ -139,22 +142,23 @@ public class StudentUploadReportIT extends BaseControllerIT {
     public void studentHasReportDue() throws Exception {
         mvcResult =
                 mvc.perform(
-                                multipart("/student-reports")
+                                multipart("/reports")
                                         .file("file", null)
                                         .param("status", "NOT_SUBMITTED")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
+                                        .param("author_id", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
-        studentReportDto =
+        reportDto =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), StudentReportDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportDto.class);
 
-        assertEquals(ReportStatus.NOT_SUBMITTED, studentReportDto.getStatus());
-        assertEquals("Offer Letter", studentReportDto.getTitle());
+        assertEquals(ReportStatus.NOT_SUBMITTED, reportDto.getStatus());
+        assertEquals("Offer Letter", reportDto.getTitle());
     }
 
     @When("the Student uploads the proper Report")
@@ -163,10 +167,10 @@ public class StudentUploadReportIT extends BaseControllerIT {
         MultipartFile multipartFile =
                 new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-        Set<StudentReportSectionDto> rsDtos = new HashSet<StudentReportSectionDto>();
+        Set<ReportSectionDto> rsDtos = new HashSet<ReportSectionDto>();
 
         MockMultipartHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.multipart("/student-reports/" + studentReportDto.getId());
+                MockMvcRequestBuilders.multipart("/reports/" + reportDto.getId());
         builder.with(
                 new RequestPostProcessor() {
                     @Override
@@ -182,6 +186,7 @@ public class StudentUploadReportIT extends BaseControllerIT {
                                         .param("status", "SUBMITTED")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
+                                        .param("author_id", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))
@@ -189,15 +194,15 @@ public class StudentUploadReportIT extends BaseControllerIT {
                         .andExpect(status().isOk())
                         .andReturn();
 
-        studentReportDto =
+        reportDto =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), StudentReportDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportDto.class);
     }
 
     @Then("the Report is saved in the system")
     public void saveReport() {
-        assertEquals(ReportStatus.SUBMITTED, studentReportDto.getStatus());
-        assertEquals("Offer Letter", studentReportDto.getTitle());
+        assertEquals(ReportStatus.SUBMITTED, reportDto.getStatus());
+        assertEquals("Offer Letter", reportDto.getTitle());
     }
 
     @And("the Student has uploaded a Report type previously")
@@ -208,37 +213,38 @@ public class StudentUploadReportIT extends BaseControllerIT {
 
         mvcResult =
                 mvc.perform(
-                                multipart("/student-reports")
+                                multipart("/reports")
                                         .file("file", multipartFile.getBytes())
                                         .param("status", "SUBMITTED")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
+                                        .param("author_id", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
-        studentReportDto =
+        reportDto =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), StudentReportDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportDto.class);
 
-        assertEquals(ReportStatus.SUBMITTED, studentReportDto.getStatus());
-        assertEquals("Offer Letter", studentReportDto.getTitle());
+        assertEquals(ReportStatus.SUBMITTED, reportDto.getStatus());
+        assertEquals("Offer Letter", reportDto.getTitle());
     }
 
     @When("the Student uploads the same type of Report again")
     public void studentUploadsReportAgain() throws Exception {
-        Set<StudentReportSectionDto> rdtos = new HashSet<StudentReportSectionDto>();
-        studentReportSectionDto =
-                createTestStudentReportSection(reportSectionConfigDto, studentReportDto);
-        rdtos.add(studentReportSectionDto);
+        Set<ReportSectionDto> rdtos = new HashSet<ReportSectionDto>();
+        reportSectionDto =
+                createTestReportSection(reportSectionConfigDto, reportDto);
+        rdtos.add(reportSectionDto);
 
         File testFile = new File("src/test/resources/Test_Offer_Letter.pdf");
         MultipartFile multipartFile =
                 new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
         MockMultipartHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.multipart("/student-reports/" + studentReportDto.getId());
+                MockMvcRequestBuilders.multipart("/reports/" + reportDto.getId());
         builder.with(
                 new RequestPostProcessor() {
                     @Override
@@ -254,6 +260,7 @@ public class StudentUploadReportIT extends BaseControllerIT {
                                         .param("status", "SUBMITTED")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
+                                        .param("author_id",  String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rdtos))
@@ -261,14 +268,14 @@ public class StudentUploadReportIT extends BaseControllerIT {
                         .andExpect(status().isOk())
                         .andReturn();
 
-        studentReportDto =
+        reportDto =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), StudentReportDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportDto.class);
     }
 
     @Then("the new Report overwrites the old one in the system")
     public void overwriteReport() {
-        assertEquals(1, studentReportDto.getReportSections().size());
-        assertEquals("Offer Letter", studentReportDto.getTitle());
+        assertEquals(1, reportDto.getReportSections().size());
+        assertEquals("Offer Letter", reportDto.getTitle());
     }
 }

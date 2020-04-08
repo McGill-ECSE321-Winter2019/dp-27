@@ -3,15 +3,16 @@ package ca.mcgill.cooperator.controller;
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.CoopDetailsDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
-import ca.mcgill.cooperator.dto.EmployerReportDto;
+import ca.mcgill.cooperator.dto.ReportDto;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.EmployerContactService;
-import ca.mcgill.cooperator.service.EmployerReportService;
+import ca.mcgill.cooperator.service.ReportService;
+
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class EmployerContactController extends BaseController {
 
     @Autowired EmployerContactService employerContactService;
     @Autowired CompanyService companyService;
-    @Autowired EmployerReportService employerReportService;
+    @Autowired ReportService reportService;
     @Autowired CoopDetailsService coopDetailsService;
 
     @GetMapping("/{id}")
@@ -76,12 +77,12 @@ public class EmployerContactController extends BaseController {
             company = companyService.getCompany(companyDto.getId());
         }
 
-        List<EmployerReportDto> employerReportDtos = employerContactDto.getEmployerReports();
-        Set<EmployerReport> employerReports = null;
-        if (employerReportDtos != null) {
-            employerReports =
-                    ControllerUtils.convertEmployerReportDtosToDomainObjects(
-                            employerReportService, employerReportDtos);
+        Set<ReportDto> reportDtos = employerContactDto.getReports();
+        Set<Report> reports = null;
+        if (reportDtos != null) {
+            reports =
+                    ControllerUtils.convertReportDtosToDomainObjects(
+                            reportService, reportDtos);
         }
 
         List<CoopDetailsDto> coopDetailsDtos = employerContactDto.getCoopDetails();
@@ -100,7 +101,7 @@ public class EmployerContactController extends BaseController {
                         employerContactDto.getEmail(),
                         employerContactDto.getPhoneNumber(),
                         company,
-                        employerReports,
+                        reports,
                         coopDetails);
 
         return ControllerUtils.convertToDto(ec);

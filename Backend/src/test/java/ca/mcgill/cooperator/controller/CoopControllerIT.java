@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
@@ -54,6 +55,7 @@ public class CoopControllerIT extends BaseControllerIT {
     @Autowired CoopDetailsRepository coopDetailsRepository;
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CompanyRepository companyRepository;
+    @Autowired AuthorRepository authorRepository;
 
     @Autowired CoopDetailsService coopDetailsService;
 
@@ -71,6 +73,7 @@ public class CoopControllerIT extends BaseControllerIT {
         courseRepository.deleteAll();
         coopRepository.deleteAll();
         coopDetailsRepository.deleteAll();
+        authorRepository.deleteAll();
         employerContactRepository.deleteAll();
         companyRepository.deleteAll();
     }
@@ -198,11 +201,11 @@ public class CoopControllerIT extends BaseControllerIT {
     @Test
     public void testCoopCreationPartialCourseOffering() throws Exception {
         CoopStatus status = CoopStatus.UNDER_REVIEW;
-        createTestCourse();
+        CourseDto courseDto = createTestCourse();
 
         // create a Course Offering with only season and year
         CourseOfferingDto courseOfferingDto =
-                new CourseOfferingDto(0, 2020, Season.SUMMER, null, null);
+                new CourseOfferingDto(0, 2020, Season.SUMMER, courseDto, null);
 
         StudentDto studentDto = createTestStudent();
 

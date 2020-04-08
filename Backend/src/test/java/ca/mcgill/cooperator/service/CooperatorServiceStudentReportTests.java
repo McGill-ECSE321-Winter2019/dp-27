@@ -7,18 +7,18 @@ import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.ReportConfigRepository;
-import ca.mcgill.cooperator.dao.StudentReportRepository;
-import ca.mcgill.cooperator.dao.StudentReportSectionRepository;
+import ca.mcgill.cooperator.dao.ReportRepository;
+import ca.mcgill.cooperator.dao.ReportSectionRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.ReportConfig;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Student;
-import ca.mcgill.cooperator.model.StudentReport;
-import ca.mcgill.cooperator.model.StudentReportSection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashSet;
@@ -36,20 +36,20 @@ import org.springframework.web.multipart.MultipartFile;
 @SpringBootTest
 @ActiveProfiles("test")
 public class CooperatorServiceStudentReportTests extends BaseServiceTest {
-    @Autowired StudentReportRepository studentReportRepository;
+    @Autowired ReportRepository reportRepository;
     @Autowired CoopRepository coopRepository;
     @Autowired CourseRepository courseRepository;
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired StudentRepository studentRepository;
-    @Autowired StudentReportSectionRepository studentReportSectionRepository;
+    @Autowired ReportSectionRepository reportSectionRepository;
     @Autowired ReportConfigRepository reportConfigRepository;
 
-    @Autowired StudentReportService studentReportService;
+    @Autowired ReportService reportService;
     @Autowired CoopService coopService;
     @Autowired CourseService courseService;
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired StudentService studentService;
-    @Autowired StudentReportSectionService studentReportSectionService;
+    @Autowired ReportSectionService reportSectionService;
     @Autowired ReportConfigService reportConfigService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
 
@@ -58,18 +58,18 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-        List<StudentReport> studentReports = studentReportService.getAllStudentReports();
-        for (StudentReport studentReport : studentReports) {
-            studentReport.setReportSections(new HashSet<StudentReportSection>());
-            studentReportRepository.save(studentReport);
+        List<Report> reports = reportService.getAllReports();
+        for (Report report : reports) {
+            report.setReportSections(new HashSet<ReportSection>());
+            reportRepository.save(report);
         }
 
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
         studentRepository.deleteAll();
-        studentReportSectionRepository.deleteAll();
-        studentReportRepository.deleteAll();
+        reportSectionRepository.deleteAll();
+        reportRepository.deleteAll();
         reportConfigRepository.deleteAll();
     }
 
@@ -84,23 +84,23 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
             MultipartFile multipartFile =
                     new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            studentReportService.createStudentReport(
-                    ReportStatus.COMPLETED, coop, "Offer Letter", multipartFile);
+            reportService.createReport(
+                    ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile);
         } catch (Exception e) {
             fail();
         }
 
-        assertEquals(1, studentReportService.getAllStudentReports().size());
+        assertEquals(1, reportService.getAllReports().size());
         coop = coopService.getCoopById(coop.getId());
         assertEquals(
-                "Offer Letter", ((StudentReport) coop.getStudentReports().toArray()[0]).getTitle());
+                "Offer Letter", ((Report) coop.getReports().toArray()[0]).getTitle());
     }
 
     @Test
     public void testCreateStudentReportNull() {
         String error = "";
         try {
-            studentReportService.createStudentReport(null, null, null, null);
+            reportService.createReport(null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -109,14 +109,15 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
                 ERROR_PREFIX
                         + "Report Status cannot be null! "
                         + "Coop cannot be null! "
+                        + "Author cannot be null! "
                         + "File title cannot be empty!",
                 error);
-        assertEquals(0, studentReportService.getAllStudentReports().size());
+        assertEquals(0, reportService.getAllReports().size());
     }
 
     @Test
     public void testUpdateStudentReportWithReportSections() {
-        StudentReport sr = null;
+        Report r = null;
 
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
@@ -131,44 +132,45 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         try {
             multipartFile = new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            sr =
-                    studentReportService.createStudentReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", multipartFile);
+            r =
+                    reportService.createReport(
+                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile);
         } catch (Exception e) {
             fail();
         }
 
-        Set<StudentReportSection> sections = new HashSet<StudentReportSection>();
-        StudentReportSection rs =
-                createTestStudentReportSection(studentReportSectionService, rsConfig, sr);
+        Set<ReportSection> sections = new HashSet<ReportSection>();
+        ReportSection rs =
+                createTestReportSection(reportSectionService, rsConfig, r);
         sections.add(rs);
 
         // 2. update with valid values
         try {
-            sr =
-                    studentReportService.updateStudentReport(
-                            sr,
+            r =
+                    reportService.updateReport(
+                            r,
                             ReportStatus.COMPLETED,
-                            "Offer Letter",
                             coop,
+                            "Offer Letter",
+                            s,
                             sections,
                             multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(1, sr.getReportSections().size());
-        assertEquals(1, studentReportService.getAllStudentReports().size());
+        assertEquals(1, r.getReportSections().size());
+        assertEquals(1, reportService.getAllReports().size());
         coop = coopService.getCoopById(coop.getId());
         assertEquals(
-                "Offer Letter", ((StudentReport) coop.getStudentReports().toArray()[0]).getTitle());
-        rs = studentReportSectionService.getReportSection(rs.getId());
-        assertEquals("Offer Letter", rs.getStudentReport().getTitle());
+                "Offer Letter", ((Report) coop.getReports().toArray()[0]).getTitle());
+        rs = reportSectionService.getReportSection(rs.getId());
+        assertEquals("Offer Letter", rs.getReport().getTitle());
     }
 
     @Test
     public void testUpdateStudentReport() {
-        StudentReport sr = null;
+        Report r = null;
 
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
@@ -183,42 +185,43 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         try {
             multipartFile = new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            sr =
-                    studentReportService.createStudentReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", multipartFile);
+            r =
+                    reportService.createReport(
+                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile);
         } catch (Exception e) {
             fail();
         }
 
-        Set<StudentReportSection> sections = new HashSet<StudentReportSection>();
-        StudentReportSection rs =
-                createTestStudentReportSection(studentReportSectionService, rsConfig, sr);
+        Set<ReportSection> sections = new HashSet<ReportSection>();
+        ReportSection rs =
+                createTestReportSection(reportSectionService, rsConfig, r);
         sections.add(rs);
 
         // 2. update with valid values
         try {
-            sr =
-                    studentReportService.updateStudentReport(
-                            sr,
+            r =
+                    reportService.updateReport(
+                            r,
                             ReportStatus.INCOMPLETE,
-                            "Offer Letter",
                             coop,
+                            "Offer Letter",
+                            s,
                             sections,
                             multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(1, sr.getReportSections().size());
+        assertEquals(1, r.getReportSections().size());
         assertEquals(
                 ReportStatus.INCOMPLETE,
-                studentReportService.getStudentReport(sr.getId()).getStatus());
-        assertEquals(1, studentReportService.getAllStudentReports().size());
+                reportService.getReport(r.getId()).getStatus());
+        assertEquals(1, reportService.getAllReports().size());
     }
 
     @Test
     public void testUpdateStudentReportInvalid() {
-        StudentReport sr = null;
+        Report r = null;
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
@@ -229,9 +232,9 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         try {
             multipartFile = new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            sr =
-                    studentReportService.createStudentReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", multipartFile);
+            r =
+                    reportService.createReport(
+                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile);
         } catch (Exception e) {
             fail();
         }
@@ -239,21 +242,21 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         // 2. try updating with invalid values
         String error = "";
         try {
-            sr = studentReportService.updateStudentReport(null, null, null, null, null, null);
+            r = reportService.updateReport(null, null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
-        assertEquals(ERROR_PREFIX + "Student Report cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Report cannot be null!", error);
         assertEquals(
                 ReportStatus.COMPLETED,
-                studentReportService.getStudentReport(sr.getId()).getStatus());
-        assertEquals(1, studentReportService.getAllStudentReports().size());
+                reportService.getReport(r.getId()).getStatus());
+        assertEquals(1, reportService.getAllReports().size());
     }
 
     @Test
     public void testDeleteStudentReport() {
-        StudentReport sr = null;
+        Report r = null;
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
@@ -264,34 +267,34 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
             MultipartFile multipartFile =
                     new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            sr =
-                    studentReportService.createStudentReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", multipartFile);
+            r =
+                    reportService.createReport(
+                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile);
         } catch (Exception e) {
             fail();
         }
 
-        assertEquals(1, studentReportService.getAllStudentReports().size());
+        assertEquals(1, reportService.getAllReports().size());
 
         // 2. try deleting the report
         try {
-            studentReportService.deleteStudentReport(sr);
+            reportService.deleteReport(r);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(0, studentReportService.getAllStudentReports().size());
+        assertEquals(0, reportService.getAllReports().size());
     }
 
     @Test
     public void testDeleteStudentReportInvalid() {
         String error = "";
         try {
-            studentReportService.deleteStudentReport(null);
+            reportService.deleteReport(null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
-        assertEquals(ERROR_PREFIX + "Student Report to delete cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Report to delete cannot be null!", error);
     }
 }

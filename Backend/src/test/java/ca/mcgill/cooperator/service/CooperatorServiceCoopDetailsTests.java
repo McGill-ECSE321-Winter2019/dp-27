@@ -3,6 +3,7 @@ package ca.mcgill.cooperator.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
@@ -43,6 +44,7 @@ public class CooperatorServiceCoopDetailsTests extends BaseServiceTest {
     @Autowired CourseService courseService;
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired CompanyService companyService;
+    @Autowired AuthorRepository authorRepository;
     @Autowired EmployerContactService employerContactService;
     @Autowired StudentService studentService;
 
@@ -58,6 +60,7 @@ public class CooperatorServiceCoopDetailsTests extends BaseServiceTest {
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
+        authorRepository.deleteAll();
         employerContactRepository.deleteAll();
         companyRepository.deleteAll();
         studentRepository.deleteAll();

@@ -6,12 +6,14 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.Notification;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.NotificationService;
+import ca.mcgill.cooperator.service.ReportService;
 import ca.mcgill.cooperator.service.StudentService;
 import java.util.Collection;
 import java.util.HashSet;
@@ -39,6 +41,7 @@ public class StudentController extends BaseController {
     @Autowired private CourseOfferingService courseOfferingService;
     @Autowired private CourseService courseService;
     @Autowired private NotificationService notificationService;
+    @Autowired private ReportService reportService;
 
     /**
      * Get students with filters
@@ -177,6 +180,11 @@ public class StudentController extends BaseController {
                     ControllerUtils.convertNotificationListToDomainObjectSet(
                             notificationService, s.getNotifications());
         }
+        
+        Set<Report> reports = null;
+        if(s.getReports() != null) {
+        	reports = ControllerUtils.convertReportDtosToDomainObjects(reportService, s.getReports());
+        }
 
         studentService.updateStudent(
                 student,
@@ -185,7 +193,8 @@ public class StudentController extends BaseController {
                 s.getEmail(),
                 s.getStudentId(),
                 coops,
-                notifs);
+                notifs,
+                reports);
         return ControllerUtils.convertToDto(student);
     }
 

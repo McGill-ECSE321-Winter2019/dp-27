@@ -6,24 +6,26 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
-import ca.mcgill.cooperator.dao.EmployerReportRepository;
+import ca.mcgill.cooperator.dao.ReportRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
-import ca.mcgill.cooperator.dto.EmployerReportDto;
-import ca.mcgill.cooperator.dto.EmployerReportSectionDto;
+import ca.mcgill.cooperator.dto.ReportDto;
+import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.model.CoopStatus;
-import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.ReportStatus;
-import ca.mcgill.cooperator.service.EmployerReportService;
+import ca.mcgill.cooperator.service.ReportService;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,27 +58,29 @@ public class EmployerReportControllerIT extends BaseControllerIT {
     @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
+    
+    @Autowired private ReportService reportService;
 
-    @Autowired private EmployerReportService employerReportService;
-
+    @Autowired private ReportRepository reportRepository;
     @Autowired private CoopRepository coopRepository;
     @Autowired private CourseOfferingRepository courseOfferingRepository;
     @Autowired private StudentRepository studentRepository;
     @Autowired private CourseRepository courseRepository;
     @Autowired private EmployerContactRepository employerContactRepository;
     @Autowired private CompanyRepository companyRepository;
-    @Autowired private EmployerReportRepository employerReportRepository;
+    @Autowired AuthorRepository authorRepository;
 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-        List<EmployerReport> ecs = employerReportService.getAllEmployerReports();
-        for (EmployerReport ec : ecs) {
-            ec.setEmployerContact(null);
-            employerReportRepository.save(ec);
+        List<Report> reports = reportService.getAllReports();
+        for (Report r : reports) {
+            r.setAuthor(null);
+            reportRepository.save(r);
         }
-        employerReportRepository.deleteAll();
+        reportRepository.deleteAll();
         coopRepository.deleteAll();
+        authorRepository.deleteAll();
         employerContactRepository.deleteAll();
         companyRepository.deleteAll();
         courseOfferingRepository.deleteAll();
@@ -106,28 +110,28 @@ public class EmployerReportControllerIT extends BaseControllerIT {
         // 1. create the EmployerReport with a POST request
         MvcResult mvcResult =
                 mvc.perform(
-                                multipart("/employer-reports")
+                                multipart("/reports")
                                         .file("file", multipartFile.getBytes())
                                         .param("status", "INCOMPLETE")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
-                                        .param("employer_id", String.valueOf(ecDto.getId()))
+                                        .param("author_id", String.valueOf(ecDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
         // 2. get object from response
-        EmployerReportDto returnedReport =
+        ReportDto returnedReport =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), EmployerReportDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportDto.class);
         assertEquals(returnedReport.getTitle(), "Offer Letter");
 
         // 3. update file
-        Set<EmployerReportSectionDto> rsDtos = new HashSet<EmployerReportSectionDto>();
+        Set<ReportSectionDto> rsDtos = new HashSet<ReportSectionDto>();
 
         MockMultipartHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.multipart("/employer-reports/" + returnedReport.getId());
+                MockMvcRequestBuilders.multipart("/reports/" + returnedReport.getId());
         builder.with(
                 new RequestPostProcessor() {
                     @Override
@@ -143,7 +147,7 @@ public class EmployerReportControllerIT extends BaseControllerIT {
                                         .param("status", "COMPLETED")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
-                                        .param("employer_id", String.valueOf(ecDto.getId()))
+                                        .param("author_id", String.valueOf(ecDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))
@@ -153,7 +157,7 @@ public class EmployerReportControllerIT extends BaseControllerIT {
 
         returnedReport =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), EmployerReportDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportDto.class);
         assertEquals("Offer Letter", returnedReport.getTitle());
 
         assertEquals(ReportStatus.COMPLETED, returnedReport.getStatus());
@@ -161,7 +165,7 @@ public class EmployerReportControllerIT extends BaseControllerIT {
         // 4. delete file
         mvcResult =
                 mvc.perform(
-                                delete("/employer-reports/" + returnedReport.getId())
+                                delete("/reports/" + returnedReport.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
@@ -169,18 +173,18 @@ public class EmployerReportControllerIT extends BaseControllerIT {
 
         mvcResult =
                 mvc.perform(
-                                get("/employer-reports/employer/" + ecDto.getId())
+                                get("/reports/author/" + ecDto.getId())
                                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andReturn();
 
         // get object from response
-        List<EmployerReportDto> employerReportDtos =
+        List<ReportDto> reportDtos =
                 Arrays.asList(
                         objectMapper.readValue(
                                 mvcResult.getResponse().getContentAsString(),
-                                EmployerReportDto[].class));
+                                ReportDto[].class));
 
-        assertEquals(employerReportDtos.size(), 0);
+        assertEquals(reportDtos.size(), 0);
     }
 }

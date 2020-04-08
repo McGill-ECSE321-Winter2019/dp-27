@@ -1,14 +1,12 @@
 package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.ReportSectionConfigDto;
-import ca.mcgill.cooperator.model.EmployerReportSection;
 import ca.mcgill.cooperator.model.ReportConfig;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
-import ca.mcgill.cooperator.model.StudentReportSection;
-import ca.mcgill.cooperator.service.EmployerReportSectionService;
 import ca.mcgill.cooperator.service.ReportConfigService;
 import ca.mcgill.cooperator.service.ReportSectionConfigService;
-import ca.mcgill.cooperator.service.StudentReportSectionService;
+import ca.mcgill.cooperator.service.ReportSectionService;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +27,7 @@ public class ReportSectionConfigController extends BaseController {
 
     @Autowired ReportConfigService reportConfigService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
-    @Autowired StudentReportSectionService studentReportSectionService;
-    @Autowired EmployerReportSectionService employerReportSectionService;
+    @Autowired ReportSectionService reportSectionService;
 
     /**
      * Returns the ReportSectionConfig with specified ID
@@ -102,18 +99,11 @@ public class ReportSectionConfigController extends BaseController {
             reportConfig = reportConfigService.getReportConfig(rscDto.getReportConfig().getId());
         }
 
-        Set<EmployerReportSection> employerReportSections = null;
-        if (rscDto.getEmployerReportSections() != null) {
-            employerReportSections =
-                    ControllerUtils.convertEmployerReportSectionsToDomainObjects(
-                            employerReportSectionService, rscDto.getEmployerReportSections());
-        }
-
-        Set<StudentReportSection> studentReportSections = null;
-        if (rscDto.getStudentReportSections() != null) {
-            studentReportSections =
-                    ControllerUtils.convertStudentReportSectionsToDomainObjects(
-                            studentReportSectionService, rscDto.getStudentReportSections());
+        Set<ReportSection> reportSections = null;
+        if (rscDto.getReportSections() != null) {
+            reportSections =
+                    ControllerUtils.convertReportSectionsToDomainObjects(
+                            reportSectionService, rscDto.getReportSections());
         }
 
         ReportSectionConfig rsConfig = reportSectionConfigService.getReportSectionConfig(id);
@@ -125,8 +115,7 @@ public class ReportSectionConfigController extends BaseController {
                         rscDto.getResponseType(),
                         rscDto.getQuestionNumber(),
                         reportConfig,
-                        employerReportSections,
-                        studentReportSections);
+                        reportSections);
 
         return ControllerUtils.convertToDto(updatedReportSectionConfig);
     }

@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
@@ -13,8 +14,9 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
-import ca.mcgill.cooperator.dto.StudentReportDto;
-import ca.mcgill.cooperator.dto.StudentReportSectionDto;
+import ca.mcgill.cooperator.dto.ReportDto;
+import ca.mcgill.cooperator.dto.ReportSectionDto;
+import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.ReportStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,6 +56,7 @@ public class StudentReportControllerIT extends BaseControllerIT {
     @Autowired private CourseOfferingRepository courseOfferingRepository;
     @Autowired private StudentRepository studentRepository;
     @Autowired private CourseRepository courseRepository;
+    @Autowired AuthorRepository authorRepository;
 
     @BeforeEach
     @AfterEach
@@ -61,6 +64,7 @@ public class StudentReportControllerIT extends BaseControllerIT {
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
+        authorRepository.deleteAll();
         studentRepository.deleteAll();
     }
 
@@ -78,34 +82,36 @@ public class StudentReportControllerIT extends BaseControllerIT {
 
         CourseDto courseDto = createTestCourse();
         CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
+        StudentDto studentDto = createTestStudent();
         CoopDto coopDto =
-                createTestCoop(courseOfferingDto, createTestStudent(), CoopStatus.IN_PROGRESS);
+                createTestCoop(courseOfferingDto, studentDto, CoopStatus.IN_PROGRESS);
 
         // 1. create the StudentReport with a POST request
         MvcResult mvcResult =
                 mvc.perform(
-                                multipart("/student-reports")
+                                multipart("/reports")
                                         .file("file", multipartFile.getBytes())
                                         .param("status", "INCOMPLETE")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
+                                        .param("author_id",  String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
         // 2. get object from response
-        StudentReportDto returnedReport =
+        ReportDto returnedReport =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), StudentReportDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportDto.class);
         assertEquals(returnedReport.getTitle(), "Offer Letter");
 
         // 3. update file
 
-        Set<StudentReportSectionDto> rsDtos = new HashSet<StudentReportSectionDto>();
+        Set<ReportSectionDto> rsDtos = new HashSet<ReportSectionDto>();
 
         MockMultipartHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.multipart("/student-reports/" + returnedReport.getId());
+                MockMvcRequestBuilders.multipart("/reports/" + returnedReport.getId());
         builder.with(
                 new RequestPostProcessor() {
                     @Override
@@ -121,6 +127,7 @@ public class StudentReportControllerIT extends BaseControllerIT {
                                         .param("status", "COMPLETED")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
+                                        .param("author_id",  String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))
@@ -130,7 +137,7 @@ public class StudentReportControllerIT extends BaseControllerIT {
 
         returnedReport =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(), StudentReportDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportDto.class);
         assertEquals("Offer Letter", returnedReport.getTitle());
 
         assertEquals(ReportStatus.COMPLETED, returnedReport.getStatus());
@@ -138,25 +145,25 @@ public class StudentReportControllerIT extends BaseControllerIT {
         // 4. delete file
         mvcResult =
                 mvc.perform(
-                                delete("/student-reports/" + returnedReport.getId())
+                                delete("/reports/" + returnedReport.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
-        // test getting all Employer Contacts
+        // test getting all reports
         mvcResult =
-                mvc.perform(get("/student-reports").contentType(MediaType.APPLICATION_JSON))
+                mvc.perform(get("/reports").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andReturn();
 
         // get object from response
-        List<StudentReportDto> studentReportDtos =
+        List<ReportDto> reportDtos =
                 Arrays.asList(
                         objectMapper.readValue(
                                 mvcResult.getResponse().getContentAsString(),
-                                StudentReportDto[].class));
+                                ReportDto[].class));
 
-        assertEquals(studentReportDtos.size(), 0);
+        assertEquals(reportDtos.size(), 0);
     }
 }

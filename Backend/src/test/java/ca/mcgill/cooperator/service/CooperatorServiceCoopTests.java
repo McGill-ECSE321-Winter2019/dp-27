@@ -3,6 +3,7 @@ package ca.mcgill.cooperator.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
@@ -17,9 +18,8 @@ import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.Student;
-import ca.mcgill.cooperator.model.StudentReport;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,6 +49,7 @@ public class CooperatorServiceCoopTests extends BaseServiceTest {
     @Autowired CoopDetailsRepository coopDetailsRepository;
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CompanyRepository companyRepository;
+    @Autowired AuthorRepository authorRepository;
 
     @BeforeEach
     @AfterEach
@@ -63,6 +64,7 @@ public class CooperatorServiceCoopTests extends BaseServiceTest {
         studentRepository.deleteAll();
         courseRepository.deleteAll();
         coopRepository.deleteAll();
+        authorRepository.deleteAll();
         employerContactRepository.deleteAll();
         companyRepository.deleteAll();
     }
@@ -124,8 +126,7 @@ public class CooperatorServiceCoopTests extends BaseServiceTest {
         Company company = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, company);
         CoopDetails cd = createTestCoopDetails(coopDetailsService, ec, c);
-        Set<EmployerReport> employerReports = new HashSet<EmployerReport>();
-        Set<StudentReport> studentReports = new HashSet<StudentReport>();
+        Set<Report> reports = new HashSet<Report>();
 
         try {
             c =
@@ -135,8 +136,7 @@ public class CooperatorServiceCoopTests extends BaseServiceTest {
                             courseOffering,
                             student,
                             cd,
-                            employerReports,
-                            studentReports);
+                            reports);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -168,7 +168,7 @@ public class CooperatorServiceCoopTests extends BaseServiceTest {
         String error = "";
 
         try {
-            coopService.updateCoop(null, null, null, null, null, null, null);
+            coopService.updateCoop(null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }

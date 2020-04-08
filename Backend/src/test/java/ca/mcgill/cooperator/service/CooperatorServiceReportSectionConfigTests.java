@@ -89,7 +89,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
         prompt = "Which tools did you use during your co-op?";
         try {
             reportSectionConfigService.updateReportSectionConfig(
-                    rsConfig, prompt, null, null, null, null, null);
+                    rsConfig, prompt, null, null, null, null);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -109,7 +109,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
                             rc, null, null, null, "Second Evaluation", null);
 
             reportSectionConfigService.updateReportSectionConfig(
-                    rsConfig, prompt, ReportResponseType.SHORT_TEXT, 2, null, null, null);
+                    rsConfig, prompt, ReportResponseType.SHORT_TEXT, 2, null, null);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -137,7 +137,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
         // 2. invalid updates
         try {
             reportSectionConfigService.updateReportSectionConfig(
-                    null, " ", null, -1, null, null, null);
+                    null, " ", null, -1, null, null);
         } catch (IllegalArgumentException e) {
             assertEquals(
                     ERROR_PREFIX

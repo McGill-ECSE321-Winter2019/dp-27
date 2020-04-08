@@ -3,11 +3,11 @@ package ca.mcgill.cooperator.service;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
-import ca.mcgill.cooperator.dao.EmployerReportRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.Report;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +20,6 @@ public class EmployerContactService extends BaseService {
 
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CompanyRepository companyRepository;
-    @Autowired EmployerReportRepository employerReportRepository;
     @Autowired CoopDetailsRepository coopDetailsRepository;
 
     /**
@@ -65,7 +64,7 @@ public class EmployerContactService extends BaseService {
         ec.setLastName(lastName.trim());
         ec.setEmail(email.trim());
         ec.setPhoneNumber(phoneNumber.trim());
-        ec.setEmployerReports(new HashSet<EmployerReport>());
+        ec.setReports(new HashSet<Report>());
         ec.setCoopDetails(new HashSet<CoopDetails>());
         ec.setCompany(company);
 
@@ -140,7 +139,7 @@ public class EmployerContactService extends BaseService {
             String email,
             String phoneNumber,
             Company company,
-            Set<EmployerReport> employerReports,
+            Set<Report> reports,
             Set<CoopDetails> coopDetails) {
 
         StringBuilder error = new StringBuilder();
@@ -179,8 +178,8 @@ public class EmployerContactService extends BaseService {
         if (phoneNumber != null) {
             ec.setPhoneNumber(phoneNumber.trim());
         }
-        if (employerReports != null) {
-            ec.setEmployerReports(employerReports);
+        if (reports != null) {
+            ec.setReports(reports);
         }
         if (coopDetails != null) {
             ec.setCoopDetails(coopDetails);

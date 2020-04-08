@@ -4,17 +4,14 @@ import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
-import ca.mcgill.cooperator.dao.EmployerReportRepository;
-import ca.mcgill.cooperator.dao.StudentReportRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.Student;
-import ca.mcgill.cooperator.model.StudentReport;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,8 +26,6 @@ public class CoopService extends BaseService {
     @Autowired StudentRepository studentRepository;
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired CoopDetailsRepository coopDetailsRepository;
-    @Autowired EmployerReportRepository employerReportRepository;
-    @Autowired StudentReportRepository studentReportRepository;
     @Autowired EmployerContactRepository employerContactRepository;
 
     /**
@@ -61,8 +56,7 @@ public class CoopService extends BaseService {
         c.setStatus(status);
         c.setCourseOffering(courseOffering);
         c.setStudent(s);
-        c.setEmployerReports(new HashSet<EmployerReport>());
-        c.setStudentReports(new HashSet<StudentReport>());
+        c.setReports(new HashSet<Report>());
 
         return coopRepository.save(c);
     }
@@ -109,8 +103,7 @@ public class CoopService extends BaseService {
             CourseOffering courseOffering,
             Student s,
             CoopDetails cd,
-            Set<EmployerReport> employerReports,
-            Set<StudentReport> studentReports) {
+            Set<Report> reports) {
         StringBuilder error = new StringBuilder();
         if (c == null) {
             error.append("Co-op to update cannot be null! ");
@@ -131,11 +124,8 @@ public class CoopService extends BaseService {
         if (cd != null) {
             c.setCoopDetails(cd);
         }
-        if (employerReports != null) {
-            c.setEmployerReports(employerReports);
-        }
-        if (studentReports != null) {
-            c.setStudentReports(studentReports);
+        if (reports != null) {
+            c.setReports(reports);
         }
 
         return coopRepository.save(c);

@@ -8,17 +8,17 @@ import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.dao.ReportConfigRepository;
-import ca.mcgill.cooperator.dao.StudentReportRepository;
-import ca.mcgill.cooperator.dao.StudentReportSectionRepository;
+import ca.mcgill.cooperator.dao.ReportRepository;
+import ca.mcgill.cooperator.dao.ReportSectionRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.ReportConfig;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.Student;
-import ca.mcgill.cooperator.model.StudentReport;
-import ca.mcgill.cooperator.model.StudentReportSection;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +31,8 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest {
 
-    @Autowired StudentReportSectionRepository studentReportSectionRepository;
-    @Autowired StudentReportRepository studentReportRepository;
+    @Autowired ReportSectionRepository reportSectionRepository;
+    @Autowired ReportRepository reportRepository;
     @Autowired CoopRepository coopRepository;
     @Autowired CourseRepository courseRepository;
     @Autowired CourseOfferingRepository courseOfferingRepository;
@@ -40,8 +40,8 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
     @Autowired StudentRepository studentRepository;
     @Autowired ReportConfigRepository reportConfigRepository;
 
-    @Autowired StudentReportSectionService studentReportSectionService;
-    @Autowired StudentReportService studentReportService;
+    @Autowired ReportSectionService reportSectionService;
+    @Autowired ReportService reportService;
     @Autowired CoopService coopService;
     @Autowired CourseService courseService;
     @Autowired CourseOfferingService courseOfferingService;
@@ -52,10 +52,10 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-        List<StudentReportSection> reportSections =
-                studentReportSectionService.getAllReportSections();
-        for (StudentReportSection reportSection : reportSections) {
-            studentReportSectionService.deleteReportSection(reportSection);
+        List<ReportSection> reportSections =
+                reportSectionService.getAllReportSections();
+        for (ReportSection reportSection : reportSections) {
+            reportSectionService.deleteReportSection(reportSection);
         }
 
         coopRepository.deleteAll();
@@ -63,8 +63,8 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         courseRepository.deleteAll();
         employerContactRepository.deleteAll();
         studentRepository.deleteAll();
-        studentReportSectionRepository.deleteAll();
-        studentReportRepository.deleteAll();
+        reportSectionRepository.deleteAll();
+        reportRepository.deleteAll();
         reportConfigRepository.deleteAll();
     }
 
@@ -75,25 +75,25 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        Report r = createTestStudentReport(reportService, coop, s);
         ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
-            studentReportSectionService.createReportSection(response, rsConfig, sr);
+            reportSectionService.createReportSection(response, rsConfig, r);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(1, studentReportSectionService.getAllReportSections().size());
+        assertEquals(1, reportSectionService.getAllReportSections().size());
     }
 
     @Test
     public void createReportSectionNull() {
         String error = "";
         try {
-            studentReportSectionService.createReportSection(null, null, null);
+            reportSectionService.createReportSection(null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -102,16 +102,16 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
                 ERROR_PREFIX
                         + "Response cannot be empty! "
                         + "Report section config cannot be null! "
-                        + "Student report cannot be null!",
+                        + "Report cannot be null!",
                 error);
-        assertEquals(0, studentReportSectionService.getAllReportSections().size());
+        assertEquals(0, reportSectionService.getAllReportSections().size());
     }
 
     @Test
     public void createReportSectionSpaces() {
         String error = "";
         try {
-            studentReportSectionService.createReportSection("    ", null, null);
+            reportSectionService.createReportSection("    ", null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -120,16 +120,16 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
                 ERROR_PREFIX
                         + "Response cannot be empty! "
                         + "Report section config cannot be null! "
-                        + "Student report cannot be null!",
+                        + "Report cannot be null!",
                 error);
-        assertEquals(0, studentReportSectionService.getAllReportSections().size());
+        assertEquals(0, reportSectionService.getAllReportSections().size());
     }
 
     @Test
     public void createReportSectionEmpty() {
         String error = "";
         try {
-            studentReportSectionService.createReportSection("", null, null);
+            reportSectionService.createReportSection("", null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -138,80 +138,80 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
                 ERROR_PREFIX
                         + "Response cannot be empty! "
                         + "Report section config cannot be null! "
-                        + "Student report cannot be null!",
+                        + "Report cannot be null!",
                 error);
-        assertEquals(0, studentReportSectionService.getAllReportSections().size());
+        assertEquals(0, reportSectionService.getAllReportSections().size());
     }
 
     @Test
     public void updateReportSection() {
-        StudentReportSection rs = null;
+        ReportSection rs = null;
         String response = "This is a response";
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        Report r = createTestStudentReport(reportService, coop, s);
         ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
-            rs = studentReportSectionService.createReportSection(response, rsConfig, sr);
+            rs = reportSectionService.createReportSection(response, rsConfig, r);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(1, studentReportSectionService.getAllReportSections().size());
+        assertEquals(1, reportSectionService.getAllReportSections().size());
 
         // update response
         response = "This is my new response";
         try {
-            rs = studentReportSectionService.updateReportSection(rs, response, null, null);
+            rs = reportSectionService.updateReportSection(rs, response, null, null);
         } catch (IllegalArgumentException e) {
             e.getMessage();
             fail();
         }
 
-        assertEquals(sr.getId(), rs.getStudentReport().getId());
-        assertEquals(1, studentReportSectionService.getAllReportSections().size());
-        sr = studentReportService.getStudentReport(sr.getId());
+        assertEquals(r.getId(), rs.getReport().getId());
+        assertEquals(1, reportSectionService.getAllReportSections().size());
+        r = reportService.getReport(r.getId());
         assertEquals(
                 response,
-                ((StudentReportSection) sr.getReportSections().toArray()[0]).getResponse());
+                ((ReportSection) r.getReportSections().toArray()[0]).getResponse());
     }
 
     @Test
     public void updateReportSectionInvalid() {
-        StudentReportSection rs = null;
+        ReportSection rs = null;
         String response = "This is a response";
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        Report r = createTestStudentReport(reportService, coop, s);
         ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
-            studentReportSectionService.createReportSection(response, rsConfig, sr);
+            reportSectionService.createReportSection(response, rsConfig, r);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(1, studentReportSectionService.getAllReportSections().size());
+        assertEquals(1, reportSectionService.getAllReportSections().size());
 
         String error = "";
         try {
-            rs = studentReportSectionService.updateReportSection(rs, "", null, null);
+            rs = reportSectionService.updateReportSection(rs, "", null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
         assertEquals(
                 ERROR_PREFIX
-                        + "Student report section cannot be null! "
+                        + "Report section cannot be null! "
                         + "Response cannot be empty!",
                 error);
     }
@@ -223,93 +223,93 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        Report r = createTestStudentReport(reportService, coop, s);
         ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
-            studentReportSectionService.createReportSection(response, rsConfig, sr);
+            reportSectionService.createReportSection(response, rsConfig, r);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(1, studentReportSectionService.getAllReportSections().size());
+        assertEquals(1, reportSectionService.getAllReportSections().size());
 
         String error = "";
         try {
-            studentReportSectionService.updateReportSection(null, null, null, null);
+            reportSectionService.updateReportSection(null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
-        assertEquals(ERROR_PREFIX + "Student report section cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Report section cannot be null!", error);
     }
 
     @Test
     public void deleteReportSection() {
-        StudentReportSection rs = null;
+        ReportSection rs = null;
         String response = "This is a response";
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        Report r = createTestStudentReport(reportService, coop, s);
         ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
-            rs = studentReportSectionService.createReportSection(response, rsConfig, sr);
+            rs = reportSectionService.createReportSection(response, rsConfig, r);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(1, studentReportSectionService.getAllReportSections().size());
+        assertEquals(1, reportSectionService.getAllReportSections().size());
 
         try {
-            studentReportSectionService.deleteReportSection(rs);
+            reportSectionService.deleteReportSection(rs);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(0, studentReportSectionService.getAllReportSections().size());
+        assertEquals(0, reportSectionService.getAllReportSections().size());
     }
 
     @Test
     public void deleteReportSectionStudentReport() {
-        StudentReportSection rs = null;
+        ReportSection rs = null;
         String response = "This is a response";
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        StudentReport sr = createTestStudentReport(studentReportService, coop);
+        Report r = createTestStudentReport(reportService, coop, s);
         ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
-            rs = studentReportSectionService.createReportSection(response, rsConfig, sr);
+            rs = reportSectionService.createReportSection(response, rsConfig, r);
 
-            studentReportService.deleteStudentReport(rs.getStudentReport());
+            reportService.deleteReport(rs.getReport());
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(0, studentReportSectionService.getAllReportSections().size());
-        assertEquals(0, studentReportService.getAllStudentReports().size());
+        assertEquals(0, reportSectionService.getAllReportSections().size());
+        assertEquals(0, reportService.getAllReports().size());
     }
 
     @Test
     public void testDeleteReportSectionInvalid() {
         String error = "";
         try {
-            studentReportSectionService.deleteReportSection(null);
+            reportSectionService.deleteReportSection(null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
-        assertEquals(ERROR_PREFIX + "Student report section to delete cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Report section to delete cannot be null!", error);
     }
 }
