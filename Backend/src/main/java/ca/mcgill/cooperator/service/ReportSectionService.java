@@ -52,10 +52,10 @@ public class ReportSectionService extends BaseService {
     }
 
     /**
-     * Gets a EmployerReportSection by ID
+     * Gets a ReportSection by ID
      *
      * @param id
-     * @return EmployerReportSection with specified ID
+     * @return ReportSection with specified ID
      */
     @Transactional
     public ReportSection getReportSection(int id) {
@@ -71,7 +71,7 @@ public class ReportSectionService extends BaseService {
     /**
      * Returns all report sections from the database
      *
-     * @return all EmployerReportSection
+     * @return all ReportSection
      */
     @Transactional
     public List<ReportSection> getAllReportSections() {
@@ -79,23 +79,22 @@ public class ReportSectionService extends BaseService {
     }
 
     /**
-     * Updates an existing EmployerReportSection
+     * Updates an existing ReportSection
      *
-     * @param employerReportSection
+     * @param reportSection
      * @param response
-     * @param reportSectionConfig <<<<<<<
-     *     HEAD:Backend/src/main/java/ca/mcgill/cooperator/service/ReportSectionService.java
+     * @param reportSectionConfig
      * @param report
      * @return updated report section
      */
     @Transactional
     public ReportSection updateReportSection(
-            ReportSection rs,
+            ReportSection reportSection,
             String response,
             ReportSectionConfig reportSectionConfig,
             Report report) {
         StringBuilder error = new StringBuilder();
-        if (rs == null) {
+        if (reportSection == null) {
             error.append("Report section cannot be null! ");
         }
         if (response != null && response.trim().length() == 0) {
@@ -106,53 +105,53 @@ public class ReportSectionService extends BaseService {
         }
 
         if (response != null) {
-            rs.setResponse(response.trim());
+        	reportSection.setResponse(response.trim());
         }
         if (reportSectionConfig != null) {
-            rs.setReportSectionConfig(reportSectionConfig);
+        	reportSection.setReportSectionConfig(reportSectionConfig);
         }
         if (report != null) {
-            rs.setReport(report);
+        	reportSection.setReport(report);
         }
 
-        return reportSectionRepository.save(rs);
+        return reportSectionRepository.save(reportSection);
     }
 
     /**
-     * Deletes an existing EmployerReportSection
+     * Deletes an existing ReportSection
      *
-     * @param employerReportSection
-     * @return the deleted EmployerReportSection
+     * @param reportSection
+     * @return the deleted ReportSection
      */
     @Transactional
-    public ReportSection deleteReportSection(ReportSection rs) {
-        if (rs == null) {
+    public ReportSection deleteReportSection(ReportSection reportSection) {
+        if (reportSection == null) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX + "Report section to delete cannot be null!");
         }
 
         // first delete from parents
-        Report r = rs.getReport();
+        Report r = reportSection.getReport();
         if (r != null) {
             Set<ReportSection> sections = r.getReportSections();
-            sections.remove(rs);
+            sections.remove(reportSection);
             r.setReportSections(sections);
             reportRepository.save(r);
         }
 
-        ReportSectionConfig rsConfig = rs.getReportSectionConfig();
+        ReportSectionConfig rsConfig = reportSection.getReportSectionConfig();
         if (rsConfig != null) {
             Set<ReportSection> sections = rsConfig.getReportSections();
-            sections.remove(rs);
+            sections.remove(reportSection);
             rsConfig.setReportSections(sections);
             reportSectionConfigRepository.save(rsConfig);
         }
 
-        rs.setReport(null);
-        rs.setReportSectionConfig(null);
-        reportSectionRepository.save(rs);
+        reportSection.setReport(null);
+        reportSection.setReportSectionConfig(null);
+        reportSectionRepository.save(reportSection);
 
-        reportSectionRepository.delete(rs);
-        return rs;
+        reportSectionRepository.delete(reportSection);
+        return reportSection;
     }
 }

@@ -38,15 +38,15 @@ public class ReportService extends BaseService {
      */
     @Transactional
     public Report createReport(
-            ReportStatus status, Coop c, String title, Author a, MultipartFile file) {
+            ReportStatus status, Coop coop, String title, Author author, MultipartFile file) {
         StringBuilder error = new StringBuilder();
         if (status == null) {
             error.append("Report Status cannot be null! ");
         }
-        if (c == null) {
+        if (coop == null) {
             error.append("Coop cannot be null! ");
         }
-        if (a == null) {
+        if (author == null) {
             error.append("Author cannot be null! ");
         }
         if (title == null || title.trim().length() == 0) {
@@ -59,8 +59,8 @@ public class ReportService extends BaseService {
         Report r = new Report();
         r.setStatus(status);
         r.setTitle(title);
-        r.setCoop(c);
-        r.setAuthor(a);
+        r.setCoop(coop);
+        r.setAuthor(author);
         r.setReportSections(new HashSet<ReportSection>());
 
         if (file != null) {
@@ -113,15 +113,15 @@ public class ReportService extends BaseService {
      */
     @Transactional
     public Report updateReport(
-            Report r,
+            Report report,
             ReportStatus status,
-            Coop c,
+            Coop coop,
             String title,
-            Author a,
+            Author author,
             Set<ReportSection> sections,
             MultipartFile file) {
         StringBuilder error = new StringBuilder();
-        if (r == null) {
+        if (report == null) {
             error.append("Report cannot be null! ");
         }
         if (title != null && title.trim().length() == 0) {
@@ -133,29 +133,27 @@ public class ReportService extends BaseService {
 
         // set all values in employer report if they're not null
         if (status != null) {
-            r.setStatus(status);
+        	report.setStatus(status);
         }
         if (title != null) {
-            r.setTitle(title);
+        	report.setTitle(title);
         }
-        if (c != null) {
-            r.setCoop(c);
+        if (coop != null) {
+        	report.setCoop(coop);
         }
-        if (a != null) {
-            r.setAuthor(a);
+        if (author != null) {
+        	report.setAuthor(author);
         }
         if (sections != null) {
-            r.setReportSections(sections);
+        	report.setReportSections(sections);
         }
         try {
-            r.setData(file.getBytes());
+        	report.setData(file.getBytes());
         } catch (IOException e) {
             throw new IllegalArgumentException(e.getMessage());
         }
 
-        reportRepository.save(r);
-
-        return reportRepository.save(r);
+        return reportRepository.save(report);
     }
 
     /**
@@ -165,26 +163,26 @@ public class ReportService extends BaseService {
      * @return deleted report
      */
     @Transactional
-    public Report deleteReport(Report r) {
-        if (r == null) {
+    public Report deleteReport(Report report) {
+        if (report == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Report to delete cannot be null!");
         }
 
         // first delete from all parents
-        Coop c = r.getCoop();
+        Coop c = report.getCoop();
         Set<Report> coopReports = c.getReports();
-        coopReports.remove(r);
+        coopReports.remove(report);
         c.setReports(coopReports);
         coopRepository.save(c);
 
-        Author a = r.getAuthor();
+        Author a = report.getAuthor();
         Set<Report> reports = a.getReports();
-        reports.remove(r);
+        reports.remove(report);
         a.setReports(reports);
         authorRepository.save(a);
 
-        reportRepository.delete(r);
+        reportRepository.delete(report);
 
-        return r;
+        return report;
     }
 }

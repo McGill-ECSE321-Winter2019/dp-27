@@ -1,13 +1,13 @@
 package ca.mcgill.cooperator.dto;
 
-import java.util.Set;
+import java.util.List;
 
 public class StudentDto extends AuthorDto {
 
     private String studentId;
 
-    private Set<CoopDto> coops;
-    private Set<NotificationDto> studentReceived;
+    private List<CoopDto> coops;
+    private List<NotificationDto> studentReceived;
 
     public StudentDto() {}
 
@@ -17,8 +17,9 @@ public class StudentDto extends AuthorDto {
             String lastName,
             String email,
             String studentId,
-            Set<CoopDto> coops,
-            Set<NotificationDto> studentReceived) {
+            List<CoopDto> coops,
+            List<NotificationDto> studentReceived,
+            List<ReportDto> reports) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,6 +27,7 @@ public class StudentDto extends AuthorDto {
         this.studentId = studentId;
         this.coops = coops;
         this.studentReceived = studentReceived;
+        this.reports = reports;
     }
 
     /*--- Getters and Setters ---*/
@@ -38,19 +40,19 @@ public class StudentDto extends AuthorDto {
         this.studentId = studentId;
     }
 
-    public Set<CoopDto> getCoops() {
+    public List<CoopDto> getCoops() {
         return this.coops;
     }
 
-    public void setCoops(Set<CoopDto> coops) {
+    public void setCoops(List<CoopDto> coops) {
         this.coops = coops;
     }
 
-    public Set<NotificationDto> getNotifications() {
+    public List<NotificationDto> getNotifications() {
         return this.studentReceived;
     }
 
-    public void setNotifications(Set<NotificationDto> notifications) {
+    public void setNotifications(List<NotificationDto> notifications) {
         this.studentReceived = notifications;
     }
 }

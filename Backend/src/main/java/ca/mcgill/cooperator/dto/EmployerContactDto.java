@@ -19,7 +19,7 @@ public class EmployerContactDto extends AuthorDto {
             String phoneNumber,
             CompanyDto company,
             List<CoopDetailsDto> coopDetails,
-            List<ReportDto> employerReports) {
+            List<ReportDto> reports) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -27,6 +27,7 @@ public class EmployerContactDto extends AuthorDto {
         this.phoneNumber = phoneNumber;
         this.company = company;
         this.coopDetails = coopDetails;
+        this.reports = reports;
     }
 
     /*--- Getters and Setters ---*/

@@ -117,8 +117,8 @@ public class StudentSubmitOfferLetterIT {
                                 .file("file", multipartFile.getBytes())
                                 .param("status", "UNDER_REVIEW")
                                 .param("title", "Offer Letter")
-                                .param("coop_id", String.valueOf(testCoop.getId()))
-                                .param("author_id", String.valueOf(student.getId()))
+                                .param("coopId", String.valueOf(testCoop.getId()))
+                                .param("authorId", String.valueOf(student.getId()))
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
                                 .characterEncoding("utf-8"))
                 .andExpect(status().isOk());

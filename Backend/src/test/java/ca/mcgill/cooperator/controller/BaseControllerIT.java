@@ -178,8 +178,6 @@ public abstract class BaseControllerIT {
         coopDetailsDto.setEndDate(Date.valueOf("2020-04-01"));
         coopDetailsDto.setCoop(coopDto);
         coopDetailsDto.setEmployerContact(employerContactDto);
-        coopDetailsDto.setStartDate(Date.valueOf("2020-05-11"));
-        coopDetailsDto.setEndDate(Date.valueOf("2020-08-31"));
 
         MvcResult mvcResult =
                 mvc.perform(
@@ -210,8 +208,6 @@ public abstract class BaseControllerIT {
         coopDetailsDto.setEndDate(Date.valueOf("2020-04-01"));
         coopDetailsDto.setCoop(coopDto);
         coopDetailsDto.setEmployerContact(employerContactDto);
-        coopDetailsDto.setStartDate(Date.valueOf("2020-05-11"));
-        coopDetailsDto.setEndDate(Date.valueOf("2020-08-31"));
 
         MvcResult mvcResult =
                 mvc.perform(

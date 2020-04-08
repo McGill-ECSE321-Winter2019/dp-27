@@ -99,8 +99,6 @@ public class CoopDetailsControllerIT extends BaseControllerIT {
         coopDetailsDto.setEndDate(Date.valueOf("2020-04-01"));
         coopDetailsDto.setHoursPerWeek(40);
         coopDetailsDto.setPayPerHour(300);
-        coopDetailsDto.setStartDate(Date.valueOf("2020-05-11"));
-        coopDetailsDto.setEndDate(Date.valueOf("2020-08-31"));
 
         // 1. create the Co-op Details with a POST request
         MvcResult mvcResult =

@@ -112,7 +112,7 @@ public class EmployerContactController extends BaseController {
             company = companyService.getCompany(companyDto.getId());
         }
 
-        Set<ReportDto> reportDtos = employerContactDto.getReports();
+        List<ReportDto> reportDtos = employerContactDto.getReports();
         Set<Report> reports = null;
         if (reportDtos != null) {
             reports = ControllerUtils.convertReportDtosToDomainObjects(reportService, reportDtos);

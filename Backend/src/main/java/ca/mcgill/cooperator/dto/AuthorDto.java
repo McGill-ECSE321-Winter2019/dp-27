@@ -1,6 +1,6 @@
 package ca.mcgill.cooperator.dto;
 
-import java.util.Set;
+import java.util.List;
 
 public class AuthorDto {
 
@@ -8,9 +8,22 @@ public class AuthorDto {
     protected String firstName;
     protected String lastName;
     protected String email;
-    private Set<ReportDto> reports;
+    protected List<ReportDto> reports;
 
     public AuthorDto() {}
+    
+    public AuthorDto(Integer id,
+            String firstName,
+            String lastName,
+            String email,
+            List<ReportDto> reports) {
+    	this.id = id;
+    	this.firstName = firstName;
+    	this.lastName = lastName;
+    	this.email = email;
+    	this.reports = reports;
+    		
+    }
 
     public Integer getId() {
         return this.id;
@@ -44,11 +57,11 @@ public class AuthorDto {
         this.email = email;
     }
 
-    public Set<ReportDto> getReports() {
+    public List<ReportDto> getReports() {
         return this.reports;
     }
 
-    public void setReports(Set<ReportDto> reports) {
+    public void setReports(List<ReportDto> reports) {
         this.reports = reports;
     }
 }

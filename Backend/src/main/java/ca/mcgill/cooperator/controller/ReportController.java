@@ -35,6 +35,33 @@ public class ReportController extends BaseController {
     @Autowired AuthorService authorService;
     @Autowired ReportService reportService;
     @Autowired ReportSectionService reportSectionService;
+    
+    /**
+     * Creates a Report using multipart form data
+     *
+     * @param file
+     * @param status
+     * @param title
+     * @param coopId
+     * @param authorId
+     * @return the created Report
+     */
+    @PostMapping("")
+    public ReportDto createReport(
+            @ModelAttribute("file") MultipartFile file,
+            @RequestParam String status,
+            @RequestParam String title,
+            @RequestParam Integer coopId,
+            @RequestParam Integer authorId) {
+        Coop coop = coopService.getCoopById(coopId);
+
+        Author a = authorService.getAuthorById(authorId);
+        ReportStatus reportStatus = ReportStatus.valueOf(status);
+
+        Report createdReport = reportService.createReport(reportStatus, coop, title, a, file);
+
+        return ControllerUtils.convertToDto(createdReport);
+    }
 
     /**
      * Gets a Report by ID
@@ -68,33 +95,6 @@ public class ReportController extends BaseController {
     }
 
     /**
-     * Creates a Report using multipart form data
-     *
-     * @param file
-     * @param status
-     * @param title
-     * @param coopId
-     * @param authorId
-     * @return the created Report
-     */
-    @PostMapping("")
-    public ReportDto createReport(
-            @ModelAttribute("file") MultipartFile file,
-            @RequestParam("status") String status,
-            @RequestParam("title") String title,
-            @RequestParam("coop_id") int coopId,
-            @RequestParam("author_id") int authorId) {
-        Coop coop = coopService.getCoopById(coopId);
-
-        Author a = authorService.getAuthorById(authorId);
-        ReportStatus reportStatus = ReportStatus.valueOf(status);
-
-        Report createdReport = reportService.createReport(reportStatus, coop, title, a, file);
-
-        return ControllerUtils.convertToDto(createdReport);
-    }
-
-    /**
      * Updates an existing Report
      *
      * @param id
@@ -110,10 +110,10 @@ public class ReportController extends BaseController {
     public ReportDto updateReport(
             @PathVariable int id,
             @ModelAttribute("file") MultipartFile file,
-            @RequestParam("status") String status,
-            @RequestParam("title") String title,
-            @RequestParam("coop_id") int coopId,
-            @RequestParam("author_id") int authorId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Integer coopId,
+            @RequestParam(required = false) Integer authorId,
             @RequestBody Set<ReportSectionDto> rsDtos) {
         Report reportToUpdate = reportService.getReport(id);
 

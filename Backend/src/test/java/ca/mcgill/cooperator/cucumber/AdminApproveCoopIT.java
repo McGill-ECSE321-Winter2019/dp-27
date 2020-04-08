@@ -124,8 +124,8 @@ public class AdminApproveCoopIT extends BaseControllerIT {
                                         .file("file", multipartFile.getBytes())
                                         .param("status", "UNDER_REVIEW")
                                         .param("title", "Offer Letter")
-                                        .param("coop_id", String.valueOf(coopDto.getId()))
-                                        .param("author_id", String.valueOf(studentDto.getId()))
+                                        .param("coopId", String.valueOf(coopDto.getId()))
+                                        .param("authorId", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
@@ -209,8 +209,8 @@ public class AdminApproveCoopIT extends BaseControllerIT {
                                 builder.file("file", multipartFile.getBytes())
                                         .param("status", "COMPLETED")
                                         .param("title", "Offer Letter")
-                                        .param("coop_id", String.valueOf(coopDto.getId()))
-                                        .param("author_id", String.valueOf(studentDto.getId()))
+                                        .param("coopId", String.valueOf(coopDto.getId()))
+                                        .param("authorId", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))
@@ -306,8 +306,8 @@ public class AdminApproveCoopIT extends BaseControllerIT {
                                 builder.file("file", multipartFile.getBytes())
                                         .param("status", "COMPLETED")
                                         .param("title", "Offer Letter")
-                                        .param("coop_id", String.valueOf(coopDto.getId()))
-                                        .param("author_id", String.valueOf(studentDto.getId()))
+                                        .param("coopId", String.valueOf(coopDto.getId()))
+                                        .param("authorId", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))
@@ -327,7 +327,8 @@ public class AdminApproveCoopIT extends BaseControllerIT {
         reportDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), ReportDto.class);
-
+        
+        assertEquals(studentDto.getFirstName(), reportDto.getAuthor().getFirstName());
         assertEquals(ReportStatus.COMPLETED, reportDto.getStatus());
         assertEquals(CoopStatus.REJECTED, reportDto.getCoop().getStatus());
         assertEquals("susan@gmail.com", reportDto.getCoop().getStudent().getEmail());

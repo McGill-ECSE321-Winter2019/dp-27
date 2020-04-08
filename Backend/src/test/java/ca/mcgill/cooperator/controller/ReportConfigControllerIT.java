@@ -147,7 +147,7 @@ public class ReportConfigControllerIT extends BaseControllerIT {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(rcDto))
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         rcDto.setDeadline(14);
         rcDto.setRequiresFile(true);

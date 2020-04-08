@@ -1,17 +1,17 @@
 package ca.mcgill.cooperator.dto;
 
-import java.util.Set;
+import java.util.List;
 
 public class AdminDto extends AuthorDto {
 
-    private Set<NotificationDto> sent;
+    private List<NotificationDto> sent;
 
     public AdminDto(
             Integer id,
             String firstName,
             String lastName,
             String email,
-            Set<NotificationDto> sent) {
+            List<NotificationDto> sent) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -19,11 +19,11 @@ public class AdminDto extends AuthorDto {
         this.sent = sent;
     }
 
-    public Set<NotificationDto> getSentNotifications() {
+    public List<NotificationDto> getSentNotifications() {
         return this.sent;
     }
 
-    public void setSentNotifications(Set<NotificationDto> sent) {
+    public void setSentNotifications(List<NotificationDto> sent) {
         this.sent = sent;
     }
 }

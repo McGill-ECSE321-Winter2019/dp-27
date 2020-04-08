@@ -59,7 +59,7 @@ public class ControllerUtils {
                 new AdminDto(a.getId(), a.getFirstName(), a.getLastName(), a.getEmail(), null);
 
         Set<Notification> notifications = a.getSentNotifications();
-        Set<NotificationDto> notificationDtos = new HashSet<NotificationDto>();
+        List<NotificationDto> notificationDtos = new ArrayList<NotificationDto>();
         if (notifications != null) {
             for (Notification notification : notifications) {
                 NotificationDto notificationDto =
@@ -81,7 +81,8 @@ public class ControllerUtils {
                                 student.getStudentId(),
                                 null, // null coops, if need coop information look up specific
                                 // student by id
-                                null); // null notifs
+                                null, // null notifs
+                                null); // null reports
                 notificationDto.setStudent(studentDto);
                 notificationDtos.add(notificationDto);
             }
@@ -90,7 +91,7 @@ public class ControllerUtils {
         adminDto.setSentNotifications(notificationDtos);
 
         Set<Report> reports = a.getReports();
-        Set<ReportDto> reportDtos = new HashSet<ReportDto>();
+        List<ReportDto> reportDtos = new ArrayList<ReportDto>();
         if (reports != null) {
             for (Report report : reports) {
                 ReportDto reportDto =
@@ -254,8 +255,8 @@ public class ControllerUtils {
                         student.getEmail(),
                         student.getStudentId(),
                         null, // set coops to null since coop is parent
-                        null); // set notifications to null, look up student by id to get all
-        // notifications
+                        null, // set notifications to null, look up student by id to get all notifications
+                        null); //null reports
         coopDto.setStudent(studentDto);
 
         // create report dtos
@@ -274,12 +275,12 @@ public class ControllerUtils {
                                 null); // null report sections
 
                 Author author = report.getAuthor();
-                AuthorDto authorDto = new AuthorDto();
-                authorDto.setId(author.getId());
-                authorDto.setFirstName(author.getEmail());
-                authorDto.setLastName(author.getLastName());
-                authorDto.setEmail(author.getEmail());
-                authorDto.setReports(null); // null since parent
+                AuthorDto authorDto = new AuthorDto(
+                							author.getId(),
+                							author.getFirstName(),
+                							author.getLastName(),
+                							author.getEmail(),
+                							null); //null reports
 
                 reportDto.setAuthor(authorDto);
 
@@ -407,7 +408,8 @@ public class ControllerUtils {
                         student.getEmail(),
                         student.getStudentId(),
                         null, // null coops since coop is parent
-                        null); // null notifications, look up student by id to get notifications
+                        null, // null notifications, look up student by id to get notifications
+                        null); //null reports
         coopDto.setStudent(studentDto);
 
         coopDetailsDto.setCoop(coopDto);
@@ -531,7 +533,8 @@ public class ControllerUtils {
                                 student.getEmail(),
                                 student.getStudentId(),
                                 null, // null coops, look up student by id to get coops
-                                null); // null notifications, look up student by id to get
+                                null, // null notifications, look up student by id to get
+                                null); //null reports
                 // notifications
                 coopDto.setStudent(studentDto);
 
@@ -623,7 +626,7 @@ public class ControllerUtils {
 
         // create employer report dtos
         Set<Report> reports = e.getReports();
-        Set<ReportDto> reportDtos = new HashSet<ReportDto>();
+        List<ReportDto> reportDtos = new ArrayList<ReportDto>();
         if (reports != null) {
             for (Report report : reports) {
                 ReportDto reportDto =
@@ -656,7 +659,8 @@ public class ControllerUtils {
                                 student.getEmail(),
                                 student.getStudentId(),
                                 null, // null coops, look up student by id to get all coops
-                                null); // null notifications, look up student by id to get all
+                                null, // null notifications, look up student by id to get all
+                                null); //null reports
                 // notifications
 
                 coopDto.setStudent(studentDto);
@@ -689,23 +693,23 @@ public class ControllerUtils {
         return employerContactDtos;
     }
 
-    public static ReportDto convertToDto(Report r) {
-        if (r == null) {
+    public static ReportDto convertToDto(Report report) {
+        if (report == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Employer Report does not exist!");
         }
 
         ReportDto reportDto =
                 new ReportDto(
-                        r.getId(),
-                        r.getTitle(),
-                        r.getStatus(),
-                        r.getData(),
+                		report.getId(),
+                		report.getTitle(),
+                		report.getStatus(),
+                		report.getData(),
                         null, // null coop
                         null, // null author
                         null); // null report sections
 
         // create coop dto
-        Coop coop = r.getCoop();
+        Coop coop = report.getCoop();
         CoopDto coopDto =
                 new CoopDto(
                         coop.getId(),
@@ -726,25 +730,26 @@ public class ControllerUtils {
                         student.getEmail(),
                         student.getStudentId(),
                         null, // null coops, look up student by id to get all coops
-                        null); // null notifications, look up student by id to get all notifications
+                        null, // null notifications, look up student by id to get all notifications
+                        null); //nul reports
 
         coopDto.setStudent(studentDto);
 
         reportDto.setCoop(coopDto);
 
         // create author dto
-        Author author = r.getAuthor();
-        AuthorDto authorDto = new AuthorDto();
-        authorDto.setId(author.getId());
-        authorDto.setFirstName(author.getFirstName());
-        authorDto.setLastName(author.getLastName());
-        authorDto.setEmail(author.getEmail());
-        authorDto.setReports(null);
+        Author author = report.getAuthor();
+        AuthorDto authorDto = new AuthorDto(
+				author.getId(),
+				author.getFirstName(),
+				author.getLastName(),
+				author.getEmail(),
+				null); //null reports
 
         reportDto.setAuthor(authorDto);
 
         // create report section dtos
-        Set<ReportSection> reportSections = r.getReportSections();
+        Set<ReportSection> reportSections = report.getReportSections();
         List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
         if (reportSections != null) {
             for (ReportSection reportSection : reportSections) {
@@ -842,7 +847,8 @@ public class ControllerUtils {
                         student.getEmail(),
                         student.getStudentId(),
                         null, // null coops, look up student by id to get coops
-                        null); // null notifications, look up student by id to get all notifications
+                        null, // null notifications, look up student by id to get all notifications
+                        null); //null reports
 
         notificationDto.setStudent(studentDto);
 
@@ -899,11 +905,12 @@ public class ControllerUtils {
                         s.getEmail(),
                         s.getStudentId(),
                         null, // null coops
-                        null); // null notifications
+                        null, // null notifications
+                        null); //null reports
 
         // create coop dtos
         Set<Coop> coops = s.getCoops();
-        Set<CoopDto> coopDtos = new HashSet<CoopDto>();
+        List<CoopDto> coopDtos = new ArrayList<CoopDto>();
         if (coops != null) {
             for (Coop coop : coops) {
                 CoopDto coopDto =
@@ -951,7 +958,7 @@ public class ControllerUtils {
 
         // create notification dtos
         Set<Notification> notifications = s.getNotifications();
-        Set<NotificationDto> notificationDtos = new HashSet<NotificationDto>();
+        List<NotificationDto> notificationDtos = new ArrayList<NotificationDto>();
         if (notifications != null) {
             for (Notification notification : notifications) {
                 NotificationDto notificationDto =
@@ -978,9 +985,11 @@ public class ControllerUtils {
                 notificationDtos.add(notificationDto);
             }
         }
+        
+        studentDto.setNotifications(notificationDtos);
 
         Set<Report> reports = s.getReports();
-        Set<ReportDto> reportDtos = new HashSet<ReportDto>();
+        List<ReportDto> reportDtos = new ArrayList<ReportDto>();
         if (reports != null) {
             for (Report report : reports) {
                 ReportDto reportDto =
@@ -1023,8 +1032,6 @@ public class ControllerUtils {
         }
 
         studentDto.setReports(reportDtos);
-
-        studentDto.setNotifications(notificationDtos);
 
         return studentDto;
     }
@@ -1132,7 +1139,7 @@ public class ControllerUtils {
     }
 
     public static Set<Notification> convertNotificationListToDomainObjectSet(
-            NotificationService service, Set<NotificationDto> notifDtos) {
+            NotificationService service, List<NotificationDto> notifDtos) {
         Set<Notification> notifs = new HashSet<>();
         if (notifDtos == null) {
             return notifs;

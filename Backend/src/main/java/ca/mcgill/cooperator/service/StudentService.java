@@ -293,7 +293,7 @@ public class StudentService extends BaseService {
             String email,
             String studentId,
             Set<Coop> coops,
-            Set<Notification> notifs,
+            Set<Notification> notifications,
             Set<Report> reports) {
 
         StringBuilder error = new StringBuilder();
@@ -330,8 +330,8 @@ public class StudentService extends BaseService {
         if (studentId != null) {
             student.setStudentId(studentId);
         }
-        if (notifs != null) {
-            student.setNotifications(notifs);
+        if (notifications != null) {
+            student.setNotifications(notifications);
         }
         if (coops != null) {
             student.setCoops(coops);

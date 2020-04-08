@@ -152,7 +152,7 @@ public class AdminControllerIT extends BaseControllerIT {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(invalidAdmin))
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         // create the Admin with a POST request
         MvcResult mvcResult =

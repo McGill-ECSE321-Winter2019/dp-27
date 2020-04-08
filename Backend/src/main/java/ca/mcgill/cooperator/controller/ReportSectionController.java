@@ -29,19 +29,12 @@ public class ReportSectionController extends BaseController {
     @Autowired ReportSectionService reportSectionService;
     @Autowired ReportService reportService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
-
-    @GetMapping("/{id}")
-    public ReportSectionDto getReportSectionById(@PathVariable int id) {
-        ReportSection reportSection = reportSectionService.getReportSection(id);
-        return ControllerUtils.convertToDto(reportSection);
-    }
-
-    @GetMapping("")
-    public List<ReportSectionDto> getAllReportSections() {
-        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
-        return ControllerUtils.convertReportSectionListToDto(reportSections);
-    }
-
+    
+    /**
+     * creates new report section
+     * @param reportSectionDto
+     * @return
+     */
     @PostMapping("")
     public ReportSectionDto createReportSection(@RequestBody ReportSectionDto reportSectionDto) {
         ReportSectionConfig reportSectionConfig = null;
@@ -63,6 +56,33 @@ public class ReportSectionController extends BaseController {
         return ControllerUtils.convertToDto(reportSection);
     }
 
+    /**
+     * gets report section by id
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public ReportSectionDto getReportSectionById(@PathVariable int id) {
+        ReportSection reportSection = reportSectionService.getReportSection(id);
+        return ControllerUtils.convertToDto(reportSection);
+    }
+
+    /**
+     * gets all report sections
+     * @return
+     */
+    @GetMapping("")
+    public List<ReportSectionDto> getAllReportSections() {
+        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
+        return ControllerUtils.convertReportSectionListToDto(reportSections);
+    }
+
+    /**
+     * update report section
+     * @param id
+     * @param reportSectionDto
+     * @return
+     */
     @PutMapping("/{id}")
     public ReportSectionDto updateReportSection(
             @PathVariable int id, @RequestBody ReportSectionDto reportSectionDto) {
@@ -88,6 +108,11 @@ public class ReportSectionController extends BaseController {
         return ControllerUtils.convertToDto(reportSection);
     }
 
+    /**
+     * delete report section
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
     public ReportSectionDto deleteReportSection(@PathVariable int id) {
         ReportSection reportSection = reportSectionService.getReportSection(id);
