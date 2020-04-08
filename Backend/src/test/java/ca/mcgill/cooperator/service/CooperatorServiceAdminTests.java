@@ -10,7 +10,6 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import java.util.Set;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +33,7 @@ public class CooperatorServiceAdminTests extends BaseServiceTest {
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-    	authorRepository.deleteAll();
+        authorRepository.deleteAll();
         adminRepository.deleteAll();
         notificationRepository.deleteAll();
         studentRepository.deleteAll();

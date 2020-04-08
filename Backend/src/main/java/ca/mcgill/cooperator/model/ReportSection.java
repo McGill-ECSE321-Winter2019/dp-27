@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 public class ReportSection {
-	@Id @GeneratedValue private int id;
+    @Id @GeneratedValue private int id;
     private String response;
 
     @ManyToOne(optional = false)
@@ -15,7 +15,7 @@ public class ReportSection {
 
     @ManyToOne(optional = false)
     private ReportSectionConfig reportSectionConfig;
-    
+
     /*--- Getters and Setters ---*/
 
     public int getId() {
@@ -45,5 +45,4 @@ public class ReportSection {
     public void setReportSectionConfig(ReportSectionConfig reportSectionConfig) {
         this.reportSectionConfig = reportSectionConfig;
     }
-
 }

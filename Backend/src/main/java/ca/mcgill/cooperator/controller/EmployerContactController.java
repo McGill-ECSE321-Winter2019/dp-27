@@ -12,7 +12,6 @@ import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.ReportService;
-
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,9 +115,7 @@ public class EmployerContactController extends BaseController {
         Set<ReportDto> reportDtos = employerContactDto.getReports();
         Set<Report> reports = null;
         if (reportDtos != null) {
-            reports =
-                    ControllerUtils.convertReportDtosToDomainObjects(
-                            reportService, reportDtos);
+            reports = ControllerUtils.convertReportDtosToDomainObjects(reportService, reportDtos);
         }
 
         List<CoopDetailsDto> coopDetailsDtos = employerContactDto.getCoopDetails();

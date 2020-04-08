@@ -182,19 +182,12 @@ public class CoopController extends BaseController {
         Set<Report> reports = null;
         if (coopDto.getReports() != null) {
             List<ReportDto> reportDtos = coopDto.getReports();
-            reports =
-                    ControllerUtils.convertReportDtosToDomainObjects(
-                            reportService, reportDtos);
+            reports = ControllerUtils.convertReportDtosToDomainObjects(reportService, reportDtos);
         }
 
         coop =
                 coopService.updateCoop(
-                        coop,
-                        coopDto.getStatus(),
-                        courseOffering,
-                        student,
-                        coopDetails,
-                        reports);
+                        coop, coopDto.getStatus(), courseOffering, student, coopDetails, reports);
         return ControllerUtils.convertToDto(coop);
     }
 

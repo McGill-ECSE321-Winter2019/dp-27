@@ -83,8 +83,7 @@ public class StudentReportControllerIT extends BaseControllerIT {
         CourseDto courseDto = createTestCourse();
         CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
         StudentDto studentDto = createTestStudent();
-        CoopDto coopDto =
-                createTestCoop(courseOfferingDto, studentDto, CoopStatus.IN_PROGRESS);
+        CoopDto coopDto = createTestCoop(courseOfferingDto, studentDto, CoopStatus.IN_PROGRESS);
 
         // 1. create the StudentReport with a POST request
         MvcResult mvcResult =
@@ -94,7 +93,7 @@ public class StudentReportControllerIT extends BaseControllerIT {
                                         .param("status", "INCOMPLETE")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
-                                        .param("author_id",  String.valueOf(studentDto.getId()))
+                                        .param("author_id", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
@@ -127,7 +126,7 @@ public class StudentReportControllerIT extends BaseControllerIT {
                                         .param("status", "COMPLETED")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
-                                        .param("author_id",  String.valueOf(studentDto.getId()))
+                                        .param("author_id", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))
@@ -161,8 +160,7 @@ public class StudentReportControllerIT extends BaseControllerIT {
         List<ReportDto> reportDtos =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(),
-                                ReportDto[].class));
+                                mvcResult.getResponse().getContentAsString(), ReportDto[].class));
 
         assertEquals(reportDtos.size(), 0);
     }

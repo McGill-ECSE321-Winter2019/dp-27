@@ -129,14 +129,7 @@ public class CooperatorServiceCoopTests extends BaseServiceTest {
         Set<Report> reports = new HashSet<Report>();
 
         try {
-            c =
-                    coopService.updateCoop(
-                            c,
-                            status,
-                            courseOffering,
-                            student,
-                            cd,
-                            reports);
+            c = coopService.updateCoop(c, status, courseOffering, student, cd, reports);
         } catch (IllegalArgumentException e) {
             fail();
         }

@@ -9,16 +9,17 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 @Profile("test")
 public class TestFlywayConfig {
-	@Bean
-	public FlywayMigrationStrategy cleanMigrateStrategy() {
-	    FlywayMigrationStrategy strategy = new FlywayMigrationStrategy() {
-	        @Override
-	        public void migrate(Flyway flyway) {
-	            flyway.clean();
-	            flyway.migrate();
-	        }
-	    };
+    @Bean
+    public FlywayMigrationStrategy cleanMigrateStrategy() {
+        FlywayMigrationStrategy strategy =
+                new FlywayMigrationStrategy() {
+                    @Override
+                    public void migrate(Flyway flyway) {
+                        flyway.clean();
+                        flyway.migrate();
+                    }
+                };
 
-	    return strategy;
-	}
+        return strategy;
+    }
 }

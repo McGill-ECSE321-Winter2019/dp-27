@@ -237,10 +237,11 @@ public class StudentController extends BaseController {
                     ControllerUtils.convertNotificationListToDomainObjectSet(
                             notificationService, s.getNotifications());
         }
-        
+
         Set<Report> reports = null;
-        if(s.getReports() != null) {
-        	reports = ControllerUtils.convertReportDtosToDomainObjects(reportService, s.getReports());
+        if (s.getReports() != null) {
+            reports =
+                    ControllerUtils.convertReportDtosToDomainObjects(reportService, s.getReports());
         }
 
         studentService.updateStudent(

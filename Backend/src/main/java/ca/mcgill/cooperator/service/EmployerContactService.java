@@ -7,7 +7,6 @@ import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.Report;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -179,7 +178,7 @@ public class EmployerContactService extends BaseService {
             employerContact.setPhoneNumber(phoneNumber.trim());
         }
         if (reports != null) {
-        	employerContact.setReports(reports);
+            employerContact.setReports(reports);
         }
         if (coopDetails != null) {
             employerContact.setCoopDetails(coopDetails);

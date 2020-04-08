@@ -1,30 +1,28 @@
 package ca.mcgill.cooperator.service;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
+import ca.mcgill.cooperator.model.Author;
+import ca.mcgill.cooperator.model.Report;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.mcgill.cooperator.dao.AuthorRepository;
-import ca.mcgill.cooperator.model.Author;
-import ca.mcgill.cooperator.model.Report;
-
 @Service
 public class AuthorService extends BaseService {
-	@Autowired AuthorRepository authorRepository;
-	
-	/**
-	 * Creates a new author in the database
-	 * @param firstName
-	 * @param lastName
-	 * @param email
-	 * @return
-	 */
-	@Transactional
-    public Author createAuthor(
-            String firstName, String lastName, String email) {
+    @Autowired AuthorRepository authorRepository;
+
+    /**
+     * Creates a new author in the database
+     *
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @return
+     */
+    @Transactional
+    public Author createAuthor(String firstName, String lastName, String email) {
         StringBuilder error = new StringBuilder();
         if (firstName == null || firstName.trim().length() == 0) {
             error.append("Author first name cannot be empty. ");
@@ -49,8 +47,8 @@ public class AuthorService extends BaseService {
 
         return authorRepository.save(a);
     }
-	
-	@Transactional
+
+    @Transactional
     public Author getAuthorById(Integer id) {
         if (id == null || id < 0) {
             throw new IllegalArgumentException(ERROR_PREFIX + "ID is invalid.");
@@ -62,14 +60,10 @@ public class AuthorService extends BaseService {
         }
         return a;
     }
-	
-	@Transactional
+
+    @Transactional
     public Author updateAuthor(
-    		Author a,
-            String firstName,
-            String lastName,
-            String email,
-            Set<Report> reports) {
+            Author a, String firstName, String lastName, String email, Set<Report> reports) {
 
         StringBuilder error = new StringBuilder();
         if (a == null) {
@@ -99,14 +93,14 @@ public class AuthorService extends BaseService {
         if (email != null) {
             a.setEmail(email.trim());
         }
-        if (reports!= null) {
-        	a.setReports(reports);
+        if (reports != null) {
+            a.setReports(reports);
         }
 
         return authorRepository.save(a);
     }
-	
-	@Transactional
+
+    @Transactional
     public Author deleteAuthor(Author a) {
         if (a == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Author to delete cannot be null.");

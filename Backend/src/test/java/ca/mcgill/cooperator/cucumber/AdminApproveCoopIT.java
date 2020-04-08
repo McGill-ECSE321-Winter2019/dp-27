@@ -28,7 +28,6 @@ import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.ReportSectionService;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
@@ -88,8 +87,7 @@ public class AdminApproveCoopIT extends BaseControllerIT {
             coopDetailsRepository.save(cd);
         }
 
-        List<ReportSection> reportSections =
-                reportSectionService.getAllReportSections();
+        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
         for (ReportSection reportSection : reportSections) {
             reportSectionService.deleteReportSection(reportSection);
         }
@@ -153,8 +151,7 @@ public class AdminApproveCoopIT extends BaseControllerIT {
         List<ReportDto> studentReportDtos =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(),
-                                ReportDto[].class));
+                                mvcResult.getResponse().getContentAsString(), ReportDto[].class));
 
         assertEquals(1, studentReportDtos.size());
 
@@ -213,7 +210,7 @@ public class AdminApproveCoopIT extends BaseControllerIT {
                                         .param("status", "COMPLETED")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
-                                        .param("author_id",  String.valueOf(studentDto.getId()))
+                                        .param("author_id", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))
@@ -253,8 +250,7 @@ public class AdminApproveCoopIT extends BaseControllerIT {
         List<ReportDto> studentReportDtos =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(),
-                                ReportDto[].class));
+                                mvcResult.getResponse().getContentAsString(), ReportDto[].class));
 
         assertEquals(1, studentReportDtos.size());
 

@@ -336,8 +336,8 @@ public class StudentService extends BaseService {
         if (coops != null) {
             student.setCoops(coops);
         }
-        if (reports!= null) {
-        	student.setReports(reports);
+        if (reports != null) {
+            student.setReports(reports);
         }
 
         return studentRepository.save(student);

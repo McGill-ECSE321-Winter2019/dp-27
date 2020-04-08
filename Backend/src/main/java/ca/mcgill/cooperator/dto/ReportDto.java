@@ -1,11 +1,10 @@
 package ca.mcgill.cooperator.dto;
 
+import ca.mcgill.cooperator.model.ReportStatus;
 import java.util.List;
 
-import ca.mcgill.cooperator.model.ReportStatus;
-
 public class ReportDto {
-	private Integer id;
+    private Integer id;
     private String title;
     private ReportStatus status;
 
@@ -16,7 +15,7 @@ public class ReportDto {
     private List<ReportSectionDto> reportSections;
 
     public ReportDto() {}
-    
+
     public ReportDto(
             Integer id,
             String title,
@@ -33,7 +32,7 @@ public class ReportDto {
         this.author = author;
         this.reportSections = reportSections;
     }
-    
+
     /*--- Getters and Setters ---*/
 
     public Integer getId() {
@@ -87,5 +86,4 @@ public class ReportDto {
     public void setReportSections(List<ReportSectionDto> reportSections) {
         this.reportSections = reportSections;
     }
-
 }

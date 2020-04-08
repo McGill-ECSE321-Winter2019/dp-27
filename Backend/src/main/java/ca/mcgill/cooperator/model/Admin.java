@@ -1,7 +1,6 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,7 +9,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-public class Admin extends Author{
+public class Admin extends Author {
 
     @OneToMany(
             mappedBy = "sender",

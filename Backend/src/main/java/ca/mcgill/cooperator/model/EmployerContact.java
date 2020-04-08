@@ -9,7 +9,7 @@ import javax.persistence.OneToMany;
 
 @Entity
 public class EmployerContact extends Author {
-	
+
     private String phoneNumber;
 
     @ManyToOne(optional = false)

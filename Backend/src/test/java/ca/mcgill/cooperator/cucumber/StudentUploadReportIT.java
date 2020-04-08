@@ -98,8 +98,7 @@ public class StudentUploadReportIT extends BaseControllerIT {
             coopDetailsRepository.save(cd);
         }
 
-        List<ReportSection> reportSections =
-                reportSectionService.getAllReportSections();
+        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
         for (ReportSection reportSection : reportSections) {
             reportSectionService.deleteReportSection(reportSection);
         }
@@ -235,8 +234,7 @@ public class StudentUploadReportIT extends BaseControllerIT {
     @When("the Student uploads the same type of Report again")
     public void studentUploadsReportAgain() throws Exception {
         Set<ReportSectionDto> rdtos = new HashSet<ReportSectionDto>();
-        reportSectionDto =
-                createTestReportSection(reportSectionConfigDto, reportDto);
+        reportSectionDto = createTestReportSection(reportSectionConfigDto, reportDto);
         rdtos.add(reportSectionDto);
 
         File testFile = new File("src/test/resources/Test_Offer_Letter.pdf");
@@ -260,7 +258,7 @@ public class StudentUploadReportIT extends BaseControllerIT {
                                         .param("status", "SUBMITTED")
                                         .param("title", "Offer Letter")
                                         .param("coop_id", String.valueOf(coopDto.getId()))
-                                        .param("author_id",  String.valueOf(studentDto.getId()))
+                                        .param("author_id", String.valueOf(studentDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rdtos))

@@ -2,8 +2,8 @@ package ca.mcgill.cooperator.dto;
 
 import java.util.Set;
 
-public class StudentDto extends AuthorDto{
-	
+public class StudentDto extends AuthorDto {
+
     private String studentId;
 
     private Set<CoopDto> coops;

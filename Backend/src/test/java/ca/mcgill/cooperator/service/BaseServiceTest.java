@@ -119,9 +119,7 @@ public class BaseServiceTest {
         try {
             MultipartFile multipartFile = new MockMultipartFile("file", new FileInputStream(file));
 
-            r =
-                    service.createReport(
-                            ReportStatus.COMPLETED, c, "Offer Letter", s, multipartFile);
+            r = service.createReport(ReportStatus.COMPLETED, c, "Offer Letter", s, multipartFile);
             return r;
         } catch (IOException e) {
             return null;
@@ -133,16 +131,13 @@ public class BaseServiceTest {
         return service.createReportSection("This is a response", rsConfig, r);
     }
 
-    Report createTestEmployerReport(
-            ReportService service, Coop c, EmployerContact ec) {
+    Report createTestEmployerReport(ReportService service, Coop c, EmployerContact ec) {
         Report r = new Report();
         File file = new File("src/test/resources/Test_Offer_Letter.pdf");
         try {
             MultipartFile multipartFile = new MockMultipartFile("file", new FileInputStream(file));
 
-            r =
-                    service.createReport(
-                            ReportStatus.COMPLETED, c, "Offer Letter", ec, multipartFile);
+            r = service.createReport(ReportStatus.COMPLETED, c, "Offer Letter", ec, multipartFile);
             return r;
         } catch (IOException e) {
             return null;

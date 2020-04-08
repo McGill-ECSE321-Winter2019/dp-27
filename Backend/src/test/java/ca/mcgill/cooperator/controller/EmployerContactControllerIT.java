@@ -14,7 +14,6 @@ import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.service.ReportService;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.List;

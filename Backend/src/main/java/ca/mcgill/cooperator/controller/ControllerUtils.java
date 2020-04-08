@@ -86,22 +86,25 @@ public class ControllerUtils {
                 notificationDtos.add(notificationDto);
             }
         }
-        
+
         adminDto.setSentNotifications(notificationDtos);
-        
+
         Set<Report> reports = a.getReports();
         Set<ReportDto> reportDtos = new HashSet<ReportDto>();
         if (reports != null) {
-        	for (Report report : reports) {
-        		ReportDto reportDto = new ReportDto(report.getId(),
-        											report.getTitle(),
-        											report.getStatus(),
-        											report.getData(),
-        											null, //null coop
-        											null, //null author since admin is parent
-        											null); //null report sections for now, could be changed later if admin starts to be authors of reports
-        		reportDtos.add(reportDto);
-        	}
+            for (Report report : reports) {
+                ReportDto reportDto =
+                        new ReportDto(
+                                report.getId(),
+                                report.getTitle(),
+                                report.getStatus(),
+                                report.getData(),
+                                null, // null coop
+                                null, // null author since admin is parent
+                                null); // null report sections for now, could be changed later if
+                                       // admin starts to be authors of reports
+                reportDtos.add(reportDto);
+            }
         }
 
         adminDto.setReports(reportDtos);
@@ -262,33 +265,32 @@ public class ControllerUtils {
             for (Report report : reports) {
                 ReportDto reportDto =
                         new ReportDto(
-                        		report.getId(),
-                        		report.getTitle(),
-                        		report.getStatus(),
-                        		report.getData(),
+                                report.getId(),
+                                report.getTitle(),
+                                report.getStatus(),
+                                report.getData(),
                                 null, // null coop since coop is parent
                                 null, // null author, look up report by id to get author
                                 null); // null report sections
-                
+
                 Author author = report.getAuthor();
                 AuthorDto authorDto = new AuthorDto();
                 authorDto.setId(author.getId());
                 authorDto.setFirstName(author.getEmail());
                 authorDto.setLastName(author.getLastName());
                 authorDto.setEmail(author.getEmail());
-                authorDto.setReports(null); //null since parent
-                
+                authorDto.setReports(null); // null since parent
+
                 reportDto.setAuthor(authorDto);
 
                 Set<ReportSection> reportSections = report.getReportSections();
-                List<ReportSectionDto> reportSectionDtos =
-                        new ArrayList<ReportSectionDto>();
+                List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
                 for (ReportSection reportSection : reportSections) {
                     ReportSectionDto reportSectionDto =
                             new ReportSectionDto(
                                     reportSection.getId(),
                                     reportSection.getResponse(),
-                                    null, // null report 
+                                    null, // null report
                                     null); // null report section config
                     reportSectionDtos.add(reportSectionDto);
                 }
@@ -626,10 +628,10 @@ public class ControllerUtils {
             for (Report report : reports) {
                 ReportDto reportDto =
                         new ReportDto(
-                        		report.getId(),
-                        		report.getTitle(),
-                        		report.getStatus(),
-                        		report.getData(),
+                                report.getId(),
+                                report.getTitle(),
+                                report.getStatus(),
+                                report.getData(),
                                 null, // null coop
                                 null, // null author since parent
                                 null); // null report sections, look up report by id to get sections
@@ -712,7 +714,7 @@ public class ControllerUtils {
                         null, // null coop details, look up coop by id to get coop details
                         null, // null student
                         null); // null reports, look up coop by id to get reports
-                        
+
         // reports
 
         Student student = coop.getStudent();
@@ -743,8 +745,7 @@ public class ControllerUtils {
 
         // create report section dtos
         Set<ReportSection> reportSections = r.getReportSections();
-        List<ReportSectionDto> reportSectionDtos =
-                new ArrayList<ReportSectionDto>();
+        List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
         if (reportSections != null) {
             for (ReportSection reportSection : reportSections) {
                 ReportSectionDto reportSectionDto =
@@ -762,15 +763,13 @@ public class ControllerUtils {
         return reportDto;
     }
 
-    public static List<ReportDto> convertReportListToDto(
-            Set<Report> reports) {
+    public static List<ReportDto> convertReportListToDto(Set<Report> reports) {
         List<ReportDto> reportDtos = new ArrayList<ReportDto>();
 
         if (reports != null && reports.size() > 0) {
             for (Report r : reports) {
                 if (r == null) {
-                    throw new IllegalArgumentException(
-                            ERROR_PREFIX + "Report does not exist!");
+                    throw new IllegalArgumentException(ERROR_PREFIX + "Report does not exist!");
                 }
                 reportDtos.add(convertToDto(r));
             }
@@ -778,16 +777,14 @@ public class ControllerUtils {
 
         return reportDtos;
     }
-    
-    public static List<ReportDto> convertReportListToDto(
-            List<Report> reports) {
+
+    public static List<ReportDto> convertReportListToDto(List<Report> reports) {
         List<ReportDto> reportDtos = new ArrayList<ReportDto>();
 
         if (reports != null && reports.size() > 0) {
             for (Report r : reports) {
                 if (r == null) {
-                    throw new IllegalArgumentException(
-                            ERROR_PREFIX + "Report does not exist!");
+                    throw new IllegalArgumentException(ERROR_PREFIX + "Report does not exist!");
                 }
                 reportDtos.add(convertToDto(r));
             }
@@ -798,8 +795,7 @@ public class ControllerUtils {
 
     public static ReportSectionDto convertToDto(ReportSection rs) {
         if (rs == null) {
-            throw new IllegalArgumentException(
-                    ERROR_PREFIX + "Report section does not exist!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Report section does not exist!");
         }
         return new ReportSectionDto(
                 rs.getId(),
@@ -810,13 +806,11 @@ public class ControllerUtils {
 
     public static List<ReportSectionDto> convertReportSectionListToDto(
             List<ReportSection> reportSections) {
-        List<ReportSectionDto> reportSectionDtos =
-                new ArrayList<ReportSectionDto>();
+        List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
 
         for (ReportSection rs : reportSections) {
             if (rs == null) {
-                throw new IllegalArgumentException(
-                        ERROR_PREFIX + "Report section does not exist!");
+                throw new IllegalArgumentException(ERROR_PREFIX + "Report section does not exist!");
             }
             reportSectionDtos.add(convertToDto(rs));
         }
@@ -984,47 +978,51 @@ public class ControllerUtils {
                 notificationDtos.add(notificationDto);
             }
         }
-        
+
         Set<Report> reports = s.getReports();
         Set<ReportDto> reportDtos = new HashSet<ReportDto>();
         if (reports != null) {
-        	for (Report report : reports) {
-        		ReportDto reportDto = new ReportDto(report.getId(),
-        											report.getTitle(),
-        											report.getStatus(),
-        											report.getData(),
-        											null, //null coop
-        											null, //null author since student is parent
-        											null); //null report sections
-        		
-        		Set<ReportSection> reportSections = report.getReportSections();
-        		List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
-        		for (ReportSection reportSection : reportSections) {
-        			ReportSectionDto reportSectionDto = new ReportSectionDto(reportSection.getId(),
-        																	 reportSection.getResponse(),
-        																	 null, //null report since parent
-        																	 null); //null report section config
-        			
-        			ReportSectionConfig reportSectionConfig = reportSection.getReportSectionConfig();
-        			ReportSectionConfigDto reportSectionConfigDto = new ReportSectionConfigDto(
-        																	reportSectionConfig.getId(),
-        																	reportSectionConfig.getSectionPrompt(),
-        																	reportSectionConfig.getResponseType(),
-        																	reportSectionConfig.getQuestionNumber(),
-        																	null, //null report config
-        																	null); //null report sections
-        			
-        			reportSectionDto.setReportSectionConfig(reportSectionConfigDto);
-        			reportSectionDtos.add(reportSectionDto);
-        		}
-        		reportDto.setReportSections(reportSectionDtos);
-        		reportDtos.add(reportDto);
-        	}
+            for (Report report : reports) {
+                ReportDto reportDto =
+                        new ReportDto(
+                                report.getId(),
+                                report.getTitle(),
+                                report.getStatus(),
+                                report.getData(),
+                                null, // null coop
+                                null, // null author since student is parent
+                                null); // null report sections
+
+                Set<ReportSection> reportSections = report.getReportSections();
+                List<ReportSectionDto> reportSectionDtos = new ArrayList<ReportSectionDto>();
+                for (ReportSection reportSection : reportSections) {
+                    ReportSectionDto reportSectionDto =
+                            new ReportSectionDto(
+                                    reportSection.getId(),
+                                    reportSection.getResponse(),
+                                    null, // null report since parent
+                                    null); // null report section config
+
+                    ReportSectionConfig reportSectionConfig =
+                            reportSection.getReportSectionConfig();
+                    ReportSectionConfigDto reportSectionConfigDto =
+                            new ReportSectionConfigDto(
+                                    reportSectionConfig.getId(),
+                                    reportSectionConfig.getSectionPrompt(),
+                                    reportSectionConfig.getResponseType(),
+                                    reportSectionConfig.getQuestionNumber(),
+                                    null, // null report config
+                                    null); // null report sections
+
+                    reportSectionDto.setReportSectionConfig(reportSectionConfigDto);
+                    reportSectionDtos.add(reportSectionDto);
+                }
+                reportDto.setReportSections(reportSectionDtos);
+                reportDtos.add(reportDto);
+            }
         }
 
         studentDto.setReports(reportDtos);
-        
-        
 
         studentDto.setNotifications(notificationDtos);
 
@@ -1147,7 +1145,7 @@ public class ControllerUtils {
     }
 
     public static Set<ReportSection> convertReportSectionsToDomainObjects(
-           ReportSectionService service, Collection<ReportSectionDto> rsDtos) {
+            ReportSectionService service, Collection<ReportSectionDto> rsDtos) {
         Set<ReportSection> reports = new HashSet<ReportSection>();
         for (ReportSectionDto rsDto : rsDtos) {
             ReportSection rs = service.getReportSection(rsDto.getId());
@@ -1166,7 +1164,7 @@ public class ControllerUtils {
         }
         return coops;
     }
-    
+
     public static Set<Coop> convertCoopsListToDomainObject(
             CoopService service, Set<CoopDto> coopDto) {
         Set<Coop> coops = new HashSet<>();
@@ -1236,7 +1234,7 @@ public class ControllerUtils {
 
         return reports;
     }
-    
+
     public static Set<Report> convertReportDtosToDomainObjects(
             ReportService service, List<ReportDto> reportDtos) {
         Set<Report> reports = new HashSet<Report>();

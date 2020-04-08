@@ -1,25 +1,23 @@
 package ca.mcgill.cooperator.service;
 
+import ca.mcgill.cooperator.dao.ReportRepository;
 import ca.mcgill.cooperator.dao.ReportSectionConfigRepository;
+import ca.mcgill.cooperator.dao.ReportSectionRepository;
+import ca.mcgill.cooperator.model.Report;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ca.mcgill.cooperator.dao.ReportRepository;
-import ca.mcgill.cooperator.dao.ReportSectionRepository;
-import ca.mcgill.cooperator.model.Report;
-import ca.mcgill.cooperator.model.ReportSection;
-
 @Service
 public class ReportSectionService extends BaseService {
-	@Autowired ReportSectionRepository reportSectionRepository;
+    @Autowired ReportSectionRepository reportSectionRepository;
     @Autowired ReportRepository reportRepository;
     @Autowired ReportSectionConfigRepository reportSectionConfigRepository;
-    
+
     /**
      * Creates new report section in the database
      *
@@ -30,9 +28,7 @@ public class ReportSectionService extends BaseService {
      */
     @Transactional
     public ReportSection createReportSection(
-            String response,
-            ReportSectionConfig reportSectionConfig,
-            Report report) {
+            String response, ReportSectionConfig reportSectionConfig, Report report) {
         StringBuilder error = new StringBuilder();
         if (response == null || response.trim().length() == 0) {
             error.append("Response cannot be empty! ");
@@ -54,7 +50,7 @@ public class ReportSectionService extends BaseService {
 
         return reportSectionRepository.save(rs);
     }
-    
+
     /**
      * Gets a EmployerReportSection by ID
      *
@@ -71,7 +67,7 @@ public class ReportSectionService extends BaseService {
 
         return rs;
     }
-    
+
     /**
      * Returns all report sections from the database
      *
@@ -81,14 +77,14 @@ public class ReportSectionService extends BaseService {
     public List<ReportSection> getAllReportSections() {
         return ServiceUtils.toList(reportSectionRepository.findAll());
     }
-    
+
     /**
      * Updates an existing EmployerReportSection
      *
      * @param employerReportSection
      * @param response
-     * @param reportSectionConfig
-<<<<<<< HEAD:Backend/src/main/java/ca/mcgill/cooperator/service/ReportSectionService.java
+     * @param reportSectionConfig <<<<<<<
+     *     HEAD:Backend/src/main/java/ca/mcgill/cooperator/service/ReportSectionService.java
      * @param report
      * @return updated report section
      */
@@ -110,10 +106,10 @@ public class ReportSectionService extends BaseService {
         }
 
         if (response != null) {
-        	rs.setResponse(response.trim());
+            rs.setResponse(response.trim());
         }
         if (reportSectionConfig != null) {
-        	rs.setReportSectionConfig(reportSectionConfig);
+            rs.setReportSectionConfig(reportSectionConfig);
         }
         if (report != null) {
             rs.setReport(report);
@@ -121,7 +117,7 @@ public class ReportSectionService extends BaseService {
 
         return reportSectionRepository.save(rs);
     }
-    
+
     /**
      * Deletes an existing EmployerReportSection
      *
@@ -159,7 +155,4 @@ public class ReportSectionService extends BaseService {
         reportSectionRepository.delete(rs);
         return rs;
     }
-    
-    
-    
 }

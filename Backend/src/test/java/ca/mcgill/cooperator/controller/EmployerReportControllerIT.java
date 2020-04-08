@@ -25,7 +25,6 @@ import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.service.ReportService;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,7 +57,7 @@ public class EmployerReportControllerIT extends BaseControllerIT {
     @Autowired private MockMvc mvc;
 
     @Autowired private ObjectMapper objectMapper;
-    
+
     @Autowired private ReportService reportService;
 
     @Autowired private ReportRepository reportRepository;
@@ -182,8 +181,7 @@ public class EmployerReportControllerIT extends BaseControllerIT {
         List<ReportDto> reportDtos =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(),
-                                ReportDto[].class));
+                                mvcResult.getResponse().getContentAsString(), ReportDto[].class));
 
         assertEquals(reportDtos.size(), 0);
     }

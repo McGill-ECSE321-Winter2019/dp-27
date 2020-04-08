@@ -52,8 +52,7 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-        List<ReportSection> reportSections =
-                reportSectionService.getAllReportSections();
+        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
         for (ReportSection reportSection : reportSections) {
             reportSectionService.deleteReportSection(reportSection);
         }
@@ -176,9 +175,7 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         assertEquals(r.getId(), rs.getReport().getId());
         assertEquals(1, reportSectionService.getAllReportSections().size());
         r = reportService.getReport(r.getId());
-        assertEquals(
-                response,
-                ((ReportSection) r.getReportSections().toArray()[0]).getResponse());
+        assertEquals(response, ((ReportSection) r.getReportSections().toArray()[0]).getResponse());
     }
 
     @Test
@@ -210,9 +207,7 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         }
 
         assertEquals(
-                ERROR_PREFIX
-                        + "Report section cannot be null! "
-                        + "Response cannot be empty!",
+                ERROR_PREFIX + "Report section cannot be null! " + "Response cannot be empty!",
                 error);
     }
 

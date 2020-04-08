@@ -1,15 +1,5 @@
 package ca.mcgill.cooperator.service;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.ReportRepository;
@@ -19,18 +9,26 @@ import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ReportService extends BaseService {
-	
-	@Autowired AuthorRepository authorRepository;
+
+    @Autowired AuthorRepository authorRepository;
     @Autowired ReportRepository reportRepository;
     @Autowired ReportSectionRepository reportSectionRepository;
     @Autowired CoopRepository coopRepository;
-    
+
     /**
      * Creates new report in database
-     * 
+     *
      * @param status
      * @param c
      * @param title
@@ -40,8 +38,8 @@ public class ReportService extends BaseService {
      */
     @Transactional
     public Report createReport(
-    		ReportStatus status, Coop c, String title, Author a, MultipartFile file) {
-    	StringBuilder error = new StringBuilder();
+            ReportStatus status, Coop c, String title, Author a, MultipartFile file) {
+        StringBuilder error = new StringBuilder();
         if (status == null) {
             error.append("Report Status cannot be null! ");
         }
@@ -57,14 +55,14 @@ public class ReportService extends BaseService {
         if (error.length() > 0) {
             throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
-        
+
         Report r = new Report();
         r.setStatus(status);
         r.setTitle(title);
         r.setCoop(c);
         r.setAuthor(a);
         r.setReportSections(new HashSet<ReportSection>());
-        
+
         if (file != null) {
             try {
                 r.setData(file.getBytes());
@@ -75,9 +73,9 @@ public class ReportService extends BaseService {
 
         return reportRepository.save(r);
     }
-    
+
     /**
-     * Retrieves specified existing  report from database
+     * Retrieves specified existing report from database
      *
      * @param id
      * @return specific report
@@ -92,7 +90,7 @@ public class ReportService extends BaseService {
 
         return r;
     }
-    
+
     /**
      * Retrieves all reports from database
      *
@@ -102,7 +100,7 @@ public class ReportService extends BaseService {
     public List<Report> getAllReports() {
         return ServiceUtils.toList(reportRepository.findAll());
     }
-    
+
     /**
      * Updates existing report in database
      *
@@ -156,21 +154,9 @@ public class ReportService extends BaseService {
         }
 
         reportRepository.save(r);
-        
-        //CHECK HERE IF BELOW IS NEEDED
-
-        // need to update sections side since it doesn't sync
-        if (sections != null) {
-            // set employer report as parent for all report sections
-            for (ReportSection section : sections) {
-                section.setReport(r);
-                reportSectionRepository.save(section);
-            }
-        }
 
         return reportRepository.save(r);
     }
-    
 
     /**
      * Deletes specific report from database
@@ -181,8 +167,7 @@ public class ReportService extends BaseService {
     @Transactional
     public Report deleteReport(Report r) {
         if (r == null) {
-            throw new IllegalArgumentException(
-                    ERROR_PREFIX + "Report to delete cannot be null!");
+            throw new IllegalArgumentException(ERROR_PREFIX + "Report to delete cannot be null!");
         }
 
         // first delete from all parents
@@ -202,6 +187,4 @@ public class ReportService extends BaseService {
 
         return r;
     }
-    
-
 }

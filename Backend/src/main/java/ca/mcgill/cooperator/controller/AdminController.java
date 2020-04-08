@@ -7,10 +7,8 @@ import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.service.AdminService;
 import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.ReportService;
-
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -97,11 +95,12 @@ public class AdminController extends BaseController {
                     ControllerUtils.convertNotificationListToDomainObjectSet(
                             notifService, a.getSentNotifications());
         }
-        
+
         Set<Report> reports = null;
-        
+
         if (a.getReports() != null) {
-        	reports = ControllerUtils.convertReportDtosToDomainObjects(reportService, a.getReports());
+            reports =
+                    ControllerUtils.convertReportDtosToDomainObjects(reportService, a.getReports());
         }
 
         Admin updatedAdmin =

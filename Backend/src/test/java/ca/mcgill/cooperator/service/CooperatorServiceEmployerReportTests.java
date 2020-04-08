@@ -76,8 +76,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
             reportRepository.save(r);
         }
 
-        List<ReportSection> reportSections =
-                reportSectionService.getAllReportSections();
+        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
         for (ReportSection reportSection : reportSections) {
             reportSectionService.deleteReportSection(reportSection);
         }
@@ -115,12 +114,9 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
 
         assertEquals(1, reportService.getAllReports().size());
         ec = employerContactService.getEmployerContact(ec.getId());
-        assertEquals(
-                "Offer Letter", ((Report) ec.getReports().toArray()[0]).getTitle());
+        assertEquals("Offer Letter", ((Report) ec.getReports().toArray()[0]).getTitle());
         coop = coopService.getCoopById(coop.getId());
-        assertEquals(
-                "Offer Letter",
-                ((Report) coop.getReports().toArray()[0]).getTitle());
+        assertEquals("Offer Letter", ((Report) coop.getReports().toArray()[0]).getTitle());
     }
 
     @Test
@@ -166,8 +162,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         }
 
         Set<ReportSection> sections = new HashSet<ReportSection>();
-        ReportSection rs =
-                createTestReportSection(reportSectionService, rsConfig, r);
+        ReportSection rs = createTestReportSection(reportSectionService, rsConfig, r);
         sections.add(rs);
 
         try {
@@ -213,8 +208,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         }
 
         Set<ReportSection> sections = new HashSet<ReportSection>();
-        ReportSection rs =
-                createTestReportSection(reportSectionService, rsConfig, r);
+        ReportSection rs = createTestReportSection(reportSectionService, rsConfig, r);
         sections.add(rs);
 
         try {
@@ -225,17 +219,12 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         }
 
         assertEquals(1, r.getReportSections().size());
-        assertEquals(
-                ReportStatus.INCOMPLETE,
-                reportService.getReport(r.getId()).getStatus());
+        assertEquals(ReportStatus.INCOMPLETE, reportService.getReport(r.getId()).getStatus());
         assertEquals(1, reportService.getAllReports().size());
         ec = employerContactService.getEmployerContact(ec.getId());
-        assertEquals(
-                "Offer Letter", ((Report) ec.getReports().toArray()[0]).getTitle());
+        assertEquals("Offer Letter", ((Report) ec.getReports().toArray()[0]).getTitle());
         coop = coopService.getCoopById(coop.getId());
-        assertEquals(
-                "Offer Letter",
-                ((Report) coop.getReports().toArray()[0]).getTitle());
+        assertEquals("Offer Letter", ((Report) coop.getReports().toArray()[0]).getTitle());
         rs = reportSectionService.getReportSection(rs.getId());
         assertEquals("Offer Letter", rs.getReport().getTitle());
     }
@@ -263,17 +252,13 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
 
         String error = "";
         try {
-            r =
-                    reportService.updateReport(
-                            null, null, null, null, null, null, null);
+            r = reportService.updateReport(null, null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
         assertEquals(ERROR_PREFIX + "Report cannot be null!", error);
-        assertEquals(
-                ReportStatus.COMPLETED,
-                reportService.getReport(r.getId()).getStatus());
+        assertEquals(ReportStatus.COMPLETED, reportService.getReport(r.getId()).getStatus());
         assertEquals(1, reportService.getAllReports().size());
     }
 

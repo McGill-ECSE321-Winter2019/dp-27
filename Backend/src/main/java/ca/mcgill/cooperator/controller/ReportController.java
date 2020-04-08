@@ -1,8 +1,18 @@
 package ca.mcgill.cooperator.controller;
 
+import ca.mcgill.cooperator.dto.ReportDto;
+import ca.mcgill.cooperator.dto.ReportSectionDto;
+import ca.mcgill.cooperator.model.Author;
+import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.Report;
+import ca.mcgill.cooperator.model.ReportSection;
+import ca.mcgill.cooperator.model.ReportStatus;
+import ca.mcgill.cooperator.service.AuthorService;
+import ca.mcgill.cooperator.service.CoopService;
+import ca.mcgill.cooperator.service.ReportSectionService;
+import ca.mcgill.cooperator.service.ReportService;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,27 +27,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import ca.mcgill.cooperator.dto.ReportDto;
-import ca.mcgill.cooperator.dto.ReportSectionDto;
-import ca.mcgill.cooperator.model.Author;
-import ca.mcgill.cooperator.model.Coop;
-import ca.mcgill.cooperator.model.Report;
-import ca.mcgill.cooperator.model.ReportSection;
-import ca.mcgill.cooperator.model.ReportStatus;
-import ca.mcgill.cooperator.service.AuthorService;
-import ca.mcgill.cooperator.service.CoopService;
-import ca.mcgill.cooperator.service.ReportSectionService;
-import ca.mcgill.cooperator.service.ReportService;
-
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("reports")
 public class ReportController extends BaseController {
-	@Autowired CoopService coopService;
+    @Autowired CoopService coopService;
     @Autowired AuthorService authorService;
     @Autowired ReportService reportService;
     @Autowired ReportSectionService reportSectionService;
-    
+
     /**
      * Gets a Report by ID
      *
@@ -50,12 +48,12 @@ public class ReportController extends BaseController {
 
         return ControllerUtils.convertToDto(r);
     }
-    
+
     @GetMapping("")
     public List<ReportDto> getAllReports() {
         return ControllerUtils.convertReportListToDto(reportService.getAllReports());
     }
-    
+
     /**
      * Gets all Reports associated with the specified Author
      *
@@ -68,7 +66,7 @@ public class ReportController extends BaseController {
 
         return ControllerUtils.convertReportListToDto(a.getReports());
     }
-    
+
     /**
      * Creates a Report using multipart form data
      *
@@ -91,12 +89,11 @@ public class ReportController extends BaseController {
         Author a = authorService.getAuthorById(authorId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
 
-        Report createdReport =
-                reportService.createReport(reportStatus, coop, title, a, file);
+        Report createdReport = reportService.createReport(reportStatus, coop, title, a, file);
 
         return ControllerUtils.convertToDto(createdReport);
     }
-    
+
     /**
      * Updates an existing Report
      *
@@ -136,7 +133,7 @@ public class ReportController extends BaseController {
 
         return ControllerUtils.convertToDto(updatedReport);
     }
-    
+
     /**
      * Deletes a Report
      *
@@ -150,6 +147,4 @@ public class ReportController extends BaseController {
 
         return ControllerUtils.convertToDto(report);
     }
-
-
 }

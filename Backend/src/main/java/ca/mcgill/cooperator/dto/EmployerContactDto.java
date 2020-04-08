@@ -3,7 +3,7 @@ package ca.mcgill.cooperator.dto;
 import java.util.List;
 
 public class EmployerContactDto extends AuthorDto {
-	
+
     private String phoneNumber;
 
     private CompanyDto company;

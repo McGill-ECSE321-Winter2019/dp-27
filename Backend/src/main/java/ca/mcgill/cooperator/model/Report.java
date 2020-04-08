@@ -1,7 +1,6 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -22,9 +20,9 @@ public class Report {
     private byte[] data;
 
     @ManyToOne private Coop coop;
-    
+
     @ManyToOne private Author author;
-    
+
     @OneToMany(
             mappedBy = "report",
             cascade = CascadeType.PERSIST,
@@ -32,7 +30,7 @@ public class Report {
             fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<ReportSection> reportSections;
-    
+
     /*--- Getters and Setters ---*/
 
     public int getId() {
@@ -78,7 +76,7 @@ public class Report {
     public void setData(byte[] data) {
         this.data = data;
     }
-    
+
     public Author getAuthor() {
         return this.author;
     }
@@ -99,5 +97,4 @@ public class Report {
             this.reportSections.addAll(reportSections);
         }
     }
-
 }

@@ -3,8 +3,6 @@ package ca.mcgill.cooperator.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.sql.Date;
-
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.CoopDetailsDto;
 import ca.mcgill.cooperator.dto.CoopDto;
@@ -339,8 +337,7 @@ public abstract class BaseControllerIT {
     }
 
     public ReportSectionDto createTestReportSection(
-            ReportSectionConfigDto reportSectionConfigDto, ReportDto reportDto)
-            throws Exception {
+            ReportSectionConfigDto reportSectionConfigDto, ReportDto reportDto) throws Exception {
         ReportSectionDto reportSectionDto = new ReportSectionDto();
         reportSectionDto.setResponse("This is the response");
         reportSectionDto.setReport(reportDto);
@@ -358,8 +355,7 @@ public abstract class BaseControllerIT {
         // get object from response
         reportSectionDto =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(),
-                        ReportSectionDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportSectionDto.class);
 
         return reportSectionDto;
     }

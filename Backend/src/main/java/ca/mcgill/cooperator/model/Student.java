@@ -11,7 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 public class Student extends Author {
-	
+
     @Column(unique = true)
     private String studentId;
 

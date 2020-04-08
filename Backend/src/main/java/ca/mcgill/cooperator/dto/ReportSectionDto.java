@@ -1,7 +1,7 @@
 package ca.mcgill.cooperator.dto;
 
 public class ReportSectionDto {
-	private Integer id;
+    private Integer id;
     private String response;
 
     private ReportDto report;
@@ -19,7 +19,7 @@ public class ReportSectionDto {
         this.report = report;
         this.reportSectionConfig = reportSectionConfig;
     }
-    
+
     /*--- Getters and Setters ---*/
 
     public Integer getId() {
@@ -49,5 +49,4 @@ public class ReportSectionDto {
     public void setReportSectionConfig(ReportSectionConfigDto reportSectionConfig) {
         this.reportSectionConfig = reportSectionConfig;
     }
-
 }

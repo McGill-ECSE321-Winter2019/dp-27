@@ -5,11 +5,9 @@ import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Report;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -150,7 +148,7 @@ public class AdminService extends BaseService {
             admin.setSentNotifications(sentNotifications);
         }
         if (reports != null) {
-        	admin.setReports(reports);
+            admin.setReports(reports);
         }
 
         return adminRepository.save(admin);

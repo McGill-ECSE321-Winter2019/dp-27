@@ -1,7 +1,6 @@
 package ca.mcgill.cooperator.model;
 
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,20 +14,20 @@ import javax.persistence.OneToMany;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Author {
-	@Id @GeneratedValue protected int id;
-	protected String firstName;
-	protected String lastName;
+    @Id @GeneratedValue protected int id;
+    protected String firstName;
+    protected String lastName;
 
     @Column(unique = true)
     protected String email;
-    
+
     @OneToMany(
             mappedBy = "author",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     protected Set<Report> reports;
-    
+
     public int getId() {
         return this.id;
     }
@@ -56,7 +55,7 @@ public class Author {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public Set<Report> getReports() {
         return this.reports;
     }
@@ -69,5 +68,4 @@ public class Author {
             this.reports.addAll(reports);
         }
     }
-
 }

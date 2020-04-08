@@ -151,7 +151,7 @@ public class ReportSectionConfigService extends BaseService {
             reportSectionConfig.setReportConfig(reportConfig);
         }
         if (reportSections != null) {
-        	reportSectionConfig.setReportSections(reportSections);
+            reportSectionConfig.setReportSections(reportSections);
         }
 
         return reportSectionConfigRepository.save(reportSectionConfig);
@@ -182,8 +182,7 @@ public class ReportSectionConfigService extends BaseService {
         for (ReportSectionConfig rsc : allReportSectionConfigs) {
             if (rsc.getQuestionNumber() > reportSectionConfig.getQuestionNumber()) {
                 // lower question number by 1
-                updateReportSectionConfig(
-                        rsc, null, null, rsc.getQuestionNumber() - 1, null, null);
+                updateReportSectionConfig(rsc, null, null, rsc.getQuestionNumber() - 1, null, null);
             }
         }
 

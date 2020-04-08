@@ -3,21 +3,21 @@ package ca.mcgill.cooperator.dto;
 import java.util.Set;
 
 public class AuthorDto {
-	
+
     protected Integer id;
     protected String firstName;
     protected String lastName;
     protected String email;
     private Set<ReportDto> reports;
-    
+
     public AuthorDto() {}
-    
+
     public Integer getId() {
         return this.id;
     }
-    
+
     public void setId(Integer id) {
-    	this.id = id;
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -43,7 +43,7 @@ public class AuthorDto {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
     public Set<ReportDto> getReports() {
         return this.reports;
     }
@@ -51,5 +51,4 @@ public class AuthorDto {
     public void setReports(Set<ReportDto> reports) {
         this.reports = reports;
     }
-
 }

@@ -118,7 +118,7 @@ public class StudentSubmitOfferLetterIT {
                                 .param("status", "UNDER_REVIEW")
                                 .param("title", "Offer Letter")
                                 .param("coop_id", String.valueOf(testCoop.getId()))
-                                .param("author_id",  String.valueOf(student.getId()))
+                                .param("author_id", String.valueOf(student.getId()))
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
                                 .characterEncoding("utf-8"))
                 .andExpect(status().isOk());
@@ -158,8 +158,7 @@ public class StudentSubmitOfferLetterIT {
         List<ReportDto> returnedReports =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(),
-                                ReportDto[].class));
+                                mvcResult.getResponse().getContentAsString(), ReportDto[].class));
 
         assertEquals(1, returnedReports.size());
 
