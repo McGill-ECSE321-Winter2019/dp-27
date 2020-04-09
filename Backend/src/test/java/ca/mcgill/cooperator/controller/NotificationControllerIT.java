@@ -212,7 +212,7 @@ public class NotificationControllerIT extends BaseControllerIT {
 
         assertEquals(0, notifDtos.size());
     }
-    
+
     @Test
     public void testManyNotificationsFlow() throws Exception {
         StudentDto studentDto1 = createTestStudent("emma@eagles.ca", "123123123");
@@ -221,14 +221,21 @@ public class NotificationControllerIT extends BaseControllerIT {
 
         String title = "Hello";
         String body = "Please attend meeting.";
-        
 
         // 1. create notification
 
         MvcResult mvcResult =
                 mvc.perform(
-                                post("/notifications/many?admin=" + adminDto.getId() 
-                                + "&title=" + title + "&body=" + body + "&studentIds=" + studentDto1.getId() +"," +  studentDto2.getId())
+                                post("/notifications/many?admin="
+                                                + adminDto.getId()
+                                                + "&title="
+                                                + title
+                                                + "&body="
+                                                + body
+                                                + "&studentIds="
+                                                + studentDto1.getId()
+                                                + ","
+                                                + studentDto2.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())

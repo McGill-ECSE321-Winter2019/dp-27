@@ -145,7 +145,7 @@ public abstract class BaseControllerIT {
 
         return studentDto;
     }
-    
+
     public StudentDto createTestStudent(String email, String stuId) throws Exception {
         StudentDto studentDto = new StudentDto();
         studentDto.setEmail(email);
@@ -168,7 +168,6 @@ public abstract class BaseControllerIT {
 
         return studentDto;
     }
-   
 
     public CoopDto createTestCoop(
             CourseOfferingDto courseOfferingDto, StudentDto studentDto, CoopStatus coopStatus)
