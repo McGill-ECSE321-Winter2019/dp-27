@@ -240,7 +240,7 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
         student = studentService.getStudentById(student.getId());
         assertEquals("Hello", ((Notification) student.getNotifications().toArray()[0]).getTitle());
         sender = adminService.getAdmin(sender.getId());
-        assertEquals("Hello", sender.getSentNotifications().get(0).getTitle());
+        assertEquals("Hello", sender.getSentNotifications().iterator().next().getTitle());
         
         title = "Bye";
         body = "Please attend meeting again.";

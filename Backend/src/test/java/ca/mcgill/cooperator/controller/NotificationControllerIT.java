@@ -1,8 +1,10 @@
 package ca.mcgill.cooperator.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
@@ -22,6 +24,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ca.mcgill.cooperator.dao.AdminRepository;
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.AdminDto;
@@ -39,10 +42,12 @@ public class NotificationControllerIT extends BaseControllerIT {
 	@Autowired NotificationRepository notificationRepository;
 	@Autowired StudentRepository studentRepository;
 	@Autowired AdminRepository adminRepository;
+	@Autowired AuthorRepository authorRepository;
 	
 	@BeforeEach
 	@AfterEach
 	public void clearDatabase() {
+		authorRepository.deleteAll();
 		studentRepository.deleteAll();
 		adminRepository.deleteAll();
 		notificationRepository.deleteAll();
@@ -60,6 +65,8 @@ public class NotificationControllerIT extends BaseControllerIT {
 		notifDto.setTitle(title);
 		notifDto.setStudent(studentDto);
 		notifDto.setSender(adminDto);
+		
+		// 1. create notification
 		
 		
         MvcResult mvcResult =
@@ -97,6 +104,8 @@ public class NotificationControllerIT extends BaseControllerIT {
 		                        NotificationDto[].class));
 		
 		assertEquals(1, notifDtos.size());
+		
+		// 2. create 2nd notification
 		
 		NotificationDto notifDto1 = new NotificationDto();
 		
@@ -144,7 +153,7 @@ public class NotificationControllerIT extends BaseControllerIT {
 		assertEquals(2, notifDtos.size());
 		
 		mvcResult =
-		        mvc.perform(get("/students/" + studentDto.getId()).contentType(MediaType.APPLICATION_JSON))
+		        mvc.perform(get("/students/id/" + studentDto.getId()).contentType(MediaType.APPLICATION_JSON))
 		                .andExpect(status().isOk())
 		                .andReturn();
 		
@@ -156,6 +165,62 @@ public class NotificationControllerIT extends BaseControllerIT {
 		
 		assertEquals(2, studentDto.getNotifications().size());
 		
+		// 3. update one notification
+		
+		title = "Hello again";
+		
+		notifDto1.setTitle(title);
+		
+		mvcResult =
+                mvc.perform(
+                                put("/notifications/" + notifDto1.getId())
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(
+                                                objectMapper.writeValueAsString(notifDto1))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
+        // get object from response
+        notifDto1 =
+                objectMapper.readValue(
+                        mvcResult.getResponse().getContentAsString(), NotificationDto.class);
+        
+        assertEquals(title, notifDto1.getTitle());
+       
+		
+		
+		// 4. delete both notifications
+        
+        mvc.perform(
+                        delete("/notifications/" + notifDto1.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(
+                                        objectMapper.writeValueAsString(notifDto1))
+                                .characterEncoding("utf-8"))
+                .andExpect(status().isOk());
+        
+        mvc.perform(
+                delete("/notifications/" + notifDto.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                objectMapper.writeValueAsString(notifDto1))
+                        .characterEncoding("utf-8"))
+        .andExpect(status().isOk());
+        
+        mvcResult =
+		        mvc.perform(get("/notifications").contentType(MediaType.APPLICATION_JSON))
+		                .andExpect(status().isOk())
+		                .andReturn();
+		
+		// get object from response
+		notifDtos =
+		        Arrays.asList(
+		                objectMapper.readValue(
+		                        mvcResult.getResponse().getContentAsString(),
+		                        NotificationDto[].class));
+		
+		assertEquals(0, notifDtos.size());
 		
 		
 	}
