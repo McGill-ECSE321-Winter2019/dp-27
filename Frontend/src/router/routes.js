@@ -91,7 +91,7 @@ const routes = [
         component: () => import("pages/admin/CsvParse.vue")
       },
       {
-        path: "notification",
+        path: "create-notification",
         component: () => import("pages/admin/AdminCreateNotificationPage.vue"),
         props: true,
         name: "CreateNotif"

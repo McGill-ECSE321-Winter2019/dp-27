@@ -1,37 +1,46 @@
 <template>
-  <q-card flat bordered id="card">
-    <q-card-section>
-      <div class="text-h6">Send Notification</div>
-    </q-card-section>
-    <div class="q-pa-md">
-      <q-table
-        title="Select Students"
-        :data="tableStudents"
-        :columns="columns"
-        row-key="email"
-        selection="multiple"
-        :selected.sync="toSendTo"
-      />
-      <q-input filled v-model="title" label="Title" style="margin-top: 3%" />
-      <q-input
-        v-model="body"
-        label="Body"
-        filled
-        type="textarea"
-        style="margin-top: 3%"
-      />
-      <q-btn
-        color="primary"
-        @click="sendNotification()"
-        label="Send Notification"
-        style="margin-top: 3%"
-      />
-    </div>
-  </q-card>
+  <BasePage title="Send Notification">
+    <q-card>
+      <div class="q-pa-md">
+        <q-table
+          title="Select Students"
+          :data="tableStudents"
+          :columns="columns"
+          row-key="email"
+          selection="multiple"
+          :selected.sync="toSendTo"
+        />
+        <q-input
+          outlined
+          v-model="title"
+          label="Title"
+          class="notifPageComponents"
+        />
+        <q-input
+          v-model="body"
+          label="Body"
+          outlined
+          type="textarea"
+          class="notifPageComponents"
+        />
+        <q-btn
+          color="primary"
+          @click="sendNotification()"
+          label="Send Notification"
+          class="notifPageComponents"
+        />
+      </div>
+    </q-card>
+  </BasePage>
 </template>
 
 <script>
+import BasePage from "../BasePage.vue";
+
 export default {
+  components: {
+    BasePage
+  },
   props: {
     selected: {
       type: Array,
@@ -159,7 +168,7 @@ h6 {
   margin-top: 25px;
   margin-right: 10px;
 }
-.bodyText {
-  margin-top: 2%;
+.notifPageComponents {
+  margin-top: 3%;
 }
 </style>

@@ -29,8 +29,8 @@
           />
         </div>
         <div class="q-pa-md">
-          <q-btn @click="applyFilter" class="q-mr-sm">Apply Filter</q-btn>
-          <q-btn @click="clearFilter" class="q-mr-sm">Clear Filter</q-btn>
+          <q-btn @click="applyFilter" class="filterBtn">Apply Filter</q-btn>
+          <q-btn @click="clearFilter" class="filterBtn">Clear Filter</q-btn>
         </div>
 
         <div class="q-pa-md">
@@ -239,8 +239,9 @@ export default {
 .dashBtn {
   width: 40%;
   margin-top: 4%;
-  margin-left: 30%;
-  margin-right: 30%;
-  position: center;
+}
+.filterBtn {
+  width: 19%;
+  margin-right: 2%;
 }
 </style>
