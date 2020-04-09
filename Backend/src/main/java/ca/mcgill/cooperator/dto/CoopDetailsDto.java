@@ -1,12 +1,23 @@
 package ca.mcgill.cooperator.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.sql.Date;
 
 public class CoopDetailsDto {
     private Integer id;
     private Integer payPerHour;
     private Integer hoursPerWeek;
+
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd",
+            timezone = "America/Toronto")
     private Date startDate;
+
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd",
+            timezone = "America/Toronto")
     private Date endDate;
 
     private EmployerContactDto employerContact;
@@ -25,6 +36,8 @@ public class CoopDetailsDto {
         this.id = id;
         this.payPerHour = payPerHour;
         this.hoursPerWeek = hoursPerWeek;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.employerContact = employerContact;
         this.coop = coop;
     }

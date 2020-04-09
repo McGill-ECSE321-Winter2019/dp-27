@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 public class SeasonController {
 
+    /**
+     * Gets all Seasons
+     *
+     * @return list of Seasons
+     */
     @GetMapping("")
     public List<String> getSeasons() {
         List<String> l = new ArrayList<>();

@@ -56,7 +56,7 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
         student = studentService.getStudentById(student.getId());
         assertEquals("Hello", ((Notification) student.getNotifications().toArray()[0]).getTitle());
         sender = adminService.getAdmin(sender.getId());
-        assertEquals("Hello", sender.getSentNotifications().get(0).getTitle());
+        assertEquals("Hello", sender.getSentNotifications().iterator().next().getTitle());
     }
 
     @Test
@@ -188,7 +188,7 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
         student = studentService.getStudentById(student.getId());
 
         assertEquals("Bye", n.getTitle());
-        assertEquals("Bye", sender.getSentNotifications().get(0).getTitle());
+        assertEquals("Bye", sender.getSentNotifications().iterator().next().getTitle());
         assertEquals("Bye", ((Notification) student.getNotifications().toArray()[0]).getTitle());
         assertEquals(1, notificationService.getAllNotifications().size());
     }
@@ -220,6 +220,43 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
                             + "Notification must have an Admin sender!",
                     error);
         }
+    }
+
+    @Test
+    public void testMultipleNotifications() {
+        String title = "Hello";
+        String body = "Please attend meeting.";
+        Student student = createTestStudent(studentService);
+        Admin sender = createTestAdmin(adminService);
+
+        try {
+            notificationService.createNotification(title, body, student, sender);
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(1, notificationService.getAllNotifications().size());
+        student = studentService.getStudentById(student.getId());
+        assertEquals("Hello", ((Notification) student.getNotifications().toArray()[0]).getTitle());
+        sender = adminService.getAdmin(sender.getId());
+        assertEquals("Hello", sender.getSentNotifications().iterator().next().getTitle());
+
+        title = "Bye";
+        body = "Please attend meeting again.";
+
+        try {
+            notificationService.createNotification(title, body, student, sender);
+
+        } catch (IllegalArgumentException e) {
+            fail();
+        }
+
+        assertEquals(2, notificationService.getAllNotifications().size());
+        student = studentService.getStudentById(student.getId());
+        assertEquals(2, student.getNotifications().size());
+        sender = adminService.getAdmin(sender.getId());
+        assertEquals(2, sender.getSentNotifications().size());
     }
 
     @Test

@@ -3,9 +3,12 @@ package ca.mcgill.cooperator.controller;
 import ca.mcgill.cooperator.dto.AdminDto;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.service.AdminService;
 import ca.mcgill.cooperator.service.NotificationService;
+import ca.mcgill.cooperator.service.ReportService;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,9 +27,28 @@ public class AdminController extends BaseController {
 
     @Autowired private AdminService adminService;
     @Autowired private NotificationService notifService;
+    @Autowired private ReportService reportService;
 
     /**
-     * Get all Admins
+     * Creates a new Admin
+     *
+     * <p>In request body:
+     *
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @return the created Admin
+     */
+    @PostMapping("")
+    public AdminDto createAdmin(@RequestBody AdminDto a) {
+        Admin createdAdmin =
+                adminService.createAdmin(a.getFirstName(), a.getLastName(), a.getEmail());
+
+        return ControllerUtils.convertToDto(createdAdmin);
+    }
+
+    /**
+     * Gets all Admins
      *
      * @return List of AdminDto objects
      */
@@ -38,7 +60,7 @@ public class AdminController extends BaseController {
     }
 
     /**
-     * Get an Admin by ID
+     * Gets an Admin by ID
      *
      * @param id
      * @return AdminDto object
@@ -51,25 +73,7 @@ public class AdminController extends BaseController {
     }
 
     /**
-     * Create a new Admin
-     *
-     * <p>In request body:
-     *
-     * @param firstName
-     * @param lastName
-     * @param email
-     * @return created Admin
-     */
-    @PostMapping("")
-    public AdminDto createAdmin(@RequestBody AdminDto a) {
-        Admin createdAdmin =
-                adminService.createAdmin(a.getFirstName(), a.getLastName(), a.getEmail());
-
-        return ControllerUtils.convertToDto(createdAdmin);
-    }
-
-    /**
-     * Update an existing Admin
+     * Updates an existing Admin
      *
      * <p>In request body:
      *
@@ -78,32 +82,39 @@ public class AdminController extends BaseController {
      * @param lastName
      * @param email
      * @param sentNotifications
-     * @return updated Admin
+     * @return the updated Admin
      */
     @PutMapping("/{id}")
     public AdminDto updateAdmin(@PathVariable int id, @RequestBody AdminDto a) {
         Admin admin = adminService.getAdmin(id);
 
-        List<Notification> notifs = null;
+        Set<Notification> notifs = null;
 
         if (a.getSentNotifications() != null) {
             notifs =
-                    ControllerUtils.convertNotificationListToDomainObject(
+                    ControllerUtils.convertNotificationListToDomainObjectSet(
                             notifService, a.getSentNotifications());
+        }
+
+        Set<Report> reports = null;
+
+        if (a.getReports() != null) {
+            reports =
+                    ControllerUtils.convertReportDtosToDomainObjects(reportService, a.getReports());
         }
 
         Admin updatedAdmin =
                 adminService.updateAdmin(
-                        admin, a.getFirstName(), a.getLastName(), a.getEmail(), notifs);
+                        admin, a.getFirstName(), a.getLastName(), a.getEmail(), notifs, reports);
 
         return ControllerUtils.convertToDto(updatedAdmin);
     }
 
     /**
-     * Delete an existing Admin
+     * Deletes an existing Admin
      *
      * @param id
-     * @return deleted Admin
+     * @return the deleted Admin
      */
     @DeleteMapping("/{id}")
     public AdminDto deleteAdmin(@PathVariable int id) {

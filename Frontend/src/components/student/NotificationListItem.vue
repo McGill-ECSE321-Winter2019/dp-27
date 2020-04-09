@@ -1,24 +1,29 @@
 <template>
-  <div>
-    <div class="row items-center">
-      <div class="col">
-        <q-separator inset />
-        <br />
-        <div>
-          <b v-if="!notification.seen" style="color:red">
-            NEW &nbsp;
-          </b>
-          <b
-            >From {{ notification.sender.firstName }}
-            {{ notification.sender.lastName }}</b
-          >
+  <div class="row items-center">
+    <div class="col">
+      <div>
+        <div
+          v-if="!notification.seen"
+          class="text-weight-medium"
+          style="color:red"
+        >
+          NEW &nbsp;
         </div>
-        <div>{{ notification.timeStamp }}</div>
-        <div>
-          <b>{{ notification.title }}</b>
+
+        <div class="row text-h6 text-weight-medium">
+          {{ notification.title }}
         </div>
+
         <div>{{ notification.body }}</div>
+
+        <div class="row text-caption">
+          From: {{ senderName }}
+          <q-space />
+          <span>{{ timestamp }}</span>
+        </div>
       </div>
+
+      <q-separator class="q-mb-md q-mt-md" />
     </div>
   </div>
 </template>
@@ -31,7 +36,16 @@ export default {
       required: true
     }
   },
-  created() {}
+  computed: {
+    timestamp: function() {
+      return this.$common.convertTimestampLongToString(
+        this.notification.timeStamp
+      );
+    },
+    senderName: function() {
+      return `${this.notification.sender.firstName} ${this.notification.sender.lastName}`;
+    }
+  }
 };
 </script>
 

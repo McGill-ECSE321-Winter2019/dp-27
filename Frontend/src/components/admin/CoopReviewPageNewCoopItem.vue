@@ -65,19 +65,21 @@ export default {
     approveCoop: function() {
       // set the status of the coop to FUTURE
       const coopBody = {
-        id: this.coop.id,
         status: "FUTURE"
       };
       // update the coop
-      this.$axios.put("/coops", coopBody);
+      this.$axios.put(`/coops/${this.coop.id}`, coopBody);
 
       // set the status of the offer letter to COMPLETED
+      // assuming the offer letter is the only StudentReport, which it should be
       const studentReportBody = {
-        id: this.coop.studentReport.id,
         status: "COMPLETED"
       };
       // update the student report status
-      this.$axios.put("/student-reports", studentReportBody);
+      this.$axios.put(
+        `/student-reports/${this.coop.studentReports[0].id}`,
+        studentReportBody
+      );
 
       // also send the student a notification that their coop has been approved
       const notifBody = {

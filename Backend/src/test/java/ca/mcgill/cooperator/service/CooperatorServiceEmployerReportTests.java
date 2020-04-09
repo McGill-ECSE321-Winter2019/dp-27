@@ -3,23 +3,24 @@ package ca.mcgill.cooperator.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
-import ca.mcgill.cooperator.dao.EmployerReportRepository;
-import ca.mcgill.cooperator.dao.EmployerReportSectionRepository;
 import ca.mcgill.cooperator.dao.ReportConfigRepository;
+import ca.mcgill.cooperator.dao.ReportRepository;
+import ca.mcgill.cooperator.dao.ReportSectionRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.EmployerReportSection;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.ReportConfig;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Student;
@@ -41,24 +42,25 @@ import org.springframework.web.multipart.MultipartFile;
 @ActiveProfiles("test")
 public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
 
-    @Autowired EmployerReportRepository employerReportRepository;
+    @Autowired ReportRepository reportRepository;
     @Autowired CoopRepository coopRepository;
     @Autowired CourseRepository courseRepository;
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired CompanyRepository companyRepository;
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired StudentRepository studentRepository;
-    @Autowired EmployerReportSectionRepository employerReportSectionRepository;
+    @Autowired ReportSectionRepository reportSectionRepository;
     @Autowired ReportConfigRepository reportConfigRepository;
 
-    @Autowired EmployerReportService employerReportService;
+    @Autowired ReportService reportService;
     @Autowired CoopService coopService;
     @Autowired CourseService courseService;
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired CompanyService companyService;
+    @Autowired AuthorRepository authorRepository;
     @Autowired EmployerContactService employerContactService;
     @Autowired StudentService studentService;
-    @Autowired EmployerReportSectionService employerReportSectionService;
+    @Autowired ReportSectionService reportSectionService;
     @Autowired ReportConfigService reportConfigService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
 
@@ -67,27 +69,27 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-        List<EmployerReport> ers = employerReportService.getAllEmployerReports();
-        for (EmployerReport er : ers) {
-            er.setCoop(null);
-            er.setReportSections(new HashSet<EmployerReportSection>());
-            employerReportRepository.save(er);
+        List<Report> reports = reportService.getAllReports();
+        for (Report r : reports) {
+            r.setCoop(null);
+            r.setReportSections(new HashSet<ReportSection>());
+            reportRepository.save(r);
         }
 
-        List<EmployerReportSection> reportSections =
-                employerReportSectionService.getAllReportSections();
-        for (EmployerReportSection reportSection : reportSections) {
-            employerReportSectionService.deleteReportSection(reportSection);
+        List<ReportSection> reportSections = reportSectionService.getAllReportSections();
+        for (ReportSection reportSection : reportSections) {
+            reportSectionService.deleteReportSection(reportSection);
         }
 
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
+        authorRepository.deleteAll();
         employerContactRepository.deleteAll();
         companyRepository.deleteAll();
         studentRepository.deleteAll();
-        employerReportSectionRepository.deleteAll();
-        employerReportRepository.deleteAll();
+        reportSectionRepository.deleteAll();
+        reportRepository.deleteAll();
         reportConfigRepository.deleteAll();
     }
 
@@ -104,27 +106,24 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
             MultipartFile multipartFile =
                     new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            employerReportService.createEmployerReport(
+            reportService.createReport(
                     ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
         } catch (Exception e) {
             fail();
         }
 
-        assertEquals(1, employerReportService.getAllEmployerReports().size());
+        assertEquals(1, reportService.getAllReports().size());
         ec = employerContactService.getEmployerContact(ec.getId());
-        assertEquals(
-                "Offer Letter", ((EmployerReport) ec.getEmployerReports().toArray()[0]).getTitle());
+        assertEquals("Offer Letter", ((Report) ec.getReports().toArray()[0]).getTitle());
         coop = coopService.getCoopById(coop.getId());
-        assertEquals(
-                "Offer Letter",
-                ((EmployerReport) coop.getEmployerReports().toArray()[0]).getTitle());
+        assertEquals("Offer Letter", ((Report) coop.getReports().toArray()[0]).getTitle());
     }
 
     @Test
     public void testCreateEmployerReportNull() {
         String error = "";
         try {
-            employerReportService.createEmployerReport(null, null, null, null, null);
+            reportService.createReport(null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -133,14 +132,14 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
                 ERROR_PREFIX
                         + "Report Status cannot be null! "
                         + "Coop cannot be null! "
-                        + "Employer Contact cannot be null! "
+                        + "Author cannot be null! "
                         + "File title cannot be empty!",
                 error);
     }
 
     @Test
     public void testUpdateEmployerReportWithReportSections() {
-        EmployerReport er = null;
+        Report r = null;
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
@@ -155,22 +154,21 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         try {
             multipartFile = new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            er =
-                    employerReportService.createEmployerReport(
+            r =
+                    reportService.createReport(
                             ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
         } catch (Exception e) {
             fail();
         }
 
-        Set<EmployerReportSection> sections = new HashSet<EmployerReportSection>();
-        EmployerReportSection rs =
-                createTestEmployerReportSection(employerReportSectionService, rsConfig, er);
+        Set<ReportSection> sections = new HashSet<ReportSection>();
+        ReportSection rs = createTestReportSection(reportSectionService, rsConfig, r);
         sections.add(rs);
 
         try {
-            er =
-                    employerReportService.updateEmployerReport(
-                            er,
+            r =
+                    reportService.updateReport(
+                            r,
                             ReportStatus.COMPLETED,
                             coop,
                             "Offer Letter",
@@ -181,13 +179,13 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
             fail();
         }
 
-        assertEquals(1, er.getReportSections().size());
-        assertEquals(1, employerReportService.getAllEmployerReports().size());
+        assertEquals(1, r.getReportSections().size());
+        assertEquals(1, reportService.getAllReports().size());
     }
 
     @Test
     public void testUpdateEmployerReport() {
-        EmployerReport er = null;
+        Report r = null;
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
@@ -202,44 +200,38 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         try {
             multipartFile = new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            er =
-                    employerReportService.createEmployerReport(
+            r =
+                    reportService.createReport(
                             ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
         } catch (Exception e) {
             fail();
         }
 
-        Set<EmployerReportSection> sections = new HashSet<EmployerReportSection>();
-        EmployerReportSection rs =
-                createTestEmployerReportSection(employerReportSectionService, rsConfig, er);
+        Set<ReportSection> sections = new HashSet<ReportSection>();
+        ReportSection rs = createTestReportSection(reportSectionService, rsConfig, r);
         sections.add(rs);
 
         try {
-            employerReportService.updateEmployerReport(
-                    er, ReportStatus.INCOMPLETE, coop, "Offer Letter", ec, sections, multipartFile);
+            reportService.updateReport(
+                    r, ReportStatus.INCOMPLETE, coop, "Offer Letter", ec, sections, multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(1, er.getReportSections().size());
-        assertEquals(
-                ReportStatus.INCOMPLETE,
-                employerReportService.getEmployerReport(er.getId()).getStatus());
-        assertEquals(1, employerReportService.getAllEmployerReports().size());
+        assertEquals(1, r.getReportSections().size());
+        assertEquals(ReportStatus.INCOMPLETE, reportService.getReport(r.getId()).getStatus());
+        assertEquals(1, reportService.getAllReports().size());
         ec = employerContactService.getEmployerContact(ec.getId());
-        assertEquals(
-                "Offer Letter", ((EmployerReport) ec.getEmployerReports().toArray()[0]).getTitle());
+        assertEquals("Offer Letter", ((Report) ec.getReports().toArray()[0]).getTitle());
         coop = coopService.getCoopById(coop.getId());
-        assertEquals(
-                "Offer Letter",
-                ((EmployerReport) coop.getEmployerReports().toArray()[0]).getTitle());
-        rs = employerReportSectionService.getReportSection(rs.getId());
-        assertEquals("Offer Letter", rs.getEmployerReport().getTitle());
+        assertEquals("Offer Letter", ((Report) coop.getReports().toArray()[0]).getTitle());
+        rs = reportSectionService.getReportSection(rs.getId());
+        assertEquals("Offer Letter", rs.getReport().getTitle());
     }
 
     @Test
     public void testUpdateEmployerReportInvalid() {
-        EmployerReport er = null;
+        Report r = null;
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
@@ -251,8 +243,8 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
             MultipartFile multipartFile =
                     new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            er =
-                    employerReportService.createEmployerReport(
+            r =
+                    reportService.createReport(
                             ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
         } catch (Exception e) {
             fail();
@@ -260,23 +252,19 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
 
         String error = "";
         try {
-            er =
-                    employerReportService.updateEmployerReport(
-                            null, null, null, null, null, null, null);
+            r = reportService.updateReport(null, null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
-        assertEquals(ERROR_PREFIX + "Employer Report cannot be null!", error);
-        assertEquals(
-                ReportStatus.COMPLETED,
-                employerReportService.getEmployerReport(er.getId()).getStatus());
-        assertEquals(1, employerReportService.getAllEmployerReports().size());
+        assertEquals(ERROR_PREFIX + "Report cannot be null!", error);
+        assertEquals(ReportStatus.COMPLETED, reportService.getReport(r.getId()).getStatus());
+        assertEquals(1, reportService.getAllReports().size());
     }
 
     @Test
     public void testDeleteEmployerReport() {
-        EmployerReport er = null;
+        Report r = null;
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
@@ -288,33 +276,33 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
             MultipartFile multipartFile =
                     new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
-            er =
-                    employerReportService.createEmployerReport(
+            r =
+                    reportService.createReport(
                             ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
         } catch (Exception e) {
             fail();
         }
 
-        assertEquals(1, employerReportService.getAllEmployerReports().size());
+        assertEquals(1, reportService.getAllReports().size());
 
         try {
-            employerReportService.deleteEmployerReport(er);
+            reportService.deleteReport(r);
         } catch (IllegalArgumentException e) {
             fail();
         }
 
-        assertEquals(0, employerReportService.getAllEmployerReports().size());
+        assertEquals(0, reportService.getAllReports().size());
     }
 
     @Test
     public void testDeleteEmployerReportInvalid() {
         String error = "";
         try {
-            employerReportService.deleteEmployerReport(null);
+            reportService.deleteReport(null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
 
-        assertEquals(ERROR_PREFIX + "Employer Report to delete cannot be null!", error);
+        assertEquals(ERROR_PREFIX + "Report to delete cannot be null!", error);
     }
 }

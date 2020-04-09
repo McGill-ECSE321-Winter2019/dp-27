@@ -24,7 +24,20 @@
 
         <q-btn flat dense round icon="settings" aria-label="Settings">
           <q-menu>
-            <q-list style="min-width: 100px">
+            <q-list style="min-width: 200px">
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Dark Mode</q-item-label>
+                </q-item-section>
+                <q-item-section side top>
+                  <q-toggle
+                    color="white"
+                    v-model="darkModeOn"
+                    val="picture"
+                    @input="setDarkMode"
+                  />
+                </q-item-section>
+              </q-item>
               <q-item clickable v-close-popup>
                 <q-item-section>username</q-item-section>
               </q-item>
@@ -44,7 +57,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-1">
+    <q-drawer v-model="leftDrawerOpen" bordered>
       <q-list>
         <q-item-label header class="text-grey-8">Navigation</q-item-label>
         <SidebarLink
@@ -73,7 +86,7 @@
           icon="playlist_add_check"
         />
         <SidebarLink
-          title="Report Configuration"
+          title="Report Configurations"
           caption="Configure reports to be submitted for co-op terms"
           link="/admin/report-config"
           icon="assignment"
@@ -97,14 +110,26 @@
 import SidebarLink from "../components/SidebarLink.vue";
 
 export default {
-  name: "LoggedInLayout",
+  name: "AdminLoggedInLayout",
   components: {
     SidebarLink
   },
   data() {
     return {
-      leftDrawerOpen: false
+      leftDrawerOpen: false,
+      darkModeOn: this.$q.localStorage.getItem("darkMode")
     };
+  },
+  created: function() {
+    this.setDarkMode();
+  },
+  methods: {
+    setDarkMode: function() {
+      if (this.darkModeOn === null) this.darkModeOn = false;
+
+      this.$q.dark.set(this.darkModeOn);
+      this.$q.localStorage.set("darkMode", this.darkModeOn);
+    }
   }
 };
 </script>

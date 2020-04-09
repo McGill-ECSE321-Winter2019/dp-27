@@ -2,23 +2,20 @@ package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
-import ca.mcgill.cooperator.dto.EmployerReportDto;
+import ca.mcgill.cooperator.dto.ReportDto;
 import ca.mcgill.cooperator.dto.StudentDto;
-import ca.mcgill.cooperator.dto.StudentReportDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
-import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.Student;
-import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
-import ca.mcgill.cooperator.service.EmployerReportService;
-import ca.mcgill.cooperator.service.StudentReportService;
+import ca.mcgill.cooperator.service.ReportService;
 import ca.mcgill.cooperator.service.StudentService;
 import java.util.List;
 import java.util.Set;
@@ -44,39 +41,19 @@ public class CoopController extends BaseController {
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired StudentService studentService;
     @Autowired CoopDetailsService coopDetailsService;
-    @Autowired EmployerReportService employerReportService;
-    @Autowired StudentReportService studentReportService;
+    @Autowired ReportService reportService;
 
-    @GetMapping("/{id}")
-    public CoopDto getCoopById(@PathVariable int id) {
-        Coop coop = coopService.getCoopById(id);
-        return ControllerUtils.convertToDto(coop);
-    }
-
-    @GetMapping("")
-    public List<CoopDto> getAllCoops(@RequestParam(required = false) String status) {
-        List<Coop> coops;
-        if (status == null) {
-            coops = coopService.getAllCoops();
-        } else {
-            coops = coopService.getCoopsByStatus(CoopStatus.valueOf(status));
-        }
-        return ControllerUtils.convertCoopListToDto(coops);
-    }
-
-    @GetMapping("/status")
-    public CoopStatus[] getAllCoopStatuses() {
-        CoopStatus[] status = CoopStatus.values();
-        return status;
-    }
-
-    @GetMapping("/student/{id}")
-    public List<CoopDto> getCoopByStudentId(@PathVariable int id) {
-        Student s = studentService.getStudentById(id);
-        List<Coop> coops = coopService.getAllCoopsByStudent(s);
-        return ControllerUtils.convertCoopListToDto(coops);
-    }
-
+    /**
+     * Creates a new Coop
+     *
+     * <p>In request body:
+     *
+     * @param status
+     * @param student
+     * @param courseOffering
+     * @param course
+     * @return the created Coop
+     */
     @PostMapping("")
     public CoopDto createCoop(@RequestBody CoopDto coopDto) {
         Coop coop = new Coop();
@@ -90,7 +67,7 @@ public class CoopController extends BaseController {
         CourseOfferingDto courseOfferingDto = coopDto.getCourseOffering();
 
         CourseOffering courseOffering = null;
-        if (courseOfferingDto.getId() > 0) {
+        if (courseOfferingDto.getId() != null && courseOfferingDto.getId() > 0) {
             courseOffering = courseOfferingService.getCourseOfferingById(courseOfferingDto.getId());
         } else {
             // if no ID present, get CourseOffering via Course
@@ -114,6 +91,72 @@ public class CoopController extends BaseController {
         return ControllerUtils.convertToDto(coop);
     }
 
+    /**
+     * Gets a Coop by ID
+     *
+     * @param id
+     * @return CoopDto object
+     */
+    @GetMapping("/{id}")
+    public CoopDto getCoopById(@PathVariable int id) {
+        Coop coop = coopService.getCoopById(id);
+        return ControllerUtils.convertToDto(coop);
+    }
+
+    /**
+     * Gets all Coops
+     *
+     * @param status
+     * @return List of CoopDtos
+     */
+    @GetMapping("")
+    public List<CoopDto> getAllCoops(@RequestParam(required = false) String status) {
+        List<Coop> coops;
+        if (status == null) {
+            coops = coopService.getAllCoops();
+        } else {
+            coops = coopService.getCoopsByStatus(CoopStatus.valueOf(status));
+        }
+        return ControllerUtils.convertCoopListToDto(coops);
+    }
+
+    /**
+     * Gets a list of all Coop statuses
+     *
+     * @return array of all Coop statuses
+     */
+    @GetMapping("/status")
+    public CoopStatus[] getAllCoopStatuses() {
+        CoopStatus[] status = CoopStatus.values();
+        return status;
+    }
+
+    /**
+     * Gets all Coops for the specified Student ID
+     *
+     * @param id
+     * @return list of CoopDtos
+     */
+    @GetMapping("/student/{id}")
+    public List<CoopDto> getCoopByStudentId(@PathVariable int id) {
+        Student s = studentService.getStudentById(id);
+        List<Coop> coops = coopService.getAllCoopsByStudent(s);
+        return ControllerUtils.convertCoopListToDto(coops);
+    }
+
+    /**
+     * Updates an existing Coop
+     *
+     * @param id
+     *     <p>In request body:
+     * @param status
+     * @param student
+     * @param courseOffering
+     * @param course
+     * @param employerReports
+     * @param studentReports
+     * @return the updated Coop
+     */
     @PutMapping("/{id}")
     public CoopDto updateCoop(@PathVariable int id, @RequestBody CoopDto coopDto) {
         Coop coop = coopService.getCoopById(id);
@@ -136,34 +179,24 @@ public class CoopController extends BaseController {
             coopDetails = coopDetailsService.getCoopDetails(coopDto.getCoopDetails().getId());
         }
 
-        Set<EmployerReport> employerReports = null;
-        if (coopDto.getEmployerReports() != null) {
-            List<EmployerReportDto> employerReportDtos = coopDto.getEmployerReports();
-            employerReports =
-                    ControllerUtils.convertEmployerReportDtosToDomainObjects(
-                            employerReportService, employerReportDtos);
-        }
-
-        Set<StudentReport> studentReports = null;
-        if (coopDto.getStudentReports() != null) {
-            List<StudentReportDto> studentReportDtos = coopDto.getStudentReports();
-            studentReports =
-                    ControllerUtils.convertStudentReportDtosToDomainObjects(
-                            studentReportService, studentReportDtos);
+        Set<Report> reports = null;
+        if (coopDto.getReports() != null) {
+            List<ReportDto> reportDtos = coopDto.getReports();
+            reports = ControllerUtils.convertReportDtosToDomainObjects(reportService, reportDtos);
         }
 
         coop =
                 coopService.updateCoop(
-                        coop,
-                        coopDto.getStatus(),
-                        courseOffering,
-                        student,
-                        coopDetails,
-                        employerReports,
-                        studentReports);
+                        coop, coopDto.getStatus(), courseOffering, student, coopDetails, reports);
         return ControllerUtils.convertToDto(coop);
     }
 
+    /**
+     * Deletes an existing Coop
+     *
+     * @param id
+     * @return the deleted Coop
+     */
     @DeleteMapping("/{id}")
     public CoopDto deleteCoop(@PathVariable int id) {
         Coop coop = coopService.getCoopById(id);

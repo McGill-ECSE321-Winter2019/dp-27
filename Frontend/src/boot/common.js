@@ -1,9 +1,9 @@
 import Vue from "vue";
+import moment from "moment";
 
 /*
  * This object contains functions that are globally available to every component
  */
-
 const common = {
   getYears: function() {
     var current = new Date().getFullYear();
@@ -13,6 +13,28 @@ const common = {
       yrs.push(current - i);
     }
     return yrs;
+  },
+  getCurrentYear: function() {
+    return new Date().getFullYear();
+  },
+  getCurrentTerm: function() {
+    var date = new Date();
+    var month = date.getMonth();
+    if (month >= 0 || month <= 3) {
+      return "WINTER";
+    } else if (month >= 4 || month <= 7) {
+      return "SUMMER";
+    } else if (month >= 8 || month <= 11) {
+      term = "FALL";
+    }
+    return "";
+  },
+  getCoopStatusColor: function(status) {
+    if (status === "UNDER_REVIEW") return "orange";
+    if (status === "IN_PROGRESS") return "blue";
+    if (status === "FUTURE") return "light-blue";
+    if (status === "INCOMPLETE") return "primary";
+    else return "black";
   },
   /*
    * Converts a base64-encoded string to a blob; used for rendering PDFs
@@ -39,6 +61,51 @@ const common = {
     return new Blob(byteArrays, {
       type: contentType
     });
+  },
+  /**
+   * Converts enum text (e.g. UNDER_REVIEW) to a readable format
+   * (e.g. Under Review)
+   */
+  convertEnumTextToReadableString: function(enumText) {
+    const capitalize = s => {
+      if (typeof s !== "string") return "";
+      let lower = s.toLowerCase();
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    };
+
+    let words = enumText.split("_");
+    let result = "";
+    words.forEach(word => {
+      result += capitalize(word) + " ";
+    });
+    return result.trim();
+  },
+  /**
+   * Converts a SQL-formatted date (e.g. 2020-01-01) to a readable format
+   * (e.g. January 1st, 2020)
+   */
+  convertSQLDateToReadableString: function(date) {
+    return moment(date)
+      .utc()
+      .format("MMMM Do, YYYY");
+  },
+  /**
+   * Converts a dollar value in cents (e.g. 2000) to a normal dollar
+   * representation (e.g. $20.00)
+   */
+  convertCentsToDollarAmount: function(amount) {
+    let dollarAmount = amount / 100.0;
+    if (dollarAmount >= 0) {
+      return "$" + dollarAmount.toFixed(2);
+    } else {
+      dollarAmount = dollarAmount * -1;
+      return "-$" + dollarAmount.toFixed(2);
+    }
+  },
+  convertTimestampLongToString: function(timestamp) {
+    return moment(timestamp)
+      .utc()
+      .format("MMMM Do, YYYY HH:mm");
   }
 };
 

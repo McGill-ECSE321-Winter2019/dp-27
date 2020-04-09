@@ -2,14 +2,11 @@ package ca.mcgill.cooperator.dto;
 
 import java.util.List;
 
-public class AdminDto {
-
-    private Integer id;
-    private String firstName;
-    private String lastName;
-    private String email;
+public class AdminDto extends AuthorDto {
 
     private List<NotificationDto> sent;
+
+    public AdminDto() {};
 
     public AdminDto(
             Integer id,
@@ -22,34 +19,6 @@ public class AdminDto {
         this.lastName = lastName;
         this.email = email;
         this.sent = sent;
-    }
-
-    public Integer getId() {
-        return this.id;
-    }
-
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return this.lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public List<NotificationDto> getSentNotifications() {

@@ -27,8 +27,8 @@ public class NightlyTasks {
     // runs once every weekday at 4am
     static final String CRON_WEEKDAY = "0 0 4 * * MON-FRI";
 
-    // runs every 5 minutes, use this for testing
-    static final String CRON_TEST = "0 */5 * ? * *";
+    // runs every 15 minutes, use this for testing
+    static final String CRON_TEST = "0 */15 * ? * *";
 
     /** Checks all existing Coops and updates their status if necessary. */
     @Async
@@ -51,15 +51,14 @@ public class NightlyTasks {
                 // check if the co-op starts today or has already started
                 if (currentDate.compareTo(coopDate) >= 0) {
                     // update status to IN_PROGRESS
-                    coopService.updateCoop(
-                            coop, CoopStatus.IN_PROGRESS, null, null, null, null, null);
+                    coopService.updateCoop(coop, CoopStatus.IN_PROGRESS, null, null, null, null);
                 }
             } else if (coop.getStatus() == CoopStatus.IN_PROGRESS) {
                 coopDate = coop.getCoopDetails().getEndDate();
                 // check if the co-op has ended
                 if (currentDate.compareTo(coopDate) > 0) {
                     // update status to FINISHED
-                    coopService.updateCoop(coop, CoopStatus.FINISHED, null, null, null, null, null);
+                    coopService.updateCoop(coop, CoopStatus.FINISHED, null, null, null, null);
                 }
             }
         }

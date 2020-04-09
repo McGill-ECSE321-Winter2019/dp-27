@@ -30,7 +30,21 @@
 
         <q-btn flat dense round icon="settings" aria-label="Settings">
           <q-menu>
-            <q-list style="min-width: 125px">
+            <q-list style="min-width: 200px">
+              <q-item>
+                <q-item-section>
+                  <q-item-label>Dark Mode</q-item-label>
+                </q-item-section>
+                <q-item-section side top>
+                  <q-toggle
+                    color="white"
+                    v-model="darkModeOn"
+                    val="picture"
+                    @input="setDarkMode"
+                  />
+                </q-item-section>
+              </q-item>
+              <q-separator />
               <q-item clickable v-close-popup>
                 <q-item-section>Settings</q-item-section>
               </q-item>
@@ -43,7 +57,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="leftDrawerOpen" bordered content-class="bg-grey-1">
+    <q-drawer v-model="leftDrawerOpen" bordered>
       <q-list>
         <q-item-label header class="text-grey-8">Navigation</q-item-label>
         <SidebarLink
@@ -83,17 +97,20 @@
 import SidebarLink from "../components/SidebarLink.vue";
 
 export default {
-  name: "LoggedInLayout",
+  name: "StudentLoggedInLayout",
   components: {
     SidebarLink
   },
   data() {
     return {
       leftDrawerOpen: false,
+      darkModeOn: this.$q.localStorage.getItem("darkMode"),
       unseen: []
     };
   },
   created: function() {
+    this.setDarkMode();
+
     const user = this.$store.state.currentUser;
     this.$axios
       .get("/notifications/" + user.id + "/unread", {
@@ -108,6 +125,12 @@ export default {
   methods: {
     goToNotifPage() {
       this.$router.push("/student/notifications");
+    },
+    setDarkMode: function() {
+      if (this.darkModeOn === null) this.darkModeOn = false;
+
+      this.$q.dark.set(this.darkModeOn);
+      this.$q.localStorage.set("darkMode", this.darkModeOn);
     }
   }
 };

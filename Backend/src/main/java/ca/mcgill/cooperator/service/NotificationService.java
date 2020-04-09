@@ -7,6 +7,7 @@ import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Student;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,10 +62,10 @@ public class NotificationService extends BaseService {
     }
 
     /**
-     * Retrieves a Notification with specific id from the database
+     * Gets an existing Notification by ID
      *
      * @param id
-     * @return Notification with given id
+     * @return Notification with specified id
      */
     @Transactional
     public Notification getNotification(int id) {
@@ -78,9 +79,9 @@ public class NotificationService extends BaseService {
     }
 
     /**
-     * returns all notifications in the database
+     * Gets all Notifications
      *
-     * @return all notifications
+     * @return all Notifications
      */
     @Transactional
     public List<Notification> getAllNotifications() {
@@ -88,9 +89,9 @@ public class NotificationService extends BaseService {
     }
 
     /**
-     * returns all notifications for student in the database
+     * Gets all Notifications for the specified Student
      *
-     * @return all Notifications
+     * @return all Notifications for specified Student
      */
     @Transactional
     public List<Notification> getAllNotificationsOfStudent(Student student) {
@@ -98,9 +99,9 @@ public class NotificationService extends BaseService {
     }
 
     /**
-     * returns all unseen notifications for student id
+     * Gets all unseen Notifications for the specified Student
      *
-     * @return all unseen notifications
+     * @return all unseen Notifications for the specified Student
      */
     @Transactional
     public List<Notification> getUnreadForStudent(Student student) {
@@ -112,46 +113,45 @@ public class NotificationService extends BaseService {
     }
 
     /**
-     * Set all Notifications of Student to seen
+     * Sets all Notifications of specified Student to seen
      *
-     * @return all Notifications
+     * @return all Notifications for specified Student
      */
-    public List<Notification> markAllAsRead(Student s) {
-        for (Notification n : notificationRepository.findByStudent(s)) {
+    public List<Notification> markAllAsRead(Student student) {
+        for (Notification n : notificationRepository.findByStudent(student)) {
             markAsRead(n);
         }
-        return notificationRepository.findByStudent(s);
+        return notificationRepository.findByStudent(student);
     }
 
     /**
-     * Set Notification to seen
+     * Sets a Notification to seen
      *
-     * @return updated Notification
+     * @return the updated Notification
      */
-    public Notification markAsRead(Notification n) {
-        if (n != null) n.setSeen(true);
+    public Notification markAsRead(Notification notification) {
+        if (notification != null) notification.setSeen(true);
         else {
             throw new IllegalArgumentException(ERROR_PREFIX + "Notification cannot be null!");
         }
-        notificationRepository.save(n);
-        return n;
+        return notificationRepository.save(notification);
     }
 
     /**
-     * Updates an already existing Notification
+     * Updates an existing Notification
      *
-     * @param n
+     * @param notification
      * @param title
      * @param body
      * @param student
      * @param sender
-     * @return updated Notification
+     * @return the updated Notification
      */
     @Transactional
     public Notification updateNotification(
-            Notification n, String title, String body, Student student, Admin sender) {
+            Notification notification, String title, String body, Student student, Admin sender) {
         StringBuilder error = new StringBuilder();
-        if (n == null) {
+        if (notification == null) {
             error.append("Notification to update cannot be null! ");
         }
         if (title != null && title.trim().length() == 0) {
@@ -171,48 +171,49 @@ public class NotificationService extends BaseService {
         }
 
         if (title != null) {
-            n.setTitle(title.trim());
+            notification.setTitle(title.trim());
         }
         if (body != null) {
-            n.setBody(body.trim());
+            notification.setBody(body.trim());
         }
         if (sender != null) {
-            n.setSender(sender);
+            notification.setSender(sender);
         }
         if (student != null) {
-            n.setStudent(student);
+            notification.setStudent(student);
         }
 
-        return notificationRepository.save(n);
+        return notificationRepository.save(notification);
     }
 
     /**
-     * Deletes a Notification from the database
+     * Deletes an existing Notification
      *
-     * @param n
-     * @return deleted notification
+     * @param notification
+     * @return the deleted Notification
      */
     @Transactional
-    public Notification deleteNotification(Notification n) {
-        if (n == null) {
+    public Notification deleteNotification(Notification notification) {
+        if (notification == null) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX + "Notification to delete cannot be null!");
         }
 
-        Student s = n.getStudent();
-        Set<Notification> notifs = s.getNotifications();
-        notifs.remove(n);
+        Student s = notification.getStudent();
+        // make a new Set to avoid pointer issues
+        Set<Notification> notifs = new HashSet<>(s.getNotifications());
+        notifs.remove(notification);
         s.setNotifications(notifs);
         studentRepository.save(s);
 
-        Admin a = n.getSender();
-        List<Notification> adminNotifs = a.getSentNotifications();
-        adminNotifs.remove(n);
+        Admin a = notification.getSender();
+        Set<Notification> adminNotifs = a.getSentNotifications();
+        adminNotifs.remove(notification);
         a.setSentNotifications(adminNotifs);
         adminRepository.save(a);
 
-        notificationRepository.delete(n);
+        notificationRepository.delete(notification);
 
-        return n;
+        return notification;
     }
 }

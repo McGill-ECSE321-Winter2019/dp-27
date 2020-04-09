@@ -1,22 +1,22 @@
 package ca.mcgill.cooperator.dto;
 
-public class EmployerReportSectionDto {
+public class ReportSectionDto {
     private Integer id;
     private String response;
 
-    private EmployerReportDto employerReport;
+    private ReportDto report;
     private ReportSectionConfigDto reportSectionConfig;
 
-    public EmployerReportSectionDto() {}
+    public ReportSectionDto() {}
 
-    public EmployerReportSectionDto(
+    public ReportSectionDto(
             Integer id,
             String response,
-            EmployerReportDto employerReport,
+            ReportDto report,
             ReportSectionConfigDto reportSectionConfig) {
         this.id = id;
         this.response = response;
-        this.employerReport = employerReport;
+        this.report = report;
         this.reportSectionConfig = reportSectionConfig;
     }
 
@@ -34,12 +34,12 @@ public class EmployerReportSectionDto {
         this.response = response;
     }
 
-    public EmployerReportDto getEmployerReport() {
-        return this.employerReport;
+    public ReportDto getReport() {
+        return this.report;
     }
 
-    public void setEmployerReport(EmployerReportDto employerReport) {
-        this.employerReport = employerReport;
+    public void setReport(ReportDto report) {
+        this.report = report;
     }
 
     public ReportSectionConfigDto getReportSectionConfig() {

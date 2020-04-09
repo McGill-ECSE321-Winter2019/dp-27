@@ -138,7 +138,6 @@ export default {
     },
     updateReportConfig: function() {
       const body = {
-        id: this.id,
         requiresFile: this.requiresFileData,
         deadline: this.deadlineData,
         isDeadlineFromStart:
@@ -147,7 +146,7 @@ export default {
       };
 
       this.$axios
-        .put("/report-configs", body)
+        .put(`/report-configs/${this.id}`, body)
         .then(_resp => {
           this.$q.notify({
             color: "green-4",

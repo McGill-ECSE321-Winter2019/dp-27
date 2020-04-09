@@ -11,8 +11,7 @@ public class CoopDto {
     private CourseOfferingDto courseOffering;
     private CoopDetailsDto details;
     private StudentDto student;
-    private List<StudentReportDto> studentReports;
-    private List<EmployerReportDto> employerReports;
+    private List<ReportDto> reports;
 
     public CoopDto() {}
 
@@ -22,15 +21,13 @@ public class CoopDto {
             CourseOfferingDto courseOffering,
             CoopDetailsDto details,
             StudentDto student,
-            List<StudentReportDto> studentReports,
-            List<EmployerReportDto> employerReports) {
+            List<ReportDto> reports) {
         this.id = id;
         this.status = status;
         this.courseOffering = courseOffering;
         this.details = details;
         this.student = student;
-        this.studentReports = studentReports;
-        this.employerReports = employerReports;
+        this.reports = reports;
     }
 
     /*--- Getters and Setters ---*/
@@ -71,19 +68,11 @@ public class CoopDto {
         this.student = student;
     }
 
-    public List<StudentReportDto> getStudentReports() {
-        return this.studentReports;
+    public List<ReportDto> getReports() {
+        return this.reports;
     }
 
-    public void setStudentReports(List<StudentReportDto> studentReports) {
-        this.studentReports = studentReports;
-    }
-
-    public List<EmployerReportDto> getEmployerReports() {
-        return this.employerReports;
-    }
-
-    public void setEmployerReports(List<EmployerReportDto> employerReports) {
-        this.employerReports = employerReports;
+    public void setReports(List<ReportDto> reports) {
+        this.reports = reports;
     }
 }

@@ -15,19 +15,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CourseOfferingService extends BaseService {
+
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired CourseRepository courseRepository;
 
     /**
-     * create new course offering in database
+     * Creates a new CourseOffering
      *
      * @param year
      * @param season
-     * @param c
-     * @return created course offering
+     * @param course
+     * @return the created CourseOffering
      */
     @Transactional
-    public CourseOffering createCourseOffering(int year, Season season, Course c) {
+    public CourseOffering createCourseOffering(int year, Season season, Course course) {
         StringBuilder error = new StringBuilder();
         if (year <= 0) {
             error.append("Year is invalid! ");
@@ -35,7 +36,7 @@ public class CourseOfferingService extends BaseService {
         if (season == null) {
             error.append("Season cannot be null! ");
         }
-        if (c == null) {
+        if (course == null) {
             error.append("Course cannot be null!");
         }
         if (error.length() > 0) {
@@ -45,36 +46,18 @@ public class CourseOfferingService extends BaseService {
         CourseOffering co = new CourseOffering();
         co.setYear(year);
         co.setSeason(season);
-        co.setCourse(c);
+        co.setCourse(course);
         co.setCoops(new ArrayList<Coop>());
 
         return courseOfferingRepository.save(co);
     }
 
-    @Transactional
-    public CourseOffering updateCourseOffering(
-            CourseOffering co, int year, Season season, Course c) {
-        StringBuilder error = new StringBuilder();
-        if (co == null) {
-            error.append("Course Offering to update cannot be null!");
-        }
-        if (error.length() > 0) {
-            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
-        }
-
-        if (year > 0) {
-            co.setYear(year);
-        }
-        if (season != null) {
-            co.setSeason(season);
-        }
-        if (c != null) {
-            co.setCourse(c);
-        }
-
-        return courseOfferingRepository.save(co);
-    }
-
+    /**
+     * Gets a CourseOffering by ID
+     *
+     * @param id
+     * @return CourseOffering with specified ID
+     */
     @Transactional
     public CourseOffering getCourseOfferingById(int id) {
         CourseOffering c = courseOfferingRepository.findById(id).orElse(null);
@@ -85,36 +68,68 @@ public class CourseOfferingService extends BaseService {
         return c;
     }
 
+    /**
+     * Gets all CourseOfferings for the specified year
+     *
+     * @param year
+     * @return all CourseOfferings for the specified year
+     */
     @Transactional
     public Set<CourseOffering> getCourseOfferings(int year) {
         return ServiceUtils.toSet(courseOfferingRepository.findByYear(year));
     }
 
+    /**
+     * Gets all CourseOfferings for the specified season
+     *
+     * @param season
+     * @return all CourseOfferings for the specified season
+     */
     @Transactional
     public Set<CourseOffering> getCourseOfferings(Season season) {
         return ServiceUtils.toSet(courseOfferingRepository.findBySeason(season));
     }
 
+    /**
+     * Gets all CourseOfferings for the specified Course
+     *
+     * @param course
+     * @return all CourseOfferings for the specified Course
+     */
     @Transactional
-    public Set<CourseOffering> getCourseOfferingsByCourse(Course c) {
-        Set<CourseOffering> co = courseOfferingRepository.findByCourse(c);
+    public Set<CourseOffering> getCourseOfferingsByCourse(Course course) {
+        Set<CourseOffering> co = courseOfferingRepository.findByCourse(course);
         if (co == null) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX
                             + "There are no course offerings for the course "
-                            + c.getName()
+                            + course.getName()
                             + "!");
         }
         return co;
     }
 
+    /**
+     * Gets the CourseOffering for the specified Course and term
+     *
+     * @param course
+     * @param year
+     * @param season
+     * @return CourseOffering for the specified Course and term
+     */
     @Transactional
-    public CourseOffering getCourseOfferingByCourseAndTerm(Course c, int year, Season season) {
-        CourseOffering co = courseOfferingRepository.findByCourseAndYearAndSeason(c, year, season);
+    public CourseOffering getCourseOfferingByCourseAndTerm(Course course, int year, Season season) {
+        CourseOffering co =
+                courseOfferingRepository.findByCourseAndYearAndSeason(course, year, season);
         // no need to throw an exception, just return null
         return co;
     }
 
+    /**
+     * Gets all CourseOfferings
+     *
+     * @return all CourseOfferings
+     */
     @Transactional
     public List<CourseOffering> getAllCourseOfferings() {
         List<CourseOffering> co = ServiceUtils.toList(courseOfferingRepository.findAll());
@@ -124,6 +139,11 @@ public class CourseOfferingService extends BaseService {
         return co;
     }
 
+    /**
+     * Gets all CourseOfferings as a Set
+     *
+     * @return all CourseOfferings in a Set
+     */
     @Transactional
     public Set<CourseOffering> getAllCourseOfferingsSet() {
         Set<CourseOffering> co = ServiceUtils.toSet(courseOfferingRepository.findAll());
@@ -133,20 +153,59 @@ public class CourseOfferingService extends BaseService {
         return co;
     }
 
+    /**
+     * Updates an existing CourseOffering
+     *
+     * @param courseOffering
+     * @param year
+     * @param season
+     * @param course
+     * @return the updated CourseOffering
+     */
     @Transactional
-    public CourseOffering deleteCourseOffering(CourseOffering co) {
-        if (co == null) {
+    public CourseOffering updateCourseOffering(
+            CourseOffering courseOffering, int year, Season season, Course course) {
+        StringBuilder error = new StringBuilder();
+        if (courseOffering == null) {
+            error.append("Course Offering to update cannot be null!");
+        }
+        if (error.length() > 0) {
+            throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
+        }
+
+        if (year > 0) {
+            courseOffering.setYear(year);
+        }
+        if (season != null) {
+            courseOffering.setSeason(season);
+        }
+        if (course != null) {
+            courseOffering.setCourse(course);
+        }
+
+        return courseOfferingRepository.save(courseOffering);
+    }
+
+    /**
+     * Deletes an existing CourseOffering
+     *
+     * @param courseOffering
+     * @return the deleted CourseOffering
+     */
+    @Transactional
+    public CourseOffering deleteCourseOffering(CourseOffering courseOffering) {
+        if (courseOffering == null) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX + "Course offering to delete cannot be null!");
         }
-        courseOfferingRepository.delete(co);
+        courseOfferingRepository.delete(courseOffering);
 
-        Course c = co.getCourse();
-        List<CourseOffering> cos = c.getCourseOfferings();
-        cos.remove(co);
-        c.setCourseOfferings(cos);
+        Course c = courseOffering.getCourse();
+        List<CourseOffering> courseOfferings = c.getCourseOfferings();
+        courseOfferings.remove(courseOffering);
+        c.setCourseOfferings(courseOfferings);
         courseRepository.save(c);
 
-        return co;
+        return courseOffering;
     }
 }

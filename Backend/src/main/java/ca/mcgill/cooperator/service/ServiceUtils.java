@@ -55,9 +55,9 @@ public class ServiceUtils {
     }
 
     /**
-     * Checks if an phone number is valid (just if all characters are numbers)
+     * Checks if a phone number is valid (just if all characters are numbers)
      *
-     * @param email
+     * @param phoneNumber
      * @return true if phone number is valid
      */
     public static boolean isValidPhoneNumber(String phoneNumber) {

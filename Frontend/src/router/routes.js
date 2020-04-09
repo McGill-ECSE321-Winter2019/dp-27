@@ -1,5 +1,9 @@
 const routes = [
   {
+    path: "/login",
+    component: () => import("layouts/LoginLayout.vue")
+  },
+  {
     path: "/student",
     component: () => import("layouts/StudentLoggedInLayout.vue"),
     meta: { requiresStudentAuth: true },
@@ -7,16 +11,11 @@ const routes = [
       { path: "", redirect: "home" },
       {
         path: "home",
-        component: () => import("pages/student/StudentHome.vue")
+        component: () => import("pages/student/StudentHomePage.vue")
       },
       {
         path: "profile",
         component: () => import("pages/student/StudentProfile.vue")
-      },
-      {
-        path: "coops/:id",
-        component: () => import("pages/student/StudentSpecificCoop.vue"),
-        props: true
       },
       {
         path: "coops",
@@ -48,21 +47,28 @@ const routes = [
       { path: "", redirect: "home" },
       { path: "home", component: () => import("pages/admin/AdminHome.vue") },
       {
-        path: "studentCoops",
+        path: "student-coops",
         component: () => import("pages/admin/AdminStudentCoops.vue")
       },
       {
         path: "profile",
         component: () => import("pages/admin/AdminProfile.vue")
       },
-      { path: "coops", component: () => import("pages/admin/AdminCoops.vue") },
       {
-        path: "coops/review",
-        component: () => import("pages/admin/AdminCoopReviewPage.vue")
+        path: "coops",
+        component: () => import("pages/admin/AdminCoops.vue")
       },
       {
+        name: "Review",
+        path: "coops/review",
+        component: () => import("pages/admin/AdminCoopReviewPage.vue"),
+        props: true
+      },
+      {
+        name: "AdminViewStudents",
         path: "students",
-        component: () => import("pages/admin/AdminStudentsPage.vue")
+        component: () => import("pages/admin/AdminStudentsPage.vue"),
+        props: true
       },
       {
         path: "student",
