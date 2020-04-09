@@ -143,7 +143,7 @@ public class CoopService extends BaseService {
             CoopStatus status,
             CourseOffering courseOffering,
             Student student,
-            CoopDetails cd,
+            CoopDetails coopDetails,
             Set<Report> reports) {
         StringBuilder error = new StringBuilder();
         if (coop == null) {
@@ -162,8 +162,8 @@ public class CoopService extends BaseService {
         if (student != null) {
             coop.setStudent(student);
         }
-        if (cd != null) {
-            coop.setCoopDetails(cd);
+        if (coopDetails != null) {
+            coop.setCoopDetails(coopDetails);
         }
         if (reports != null) {
             coop.setReports(reports);
