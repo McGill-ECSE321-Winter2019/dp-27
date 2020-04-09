@@ -123,7 +123,7 @@ export default {
       };
 
       this.$axios
-        .put("/report-section-configs", body)
+        .put(`/report-section-configs/${this.reportSectionConfig.id}`, body)
         .then(_resp => {
           this.$q.notify({
             color: "green-4",
@@ -132,7 +132,8 @@ export default {
             icon: "cloud_done",
             message: "Updated Successfully"
           });
-          // let parent know to close the dialog and refresh its list of report configs
+          // let parent know to close the dialog and refresh its list
+          // of report configs
           this.$emit("refresh");
         })
         .catch(_err => {

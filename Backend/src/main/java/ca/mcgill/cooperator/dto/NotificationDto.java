@@ -1,14 +1,11 @@
 package ca.mcgill.cooperator.dto;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 public class NotificationDto {
-    private int id;
+    private Integer id;
     private String title;
     private String body;
     private Boolean seen;
-    private String timeStamp;
+    private Long timeStamp;
 
     private StudentDto student;
     private AdminDto sender;
@@ -16,26 +13,25 @@ public class NotificationDto {
     public NotificationDto() {};
 
     public NotificationDto(
-            int id,
+            Integer id,
             String title,
             String body,
             StudentDto student,
             AdminDto sender,
             Boolean seen,
-            long timeStamp) {
+            Long timeStamp) {
         this.id = id;
         this.title = title;
         this.body = body;
         this.seen = seen;
-        DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm");
-        this.timeStamp = simple.format(timeStamp);
+        this.timeStamp = timeStamp;
         this.student = student;
         this.sender = sender;
     }
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
@@ -79,12 +75,11 @@ public class NotificationDto {
         this.seen = seen;
     }
 
-    public String getTimeStamp() {
+    public Long getTimeStamp() {
         return this.timeStamp;
     }
 
-    public void setTimeStamp(long timeStamp) {
-        DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm");
-        this.timeStamp = simple.format(timeStamp);
+    public void setTimeStamp(Long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }

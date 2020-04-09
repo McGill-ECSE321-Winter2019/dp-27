@@ -6,7 +6,6 @@ import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.EmployerContactService;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,10 +28,40 @@ public class CompanyController extends BaseController {
     @Autowired private EmployerContactService employerContactService;
 
     /**
+     * Creates a new Company
+     *
+     * @param name
+     * @param city
+     * @param region
+     * @param county
+     * @return the created Company
+     */
+    @PostMapping("")
+    public CompanyDto createCompany(@RequestBody CompanyDto companyDto) {
+        List<EmployerContact> employerContacts = null;
+        List<EmployerContactDto> employerContactDtos = companyDto.getEmployees();
+        if (employerContactDtos != null) {
+            employerContacts =
+                    ControllerUtils.covertEmployerContactDtosToDomainObjects(
+                            employerContactService, employerContactDtos);
+        }
+
+        Company company =
+                companyService.createCompany(
+                        companyDto.getName(),
+                        companyDto.getCity(),
+                        companyDto.getRegion(),
+                        companyDto.getCountry(),
+                        employerContacts);
+
+        return ControllerUtils.convertToDto(company);
+    }
+
+    /**
      * Gets a Company by ID
      *
      * @param id
-     * @return Company with specified ID
+     * @return CompanyDto object
      */
     @GetMapping("/{id}")
     public CompanyDto getCompanyById(@PathVariable int id) {
@@ -44,7 +73,7 @@ public class CompanyController extends BaseController {
      * Gets all Companies or all Companies with specified name
      *
      * @param name
-     * @return Companies that match filter
+     * @return List of CompanyDtos that match filter
      */
     @GetMapping("")
     public List<CompanyDto> getAllCompanies(@RequestParam(required = false) String name) {
@@ -60,38 +89,6 @@ public class CompanyController extends BaseController {
     }
 
     /**
-     * Creates a new Company
-     *
-     * @param name
-     * @param city
-     * @param region
-     * @param county
-     * @return created Company
-     */
-    @PostMapping("")
-    public CompanyDto createCompany(@RequestBody CompanyDto companyDto) {
-        List<EmployerContact> employerContacts = new ArrayList<EmployerContact>();
-        List<EmployerContactDto> employerContactDtos = companyDto.getEmployees();
-        if (employerContactDtos != null) {
-            for (EmployerContactDto employerContactDto : employerContactDtos) {
-                EmployerContact employerContact =
-                        employerContactService.getEmployerContact(employerContactDto.getId());
-                employerContacts.add(employerContact);
-            }
-        }
-
-        Company company =
-                companyService.createCompany(
-                        companyDto.getName(),
-                        companyDto.getCity(),
-                        companyDto.getRegion(),
-                        companyDto.getCountry(),
-                        employerContacts);
-
-        return ControllerUtils.convertToDto(company);
-    }
-
-    /**
      * Updates an existing Company
      *
      * @param name
@@ -99,20 +96,18 @@ public class CompanyController extends BaseController {
      * @param region
      * @param county
      * @param employees
-     * @return updated Company
+     * @return the updated Company
      */
-    @PutMapping("")
-    public CompanyDto updateCompany(@RequestBody CompanyDto companyDto) {
-        Company company = companyService.getCompany(companyDto.getId());
+    @PutMapping("/{id}")
+    public CompanyDto updateCompany(@PathVariable int id, @RequestBody CompanyDto companyDto) {
+        Company company = companyService.getCompany(id);
 
         List<EmployerContactDto> employerContactDtos = companyDto.getEmployees();
-        List<EmployerContact> employerContacts = new ArrayList<EmployerContact>();
+        List<EmployerContact> employerContacts = null;
         if (employerContactDtos != null) {
-            for (EmployerContactDto employerContactDto : employerContactDtos) {
-                EmployerContact employerContact =
-                        employerContactService.getEmployerContact(employerContactDto.getId());
-                employerContacts.add(employerContact);
-            }
+            employerContacts =
+                    ControllerUtils.covertEmployerContactDtosToDomainObjects(
+                            employerContactService, employerContactDtos);
         }
 
         company =
@@ -131,11 +126,11 @@ public class CompanyController extends BaseController {
      * Deletes a Company by ID
      *
      * @param id
-     * @return deleted Company
+     * @return the deleted Company
      */
     @DeleteMapping("/{id}")
-    public void deleteCompany(@PathVariable int id) {
+    public CompanyDto deleteCompany(@PathVariable int id) {
         Company c = companyService.getCompany(id);
-        companyService.deleteCompany(c);
+        return ControllerUtils.convertToDto(companyService.deleteCompany(c));
     }
 }

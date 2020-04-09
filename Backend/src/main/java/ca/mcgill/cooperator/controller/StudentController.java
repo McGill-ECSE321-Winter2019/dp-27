@@ -5,13 +5,17 @@ import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.Notification;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.NotificationService;
+import ca.mcgill.cooperator.service.ReportService;
 import ca.mcgill.cooperator.service.StudentService;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -38,11 +42,36 @@ public class StudentController extends BaseController {
     @Autowired private CourseOfferingService courseOfferingService;
     @Autowired private CourseService courseService;
     @Autowired private NotificationService notificationService;
+    @Autowired private ReportService reportService;
 
     /**
-     * Get students with filters
+     * Creates a new Student
      *
-     * @return Set<StudentDto>
+     * <p>In request body:
+     *
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param studentId
+     * @return created Student
+     */
+    @PostMapping("")
+    public StudentDto createStudent(@RequestBody StudentDto studentDto) {
+
+        Student student =
+                studentService.createStudent(
+                        studentDto.getFirstName(),
+                        studentDto.getLastName(),
+                        studentDto.getEmail(),
+                        studentDto.getStudentId());
+
+        return ControllerUtils.convertToDto(student);
+    }
+
+    /**
+     * Gets Students with filters
+     *
+     * @return collection of StudentDtos
      */
     @GetMapping("")
     public Collection<StudentDto> getStudentFiltered(
@@ -100,12 +129,12 @@ public class StudentController extends BaseController {
     }
 
     /**
-     * Get Student by id
+     * Gets a Student by ID
      *
      * @param id
      * @return StudentDto Object
      */
-    @GetMapping("/{id}")
+    @GetMapping("id/{id}")
     public StudentDto getStudentById(@PathVariable int id) {
         Student s = studentService.getStudentById(id);
 
@@ -113,74 +142,23 @@ public class StudentController extends BaseController {
     }
 
     /**
-     * Create new Student
+     * Gets a Student by email
      *
-     * <p>In request body:
-     *
-     * @param firstName
-     * @param lastName
      * @param email
-     * @param studentId
-     * @return created Student
+     * @return StudentDto Object
      */
-    @PostMapping("")
-    public StudentDto createStudent(@RequestBody StudentDto studentDto) {
+    @GetMapping("email/{email}")
+    public StudentDto getStudentByEmail(@PathVariable String email) {
+        Student s = studentService.getStudentByEmail(email);
 
-        Student student =
-                studentService.createStudent(
-                        studentDto.getFirstName(),
-                        studentDto.getLastName(),
-                        studentDto.getEmail(),
-                        studentDto.getStudentId());
-
-        return ControllerUtils.convertToDto(student);
+        return ControllerUtils.convertToDto(s);
     }
 
     /**
-     * Update student
-     *
-     * <p>In request body:
-     *
-     * @param firstName
-     * @param lastName
-     * @param email
-     * @param studentId
-     * @param List<Coops>
-     * @param List<Notifications>
-     * @return updated Student
-     */
-    @PutMapping("")
-    public StudentDto updateStudent(@RequestBody StudentDto s) {
-        Student student = studentService.getStudentByStudentId(s.getStudentId());
-        studentService.updateStudent(
-                student,
-                s.getFirstName(),
-                s.getLastName(),
-                s.getEmail(),
-                s.getStudentId(),
-                ControllerUtils.convertCoopsListToDomainObject(coopService, s.getCoops()),
-                ControllerUtils.convertNotificationListToDomainObjectSet(
-                        notificationService, s.getNotifications()));
-        return ControllerUtils.convertToDto(student);
-    }
-
-    /**
-     * Deletes an existing student
+     * Gets current Coop for the specified Student
      *
      * @param id
-     * @return deleted Student
-     */
-    @DeleteMapping("/{id}")
-    public StudentDto deleteStudent(@PathVariable int id) {
-        Student student = studentService.deleteStudent(studentService.getStudentById(id));
-        return ControllerUtils.convertToDto(student);
-    }
-
-    /**
-     * Gets current coop
-     *
-     * @param id
-     * @return coop or null if not in a coop currently
+     * @return Coop or null if not in a Coop currently
      */
     @GetMapping("/{id}/current-coop")
     public CoopDto getCurrentStudentCoop(@PathVariable int id) {
@@ -193,21 +171,100 @@ public class StudentController extends BaseController {
     }
 
     /**
-     * Get student coops by status
+     * Gets the upcoming Coop(s) for the specified Student
      *
      * @param id
-     *     <p>In request body
+     * @return Coop(s) or empty list if no upcoming Coops
+     */
+    @GetMapping("/{id}/upcoming-coops")
+    public List<CoopDto> getUpcomingStudentCoops(@PathVariable int id) {
+        Student s = studentService.getStudentById(id);
+        Set<Coop> coops = s.getCoops();
+        List<CoopDto> result = new ArrayList<>();
+        for (Coop c : coops) {
+            if (c.getStatus() == CoopStatus.FUTURE
+                    || c.getStatus() == CoopStatus.UNDER_REVIEW
+                    || c.getStatus() == CoopStatus.REJECTED)
+                result.add(ControllerUtils.convertToDto(c));
+        }
+        return result;
+    }
+
+    /**
+     * Get a Student's Coops by status
+     *
+     * @param id
+     *     <p>In request body:
      * @param status
-     * @return set of all coops with that status
+     * @return set of CoopDtos with that status
      */
     @GetMapping("/{id}/coop-list")
     public Set<CoopDto> getCoopsByStatus(@PathVariable int id, @RequestParam CoopStatus status) {
         Student s = studentService.getStudentById(id);
         Set<Coop> coops = s.getCoops();
-        Set<CoopDto> coopDto = new HashSet<>();
+        Set<CoopDto> coopDtos = new HashSet<>();
         for (Coop c : coops) {
-            if (c.getStatus() == status) coopDto.add(ControllerUtils.convertToDto(c));
+            if (c.getStatus() == status) coopDtos.add(ControllerUtils.convertToDto(c));
         }
-        return coopDto;
+        return coopDtos;
+    }
+
+    /**
+     * Updates an existing student
+     *
+     * <p>In request body:
+     *
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param studentId
+     * @param List<Coops>
+     * @param List<Notifications>
+     * @return the updated Student
+     */
+    @PutMapping("/{id}")
+    public StudentDto updateStudent(@PathVariable int id, @RequestBody StudentDto s) {
+        Student student = studentService.getStudentById(id);
+
+        Set<Coop> coops = null;
+        if (s.getCoops() != null) {
+            coops = ControllerUtils.convertCoopsListToDomainObject(coopService, s.getCoops());
+        }
+
+        Set<Notification> notifs = null;
+        if (s.getNotifications() != null) {
+            notifs =
+                    ControllerUtils.convertNotificationListToDomainObjectSet(
+                            notificationService, s.getNotifications());
+        }
+
+        Set<Report> reports = null;
+        if (s.getReports() != null) {
+            reports =
+                    ControllerUtils.convertReportDtosToDomainObjects(reportService, s.getReports());
+        }
+
+        studentService.updateStudent(
+                student,
+                s.getFirstName(),
+                s.getLastName(),
+                s.getEmail(),
+                s.getStudentId(),
+                coops,
+                notifs,
+                reports);
+        return ControllerUtils.convertToDto(student);
+    }
+
+    /**
+     * Deletes an existing student
+     *
+     * @param id
+     * @return the deleted Student
+     */
+    @DeleteMapping("/{id}")
+    public StudentDto deleteStudent(@PathVariable int id) {
+        Student student = studentService.deleteStudent(studentService.getStudentById(id));
+        return ControllerUtils.convertToDto(student);
     }
 }

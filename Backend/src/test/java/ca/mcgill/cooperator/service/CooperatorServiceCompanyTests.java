@@ -3,6 +3,7 @@ package ca.mcgill.cooperator.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Company;
@@ -24,12 +25,14 @@ public class CooperatorServiceCompanyTests extends BaseServiceTest {
     @Autowired EmployerContactService employerContactService;
 
     @Autowired CompanyRepository companyRepository;
+    @Autowired AuthorRepository authorRepository;
     @Autowired EmployerContactRepository employerContactRepository;
 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
         companyRepository.deleteAll();
+        authorRepository.deleteAll();
         employerContactRepository.deleteAll();
     }
 
@@ -69,8 +72,7 @@ public class CooperatorServiceCompanyTests extends BaseServiceTest {
                         + "Company name cannot be empty! "
                         + "Company city cannot be empty! "
                         + "Company region cannot be empty! "
-                        + "Company country cannot be empty! "
-                        + "Company employees cannot be null!",
+                        + "Company country cannot be empty!",
                 error);
         assertEquals(companyService.getAllCompanies().size(), 0);
     }
@@ -89,8 +91,7 @@ public class CooperatorServiceCompanyTests extends BaseServiceTest {
                         + "Company name cannot be empty! "
                         + "Company city cannot be empty! "
                         + "Company region cannot be empty! "
-                        + "Company country cannot be empty! "
-                        + "Company employees cannot be null!",
+                        + "Company country cannot be empty!",
                 error);
         assertEquals(companyService.getAllCompanies().size(), 0);
     }

@@ -1,18 +1,25 @@
 <template>
   <div>
-    <q-card flat bordered class="card">
+    <q-card flat bordered>
       <q-card-section>
-        <div class="text-h6">Notifications</div>
-      </q-card-section>
-      <q-card-section v-if="notifsLoaded">
-        <NotificationListItem
-          v-for="notification in notifications"
-          :key="notification.id"
-          :notification="notification"
-        />
-      </q-card-section>
-      <q-card-section v-else>
-        You have no notifications!
+        <!-- Show spinner while loading -->
+        <div v-if="loading" class="center-item q-mb-md">
+          <q-spinner color="primary" size="3em" />
+        </div>
+
+        <!-- Show notifications -->
+        <div v-else>
+          <div v-if="notifications.length > 0">
+            <NotificationListItem
+              v-for="notification in notifications"
+              :key="notification.id"
+              :notification="notification"
+            />
+          </div>
+          <div v-else>
+            You have no notifications!
+          </div>
+        </div>
       </q-card-section>
     </q-card>
   </div>
@@ -28,7 +35,7 @@ export default {
   data() {
     return {
       notifications: [],
-      notifsLoaded: false
+      loading: true
     };
   },
   created: function() {
@@ -41,26 +48,19 @@ export default {
       })
       .then(resp => {
         this.notifications = resp.data;
-        this.notifsLoaded = true;
-        if (this.notifications.length == 0) {
-          this.notifsLoaded = false;
-        }
+        this.loading = false;
       });
-    this.$axios
-      .put("/notifications/" + user.id + "/mark-as-read", {
-        headers: {
-          Authorization: this.$store.state.token
-        }
-      })
-      .then(resp => {});
+    this.$axios.put(`/notifications/${user.id}/mark-as-read`, {
+      headers: {
+        Authorization: this.$store.state.token
+      }
+    });
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.card {
-  width: 100%;
-  margin-top: 25px;
-  margin-bottom: 25px;
+.center-item {
+  text-align: center;
 }
 </style>

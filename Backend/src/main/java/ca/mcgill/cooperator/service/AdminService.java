@@ -4,8 +4,10 @@ import ca.mcgill.cooperator.dao.AdminRepository;
 import ca.mcgill.cooperator.dao.NotificationRepository;
 import ca.mcgill.cooperator.model.Admin;
 import ca.mcgill.cooperator.model.Notification;
-import java.util.ArrayList;
+import ca.mcgill.cooperator.model.Report;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,8 @@ public class AdminService extends BaseService {
         a.setFirstName(firstName.trim());
         a.setLastName(lastName.trim());
         a.setEmail(email.trim());
-        a.setSentNotifications(new ArrayList<Notification>());
+        a.setSentNotifications(new HashSet<Notification>());
+        a.setReports(new HashSet<Report>());
 
         return adminRepository.save(a);
     }
@@ -55,7 +58,7 @@ public class AdminService extends BaseService {
      * Returns the Admin with specified ID
      *
      * @param id
-     * @return Admin, if it exists
+     * @return Admin, if they exist
      */
     @Transactional
     public Admin getAdmin(int id) {
@@ -72,7 +75,7 @@ public class AdminService extends BaseService {
      * Returns the Admin with specified email
      *
      * @param email
-     * @return Admin, if it exists
+     * @return Admin, if they exist
      */
     @Transactional
     public Admin getAdmin(String email) {
@@ -98,7 +101,7 @@ public class AdminService extends BaseService {
     /**
      * Updates the specified Admin
      *
-     * @param a
+     * @param admin
      * @param firstName
      * @param lastName
      * @param email
@@ -107,13 +110,14 @@ public class AdminService extends BaseService {
      */
     @Transactional
     public Admin updateAdmin(
-            Admin a,
+            Admin admin,
             String firstName,
             String lastName,
             String email,
-            List<Notification> sentNotifications) {
+            Set<Notification> sentNotifications,
+            Set<Report> reports) {
         StringBuilder error = new StringBuilder();
-        if (a == null) {
+        if (admin == null) {
             error.append("Admin to update cannot be null! ");
         }
         if (firstName != null && firstName.trim().length() == 0) {
@@ -131,22 +135,23 @@ public class AdminService extends BaseService {
             throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
         // set fields if they're not null
-
         if (firstName != null) {
-            a.setFirstName(firstName.trim());
+            admin.setFirstName(firstName.trim());
         }
         if (lastName != null) {
-            a.setLastName(lastName.trim());
+            admin.setLastName(lastName.trim());
         }
         if (email != null) {
-            a.setEmail(email.trim());
+            admin.setEmail(email.trim());
         }
-
         if (sentNotifications != null) {
-            a.setSentNotifications(sentNotifications);
+            admin.setSentNotifications(sentNotifications);
+        }
+        if (reports != null) {
+            admin.setReports(reports);
         }
 
-        return adminRepository.save(a);
+        return adminRepository.save(admin);
     }
 
     /**
@@ -156,12 +161,12 @@ public class AdminService extends BaseService {
      * @return the deleted Admin
      */
     @Transactional
-    public Admin deleteAdmin(Admin a) {
-        if (a == null) {
+    public Admin deleteAdmin(Admin admin) {
+        if (admin == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Admin to delete cannot be null!");
         }
-        adminRepository.delete(a);
+        adminRepository.delete(admin);
 
-        return a;
+        return admin;
     }
 }

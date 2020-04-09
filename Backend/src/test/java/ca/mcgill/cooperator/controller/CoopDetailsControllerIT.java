@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
@@ -25,6 +26,7 @@ import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -54,6 +56,7 @@ public class CoopDetailsControllerIT extends BaseControllerIT {
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CompanyRepository companyRepository;
     @Autowired CoopDetailsService coopDetailsService;
+    @Autowired AuthorRepository authorRepository;
 
     @BeforeEach
     @AfterEach
@@ -69,6 +72,7 @@ public class CoopDetailsControllerIT extends BaseControllerIT {
         courseRepository.deleteAll();
         coopRepository.deleteAll();
         coopDetailsRepository.deleteAll();
+        authorRepository.deleteAll();
         employerContactRepository.deleteAll();
         companyRepository.deleteAll();
     }
@@ -91,6 +95,8 @@ public class CoopDetailsControllerIT extends BaseControllerIT {
         CoopDetailsDto coopDetailsDto = new CoopDetailsDto();
         coopDetailsDto.setCoop(coopDto);
         coopDetailsDto.setEmployerContact(employerContactDto);
+        coopDetailsDto.setStartDate(Date.valueOf("2020-01-01"));
+        coopDetailsDto.setEndDate(Date.valueOf("2020-04-01"));
         coopDetailsDto.setHoursPerWeek(40);
         coopDetailsDto.setPayPerHour(300);
 
@@ -136,7 +142,7 @@ public class CoopDetailsControllerIT extends BaseControllerIT {
         // 4. update the Co-op Details with a PUT request
         mvcResult =
                 mvc.perform(
-                                put("/coop-details")
+                                put("/coop-details/" + coopDetailsToUpdate.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(
                                                 objectMapper.writeValueAsString(

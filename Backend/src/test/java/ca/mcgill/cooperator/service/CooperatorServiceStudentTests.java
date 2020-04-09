@@ -205,7 +205,7 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         try {
             Student s = studentService.getStudentByStudentId(studentID);
             studentService.updateStudent(
-                    s, firstName, lastName, email, studentIDNew, coops, notifications);
+                    s, firstName, lastName, email, studentIDNew, coops, notifications, null);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -245,7 +245,7 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         try {
             s =
                     studentService.updateStudent(
-                            s, firstName, lastName, email, studentId, coops, notifs);
+                            s, firstName, lastName, email, studentId, coops, notifs, null);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -274,7 +274,7 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         }
         try {
             Student s = studentService.getStudentByStudentId(studentID);
-            studentService.updateStudent(s, "  ", "", "", "", null, null);
+            studentService.updateStudent(s, "  ", "", "", "", null, null, null);
             fail();
         } catch (IllegalArgumentException e) {
 
@@ -303,7 +303,7 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
 
         String error = "";
         try {
-            studentService.updateStudent(null, null, null, null, null, null, null);
+            studentService.updateStudent(null, null, null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -318,11 +318,11 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
 
         Course c = createTestCourse(courseService);
         CourseOffering co1 = createTestCourseOffering(courseOfferingService, c, Season.FALL, 2019);
-        Coop coop1 = createTestCoop(coopService, co1, s);
+        createTestCoop(coopService, co1, s);
 
         CourseOffering co2 =
                 createTestCourseOffering(courseOfferingService, c, Season.SUMMER, 2019);
-        Coop coop2 = createTestCoop(coopService, co2, s);
+        createTestCoop(coopService, co2, s);
 
         s = studentService.getStudentById(s.getId());
         Coop mostRecent = studentService.getMostRecentCoop(s);
@@ -332,7 +332,7 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
 
         CourseOffering co3 =
                 createTestCourseOffering(courseOfferingService, c, Season.WINTER, 2020);
-        Coop coop3 = createTestCoop(coopService, co3, s);
+        createTestCoop(coopService, co3, s);
 
         s = studentService.getStudentById(s.getId());
         mostRecent = studentService.getMostRecentCoop(s);
@@ -396,7 +396,7 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         try {
             s =
                     studentService.updateStudent(
-                            s, firstName, lastName, email, studentId, coops, notifs);
+                            s, firstName, lastName, email, studentId, coops, notifs, null);
         } catch (IllegalArgumentException e) {
             fail();
         }

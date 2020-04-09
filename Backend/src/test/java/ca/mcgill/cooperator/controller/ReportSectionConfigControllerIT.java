@@ -74,6 +74,7 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
         rscDto.setSectionPrompt(prompt);
         rscDto.setResponseType(ReportResponseType.LONG_TEXT);
         rscDto.setReportConfig(rcDto);
+        rscDto.setQuestionNumber(12);
 
         // 2. create the ReportSectionConfig with a POST request
         mvcResult =
@@ -115,7 +116,7 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
         rscDto.setResponseType(ReportResponseType.NUMBER);
 
         mvc.perform(
-                        put("/report-section-configs")
+                        put("/report-section-configs/" + rscDto.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(rscDto))
                                 .characterEncoding("utf-8"))
@@ -197,24 +198,31 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
         rscDto.setSectionPrompt(prompt);
         rscDto.setResponseType(ReportResponseType.LONG_TEXT);
         rscDto.setReportConfig(rcDto);
+        rscDto.setQuestionNumber(3);
 
         // valid create so that we have a ReportSectionConfig to work with
-        mvc.perform(
-                        post("/report-section-configs")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(rscDto))
-                                .characterEncoding("utf-8"))
-                .andExpect(status().isOk());
+        mvcResult =
+                mvc.perform(
+                                post("/report-section-configs")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(rscDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
+        rscDto =
+                objectMapper.readValue(
+                        mvcResult.getResponse().getContentAsString(), ReportSectionConfigDto.class);
 
         rscDto.setSectionPrompt(" ");
 
-        // 2. invalid update: empty prompt and no ID provided
+        // 2. invalid update: empty prompt, expect null pointer exception
         mvc.perform(
-                        put("/report-section-configs")
+                        put("/report-section-configs/" + rscDto.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(rscDto))
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         // get the created ReportSectionConfig
         mvcResult =
@@ -235,6 +243,6 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
                         delete("/report-section-configs/" + (rscDto.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 }

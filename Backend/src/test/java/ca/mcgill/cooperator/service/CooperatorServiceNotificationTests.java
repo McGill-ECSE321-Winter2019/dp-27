@@ -56,7 +56,7 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
         student = studentService.getStudentById(student.getId());
         assertEquals("Hello", ((Notification) student.getNotifications().toArray()[0]).getTitle());
         sender = adminService.getAdmin(sender.getId());
-        assertEquals("Hello", sender.getSentNotifications().get(0).getTitle());
+        assertEquals("Hello", sender.getSentNotifications().iterator().next().getTitle());
     }
 
     @Test
@@ -188,7 +188,7 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
         student = studentService.getStudentById(student.getId());
 
         assertEquals("Bye", n.getTitle());
-        assertEquals("Bye", sender.getSentNotifications().get(0).getTitle());
+        assertEquals("Bye", sender.getSentNotifications().iterator().next().getTitle());
         assertEquals("Bye", ((Notification) student.getNotifications().toArray()[0]).getTitle());
         assertEquals(1, notificationService.getAllNotifications().size());
     }

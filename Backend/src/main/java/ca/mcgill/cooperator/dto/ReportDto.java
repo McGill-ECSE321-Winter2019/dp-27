@@ -3,45 +3,40 @@ package ca.mcgill.cooperator.dto;
 import ca.mcgill.cooperator.model.ReportStatus;
 import java.util.List;
 
-public class StudentReportDto {
-    private int id;
-    private ReportStatus status;
+public class ReportDto {
+    private Integer id;
     private String title;
+    private ReportStatus status;
 
     private byte[] data;
 
     private CoopDto coop;
-    private List<StudentReportSectionDto> reportSections;
+    private AuthorDto author;
+    private List<ReportSectionDto> reportSections;
 
-    public StudentReportDto() {}
+    public ReportDto() {}
 
-    public StudentReportDto(
-            int id,
-            ReportStatus status,
+    public ReportDto(
+            Integer id,
             String title,
+            ReportStatus status,
             byte[] data,
             CoopDto coop,
-            List<StudentReportSectionDto> reportSections) {
+            AuthorDto author,
+            List<ReportSectionDto> reportSections) {
         this.id = id;
-        this.status = status;
         this.title = title;
+        this.status = status;
         this.data = data;
         this.coop = coop;
+        this.author = author;
         this.reportSections = reportSections;
     }
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
-    }
-
-    public ReportStatus getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(ReportStatus status) {
-        this.status = status;
     }
 
     public String getTitle() {
@@ -50,6 +45,14 @@ public class StudentReportDto {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public ReportStatus getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(ReportStatus status) {
+        this.status = status;
     }
 
     public byte[] getData() {
@@ -68,11 +71,19 @@ public class StudentReportDto {
         this.coop = coop;
     }
 
-    public List<StudentReportSectionDto> getReportSections() {
+    public AuthorDto getAuthor() {
+        return this.author;
+    }
+
+    public void setAuthor(AuthorDto author) {
+        this.author = author;
+    }
+
+    public List<ReportSectionDto> getReportSections() {
         return this.reportSections;
     }
 
-    public void setReportSections(List<StudentReportSectionDto> reportSections) {
+    public void setReportSections(List<ReportSectionDto> reportSections) {
         this.reportSections = reportSections;
     }
 }

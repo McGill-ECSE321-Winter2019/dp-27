@@ -9,11 +9,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
-import ca.mcgill.cooperator.dao.EmployerReportRepository;
+import ca.mcgill.cooperator.dao.ReportRepository;
 import ca.mcgill.cooperator.dto.CompanyDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
-import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.service.EmployerReportService;
+import ca.mcgill.cooperator.model.Report;
+import ca.mcgill.cooperator.service.ReportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.List;
@@ -37,19 +37,19 @@ public class EmployerContactControllerIT extends BaseControllerIT {
 
     @Autowired private ObjectMapper objectMapper;
 
-    @Autowired private EmployerReportService employerReportService;
+    @Autowired private ReportService reportService;
 
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CompanyRepository companyRepository;
-    @Autowired EmployerReportRepository employerReportRepository;
+    @Autowired ReportRepository employerReportRepository;
 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
-        List<EmployerReport> ecs = employerReportService.getAllEmployerReports();
-        for (EmployerReport ec : ecs) {
-            ec.setEmployerContact(null);
-            employerReportRepository.save(ec);
+        List<Report> reports = reportService.getAllReports();
+        for (Report r : reports) {
+            r.setAuthor(null);
+            employerReportRepository.save(r);
         }
         employerReportRepository.deleteAll();
         employerContactRepository.deleteAll();
@@ -122,7 +122,7 @@ public class EmployerContactControllerIT extends BaseControllerIT {
         // 4. update the Employer Contact with a PUT request
         mvcResult =
                 mvc.perform(
-                                put("/employer-contacts")
+                                put("/employer-contacts/" + employerContactToUpdate.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(
                                                 objectMapper.writeValueAsString(

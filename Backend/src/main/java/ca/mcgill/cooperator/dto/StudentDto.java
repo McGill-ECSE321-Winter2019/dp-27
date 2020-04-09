@@ -2,11 +2,8 @@ package ca.mcgill.cooperator.dto;
 
 import java.util.List;
 
-public class StudentDto {
-    private int id;
-    private String firstName;
-    private String lastName;
-    private String email;
+public class StudentDto extends AuthorDto {
+
     private String studentId;
 
     private List<CoopDto> coops;
@@ -15,13 +12,14 @@ public class StudentDto {
     public StudentDto() {}
 
     public StudentDto(
-            int id,
+            Integer id,
             String firstName,
             String lastName,
             String email,
             String studentId,
             List<CoopDto> coops,
-            List<NotificationDto> studentReceived) {
+            List<NotificationDto> studentReceived,
+            List<ReportDto> reports) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -29,37 +27,10 @@ public class StudentDto {
         this.studentId = studentId;
         this.coops = coops;
         this.studentReceived = studentReceived;
+        this.reports = reports;
     }
 
     /*--- Getters and Setters ---*/
-
-    public int getId() {
-        return this.id;
-    }
-
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return this.lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getStudentId() {
         return this.studentId;

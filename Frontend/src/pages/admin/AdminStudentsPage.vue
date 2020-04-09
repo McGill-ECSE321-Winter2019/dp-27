@@ -1,62 +1,87 @@
 <template>
-  <div>
-    <q-card-section>All Students</q-card-section>
+  <BasePage title="Students">
+    <q-card flat bordered>
+      <q-card-section>
+        <div class="q-pa-md">
+          <q-select
+            v-model="courseNameData"
+            :options="courseNames"
+            label="Course"
+            style="width:25%"
+          />
+          <q-select
+            v-model="statsData"
+            :options="statusOptions"
+            label="Coop Status"
+            style="width:25%"
+          />
+          <q-select
+            v-model="yearData"
+            :options="years"
+            label="Years"
+            style="width:25%"
+          />
+          <q-select
+            v-model="termData"
+            :options="terms"
+            label="Term"
+            style="width:25%"
+          />
+        </div>
+        <div class="q-pa-md">
+          <q-btn @click="applyFilter" class="q-mr-sm">Apply Filter</q-btn>
+          <q-btn @click="clearFilter" class="q-mr-sm">Clear Filter</q-btn>
+        </div>
 
-    <q-separator inset />
-    <div class="q-pa-md">
-      <q-select
-        v-model="course_name"
-        :options="course_names"
-        label="Course"
-        style="width:25%"
-      />
-      <q-select
-        v-model="status"
-        :options="statusOptions"
-        label="Coop Status"
-        style="width:25%"
-      />
-      <q-select
-        v-model="year"
-        :options="years"
-        label="Years"
-        style="width:25%"
-      />
-      <q-select
-        v-model="season"
-        :options="seasons"
-        label="Term"
-        style="width:25%"
-      />
-    </div>
-    <div class="q-pa-md">
-      <q-btn @click="applyFilter" class="q-mr-sm">Apply Filter</q-btn>
-      <q-btn @click="clearFilter" class="q-mr-sm">Clear Filter</q-btn>
-    </div>
-
-    <div class="q-pa-md">
-      <q-table
-        :data="students"
-        :columns="columns"
-        row-key="studentName"
-        @row-click="goToStudentCoop"
-      />
-    </div>
-  </div>
+        <div class="q-pa-md">
+          <q-table
+            :data="students"
+            :columns="columns"
+            row-key="studentName"
+            @row-click="goToStudentCoop"
+          />
+        </div>
+      </q-card-section>
+    </q-card>
+  </BasePage>
 </template>
+
 <script>
+import BasePage from "../BasePage.vue";
+
 export default {
   name: "AdminStudentsPage",
+  components: {
+    BasePage
+  },
+  props: {
+    courseName: {
+      type: String,
+      default: ""
+    },
+    year: {
+      type: String,
+      default: ""
+    },
+    status: {
+      type: String,
+      default: ""
+    },
+    term: {
+      type: String,
+      default: ""
+    }
+  },
   data: () => ({
     students: [],
-    course_names: [],
-    course_name: "",
+    courseNames: [],
+    courseNameData: "",
     statusOptions: [],
-    status: "",
-    seasons: [],
-    season: "",
+    statsData: "",
+    terms: [],
+    termData: "",
     years: [],
-    year: "",
+    yearData: "",
     columns: [
       {
         name: "studentLastName",
@@ -101,12 +126,27 @@ export default {
     ]
   }),
   created: function() {
+    this.courseNameData = this.courseName;
+    this.yearData = this.year;
+    this.termData = this.term;
+    this.statsData = this.status;
+
     this.$axios
-      .get("/students", {
-        headers: {
-          Authorization: this.$store.state.token
+      .get(
+        "/students?season=" +
+          this.termData +
+          "&year=" +
+          this.yearData +
+          "&name=" +
+          this.courseNameData +
+          "&status=" +
+          this.statsData,
+        {
+          headers: {
+            Authorization: this.$store.state.token
+          }
         }
-      })
+      )
       .then(resp => {
         this.students = resp.data;
       });
@@ -120,7 +160,6 @@ export default {
         this.statusOptions = resp.data;
       });
     this.years = this.$common.getYears();
-    console.log(this.$common.getYears());
     this.$axios
       .get("/course-offerings/seasons", {
         headers: {
@@ -128,21 +167,21 @@ export default {
         }
       })
       .then(resp => {
-        this.seasons = resp.data;
+        this.terms = resp.data;
       });
     this.$axios.get("/courses/names", {}).then(resp => {
-      this.course_names = resp.data;
+      this.courseNames = resp.data;
     });
   },
   methods: {
     goToStudentCoop() {
-      this.$router.push("/admin/studentcoops");
+      this.$router.push("/admin/student-coops");
     },
     clearFilter() {
-      this.course_name = "";
-      this.season = "";
-      this.year = "";
-      this.status = "";
+      this.courseNameData = "";
+      this.termData = "";
+      this.yearData = "";
+      this.statsData = "";
       this.$axios
         .get("/students", {
           headers: {
@@ -157,13 +196,13 @@ export default {
       this.$axios
         .get(
           "/students?season=" +
-            this.season +
+            this.termData +
             "&year=" +
-            this.year +
+            this.yearData +
             "&name=" +
-            this.course_name +
+            this.courseNameData +
             "&status=" +
-            this.status,
+            this.statsData,
           {
             headers: {
               Authorization: this.$store.state.token
@@ -178,4 +217,4 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped></style>

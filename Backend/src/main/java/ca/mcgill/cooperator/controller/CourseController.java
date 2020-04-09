@@ -2,6 +2,7 @@ package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.model.Course;
+import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 import java.util.List;
@@ -25,6 +26,21 @@ public class CourseController extends BaseController {
     @Autowired private CourseOfferingService courseOfferingService;
 
     /**
+     * Creates a new Course
+     *
+     * <p>In request body:
+     *
+     * @param name
+     * @return the created Course
+     */
+    @PostMapping("")
+    public CourseDto createCourse(@RequestBody CourseDto c) {
+        Course createdCourse = courseService.createCourse(c.getName());
+
+        return ControllerUtils.convertToDto(createdCourse);
+    }
+
+    /**
      * Gets a Course by ID
      *
      * @param id
@@ -37,7 +53,7 @@ public class CourseController extends BaseController {
     }
 
     /**
-     * Gets all courses
+     * Gets all Courses
      *
      * @return List of CourseDto objects
      */
@@ -49,9 +65,9 @@ public class CourseController extends BaseController {
     }
 
     /**
-     * Gets all course names
+     * Gets all Course names
      *
-     * @return List of strings
+     * @return List of Course names
      */
     @GetMapping("/names")
     public List<String> getAllCourseNames() {
@@ -59,37 +75,26 @@ public class CourseController extends BaseController {
     }
 
     /**
-     * Creates a new Course
-     *
-     * <p>In request body:
-     *
-     * @param CourseDto object
-     * @return CourseDto object
-     */
-    @PostMapping("")
-    public CourseDto createCourse(@RequestBody CourseDto c) {
-        Course createdCourse = courseService.createCourse(c.getName());
-
-        return ControllerUtils.convertToDto(createdCourse);
-    }
-
-    /**
      * Updates an existing Course
      *
-     * <p>In request body:
-     *
-     * @param CourseDto object
-     * @return CourseDto object
+     * @param id
+     *     <p>In request body:
+     * @param name
+     * @param courseOfferings
+     * @return the updated Course
      */
-    @PutMapping("")
-    public CourseDto updateCourse(@RequestBody CourseDto c) {
-        Course course = courseService.getCourseById(c.getId());
-        Course updatedCourse =
-                courseService.updateCourse(
-                        course,
-                        c.getName(),
-                        ControllerUtils.convertCourseOfferingListToDomainObject(
-                                courseOfferingService, c.getCourseOfferings()));
+    @PutMapping("/{id}")
+    public CourseDto updateCourse(@PathVariable int id, @RequestBody CourseDto c) {
+        Course course = courseService.getCourseById(id);
+
+        List<CourseOffering> courseOfferings = null;
+        if (c.getCourseOfferings() != null) {
+            courseOfferings =
+                    ControllerUtils.convertCourseOfferingListToDomainObject(
+                            courseOfferingService, c.getCourseOfferings());
+        }
+
+        Course updatedCourse = courseService.updateCourse(course, c.getName(), courseOfferings);
 
         return ControllerUtils.convertToDto(updatedCourse);
     }
@@ -98,13 +103,12 @@ public class CourseController extends BaseController {
      * Deletes an existing Course
      *
      * @param id
-     * @return deleted CourseDto object
+     * @return the deleted Course
      */
     @DeleteMapping("/{id}")
     public CourseDto deleteCourse(@PathVariable int id) {
         Course course = courseService.getCourseById(id);
-        Course deletedCourse = courseService.deleteCourse(course);
 
-        return ControllerUtils.convertToDto(deletedCourse);
+        return ControllerUtils.convertToDto(courseService.deleteCourse(course));
     }
 }

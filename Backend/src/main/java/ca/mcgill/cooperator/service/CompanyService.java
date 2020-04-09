@@ -4,6 +4,7 @@ import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.EmployerContact;
+import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,6 @@ public class CompanyService extends BaseService {
         if (country == null || country.trim().length() == 0) {
             error.append("Company country cannot be empty! ");
         }
-        // employees cannot be null but can be empty
-        if (employees == null) {
-            error.append("Company employees cannot be null! ");
-        }
         if (companyExists(name, city, region, country)) {
             error.append("Company with this name and location already exists!");
         }
@@ -61,6 +58,9 @@ public class CompanyService extends BaseService {
         c.setCity(city);
         c.setRegion(region);
         c.setCountry(country);
+        if (employees == null) {
+            employees = new ArrayList<EmployerContact>();
+        }
         c.setEmployees(employees);
         companyRepository.save(c);
 
@@ -68,7 +68,7 @@ public class CompanyService extends BaseService {
     }
 
     /**
-     * Returns the Company with specified ID
+     * Gets the Company with specified ID
      *
      * @param id
      * @return Company, if it exists
@@ -85,7 +85,7 @@ public class CompanyService extends BaseService {
     }
 
     /**
-     * Returns the Company with specified name and location
+     * Gets the Company with specified name and location
      *
      * @param name
      * @param city
@@ -113,7 +113,7 @@ public class CompanyService extends BaseService {
     }
 
     /**
-     * Returns all Company offices with specified name
+     * Gets all Company offices with specified name
      *
      * @param name
      * @return list of Companies
@@ -131,7 +131,7 @@ public class CompanyService extends BaseService {
     }
 
     /**
-     * Returns all Companies that exist
+     * Gets all Companies that exist
      *
      * @return all Companies
      */
@@ -143,21 +143,21 @@ public class CompanyService extends BaseService {
     /**
      * Updates the specified Company
      *
-     * @param c
+     * @param company
      * @param name
      * @param employees
      * @return the updated Company
      */
     @Transactional
     public Company updateCompany(
-            Company c,
+            Company company,
             String name,
             String city,
             String region,
             String country,
             List<EmployerContact> employees) {
         StringBuilder error = new StringBuilder();
-        if (c == null) {
+        if (company == null) {
             error.append("Company to update cannot be null! ");
         }
         if (name != null && name.trim().length() == 0) {
@@ -177,16 +177,16 @@ public class CompanyService extends BaseService {
         }
 
         if (name == null) {
-            name = c.getName();
+            name = company.getName();
         }
         if (city == null) {
-            city = c.getCity();
+            city = company.getCity();
         }
         if (region == null) {
-            region = c.getRegion();
+            region = company.getRegion();
         }
         if (country == null) {
-            country = c.getCountry();
+            country = company.getCountry();
         }
 
         if (companyExists(name, city, region, country)) {
@@ -194,32 +194,32 @@ public class CompanyService extends BaseService {
                     ERROR_PREFIX + "Company with this name and location already exists!");
         }
 
-        c.setName(name.trim());
-        c.setCity(city.trim());
-        c.setRegion(region.trim());
-        c.setCountry(country.trim());
+        company.setName(name.trim());
+        company.setCity(city.trim());
+        company.setRegion(region.trim());
+        company.setCountry(country.trim());
 
         if (employees != null) {
-            c.setEmployees(employees);
+            company.setEmployees(employees);
         }
 
-        return companyRepository.save(c);
+        return companyRepository.save(company);
     }
 
     /**
      * Deletes the specified Company
      *
-     * @param c
+     * @param company
      * @return the deleted Company
      */
     @Transactional
-    public Company deleteCompany(Company c) {
-        if (c == null) {
+    public Company deleteCompany(Company company) {
+        if (company == null) {
             throw new IllegalArgumentException(ERROR_PREFIX + "Company to delete cannot be null!");
         }
-        companyRepository.delete(c);
+        companyRepository.delete(company);
 
-        return c;
+        return company;
     }
 
     private boolean companyExists(String name, String city, String region, String country) {

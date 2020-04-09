@@ -1,72 +1,66 @@
 <template>
-  <q-card
-    flat
-    bordered
-    id="card"
-  >
-    <q-card-section>All Students
-    </q-card-section>
-
-    <q-separator inset />
-
-    <div class="q-pa-md">
-    <q-table
-      :data="tableData"
-      :columns="columns"
-      row-key="studentName"
-    />
-    </div>
-  </q-card>
+  <BasePage title="Companies">
+    <q-card flat bordered>
+      <q-table :data="tableData" :columns="columns" row-key="studentName" />
+    </q-card>
+  </BasePage>
 </template>
+
 <script>
+import BasePage from "../BasePage.vue";
+
 export default {
-  name: 'AdminAllStudents',
+  name: "AdminAllStudents",
+  components: {
+    BasePage
+  },
   data: () => ({
     columns: [
       {
-        name: 'companyName',
+        name: "companyName",
         required: true,
-        label: 'Company Name',
-        align: 'left',
-        field: 'companyName',
+        label: "Company Name",
+        align: "left",
+        field: "companyName",
         sortable: true,
-        classes: 'my-class',
-        style: 'width: 500px'
+        classes: "my-class",
+        style: "width: 500px"
       },
       {
-        name: 'location',
+        name: "location",
         required: true,
-        label: 'Location',
-        align: 'left',
-        field: 'location',
+        label: "Location",
+        align: "left",
+        field: "location",
         sortable: true,
-        classes: 'my-class',
-        style: 'width: 500px'
+        classes: "my-class",
+        style: "width: 500px"
       },
       {
-        name: 'currentCoops',
+        name: "currentCoops",
         required: true,
-        label: 'Current Coops',
-        align: 'left',
-        field: 'currentCoops',
+        label: "Current Coops",
+        align: "left",
+        field: "currentCoops",
         sortable: true,
-        classes: 'my-class',
-        style: 'width: 500px'
-      }],
+        classes: "my-class",
+        style: "width: 500px"
+      }
+    ],
     tableData: [
       {
-        companyName: 'Facebook',
-        location: 'USA',
-        currentCoops: '3'
+        companyName: "Facebook",
+        location: "USA",
+        currentCoops: "3"
       },
       {
-        companyName: 'Lightspeed',
-        location: 'Montreal',
-        currentCoops: '2'
-      }]
+        companyName: "Lightspeed",
+        location: "Montreal",
+        currentCoops: "2"
+      }
+    ]
   })
-}
+};
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss" scoped></style>

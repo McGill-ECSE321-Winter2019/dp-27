@@ -101,7 +101,7 @@ public class CourseControllerIT extends BaseControllerIT {
         // 4. update the Course with a PUT request
         mvcResult =
                 mvc.perform(
-                                put("/courses")
+                                put("/courses/" + courseToUpdate.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(courseToUpdate))
                                         .characterEncoding("utf-8"))
@@ -159,7 +159,7 @@ public class CourseControllerIT extends BaseControllerIT {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(invalidCourse))
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         // create the Course with a POST request
         MvcResult mvcResult =
@@ -180,23 +180,23 @@ public class CourseControllerIT extends BaseControllerIT {
         mvc.perform(
                         get("/courses/" + (returnedCourse.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         returnedCourse.setName("");
 
         // 3. invalid update
         mvc.perform(
-                        put("/courses")
+                        put("/courses/" + returnedCourse.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(returnedCourse))
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         // 4. invalid delete
         mvc.perform(
                         delete("/courses/" + (returnedCourse.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 }

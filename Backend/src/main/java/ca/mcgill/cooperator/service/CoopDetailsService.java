@@ -6,6 +6,7 @@ import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.EmployerContact;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,17 +22,24 @@ public class CoopDetailsService extends BaseService {
     @Autowired CoopRepository coopRepository;
 
     /**
-     * creates a new coop details in database
+     * Creates a new CoopDetails
      *
      * @param payPerHour
      * @param hoursPerWeek
+     * @param startDate
+     * @param endDate
      * @param ec
      * @param c
-     * @return coop details
+     * @return the created CoopDetails
      */
     @Transactional
     public CoopDetails createCoopDetails(
-            int payPerHour, int hoursPerWeek, EmployerContact ec, Coop c) {
+            int payPerHour,
+            int hoursPerWeek,
+            Date startDate,
+            Date endDate,
+            EmployerContact employerContact,
+            Coop coop) {
         StringBuilder error = new StringBuilder();
         if (payPerHour < 0) {
             error.append("Pay Per Hour is invalid! ");
@@ -39,10 +47,16 @@ public class CoopDetailsService extends BaseService {
         if (hoursPerWeek <= 0) {
             error.append("Hours Per Week is invalid! ");
         }
-        if (ec == null) {
+        if (startDate == null) {
+            error.append("Start date cannot be null! ");
+        }
+        if (endDate == null) {
+            error.append("End date cannot be null! ");
+        }
+        if (employerContact == null) {
             error.append("Employer Contact cannot be null! ");
         }
-        if (c == null) {
+        if (coop == null) {
             error.append("Co-op cannot be null!");
         }
         if (error.length() > 0) {
@@ -52,17 +66,19 @@ public class CoopDetailsService extends BaseService {
         CoopDetails cd = new CoopDetails();
         cd.setPayPerHour(payPerHour);
         cd.setHoursPerWeek(hoursPerWeek);
-        cd.setEmployerContact(ec);
-        cd.setCoop(c);
+        cd.setStartDate(startDate);
+        cd.setEndDate(endDate);
+        cd.setEmployerContact(employerContact);
+        cd.setCoop(coop);
 
         return coopDetailsRepository.save(cd);
     }
 
     /**
-     * retrieves coop details with specific id
+     * Gets the CoopDetails with specified id
      *
      * @param id
-     * @return coop details
+     * @return CoopDetails with specified ID
      */
     @Transactional
     public CoopDetails getCoopDetails(int id) {
@@ -76,9 +92,9 @@ public class CoopDetailsService extends BaseService {
     }
 
     /**
-     * retrieves all coop details entities from database
+     * Gets all CoopDetails
      *
-     * @return list of coop details
+     * @return all CoopDetails
      */
     @Transactional
     public List<CoopDetails> getAllCoopDetails() {
@@ -86,65 +102,79 @@ public class CoopDetailsService extends BaseService {
     }
 
     /**
-     * delete specific coop details
-     *
-     * @param cd
-     * @return deleted coop details
-     */
-    @Transactional
-    public CoopDetails deleteCoopDetails(CoopDetails cd) {
-        if (cd == null) {
-            throw new IllegalArgumentException(
-                    ERROR_PREFIX + "Co-op Details to delete cannot be null!");
-        }
-        Coop c = cd.getCoop();
-        c.setCoopDetails(null);
-        coopRepository.save(c);
-
-        EmployerContact ec = cd.getEmployerContact();
-        Set<CoopDetails> details = new HashSet<>(ec.getCoopDetails());
-        details.remove(cd);
-        ec.setCoopDetails(details);
-        employerContactRepository.save(ec);
-
-        coopDetailsRepository.delete(cd);
-        return cd;
-    }
-
-    /**
-     * update exisitng coop details
+     * Updates an existing CoopDetails
      *
      * @param cd
      * @param payPerHour
      * @param hoursPerWeek
+     * @param startDate
+     * @param endDate
      * @param ec
      * @param c
-     * @return updated coop details
+     * @return the updated CoopDetails
      */
     @Transactional
     public CoopDetails updateCoopDetails(
-            CoopDetails cd, int payPerHour, int hoursPerWeek, EmployerContact ec, Coop c) {
+            CoopDetails coopDetails,
+            Integer payPerHour,
+            Integer hoursPerWeek,
+            Date startDate,
+            Date endDate,
+            EmployerContact employerContact,
+            Coop coop) {
         StringBuilder error = new StringBuilder();
-        if (cd == null) {
+        if (coopDetails == null) {
             error.append("Co-op Details to update cannot be null!");
         }
         if (error.length() > 0) {
             throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
 
-        if (payPerHour >= 0) {
-            cd.setPayPerHour(payPerHour);
+        if (payPerHour != null && payPerHour >= 0) {
+            coopDetails.setPayPerHour(payPerHour);
         }
-        if (hoursPerWeek > 0) {
-            cd.setHoursPerWeek(hoursPerWeek);
+        if (hoursPerWeek != null && hoursPerWeek > 0) {
+            coopDetails.setHoursPerWeek(hoursPerWeek);
         }
-        if (ec != null) {
-            cd.setEmployerContact(ec);
+        if (startDate != null) {
+            coopDetails.setStartDate(startDate);
         }
-        if (c != null) {
-            cd.setCoop(c);
+        if (endDate != null) {
+            coopDetails.setEndDate(endDate);
+        }
+        if (employerContact != null) {
+            coopDetails.setEmployerContact(employerContact);
+        }
+        if (coop != null) {
+            coopDetails.setCoop(coop);
         }
 
-        return coopDetailsRepository.save(cd);
+        return coopDetailsRepository.save(coopDetails);
+    }
+
+    /**
+     * Deletes an existing CoopDetails
+     *
+     * @param coopDetails
+     * @return the deleted CoopDetails
+     */
+    @Transactional
+    public CoopDetails deleteCoopDetails(CoopDetails coopDetails) {
+        if (coopDetails == null) {
+            throw new IllegalArgumentException(
+                    ERROR_PREFIX + "Co-op Details to delete cannot be null!");
+        }
+        Coop c = coopDetails.getCoop();
+        c.setCoopDetails(null);
+        coopRepository.save(c);
+
+        EmployerContact ec = coopDetails.getEmployerContact();
+        Set<CoopDetails> details = new HashSet<>(ec.getCoopDetails());
+        details.remove(coopDetails);
+        ec.setCoopDetails(details);
+        employerContactRepository.save(ec);
+
+        coopDetailsRepository.delete(coopDetails);
+        return coopDetails;
     }
 }

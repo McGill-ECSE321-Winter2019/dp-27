@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
@@ -23,7 +24,6 @@ import ca.mcgill.cooperator.dto.EmployerContactDto;
 import ca.mcgill.cooperator.dto.StudentDto;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
-import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
@@ -54,6 +54,7 @@ public class CoopControllerIT extends BaseControllerIT {
     @Autowired CoopDetailsRepository coopDetailsRepository;
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CompanyRepository companyRepository;
+    @Autowired AuthorRepository authorRepository;
 
     @Autowired CoopDetailsService coopDetailsService;
 
@@ -71,6 +72,7 @@ public class CoopControllerIT extends BaseControllerIT {
         courseRepository.deleteAll();
         coopRepository.deleteAll();
         coopDetailsRepository.deleteAll();
+        authorRepository.deleteAll();
         employerContactRepository.deleteAll();
         companyRepository.deleteAll();
     }
@@ -130,7 +132,7 @@ public class CoopControllerIT extends BaseControllerIT {
         // 4. update the co-op with a PUT request
         mvcResult =
                 mvc.perform(
-                                put("/coops")
+                                put("/coops/" + coopToUpdate.getId())
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(coopToUpdate))
                                         .characterEncoding("utf-8"))
@@ -185,71 +187,5 @@ public class CoopControllerIT extends BaseControllerIT {
                                 CoopDetailsDto[].class));
 
         assertEquals(coopDetailsDtos.size(), 0);
-    }
-
-    /**
-     * This tests if a Coop can be created without giving it a complete Course Offering.
-     *
-     * <p>When a request for a new Coop is submitted by a Student it will only contain the season
-     * and year of the Coop, so this is all the information the Course Offering will have.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void testCoopCreationPartialCourseOffering() throws Exception {
-        CoopStatus status = CoopStatus.UNDER_REVIEW;
-        createTestCourse();
-
-        // create a Course Offering with only season and year
-        CourseOfferingDto courseOfferingDto =
-                new CourseOfferingDto(0, 2020, Season.SUMMER, null, null);
-
-        StudentDto studentDto = createTestStudent();
-
-        CoopDto coopDto = new CoopDto();
-        coopDto.setStatus(status);
-        coopDto.setCourseOffering(courseOfferingDto);
-        coopDto.setStudent(studentDto);
-
-        // 1. create the Co-op with a POST request
-        MvcResult mvcResult =
-                mvc.perform(
-                                post("/coops")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(coopDto))
-                                        .characterEncoding("utf-8"))
-                        .andExpect(status().isOk())
-                        .andReturn();
-
-        // get object from response
-        CoopDto returnedCoop =
-                objectMapper.readValue(mvcResult.getResponse().getContentAsString(), CoopDto.class);
-        assertEquals(returnedCoop.getStatus(), CoopStatus.UNDER_REVIEW);
-
-        // 2. get the Co-op by ID, valid
-        mvc.perform(get("/coops/" + returnedCoop.getId()).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-        // 3. get all Course Offerings
-        mvcResult =
-                mvc.perform(get("/course-offerings").contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk())
-                        .andReturn();
-
-        // get object from response
-        List<CourseOfferingDto> returnedCourseOfferings =
-                Arrays.asList(
-                        objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(),
-                                CourseOfferingDto[].class));
-
-        assertEquals(1, returnedCourseOfferings.size());
-
-        CourseOfferingDto coDto = returnedCourseOfferings.get(0);
-
-        assertEquals(Season.SUMMER, coDto.getSeason());
-        assertEquals(2020, coDto.getYear());
-        // this is the main thing to test
-        assertEquals("FACC 200", coDto.getCourse().getName());
     }
 }

@@ -5,8 +5,8 @@ import java.util.List;
 
 public class CourseOfferingDto {
 
-    private int id;
-    private int year;
+    private Integer id;
+    private Integer year;
     private Season season;
 
     private CourseDto course;
@@ -15,7 +15,7 @@ public class CourseOfferingDto {
     public CourseOfferingDto() {}
 
     public CourseOfferingDto(
-            int id, int year, Season season, CourseDto course, List<CoopDto> coops) {
+            Integer id, Integer year, Season season, CourseDto course, List<CoopDto> coops) {
         this.id = id;
         this.year = year;
         this.season = season;
@@ -25,15 +25,15 @@ public class CourseOfferingDto {
 
     /*--- Getters and Setters ---*/
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return this.year;
     }
 
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 

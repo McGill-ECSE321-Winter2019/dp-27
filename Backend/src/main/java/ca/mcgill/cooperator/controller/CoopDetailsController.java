@@ -30,60 +30,118 @@ public class CoopDetailsController extends BaseController {
     @Autowired EmployerContactService employerContactService;
     @Autowired CoopService coopService;
 
-    @GetMapping("/{id}")
-    public CoopDetailsDto getCoopDetailsById(@PathVariable int id) {
-        return ControllerUtils.convertToDto(coopDetailsService.getCoopDetails(id));
-    }
-
-    @GetMapping("")
-    public List<CoopDetailsDto> getAllCoopDetails() {
-        return ControllerUtils.convertCoopDetailsListToDto(coopDetailsService.getAllCoopDetails());
-    }
-
+    /**
+     * Creates a new CoopDetails
+     *
+     * <p>In request body:
+     *
+     * @param payPerHour
+     * @param hoursPerWeek
+     * @param startDate
+     * @param endDate
+     * @param employerContact
+     * @param coop
+     * @return the created CoopDetails
+     */
     @PostMapping("")
     public CoopDetailsDto createCoopDetails(@RequestBody CoopDetailsDto coopDetailsDto) {
         EmployerContactDto employerContactDto = coopDetailsDto.getEmployerContact();
-        EmployerContact employerContact =
-                employerContactService.getEmployerContact(employerContactDto.getId());
+        EmployerContact employerContact = null;
+        if (employerContactDto != null) {
+            employerContact = employerContactService.getEmployerContact(employerContactDto.getId());
+        }
 
         CoopDto coopDto = coopDetailsDto.getCoop();
-        Coop coop = coopService.getCoopById(coopDto.getId());
+        Coop coop = null;
+        if (coopDto != null) {
+            coop = coopService.getCoopById(coopDto.getId());
+        }
 
         CoopDetails coopDetails =
                 coopDetailsService.createCoopDetails(
                         coopDetailsDto.getPayPerHour(),
                         coopDetailsDto.getHoursPerWeek(),
+                        coopDetailsDto.getStartDate(),
+                        coopDetailsDto.getEndDate(),
                         employerContact,
                         coop);
 
         return ControllerUtils.convertToDto(coopDetails);
     }
 
-    @PutMapping("")
-    public CoopDetailsDto updateCoopDetails(@RequestBody CoopDetailsDto coopDetailsDto) {
+    /**
+     * Gets a CoopDetails by ID
+     *
+     * @param id
+     * @return CoopDetailsDto object
+     */
+    @GetMapping("/{id}")
+    public CoopDetailsDto getCoopDetailsById(@PathVariable int id) {
+        return ControllerUtils.convertToDto(coopDetailsService.getCoopDetails(id));
+    }
+
+    /**
+     * Gets all CoopDetails
+     *
+     * @return list of CoopDetailsDtos
+     */
+    @GetMapping("")
+    public List<CoopDetailsDto> getAllCoopDetails() {
+        return ControllerUtils.convertCoopDetailsListToDto(coopDetailsService.getAllCoopDetails());
+    }
+
+    /**
+     * Updates an existing CoopDetails
+     *
+     * @param id
+     *     <p>In request body:
+     * @param payPerHour
+     * @param hoursPerWeek
+     * @param startDate
+     * @param endDate
+     * @param employerContact
+     * @param coop
+     * @return the updated CoopDetails
+     */
+    @PutMapping("/{id}")
+    public CoopDetailsDto updateCoopDetails(
+            @PathVariable int id, @RequestBody CoopDetailsDto coopDetailsDto) {
         EmployerContactDto employerContactDto = coopDetailsDto.getEmployerContact();
-        EmployerContact employerContact =
-                employerContactService.getEmployerContact(employerContactDto.getId());
+        EmployerContact employerContact = null;
+        if (employerContactDto != null) {
+            employerContact = employerContactService.getEmployerContact(employerContactDto.getId());
+        }
 
         CoopDto coopDto = coopDetailsDto.getCoop();
-        Coop coop = coopService.getCoopById(coopDto.getId());
+        Coop coop = null;
+        if (coopDto != null) {
+            coop = coopService.getCoopById(coopDto.getId());
+        }
 
-        CoopDetails coopDetails = coopDetailsService.getCoopDetails(coopDetailsDto.getId());
+        CoopDetails coopDetails = coopDetailsService.getCoopDetails(id);
 
         coopDetails =
                 coopDetailsService.updateCoopDetails(
                         coopDetails,
                         coopDetailsDto.getPayPerHour(),
                         coopDetailsDto.getHoursPerWeek(),
+                        coopDetailsDto.getStartDate(),
+                        coopDetailsDto.getEndDate(),
                         employerContact,
                         coop);
 
         return ControllerUtils.convertToDto(coopDetails);
     }
 
+    /**
+     * Deletes an existing CoopDetails
+     *
+     * @param id
+     * @return the deleted CoopDetails
+     */
     @DeleteMapping("/{id}")
-    public void deleteCoopDetails(@PathVariable int id) {
+    public CoopDetailsDto deleteCoopDetails(@PathVariable int id) {
         CoopDetails cd = coopDetailsService.getCoopDetails(id);
-        coopDetailsService.deleteCoopDetails(cd);
+        return ControllerUtils.convertToDto(coopDetailsService.deleteCoopDetails(cd));
     }
 }
