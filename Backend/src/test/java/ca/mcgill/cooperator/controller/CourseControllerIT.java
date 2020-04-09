@@ -159,7 +159,7 @@ public class CourseControllerIT extends BaseControllerIT {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(invalidCourse))
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         // create the Course with a POST request
         MvcResult mvcResult =
@@ -180,7 +180,7 @@ public class CourseControllerIT extends BaseControllerIT {
         mvc.perform(
                         get("/courses/" + (returnedCourse.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         returnedCourse.setName("");
 
@@ -190,13 +190,13 @@ public class CourseControllerIT extends BaseControllerIT {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(returnedCourse))
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
 
         // 4. invalid delete
         mvc.perform(
                         delete("/courses/" + (returnedCourse.getId() + 1))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .characterEncoding("utf-8"))
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().is4xxClientError());
     }
 }

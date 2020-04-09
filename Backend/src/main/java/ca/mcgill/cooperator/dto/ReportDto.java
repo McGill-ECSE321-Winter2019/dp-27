@@ -3,7 +3,7 @@ package ca.mcgill.cooperator.dto;
 import ca.mcgill.cooperator.model.ReportStatus;
 import java.util.List;
 
-public class EmployerReportDto {
+public class ReportDto {
     private Integer id;
     private String title;
     private ReportStatus status;
@@ -11,25 +11,25 @@ public class EmployerReportDto {
     private byte[] data;
 
     private CoopDto coop;
-    private EmployerContactDto employerContact;
-    private List<EmployerReportSectionDto> reportSections;
+    private AuthorDto author;
+    private List<ReportSectionDto> reportSections;
 
-    public EmployerReportDto() {}
+    public ReportDto() {}
 
-    public EmployerReportDto(
+    public ReportDto(
             Integer id,
             String title,
             ReportStatus status,
             byte[] data,
             CoopDto coop,
-            EmployerContactDto employerContact,
-            List<EmployerReportSectionDto> reportSections) {
+            AuthorDto author,
+            List<ReportSectionDto> reportSections) {
         this.id = id;
         this.title = title;
         this.status = status;
         this.data = data;
         this.coop = coop;
-        this.employerContact = employerContact;
+        this.author = author;
         this.reportSections = reportSections;
     }
 
@@ -71,19 +71,19 @@ public class EmployerReportDto {
         this.coop = coop;
     }
 
-    public EmployerContactDto getEmployerContact() {
-        return this.employerContact;
+    public AuthorDto getAuthor() {
+        return this.author;
     }
 
-    public void setEmployerContact(EmployerContactDto employerContact) {
-        this.employerContact = employerContact;
+    public void setAuthor(AuthorDto author) {
+        this.author = author;
     }
 
-    public List<EmployerReportSectionDto> getReportSections() {
+    public List<ReportSectionDto> getReportSections() {
         return this.reportSections;
     }
 
-    public void setReportSections(List<EmployerReportSectionDto> reportSections) {
+    public void setReportSections(List<ReportSectionDto> reportSections) {
         this.reportSections = reportSections;
     }
 }

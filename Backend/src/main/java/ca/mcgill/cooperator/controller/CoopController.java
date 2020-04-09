@@ -2,23 +2,20 @@ package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
-import ca.mcgill.cooperator.dto.EmployerReportDto;
+import ca.mcgill.cooperator.dto.ReportDto;
 import ca.mcgill.cooperator.dto.StudentDto;
-import ca.mcgill.cooperator.dto.StudentReportDto;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
-import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.Student;
-import ca.mcgill.cooperator.model.StudentReport;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
-import ca.mcgill.cooperator.service.EmployerReportService;
-import ca.mcgill.cooperator.service.StudentReportService;
+import ca.mcgill.cooperator.service.ReportService;
 import ca.mcgill.cooperator.service.StudentService;
 import java.util.List;
 import java.util.Set;
@@ -44,8 +41,7 @@ public class CoopController extends BaseController {
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired StudentService studentService;
     @Autowired CoopDetailsService coopDetailsService;
-    @Autowired EmployerReportService employerReportService;
-    @Autowired StudentReportService studentReportService;
+    @Autowired ReportService reportService;
 
     /**
      * Creates a new Coop
@@ -183,32 +179,15 @@ public class CoopController extends BaseController {
             coopDetails = coopDetailsService.getCoopDetails(coopDto.getCoopDetails().getId());
         }
 
-        Set<EmployerReport> employerReports = null;
-        if (coopDto.getEmployerReports() != null) {
-            List<EmployerReportDto> employerReportDtos = coopDto.getEmployerReports();
-            employerReports =
-                    ControllerUtils.convertEmployerReportDtosToDomainObjects(
-                            employerReportService, employerReportDtos);
-        }
-
-        Set<StudentReport> studentReports = null;
-        if (coopDto.getStudentReports() != null) {
-            List<StudentReportDto> studentReportDtos = coopDto.getStudentReports();
-            studentReports =
-                    ControllerUtils.convertStudentReportDtosToDomainObjects(
-                            studentReportService, studentReportDtos);
+        Set<Report> reports = null;
+        if (coopDto.getReports() != null) {
+            List<ReportDto> reportDtos = coopDto.getReports();
+            reports = ControllerUtils.convertReportDtosToDomainObjects(reportService, reportDtos);
         }
 
         coop =
                 coopService.updateCoop(
-                        coop,
-                        coopDto.getStatus(),
-                        courseOffering,
-                        student,
-                        coopDetails,
-                        employerReports,
-                        studentReports);
-
+                        coop, coopDto.getStatus(), courseOffering, student, coopDetails, reports);
         return ControllerUtils.convertToDto(coop);
     }
 

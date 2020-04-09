@@ -12,25 +12,24 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-public class EmployerReport {
+public class Report {
     @Id @GeneratedValue private int id;
     private String title;
     private String type;
     private ReportStatus status;
-
     private byte[] data;
 
     @ManyToOne private Coop coop;
 
-    @ManyToOne private EmployerContact employerContact;
+    @ManyToOne private Author author;
 
     @OneToMany(
-            mappedBy = "employerReport",
-            cascade = CascadeType.ALL,
+            mappedBy = "report",
+            cascade = CascadeType.PERSIST,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<EmployerReportSection> reportSections;
+    private Set<ReportSection> reportSections;
 
     /*--- Getters and Setters ---*/
 
@@ -62,14 +61,6 @@ public class EmployerReport {
         this.status = status;
     }
 
-    public byte[] getData() {
-        return this.data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
-    }
-
     public Coop getCoop() {
         return this.coop;
     }
@@ -78,19 +69,27 @@ public class EmployerReport {
         this.coop = coop;
     }
 
-    public EmployerContact getEmployerContact() {
-        return this.employerContact;
+    public byte[] getData() {
+        return this.data;
     }
 
-    public void setEmployerContact(EmployerContact employerContact) {
-        this.employerContact = employerContact;
+    public void setData(byte[] data) {
+        this.data = data;
     }
 
-    public Set<EmployerReportSection> getReportSections() {
+    public Author getAuthor() {
+        return this.author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    public Set<ReportSection> getReportSections() {
         return this.reportSections;
     }
 
-    public void setReportSections(Set<EmployerReportSection> reportSections) {
+    public void setReportSections(Set<ReportSection> reportSections) {
         if (this.reportSections == null) {
             this.reportSections = reportSections;
         } else {

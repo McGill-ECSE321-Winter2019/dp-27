@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
@@ -55,6 +56,7 @@ public class CoopDetailsControllerIT extends BaseControllerIT {
     @Autowired EmployerContactRepository employerContactRepository;
     @Autowired CompanyRepository companyRepository;
     @Autowired CoopDetailsService coopDetailsService;
+    @Autowired AuthorRepository authorRepository;
 
     @BeforeEach
     @AfterEach
@@ -70,6 +72,7 @@ public class CoopDetailsControllerIT extends BaseControllerIT {
         courseRepository.deleteAll();
         coopRepository.deleteAll();
         coopDetailsRepository.deleteAll();
+        authorRepository.deleteAll();
         employerContactRepository.deleteAll();
         companyRepository.deleteAll();
     }

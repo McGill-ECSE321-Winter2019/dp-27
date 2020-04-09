@@ -9,13 +9,11 @@ import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
-import ca.mcgill.cooperator.dto.EmployerReportDto;
-import ca.mcgill.cooperator.dto.EmployerReportSectionDto;
 import ca.mcgill.cooperator.dto.ReportConfigDto;
+import ca.mcgill.cooperator.dto.ReportDto;
 import ca.mcgill.cooperator.dto.ReportSectionConfigDto;
+import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.dto.StudentDto;
-import ca.mcgill.cooperator.dto.StudentReportDto;
-import ca.mcgill.cooperator.dto.StudentReportSectionDto;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.Season;
@@ -334,17 +332,16 @@ public abstract class BaseControllerIT {
         return employerContactDto;
     }
 
-    public StudentReportSectionDto createTestStudentReportSection(
-            ReportSectionConfigDto reportSectionConfigDto, StudentReportDto studentReportDto)
-            throws Exception {
-        StudentReportSectionDto reportSectionDto = new StudentReportSectionDto();
-        reportSectionDto.setResponse("I am a student and this is my response");
-        reportSectionDto.setStudentReport(studentReportDto);
+    public ReportSectionDto createTestReportSection(
+            ReportSectionConfigDto reportSectionConfigDto, ReportDto reportDto) throws Exception {
+        ReportSectionDto reportSectionDto = new ReportSectionDto();
+        reportSectionDto.setResponse("This is the response");
+        reportSectionDto.setReport(reportDto);
         reportSectionDto.setReportSectionConfig(reportSectionConfigDto);
 
         MvcResult mvcResult =
                 mvc.perform(
-                                post("/student-report-sections")
+                                post("/report-sections")
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(reportSectionDto))
                                         .characterEncoding("utf-8"))
@@ -354,34 +351,7 @@ public abstract class BaseControllerIT {
         // get object from response
         reportSectionDto =
                 objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(),
-                        StudentReportSectionDto.class);
-
-        return reportSectionDto;
-    }
-
-    public EmployerReportSectionDto createTestEmployerReportSection(
-            ReportSectionConfigDto reportSectionConfigDto, EmployerReportDto employerReportDto)
-            throws Exception {
-        EmployerReportSectionDto reportSectionDto = new EmployerReportSectionDto();
-        reportSectionDto.setResponse("I am an employer and this is my response");
-        reportSectionDto.setEmployerReport(employerReportDto);
-        reportSectionDto.setReportSectionConfig(reportSectionConfigDto);
-
-        MvcResult mvcResult =
-                mvc.perform(
-                                post("/employer-report-sections")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(objectMapper.writeValueAsString(reportSectionDto))
-                                        .characterEncoding("utf-8"))
-                        .andExpect(status().isOk())
-                        .andReturn();
-
-        // get object from response
-        reportSectionDto =
-                objectMapper.readValue(
-                        mvcResult.getResponse().getContentAsString(),
-                        EmployerReportSectionDto.class);
+                        mvcResult.getResponse().getContentAsString(), ReportSectionDto.class);
 
         return reportSectionDto;
     }

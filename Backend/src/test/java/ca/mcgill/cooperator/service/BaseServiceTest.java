@@ -8,17 +8,15 @@ import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.EmployerReport;
-import ca.mcgill.cooperator.model.EmployerReportSection;
 import ca.mcgill.cooperator.model.Notification;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportResponseType;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
-import ca.mcgill.cooperator.model.StudentReport;
-import ca.mcgill.cooperator.model.StudentReportSection;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -115,45 +113,35 @@ public class BaseServiceTest {
         return s;
     }
 
-    StudentReport createTestStudentReport(StudentReportService service, Coop c) {
-        StudentReport sr = new StudentReport();
+    Report createTestStudentReport(ReportService service, Coop c, Student s) {
+        Report r = new Report();
         File file = new File("src/test/resources/Test_Offer_Letter.pdf");
         try {
             MultipartFile multipartFile = new MockMultipartFile("file", new FileInputStream(file));
 
-            sr =
-                    service.createStudentReport(
-                            ReportStatus.COMPLETED, c, "Offer Letter", multipartFile);
-            return sr;
+            r = service.createReport(ReportStatus.COMPLETED, c, "Offer Letter", s, multipartFile);
+            return r;
         } catch (IOException e) {
             return null;
         }
     }
 
-    StudentReportSection createTestStudentReportSection(
-            StudentReportSectionService service, ReportSectionConfig rsConfig, StudentReport sr) {
-        return service.createReportSection("This is a response", rsConfig, sr);
+    ReportSection createTestReportSection(
+            ReportSectionService service, ReportSectionConfig rsConfig, Report r) {
+        return service.createReportSection("This is a response", rsConfig, r);
     }
 
-    EmployerReport createTestEmployerReport(
-            EmployerReportService service, Coop c, EmployerContact ec) {
-        EmployerReport er = new EmployerReport();
+    Report createTestEmployerReport(ReportService service, Coop c, EmployerContact ec) {
+        Report r = new Report();
         File file = new File("src/test/resources/Test_Offer_Letter.pdf");
         try {
             MultipartFile multipartFile = new MockMultipartFile("file", new FileInputStream(file));
 
-            er =
-                    service.createEmployerReport(
-                            ReportStatus.COMPLETED, c, "Offer Letter", ec, multipartFile);
-            return er;
+            r = service.createReport(ReportStatus.COMPLETED, c, "Offer Letter", ec, multipartFile);
+            return r;
         } catch (IOException e) {
             return null;
         }
-    }
-
-    EmployerReportSection createTestEmployerReportSection(
-            EmployerReportSectionService service, ReportSectionConfig rsConfig, EmployerReport er) {
-        return service.createReportSection("This is a response", rsConfig, er);
     }
 
     ReportConfig createTestReportConfig(ReportConfigService service, String type) {

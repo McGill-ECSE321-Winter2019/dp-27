@@ -193,27 +193,27 @@ public class NotificationService extends BaseService {
      * @return the deleted Notification
      */
     @Transactional
-    public Notification deleteNotification(Notification notifications) {
-        if (notifications == null) {
+    public Notification deleteNotification(Notification notification) {
+        if (notification == null) {
             throw new IllegalArgumentException(
                     ERROR_PREFIX + "Notification to delete cannot be null!");
         }
 
-        Student s = notifications.getStudent();
+        Student s = notification.getStudent();
         // make a new Set to avoid pointer issues
         Set<Notification> notifs = new HashSet<>(s.getNotifications());
-        notifs.remove(notifications);
+        notifs.remove(notification);
         s.setNotifications(notifs);
         studentRepository.save(s);
 
-        Admin a = notifications.getSender();
-        List<Notification> adminNotifs = new ArrayList<>(a.getSentNotifications());
-        adminNotifs.remove(notifications);
+        Admin a = notification.getSender();
+        Set<Notification> adminNotifs = a.getSentNotifications();
+        adminNotifs.remove(notification);
         a.setSentNotifications(adminNotifs);
         adminRepository.save(a);
 
-        notificationRepository.delete(notifications);
+        notificationRepository.delete(notification);
 
-        return notifications;
+        return notification;
     }
 }

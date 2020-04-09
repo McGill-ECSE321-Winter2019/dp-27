@@ -6,12 +6,12 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class EmployerReportSection {
+public class ReportSection {
     @Id @GeneratedValue private int id;
     private String response;
 
     @ManyToOne(optional = false)
-    private EmployerReport employerReport;
+    private Report report;
 
     @ManyToOne(optional = false)
     private ReportSectionConfig reportSectionConfig;
@@ -30,12 +30,12 @@ public class EmployerReportSection {
         this.response = response;
     }
 
-    public EmployerReport getEmployerReport() {
-        return this.employerReport;
+    public Report getReport() {
+        return this.report;
     }
 
-    public void setEmployerReport(EmployerReport employerReport) {
-        this.employerReport = employerReport;
+    public void setReport(Report report) {
+        this.report = report;
     }
 
     public ReportSectionConfig getReportSectionConfig() {

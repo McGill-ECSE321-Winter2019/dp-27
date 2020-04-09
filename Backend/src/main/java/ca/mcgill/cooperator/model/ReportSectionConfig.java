@@ -27,15 +27,7 @@ public class ReportSectionConfig {
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<EmployerReportSection> employerReportSections;
-
-    @OneToMany(
-            mappedBy = "reportSectionConfig",
-            cascade = CascadeType.PERSIST,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<StudentReportSection> studentReportSections;
+    private Set<ReportSection> reportSections;
 
     /*--- Getters and Setters ---*/
 
@@ -75,29 +67,16 @@ public class ReportSectionConfig {
         this.reportConfig = reportConfig;
     }
 
-    public Set<EmployerReportSection> getEmployerReportSections() {
-        return this.employerReportSections;
+    public Set<ReportSection> getReportSections() {
+        return this.reportSections;
     }
 
-    public void setEmployerReportSections(Set<EmployerReportSection> employerReportSections) {
-        if (this.employerReportSections == null) {
-            this.employerReportSections = employerReportSections;
+    public void setReportSections(Set<ReportSection> reportSections) {
+        if (this.reportSections == null) {
+            this.reportSections = reportSections;
         } else {
-            this.employerReportSections.clear();
-            this.employerReportSections.addAll(employerReportSections);
-        }
-    }
-
-    public Set<StudentReportSection> getStudentReportSections() {
-        return this.studentReportSections;
-    }
-
-    public void setStudentReportSections(Set<StudentReportSection> studentReportSections) {
-        if (this.studentReportSections == null) {
-            this.studentReportSections = studentReportSections;
-        } else {
-            this.studentReportSections.clear();
-            this.studentReportSections.addAll(studentReportSections);
+            this.reportSections.clear();
+            this.reportSections.addAll(reportSections);
         }
     }
 }

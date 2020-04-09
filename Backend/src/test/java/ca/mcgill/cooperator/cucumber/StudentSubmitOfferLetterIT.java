@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ca.mcgill.cooperator.controller.ControllerUtils;
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
@@ -14,7 +15,7 @@ import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.CoopDetailsDto;
 import ca.mcgill.cooperator.dto.CoopDto;
-import ca.mcgill.cooperator.dto.StudentReportDto;
+import ca.mcgill.cooperator.dto.ReportDto;
 import ca.mcgill.cooperator.model.Company;
 import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
@@ -60,6 +61,7 @@ public class StudentSubmitOfferLetterIT {
     @Autowired private CourseRepository courseRepository;
     @Autowired private CoopDetailsRepository coopDetailsRepository;
     @Autowired private CourseOfferingRepository courseOfferingRepository;
+    @Autowired AuthorRepository authorRepository;
 
     @Autowired private StudentService studentService;
     @Autowired private EmployerContactService employerContactService;
@@ -87,6 +89,7 @@ public class StudentSubmitOfferLetterIT {
 
         // deleting all students will also delete all coops
         studentRepository.deleteAll();
+        authorRepository.deleteAll();
         // deleting all companies will also delete all employer contacts
         companyRepository.deleteAll();
         courseRepository.deleteAll();
@@ -110,11 +113,12 @@ public class StudentSubmitOfferLetterIT {
 
         // upload the StudentReport with a POST request
         mvc.perform(
-                        multipart("/student-reports")
+                        multipart("/reports")
                                 .file("file", multipartFile.getBytes())
                                 .param("status", "UNDER_REVIEW")
                                 .param("title", "Offer Letter")
-                                .param("coop_id", String.valueOf(testCoop.getId()))
+                                .param("coopId", String.valueOf(testCoop.getId()))
+                                .param("authorId", String.valueOf(student.getId()))
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
                                 .characterEncoding("utf-8"))
                 .andExpect(status().isOk());
@@ -144,22 +148,21 @@ public class StudentSubmitOfferLetterIT {
     public void offerLetterIsPutUpForReview() throws Exception {
         MvcResult mvcResult =
                 mvc.perform(
-                                get("/student-reports")
+                                get("/reports")
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
                         .andReturn();
 
         // get object from response
-        List<StudentReportDto> returnedReports =
+        List<ReportDto> returnedReports =
                 Arrays.asList(
                         objectMapper.readValue(
-                                mvcResult.getResponse().getContentAsString(),
-                                StudentReportDto[].class));
+                                mvcResult.getResponse().getContentAsString(), ReportDto[].class));
 
         assertEquals(1, returnedReports.size());
 
-        StudentReportDto report = returnedReports.get(0);
+        ReportDto report = returnedReports.get(0);
 
         assertEquals(ReportStatus.UNDER_REVIEW, report.getStatus());
         assertEquals(CoopStatus.UNDER_REVIEW, report.getCoop().getStatus());

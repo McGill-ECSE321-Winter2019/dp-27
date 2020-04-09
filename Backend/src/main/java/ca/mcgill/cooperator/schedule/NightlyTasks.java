@@ -51,15 +51,14 @@ public class NightlyTasks {
                 // check if the co-op starts today or has already started
                 if (currentDate.compareTo(coopDate) >= 0) {
                     // update status to IN_PROGRESS
-                    coopService.updateCoop(
-                            coop, CoopStatus.IN_PROGRESS, null, null, null, null, null);
+                    coopService.updateCoop(coop, CoopStatus.IN_PROGRESS, null, null, null, null);
                 }
             } else if (coop.getStatus() == CoopStatus.IN_PROGRESS) {
                 coopDate = coop.getCoopDetails().getEndDate();
                 // check if the co-op has ended
                 if (currentDate.compareTo(coopDate) > 0) {
                     // update status to FINISHED
-                    coopService.updateCoop(coop, CoopStatus.FINISHED, null, null, null, null, null);
+                    coopService.updateCoop(coop, CoopStatus.FINISHED, null, null, null, null);
                 }
             }
         }

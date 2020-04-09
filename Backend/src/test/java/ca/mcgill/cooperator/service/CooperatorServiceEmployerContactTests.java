@@ -3,6 +3,7 @@ package ca.mcgill.cooperator.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
@@ -16,7 +17,7 @@ import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
-import ca.mcgill.cooperator.model.EmployerReport;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.Student;
 import java.util.HashSet;
 import java.util.List;
@@ -47,6 +48,7 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired CoopRepository coopRepository;
     @Autowired StudentRepository studentRepository;
+    @Autowired AuthorRepository authorRepository;
 
     @BeforeEach
     @AfterEach
@@ -56,10 +58,10 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
         for (CoopDetails cd : coopDetails) {
             coopDetailsService.deleteCoopDetails(cd);
         }
-
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
+        authorRepository.deleteAll();
         employerContactRepository.deleteAll();
         companyRepository.deleteAll();
         studentRepository.deleteAll();
@@ -246,7 +248,7 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
             cd = createTestCoopDetails(coopDetailsService, ec, coop);
             coopDetails.add(cd);
 
-            Set<EmployerReport> reports = new HashSet<EmployerReport>();
+            Set<Report> reports = new HashSet<Report>();
 
             ec =
                     employerContactService.updateEmployerContact(
@@ -287,7 +289,7 @@ public class CooperatorServiceEmployerContactTests extends BaseServiceTest {
         lastName = "Eagles";
         email = "jeagles@gmail.com";
         phoneNumber = "9876543210";
-        Set<EmployerReport> reports = new HashSet<EmployerReport>();
+        Set<Report> reports = new HashSet<Report>();
         Set<CoopDetails> coopDetails = new HashSet<CoopDetails>();
 
         try {

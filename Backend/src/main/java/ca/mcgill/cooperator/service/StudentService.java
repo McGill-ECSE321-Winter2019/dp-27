@@ -6,6 +6,7 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Notification;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import java.util.HashSet;
@@ -59,6 +60,7 @@ public class StudentService extends BaseService {
         s.setStudentId(studentId);
         s.setNotifications(new HashSet<Notification>());
         s.setCoops(new HashSet<Coop>());
+        s.setReports(new HashSet<Report>());
 
         return studentRepository.save(s);
     }
@@ -291,7 +293,8 @@ public class StudentService extends BaseService {
             String email,
             String studentId,
             Set<Coop> coops,
-            Set<Notification> notifs) {
+            Set<Notification> notifications,
+            Set<Report> reports) {
 
         StringBuilder error = new StringBuilder();
         if (student == null) {
@@ -327,11 +330,14 @@ public class StudentService extends BaseService {
         if (studentId != null) {
             student.setStudentId(studentId);
         }
-        if (notifs != null) {
-            student.setNotifications(notifs);
+        if (notifications != null) {
+            student.setNotifications(notifications);
         }
         if (coops != null) {
             student.setCoops(coops);
+        }
+        if (reports != null) {
+            student.setReports(reports);
         }
 
         return studentRepository.save(student);

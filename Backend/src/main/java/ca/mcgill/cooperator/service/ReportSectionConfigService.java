@@ -2,11 +2,10 @@ package ca.mcgill.cooperator.service;
 
 import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.ReportSectionConfigRepository;
-import ca.mcgill.cooperator.model.EmployerReportSection;
 import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportResponseType;
+import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
-import ca.mcgill.cooperator.model.StudentReportSection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -57,8 +56,7 @@ public class ReportSectionConfigService extends BaseService {
         rsConfig.setResponseType(responseType);
         rsConfig.setQuestionNumber(questionNumber);
         rsConfig.setReportConfig(reportConfig);
-        rsConfig.setEmployerReportSections(new HashSet<EmployerReportSection>());
-        rsConfig.setStudentReportSections(new HashSet<StudentReportSection>());
+        rsConfig.setReportSections(new HashSet<ReportSection>());
 
         return reportSectionConfigRepository.save(rsConfig);
     }
@@ -125,8 +123,7 @@ public class ReportSectionConfigService extends BaseService {
             ReportResponseType responseType,
             Integer questionNumber,
             ReportConfig reportConfig,
-            Set<EmployerReportSection> employerReportSections,
-            Set<StudentReportSection> studentReportSections) {
+            Set<ReportSection> reportSections) {
         StringBuilder error = new StringBuilder();
         if (reportSectionConfig == null) {
             error.append("Report section config to update cannot be null! ");
@@ -153,11 +150,8 @@ public class ReportSectionConfigService extends BaseService {
         if (reportConfig != null) {
             reportSectionConfig.setReportConfig(reportConfig);
         }
-        if (employerReportSections != null) {
-            reportSectionConfig.setEmployerReportSections(employerReportSections);
-        }
-        if (studentReportSections != null) {
-            reportSectionConfig.setStudentReportSections(studentReportSections);
+        if (reportSections != null) {
+            reportSectionConfig.setReportSections(reportSections);
         }
 
         return reportSectionConfigRepository.save(reportSectionConfig);
@@ -188,8 +182,7 @@ public class ReportSectionConfigService extends BaseService {
         for (ReportSectionConfig rsc : allReportSectionConfigs) {
             if (rsc.getQuestionNumber() > reportSectionConfig.getQuestionNumber()) {
                 // lower question number by 1
-                updateReportSectionConfig(
-                        rsc, null, null, rsc.getQuestionNumber() - 1, null, null, null);
+                updateReportSectionConfig(rsc, null, null, rsc.getQuestionNumber() - 1, null, null);
             }
         }
 
