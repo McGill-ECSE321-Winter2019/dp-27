@@ -71,9 +71,22 @@ public class EmployerContactController extends BaseController {
      * @param id
      * @return EmployerContactDto object
      */
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public EmployerContactDto getEmployerContactById(@PathVariable int id) {
         EmployerContact ec = employerContactService.getEmployerContact(id);
+        return ControllerUtils.convertToDto(ec);
+    }
+    
+
+    /**
+     * Gets an EmployerContact by email
+     *
+     * @param email
+     * @return EmployerContactDto object
+     */
+    @GetMapping("/email/{email}")
+    public EmployerContactDto getEmployerContactByEmail(@PathVariable String email) {
+        EmployerContact ec = employerContactService.getEmployerContact(email);
         return ControllerUtils.convertToDto(ec);
     }
 
