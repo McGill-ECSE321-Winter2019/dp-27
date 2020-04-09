@@ -68,50 +68,14 @@ public class NotificationController extends BaseController {
     }
 
     /**
-     * Creates a new Notification
+     * Creates a new Notification for all the students in the list
      *
-     * <p>In request body:
-     *
-     * @param title
-     * @param body
-     * @param student
-     * @param sender
-     * @return the created Notification
-     */
-    @PostMapping("/many")
-    public List<NotificationDto> createManyNotifications(
-            @RequestParam("studentIds") List<Integer> stuIds,
-            @RequestParam("admin") Integer adminId,
-            @RequestParam("title") String title,
-            @RequestParam("body") String body) {
-
-        Admin sender = null;
-        if (adminId != null) {
-            sender = adminService.getAdmin(adminId);
-        }
-
-        Student student = null;
-        List<Notification> notifs = new ArrayList<>();
-        for (Integer id : stuIds) {
-            student = studentService.getStudentById(id);
-            Notification notification =
-                    notificationService.createNotification(title, body, student, sender);
-            notifs.add(notification);
-        }
-
-        return ControllerUtils.convertNotifListToDto(notifs);
-    }
-
-    /**
-     * Creates a new Notification
-     *
-     * <p>In request body:
      *
      * @param title
      * @param body
-     * @param student
-     * @param sender
-     * @return the created Notification
+     * @param list of student Ids
+     * @param sender Id
+     * @return list of the created Notifications
      */
     @PostMapping("/many")
     public List<NotificationDto> createManyNotifications(
