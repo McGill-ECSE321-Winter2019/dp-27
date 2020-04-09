@@ -108,6 +108,7 @@ public class CooperatorServiceCoopDetailsTests extends BaseServiceTest {
                 ERROR_PREFIX
                         + "Start date cannot be null! "
                         + "End date cannot be null! "
+                        + "Employer Contact cannot be null! "
                         + "Co-op cannot be null!",
                 error);
         assertEquals(0, coopDetailsService.getAllCoopDetails().size());
@@ -130,6 +131,7 @@ public class CooperatorServiceCoopDetailsTests extends BaseServiceTest {
                         + "Hours Per Week is invalid! "
                         + "Start date cannot be null! "
                         + "End date cannot be null! "
+                        + "Employer Contact cannot be null! "
                         + "Co-op cannot be null!",
                 error);
         assertEquals(0, coopDetailsService.getAllCoopDetails().size());

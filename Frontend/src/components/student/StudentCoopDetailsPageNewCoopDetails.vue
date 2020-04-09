@@ -323,7 +323,6 @@ export default {
   data: function() {
     return {
       submitting: false,
-      loading: true,
       disableInput: false,
       isSearching: false,
       searched: false,

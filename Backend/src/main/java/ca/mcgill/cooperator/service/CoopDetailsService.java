@@ -53,6 +53,9 @@ public class CoopDetailsService extends BaseService {
         if (endDate == null) {
             error.append("End date cannot be null! ");
         }
+        if (employerContact == null) {
+            error.append("Employer Contact cannot be null! ");
+        }
         if (coop == null) {
             error.append("Co-op cannot be null!");
         }
@@ -65,7 +68,6 @@ public class CoopDetailsService extends BaseService {
         cd.setHoursPerWeek(hoursPerWeek);
         cd.setStartDate(startDate);
         cd.setEndDate(endDate);
-        // EmployerContact can be null initially
         cd.setEmployerContact(employerContact);
         cd.setCoop(coop);
 

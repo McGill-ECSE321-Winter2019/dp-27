@@ -176,24 +176,6 @@ export default {
       required: true
     }
   },
-  data: function() {
-    return {
-      loading: true,
-      companyName: "",
-      companyCountry: "",
-      companyRegion: "",
-      companyCity: "",
-      employerContact: null,
-      employerContactFirstName: "",
-      employerContactLastName: "",
-      employerContactEmail: "",
-      employerContactPhoneNumber: "",
-      startDate: "",
-      endDate: "",
-      payPerHour: "",
-      hoursPerWeek: null
-    };
-  },
   computed: {
     coopDetails: function() {
       return this.coop.coopDetails;
