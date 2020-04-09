@@ -7,7 +7,7 @@ public class AdminDto extends AuthorDto {
     private List<NotificationDto> sent;
 
     public AdminDto() {};
-    
+
     public AdminDto(
             Integer id,
             String firstName,

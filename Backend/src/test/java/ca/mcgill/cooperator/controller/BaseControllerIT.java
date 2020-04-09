@@ -408,28 +408,27 @@ public abstract class BaseControllerIT {
 
         return rsConfigDto;
     }
-    
-	public AdminDto createTestAdmin() throws Exception {
-		AdminDto adminDto = new AdminDto();
-		adminDto.setEmail("admin@gmail.com");
-		adminDto.setFirstName("Lucy");
-		adminDto.setLastName("Brown");
-		
-		// 1. create the Admin with a POST request
-	    MvcResult mvcResult =
-	            mvc.perform(
-	                            post("/admins")
-	                                    .contentType(MediaType.APPLICATION_JSON)
-	                                    .content(objectMapper.writeValueAsString(adminDto))
-	                                    .characterEncoding("utf-8"))
-	                                    .andExpect(status().isOk())
-	                                    .andReturn();
-	    
+
+    public AdminDto createTestAdmin() throws Exception {
+        AdminDto adminDto = new AdminDto();
+        adminDto.setEmail("admin@gmail.com");
+        adminDto.setFirstName("Lucy");
+        adminDto.setLastName("Brown");
+
+        // 1. create the Admin with a POST request
+        MvcResult mvcResult =
+                mvc.perform(
+                                post("/admins")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(adminDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
         adminDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), AdminDto.class);
-        
+
         return adminDto;
-    	
     }
 }

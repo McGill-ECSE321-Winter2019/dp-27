@@ -221,10 +221,10 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
                     error);
         }
     }
-    
+
     @Test
     public void testMultipleNotifications() {
-    	String title = "Hello";
+        String title = "Hello";
         String body = "Please attend meeting.";
         Student student = createTestStudent(studentService);
         Admin sender = createTestAdmin(adminService);
@@ -241,7 +241,7 @@ public class CooperatorServiceNotificationTests extends BaseServiceTest {
         assertEquals("Hello", ((Notification) student.getNotifications().toArray()[0]).getTitle());
         sender = adminService.getAdmin(sender.getId());
         assertEquals("Hello", sender.getSentNotifications().iterator().next().getTitle());
-        
+
         title = "Bye";
         body = "Please attend meeting again.";
 

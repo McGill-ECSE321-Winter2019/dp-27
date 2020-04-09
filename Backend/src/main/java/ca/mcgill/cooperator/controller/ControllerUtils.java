@@ -256,7 +256,7 @@ public class ControllerUtils {
                         student.getStudentId(),
                         null, // set coops to null since coop is parent
                         null, // set notifications to null, look up student by id to get all
-                              // notifications
+                        // notifications
                         null); // null reports
         coopDto.setStudent(studentDto);
 
