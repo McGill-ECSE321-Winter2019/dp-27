@@ -14,6 +14,12 @@
               </span>
               {{ term }}
             </div>
+            <div class="text-subtitle1">
+              <span class="text-subtitle1 text-weight-medium">
+                Course:
+              </span>
+              {{ coop.courseOffering.course.name }}
+            </div>
           </div>
           <div class="col-6 text-body2">
             <q-btn
@@ -25,9 +31,24 @@
               @click="openPDF"
             />
           </div>
-          <q-btn label="Approve" color="primary" @click="approveCoop" />
-          <q-btn label="Reject" color="primary" flat @click="rejectCoop" />
         </div>
+
+        <!-- Disable buttons while submitting -->
+        <q-btn
+          label="Approve"
+          color="primary"
+          @click="approveCoop"
+          :disabled="submitting"
+        />
+        <q-btn
+          label="Reject"
+          color="primary"
+          flat
+          @click="rejectCoop"
+          :disabled="submitting"
+        />
+        <!-- Show spinner while submitting -->
+        <q-spinner v-if="submitting" color="primary" size="2.5em" />
       </div>
     </q-card-section>
   </q-card>
@@ -38,7 +59,8 @@ export default {
   name: "CoopReviewPageNewCoopItem",
   data: function() {
     return {
-      offerLetterURL: null
+      offerLetterURL: null,
+      submitting: false
     };
   },
   props: {
@@ -49,11 +71,12 @@ export default {
   },
   computed: {
     term: function() {
-      return `${this.coop.courseOffering.season} ${this.coop.courseOffering.year}`;
+      const term = `${this.coop.courseOffering.season} ${this.coop.courseOffering.year}`;
+      return this.$common.convertEnumTextToReadableString(term);
     }
   },
   created: function() {
-    var bytes = this.coop.studentReports[0].data;
+    var bytes = this.coop.reports[0].data;
 
     let blob = this.$common.b64toBlob(bytes, "application/pdf");
     this.offerLetterURL = window.URL.createObjectURL(blob);
@@ -63,6 +86,7 @@ export default {
       window.open(this.offerLetterURL);
     },
     approveCoop: function() {
+      this.submitting = true;
       // set the status of the coop to FUTURE
       const coopBody = {
         status: "FUTURE"
@@ -71,15 +95,12 @@ export default {
       this.$axios.put(`/coops/${this.coop.id}`, coopBody);
 
       // set the status of the offer letter to COMPLETED
-      // assuming the offer letter is the only StudentReport, which it should be
-      const studentReportBody = {
+      // assuming the offer letter is the only Report, which it should be
+      const reportBody = {
         status: "COMPLETED"
       };
       // update the student report status
-      this.$axios.put(
-        `/student-reports/${this.coop.studentReports[0].id}`,
-        studentReportBody
-      );
+      this.$axios.put(`/reports/${this.coop.reports[0].id}`, reportBody);
 
       // also send the student a notification that their coop has been approved
       const notifBody = {
@@ -103,6 +124,9 @@ export default {
             icon: "cloud_done",
             message: "Co-op Approved Successfully"
           });
+          this.submitting = false;
+
+          this.$emit("refresh-new-coops");
         })
         .catch(_err => {
           this.$q.notify({

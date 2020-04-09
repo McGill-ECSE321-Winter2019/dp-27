@@ -33,7 +33,7 @@
 import HomeUpcomingCoopsSectionItem from "./HomeUpcomingCoopsSectionItem.vue";
 
 export default {
-  name: "HomeCoopSection",
+  name: "HomeUpcomingCoopsSection",
   components: {
     HomeUpcomingCoopsSectionItem
   },

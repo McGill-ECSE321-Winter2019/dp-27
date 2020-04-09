@@ -32,7 +32,7 @@ public class ReportSectionConfigService extends BaseService {
     public ReportSectionConfig createReportSectionConfig(
             String sectionPrompt,
             ReportResponseType responseType,
-            int questionNumber,
+            Integer questionNumber,
             ReportConfig reportConfig) {
         StringBuilder error = new StringBuilder();
         if (sectionPrompt == null || sectionPrompt.trim().length() == 0) {
@@ -41,8 +41,8 @@ public class ReportSectionConfigService extends BaseService {
         if (responseType == null) {
             error.append("Response type cannot be null! ");
         }
-        if (questionNumber <= 0) {
-            error.append("Question number cannot be less than 1! ");
+        if (questionNumber == null || questionNumber <= 0) {
+            error.append("Invalid question number! ");
         }
         if (reportConfig == null) {
             error.append("Report config cannot be null!");

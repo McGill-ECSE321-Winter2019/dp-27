@@ -12,11 +12,7 @@ Parent: HomeUpcomingCoopsSection.vue -->
     <q-card-section>
       <!-- Show a warning message if co-op details are missing -->
       <div v-if="coopDetailsRequired">
-        <q-banner
-          inline-actions
-          rounded
-          class="bg-orange-12 text-white q-mb-sm"
-        >
+        <q-banner inline-actions rounded class="bg-orange-7 text-white q-mb-sm">
           You have not yet added required details for this co-op.
           <template v-slot:avatar>
             <q-icon name="warning" color="white" />
@@ -25,16 +21,16 @@ Parent: HomeUpcomingCoopsSection.vue -->
             <q-btn
               flat
               label="Add Co-op Details"
-              @click="showCoopDetailsPopup = true"
+              @click="goToCoopDetailsPage"
             />
           </template>
         </q-banner>
       </div>
 
-      <!-- Co-op status -->
       <div class="text-subtitle1">
-        <div class="row">
+        <div class="row q-mb-sm">
           <div class="col-6">
+            <!-- Co-op status -->
             <span class="text-subtitle1 text-weight-medium">
               Status:
             </span>
@@ -54,6 +50,7 @@ Parent: HomeUpcomingCoopsSection.vue -->
               />
             </div>
           </div>
+          <!-- View offer letter -->
           <div v-if="underReview" class="col-6 text-body2">
             <q-btn
               color="primary"
@@ -69,18 +66,20 @@ Parent: HomeUpcomingCoopsSection.vue -->
 
       <div v-if="!underReview && !coopDetailsRequired">
         <!-- Show co-op details -->
-        <div class="text-body2 q-mb-md">
-          {{ coop.coopDetails.employerContact.company.name }}
+        <CoopDetailsListView :coop="coop" />
+        <div>
+          <q-btn
+            color="primary"
+            flat
+            label="View Co-op Details"
+            @click="goToCoopDetailsPage"
+          />
         </div>
       </div>
 
-      <q-dialog v-model="showCoopDetailsPopup">
-        <CoopDetailsPopup :coopId="this.coop.id" />
-      </q-dialog>
-
       <q-dialog v-model="showEditOfferLetterPopup">
         <EditOfferLetterPopup
-          :reportId="this.coop.studentReports[0].id"
+          :reportId="this.coop.reports[0].id"
           @refresh-upcoming-coops="notifyParentToRefreshUpcomingCoops"
         />
       </q-dialog>
@@ -89,13 +88,13 @@ Parent: HomeUpcomingCoopsSection.vue -->
 </template>
 
 <script>
-import CoopDetailsPopup from "./CoopDetailsPopup.vue";
+import CoopDetailsListView from "./CoopDetailsListView.vue";
 import EditOfferLetterPopup from "./EditOfferLetterPopup.vue";
 
 export default {
   name: "HomeUpcomingCoopsSectionItem",
   components: {
-    CoopDetailsPopup,
+    CoopDetailsListView,
     EditOfferLetterPopup
   },
   props: {
@@ -129,7 +128,7 @@ export default {
     }
   },
   created: function() {
-    var bytes = this.coop.studentReports[0].data;
+    var bytes = this.coop.reports[0].data;
 
     let blob = this.$common.b64toBlob(bytes, "application/pdf");
     this.offerLetterURL = window.URL.createObjectURL(blob);
@@ -141,6 +140,12 @@ export default {
     notifyParentToRefreshUpcomingCoops: function() {
       this.showEditOfferLetterPopup = false;
       this.$emit("refresh-upcoming-coops");
+    },
+    goToCoopDetailsPage: function() {
+      // go to the Coop Details page for this specific Coop
+      this.$router.push({
+        path: `/student/coop-details/${this.coop.id}`
+      });
     }
   }
 };

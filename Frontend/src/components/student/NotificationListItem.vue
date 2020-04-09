@@ -2,17 +2,17 @@
   <div class="row items-center">
     <div class="col">
       <div>
-        <div
+        <span
           v-if="!notification.seen"
           class="text-weight-medium"
           style="color:red"
         >
           NEW &nbsp;
-        </div>
+        </span>
 
-        <div class="row text-h6 text-weight-medium">
+        <span class="text-h6 text-weight-medium">
           {{ notification.title }}
-        </div>
+        </span>
 
         <div>{{ notification.body }}</div>
 

@@ -40,6 +40,7 @@
               v-for="coop in newCoops"
               :key="coop.id"
               :coop="coop"
+              @refresh-new-coops="getNewCoops"
             />
           </div>
           <div v-else class="center-item">
@@ -66,10 +67,7 @@ import CoopReviewPageNewCoopItem from "../../components/admin/CoopReviewPageNewC
 export default {
   name: "AdminCoopReviewPage",
   props: {
-    currentTab: {
-      type: String,
-      required: false
-    }
+    currentTab: String
   },
   components: {
     BasePage,
@@ -85,18 +83,25 @@ export default {
     };
   },
   created: function() {
-    this.currentTabData = this.currentTab;
-    this.$axios
-      .get("/coops", { params: { status: "UNDER_REVIEW" } })
-      .then(resp => {
-        this.newCoops = resp.data;
-        this.newCoopsLoading = false;
-      });
+    if (this.currentTab) this.currentTabData = this.currentTab;
+
+    this.getNewCoops();
     this.completedCoopsLoading = false;
   },
   computed: {
     loading: function() {
       return this.newCoopsLoading || this.completedCoopsLoading;
+    }
+  },
+  methods: {
+    getNewCoops: function() {
+      this.newCoopsLoading = true;
+      this.$axios
+        .get("/coops", { params: { status: "UNDER_REVIEW" } })
+        .then(resp => {
+          this.newCoops = resp.data;
+          this.newCoopsLoading = false;
+        });
     }
   }
 };
