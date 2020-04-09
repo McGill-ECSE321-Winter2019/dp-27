@@ -105,13 +105,13 @@ public class ReportSectionService extends BaseService {
         }
 
         if (response != null) {
-        	reportSection.setResponse(response.trim());
+            reportSection.setResponse(response.trim());
         }
         if (reportSectionConfig != null) {
-        	reportSection.setReportSectionConfig(reportSectionConfig);
+            reportSection.setReportSectionConfig(reportSectionConfig);
         }
         if (report != null) {
-        	reportSection.setReport(report);
+            reportSection.setReport(report);
         }
 
         return reportSectionRepository.save(reportSection);

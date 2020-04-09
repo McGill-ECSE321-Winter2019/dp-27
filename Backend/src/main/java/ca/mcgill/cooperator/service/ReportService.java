@@ -133,22 +133,22 @@ public class ReportService extends BaseService {
 
         // set all values in employer report if they're not null
         if (status != null) {
-        	report.setStatus(status);
+            report.setStatus(status);
         }
         if (title != null) {
-        	report.setTitle(title);
+            report.setTitle(title);
         }
         if (coop != null) {
-        	report.setCoop(coop);
+            report.setCoop(coop);
         }
         if (author != null) {
-        	report.setAuthor(author);
+            report.setAuthor(author);
         }
         if (sections != null) {
-        	report.setReportSections(sections);
+            report.setReportSections(sections);
         }
         try {
-        	report.setData(file.getBytes());
+            report.setData(file.getBytes());
         } catch (IOException e) {
             throw new IllegalArgumentException(e.getMessage());
         }

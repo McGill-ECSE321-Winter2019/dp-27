@@ -29,9 +29,10 @@ public class ReportSectionController extends BaseController {
     @Autowired ReportSectionService reportSectionService;
     @Autowired ReportService reportService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
-    
+
     /**
      * creates new report section
+     *
      * @param reportSectionDto
      * @return
      */
@@ -58,6 +59,7 @@ public class ReportSectionController extends BaseController {
 
     /**
      * gets report section by id
+     *
      * @param id
      * @return
      */
@@ -69,6 +71,7 @@ public class ReportSectionController extends BaseController {
 
     /**
      * gets all report sections
+     *
      * @return
      */
     @GetMapping("")
@@ -79,6 +82,7 @@ public class ReportSectionController extends BaseController {
 
     /**
      * update report section
+     *
      * @param id
      * @param reportSectionDto
      * @return
@@ -110,6 +114,7 @@ public class ReportSectionController extends BaseController {
 
     /**
      * delete report section
+     *
      * @param id
      * @return
      */

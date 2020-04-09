@@ -327,7 +327,7 @@ public class AdminApproveCoopIT extends BaseControllerIT {
         reportDto =
                 objectMapper.readValue(
                         mvcResult.getResponse().getContentAsString(), ReportDto.class);
-        
+
         assertEquals(studentDto.getFirstName(), reportDto.getAuthor().getFirstName());
         assertEquals(ReportStatus.COMPLETED, reportDto.getStatus());
         assertEquals(CoopStatus.REJECTED, reportDto.getCoop().getStatus());

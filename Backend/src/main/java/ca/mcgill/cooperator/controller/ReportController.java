@@ -35,7 +35,7 @@ public class ReportController extends BaseController {
     @Autowired AuthorService authorService;
     @Autowired ReportService reportService;
     @Autowired ReportSectionService reportSectionService;
-    
+
     /**
      * Creates a Report using multipart form data
      *

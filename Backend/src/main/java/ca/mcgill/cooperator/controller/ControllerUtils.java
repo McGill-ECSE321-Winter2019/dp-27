@@ -103,7 +103,7 @@ public class ControllerUtils {
                                 null, // null coop
                                 null, // null author since admin is parent
                                 null); // null report sections for now, could be changed later if
-                                       // admin starts to be authors of reports
+                // admin starts to be authors of reports
                 reportDtos.add(reportDto);
             }
         }
@@ -255,8 +255,9 @@ public class ControllerUtils {
                         student.getEmail(),
                         student.getStudentId(),
                         null, // set coops to null since coop is parent
-                        null, // set notifications to null, look up student by id to get all notifications
-                        null); //null reports
+                        null, // set notifications to null, look up student by id to get all
+                              // notifications
+                        null); // null reports
         coopDto.setStudent(studentDto);
 
         // create report dtos
@@ -275,12 +276,13 @@ public class ControllerUtils {
                                 null); // null report sections
 
                 Author author = report.getAuthor();
-                AuthorDto authorDto = new AuthorDto(
-                							author.getId(),
-                							author.getFirstName(),
-                							author.getLastName(),
-                							author.getEmail(),
-                							null); //null reports
+                AuthorDto authorDto =
+                        new AuthorDto(
+                                author.getId(),
+                                author.getFirstName(),
+                                author.getLastName(),
+                                author.getEmail(),
+                                null); // null reports
 
                 reportDto.setAuthor(authorDto);
 
@@ -409,7 +411,7 @@ public class ControllerUtils {
                         student.getStudentId(),
                         null, // null coops since coop is parent
                         null, // null notifications, look up student by id to get notifications
-                        null); //null reports
+                        null); // null reports
         coopDto.setStudent(studentDto);
 
         coopDetailsDto.setCoop(coopDto);
@@ -534,7 +536,7 @@ public class ControllerUtils {
                                 student.getStudentId(),
                                 null, // null coops, look up student by id to get coops
                                 null, // null notifications, look up student by id to get
-                                null); //null reports
+                                null); // null reports
                 // notifications
                 coopDto.setStudent(studentDto);
 
@@ -660,7 +662,7 @@ public class ControllerUtils {
                                 student.getStudentId(),
                                 null, // null coops, look up student by id to get all coops
                                 null, // null notifications, look up student by id to get all
-                                null); //null reports
+                                null); // null reports
                 // notifications
 
                 coopDto.setStudent(studentDto);
@@ -700,10 +702,10 @@ public class ControllerUtils {
 
         ReportDto reportDto =
                 new ReportDto(
-                		report.getId(),
-                		report.getTitle(),
-                		report.getStatus(),
-                		report.getData(),
+                        report.getId(),
+                        report.getTitle(),
+                        report.getStatus(),
+                        report.getData(),
                         null, // null coop
                         null, // null author
                         null); // null report sections
@@ -731,7 +733,7 @@ public class ControllerUtils {
                         student.getStudentId(),
                         null, // null coops, look up student by id to get all coops
                         null, // null notifications, look up student by id to get all notifications
-                        null); //nul reports
+                        null); // nul reports
 
         coopDto.setStudent(studentDto);
 
@@ -739,12 +741,13 @@ public class ControllerUtils {
 
         // create author dto
         Author author = report.getAuthor();
-        AuthorDto authorDto = new AuthorDto(
-				author.getId(),
-				author.getFirstName(),
-				author.getLastName(),
-				author.getEmail(),
-				null); //null reports
+        AuthorDto authorDto =
+                new AuthorDto(
+                        author.getId(),
+                        author.getFirstName(),
+                        author.getLastName(),
+                        author.getEmail(),
+                        null); // null reports
 
         reportDto.setAuthor(authorDto);
 
@@ -848,7 +851,7 @@ public class ControllerUtils {
                         student.getStudentId(),
                         null, // null coops, look up student by id to get coops
                         null, // null notifications, look up student by id to get all notifications
-                        null); //null reports
+                        null); // null reports
 
         notificationDto.setStudent(studentDto);
 
@@ -906,7 +909,7 @@ public class ControllerUtils {
                         s.getStudentId(),
                         null, // null coops
                         null, // null notifications
-                        null); //null reports
+                        null); // null reports
 
         // create coop dtos
         Set<Coop> coops = s.getCoops();
@@ -985,7 +988,7 @@ public class ControllerUtils {
                 notificationDtos.add(notificationDto);
             }
         }
-        
+
         studentDto.setNotifications(notificationDtos);
 
         Set<Report> reports = s.getReports();
