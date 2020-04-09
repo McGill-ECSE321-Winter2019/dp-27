@@ -22,9 +22,9 @@ const routes = [
         component: () => import("pages/student/StudentCoops.vue")
       },
       {
-        name: "StudentEditCoopDetailsPage",
+        name: "StudentCoopDetailsPage",
         path: "coop-details/:coopId",
-        component: () => import("pages/student/StudentEditCoopDetailsPage.vue")
+        component: () => import("pages/student/StudentCoopDetailsPage.vue")
       },
       {
         path: "new-coop",

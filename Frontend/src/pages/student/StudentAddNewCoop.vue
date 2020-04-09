@@ -88,7 +88,7 @@
             :disabled="submitting"
           />
           <!-- Show spinner while submitting -->
-          <q-spinner v-if="submitting" color="primary" size="3em" />
+          <q-spinner v-if="submitting" color="primary" size="2.5em" />
         </q-card-section>
       </q-form>
     </q-card>
@@ -148,10 +148,11 @@ export default {
           formData.append("file", this.offerLetterFile);
           formData.append("status", "UNDER_REVIEW");
           formData.append("title", "Offer Letter");
-          formData.append("coop_id", resp.data.id.toString());
+          formData.append("coopId", resp.data.id);
+          formData.append("authorId", this.$store.state.currentUser.id);
 
           this.$axios
-            .post("/student-reports", formData, {
+            .post("/reports", formData, {
               headers: { "Content-Type": "multipart/form-data" }
             })
             .then(resp => {
@@ -167,6 +168,7 @@ export default {
               this.$router.push({ path: "/student/home" });
             })
             .catch(err => {
+              this.submitting = false;
               this.$q.notify({
                 color: "red-4",
                 position: "top",
@@ -177,6 +179,7 @@ export default {
             });
         })
         .catch(err => {
+          this.submitting = false;
           this.$q.notify({
             color: "red-4",
             position: "top",

@@ -76,7 +76,7 @@ export default {
     }
   },
   created: function() {
-    var bytes = this.coop.studentReports[0].data;
+    var bytes = this.coop.reports[0].data;
 
     let blob = this.$common.b64toBlob(bytes, "application/pdf");
     this.offerLetterURL = window.URL.createObjectURL(blob);
@@ -95,15 +95,12 @@ export default {
       this.$axios.put(`/coops/${this.coop.id}`, coopBody);
 
       // set the status of the offer letter to COMPLETED
-      // assuming the offer letter is the only StudentReport, which it should be
-      const studentReportBody = {
+      // assuming the offer letter is the only Report, which it should be
+      const reportBody = {
         status: "COMPLETED"
       };
       // update the student report status
-      this.$axios.put(
-        `/student-reports/${this.coop.studentReports[0].id}`,
-        studentReportBody
-      );
+      this.$axios.put(`/reports/${this.coop.reports[0].id}`, reportBody);
 
       // also send the student a notification that their coop has been approved
       const notifBody = {

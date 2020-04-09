@@ -1,12 +1,20 @@
+<!-- This page allows a Student to either submit their CoopDetails or view the
+CoopDetails they have already submitted. -->
 <template>
-  <BasePage title="Edit Co-op Details">
+  <BasePage title="Co-op Details">
     <q-card flat bordered class="q-mb-md">
       <!-- Show spinner while submitting -->
       <div v-if="loading" class="center-item q-ma-md">
         <q-spinner color="primary" size="3em" />
       </div>
       <div v-else>
-        <NewCoopDetailsView v-if="coop.coopDetails === null" :coop="coop" />
+        <!-- Allow Student to add their CoopDetails if it doesn't exist -->
+        <StudentCoopDetailsPageNewCoopDetails
+          v-if="coop.coopDetails === null"
+          :coop="coop"
+        />
+        <!-- Allow viewing only otherwise -->
+        <StudentCoopDetailsPageExistingCoopDetails v-else :coop="coop" />
       </div>
     </q-card>
   </BasePage>
@@ -14,13 +22,15 @@
 
 <script>
 import BasePage from "../BasePage.vue";
-import NewCoopDetailsView from "../../components/student/NewCoopDetailsView.vue";
+import StudentCoopDetailsPageNewCoopDetails from "../../components/student/StudentCoopDetailsPageNewCoopDetails.vue";
+import StudentCoopDetailsPageExistingCoopDetails from "../../components/student/StudentCoopDetailsPageExistingCoopDetails.vue";
 
 export default {
-  name: "StudentEditCoopDetailsPage",
+  name: "StudentCoopDetailsPage",
   components: {
     BasePage,
-    NewCoopDetailsView
+    StudentCoopDetailsPageNewCoopDetails,
+    StudentCoopDetailsPageExistingCoopDetails
   },
   data: function() {
     return {

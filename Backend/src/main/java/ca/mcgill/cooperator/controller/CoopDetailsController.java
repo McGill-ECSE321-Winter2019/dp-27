@@ -53,15 +53,15 @@ public class CoopDetailsController extends BaseController {
         EmployerContact employerContact = null;
         if (employerContactDto != null) {
             if (employerContactDto.getId() != null) {
-            	try {
-            		employerContact =
+                try {
+                    employerContact =
                             employerContactService.getEmployerContact(employerContactDto.getId());
-            	} catch (IllegalArgumentException e) {
-            		// create the EmployerContact (and Company, if necessary)
+                } catch (IllegalArgumentException e) {
+                    // create the EmployerContact (and Company, if necessary)
                     employerContact = handleCreateEmployerContactAndCompany(employerContactDto);
-            	}
+                }
             } else if (employerContactDto.getEmail() != null) {
-            	try {
+                try {
                     employerContact =
                             employerContactService.getEmployerContact(
                                     employerContactDto.getEmail());
@@ -131,13 +131,13 @@ public class CoopDetailsController extends BaseController {
         EmployerContact employerContact = null;
         if (employerContactDto != null) {
             if (employerContactDto.getId() != null) {
-            	try {
-            		employerContact =
+                try {
+                    employerContact =
                             employerContactService.getEmployerContact(employerContactDto.getId());
-            	} catch (IllegalArgumentException e) {
-            		// create the EmployerContact (and Company, if necessary)
+                } catch (IllegalArgumentException e) {
+                    // create the EmployerContact (and Company, if necessary)
                     employerContact = handleCreateEmployerContactAndCompany(employerContactDto);
-            	}
+                }
             } else if (employerContactDto.getEmail() != null) {
                 try {
                     employerContact =
@@ -182,7 +182,7 @@ public class CoopDetailsController extends BaseController {
         CoopDetails cd = coopDetailsService.getCoopDetails(id);
         return ControllerUtils.convertToDto(coopDetailsService.deleteCoopDetails(cd));
     }
-    
+
     private EmployerContact handleCreateEmployerContactAndCompany(EmployerContactDto ecDto) {
         CompanyDto cDto = ecDto.getCompany();
 
@@ -190,10 +190,7 @@ public class CoopDetailsController extends BaseController {
         try {
             company =
                     companyService.getCompany(
-                            cDto.getName(),
-                            cDto.getCity(),
-                            cDto.getRegion(),
-                            cDto.getCountry());
+                            cDto.getName(), cDto.getCity(), cDto.getRegion(), cDto.getCountry());
         } catch (IllegalArgumentException _e) {
             company =
                     companyService.createCompany(
@@ -205,10 +202,10 @@ public class CoopDetailsController extends BaseController {
         }
 
         return employerContactService.createEmployerContact(
-        		ecDto.getFirstName(),
-        		ecDto.getLastName(),
-        		ecDto.getEmail(),
-        		ecDto.getPhoneNumber(),
+                ecDto.getFirstName(),
+                ecDto.getLastName(),
+                ecDto.getEmail(),
+                ecDto.getPhoneNumber(),
                 company);
     }
 }

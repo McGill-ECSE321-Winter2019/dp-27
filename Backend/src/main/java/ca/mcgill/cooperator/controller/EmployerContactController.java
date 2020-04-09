@@ -76,7 +76,6 @@ public class EmployerContactController extends BaseController {
         EmployerContact ec = employerContactService.getEmployerContact(id);
         return ControllerUtils.convertToDto(ec);
     }
-    
 
     /**
      * Gets an EmployerContact by email

@@ -65,7 +65,7 @@
               v-model="employerContactFirstName"
               label="First Name"
               hint="First Name"
-              :disabled="disableInput"
+              :disable="disableInput"
               :rules="[
                 val => (val && val.length > 0) || 'Please enter a first name'
               ]"
@@ -77,7 +77,7 @@
               v-model="employerContactLastName"
               label="Last Name"
               hint="Last Name"
-              :disabled="disableInput"
+              :disable="disableInput"
               :rules="[
                 val => (val && val.length > 0) || 'Please enter a last name'
               ]"
@@ -90,7 +90,7 @@
             v-model="employerContactEmail"
             label="Email"
             hint="Email"
-            :disabled="disableInput"
+            :disable="disableInput"
             :rules="[val => (val && val.length > 0) || 'Please enter an email']"
           />
 
@@ -99,7 +99,7 @@
             v-model="employerContactPhoneNumber"
             label="Phone Number"
             hint="Phone Number"
-            :disabled="disableInput"
+            :disable="disableInput"
             :rules="[
               val => (val && val.length > 0) || 'Please enter a phone number'
             ]"
@@ -310,7 +310,7 @@
 import NewCoopDetailsViewConfirmPopup from "./NewCoopDetailsViewConfirmPopup.vue";
 
 export default {
-  name: "NewCoopDetailsView",
+  name: "StudentCoopDetailsPageNewCoopDetails",
   components: {
     NewCoopDetailsViewConfirmPopup
   },
@@ -355,6 +355,7 @@ export default {
       this.showConfirmationPopup = true;
     },
     createCoopDetails: function() {
+      this.showConfirmationPopup = false;
       this.submitting = true;
 
       const body = {
@@ -432,10 +433,13 @@ export default {
         this.cities = Array.from(citiesSet);
       });
     },
+    // checks if an EmployerContact exists and updates the form inputs
+    // accordingly
     searchForEmployerContact: function() {
       this.isSearching = true;
       this.searched = false;
       this.employerContact = null;
+      this.disableInput = false;
 
       this.employerContactFirstName = null;
       this.employerContactLastName = null;
@@ -465,6 +469,7 @@ export default {
           this.companyCity = this.employerContact.company.city;
         })
         .catch(_err => {
+          // EmployerContact doesn't exist
           this.isSearching = false;
           this.searched = true;
         });
