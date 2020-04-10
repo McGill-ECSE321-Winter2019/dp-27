@@ -146,6 +146,29 @@ public abstract class BaseControllerIT {
         return studentDto;
     }
 
+    public StudentDto createTestStudent(String email, String stuId) throws Exception {
+        StudentDto studentDto = new StudentDto();
+        studentDto.setEmail(email);
+        studentDto.setFirstName("Emma");
+        studentDto.setLastName("Eagles");
+        studentDto.setStudentId(stuId);
+        MvcResult mvcResult =
+                mvc.perform(
+                                post("/students")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(studentDto))
+                                        .characterEncoding("utf-8"))
+                        .andExpect(status().isOk())
+                        .andReturn();
+
+        // get object from response
+        studentDto =
+                objectMapper.readValue(
+                        mvcResult.getResponse().getContentAsString(), StudentDto.class);
+
+        return studentDto;
+    }
+
     public CoopDto createTestCoop(
             CourseOfferingDto courseOfferingDto, StudentDto studentDto, CoopStatus coopStatus)
             throws Exception {

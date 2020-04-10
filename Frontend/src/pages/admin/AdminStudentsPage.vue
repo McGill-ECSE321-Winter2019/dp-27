@@ -29,16 +29,24 @@
           />
         </div>
         <div class="q-pa-md">
-          <q-btn @click="applyFilter" class="q-mr-sm">Apply Filter</q-btn>
-          <q-btn @click="clearFilter" class="q-mr-sm">Clear Filter</q-btn>
+          <q-btn @click="applyFilter" class="filterBtn">Apply Filter</q-btn>
+          <q-btn @click="clearFilter" class="filterBtn">Clear Filter</q-btn>
         </div>
 
         <div class="q-pa-md">
           <q-table
             :data="students"
             :columns="columns"
-            row-key="studentName"
+            row-key="email"
             @row-click="goToStudentCoop"
+            selection="multiple"
+            :selected.sync="selected"
+          />
+          <q-btn
+            class="dashBtn"
+            label="Send Notification to Selected Students"
+            color="primary"
+            @click="sendNotif"
           />
         </div>
       </q-card-section>
@@ -73,6 +81,7 @@ export default {
     }
   },
   data: () => ({
+    selected: [],
     students: [],
     courseNames: [],
     courseNameData: "",
@@ -177,6 +186,15 @@ export default {
     goToStudentCoop() {
       this.$router.push("/admin/student-coops");
     },
+    sendNotif() {
+      this.$router.push({
+        path: "/admin/notification",
+        name: "CreateNotif",
+        params: {
+          selected: this.selected
+        }
+      });
+    },
     clearFilter() {
       this.courseNameData = "";
       this.termData = "";
@@ -217,4 +235,13 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.dashBtn {
+  width: 40%;
+  margin-top: 4%;
+}
+.filterBtn {
+  width: 19%;
+  margin-right: 2%;
+}
+</style>

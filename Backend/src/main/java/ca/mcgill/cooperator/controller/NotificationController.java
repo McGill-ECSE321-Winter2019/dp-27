@@ -9,6 +9,7 @@ import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.AdminService;
 import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.StudentService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
@@ -63,6 +65,40 @@ public class NotificationController extends BaseController {
                 notificationService.createNotification(title, body, student, sender);
 
         return ControllerUtils.convertToDto(notification);
+    }
+
+    /**
+     * Creates a new Notification for all the students in the list
+     *
+     *
+     * @param title
+     * @param body
+     * @param list of student Ids
+     * @param sender Id
+     * @return list of the created Notifications
+     */
+    @PostMapping("/many")
+    public List<NotificationDto> createManyNotifications(
+            @RequestParam("studentIds") List<Integer> stuIds,
+            @RequestParam("admin") Integer adminId,
+            @RequestParam("title") String title,
+            @RequestParam("body") String body) {
+
+        Admin sender = null;
+        if (adminId != null) {
+            sender = adminService.getAdmin(adminId);
+        }
+
+        Student student = null;
+        List<Notification> notifs = new ArrayList<>();
+        for (Integer id : stuIds) {
+            student = studentService.getStudentById(id);
+            Notification notification =
+                    notificationService.createNotification(title, body, student, sender);
+            notifs.add(notification);
+        }
+
+        return ControllerUtils.convertNotifListToDto(notifs);
     }
 
     /**
