@@ -23,7 +23,13 @@
           icon="notifications"
           @click="goToNotifPage()"
         >
-          <q-badge color="white" text-color="red" floating transparent>
+          <q-badge
+            v-if="unseen.length > 0"
+            color="white"
+            text-color="red"
+            floating
+            transparent
+          >
             {{ unseen.length }}
           </q-badge>
         </q-btn>

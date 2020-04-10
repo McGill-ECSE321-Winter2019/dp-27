@@ -32,12 +32,6 @@
                   />
                 </q-item-section>
               </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section>username</q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup>
-                <q-item-section>Help</q-item-section>
-              </q-item>
               <q-separator />
               <q-item clickable v-close-popup>
                 <q-item-section>Settings</q-item-section>
