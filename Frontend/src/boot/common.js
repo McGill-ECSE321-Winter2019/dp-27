@@ -37,6 +37,41 @@ const common = {
     else return "black";
   },
   /*
+   * Used for sorting coop objects by term
+   */
+  compareCoopTerms: function(coop1, coop2) {
+    const term1 = `${coop1.courseOffering.season} ${coop1.courseOffering.year}`;
+    const term2 = `${coop2.courseOffering.season} ${coop2.courseOffering.year}`;
+
+    if (term1 === term2) return 0;
+    else {
+      const term1Split = term1.split(" ");
+      const term2Split = term2.split(" ");
+
+      if (parseInt(term1Split[1]) > parseInt(term2Split[1])) return 1;
+      else if (parseInt(term1Split[1]) < parseInt(term2Split[1])) return -1;
+      else {
+        // years are the same, compare by season
+        if (
+          (term1Split[0] === "WINTER" &&
+            (term2Split[0] === "SUMMER" || term2Split[0] === "FALL")) ||
+          (term1Split[0] === "SUMMER" && term2Split[0] === "FALL")
+        ) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+    }
+  },
+  /*
+   * Used for sorting notifications by timestamp. Returns later notifications
+   * first.
+   */
+  compareNotificationTimestamps: function(notif1, notif2) {
+    return notif2.timeStamp - notif1.timeStamp;
+  },
+  /*
    * Converts a base64-encoded string to a blob; used for rendering PDFs
    *
    * Found on SO: https://stackoverflow.com/a/57767153

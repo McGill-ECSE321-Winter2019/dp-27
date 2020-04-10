@@ -99,7 +99,8 @@ export default {
       this.$axios
         .get("/coops", { params: { status: "UNDER_REVIEW" } })
         .then(resp => {
-          this.newCoops = resp.data;
+          // sort in order of soonest terms first
+          this.newCoops = resp.data.sort(this.$common.compareCoopTerms);
           this.newCoopsLoading = false;
         });
     }

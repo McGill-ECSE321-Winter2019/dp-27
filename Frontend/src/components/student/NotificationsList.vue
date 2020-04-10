@@ -47,7 +47,10 @@ export default {
         }
       })
       .then(resp => {
-        this.notifications = resp.data;
+        // sort notifications by timestamp
+        this.notifications = resp.data.sort(
+          this.$common.compareNotificationTimestamps
+        );
         this.loading = false;
       });
     this.$axios.put(`/notifications/${user.id}/mark-as-read`, {
