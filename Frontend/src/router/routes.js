@@ -44,8 +44,14 @@ const routes = [
     component: () => import("layouts/AdminLoggedInLayout.vue"),
     meta: { requiresAdminAuth: true },
     children: [
-      { path: "", redirect: "home" },
-      { path: "home", component: () => import("pages/admin/AdminHome.vue") },
+      {
+        path: "",
+        redirect: "home"
+      },
+      {
+        path: "home",
+        component: () => import("pages/admin/AdminHome.vue")
+      },
       {
         path: "student-coops",
         component: () => import("pages/admin/AdminStudentCoops.vue")
@@ -77,10 +83,6 @@ const routes = [
       {
         path: "companies",
         component: () => import("pages/admin/AdminCompanies.vue")
-      },
-      {
-        path: "notifications",
-        component: () => import("pages/admin/AdminNotifications.vue")
       },
       {
         path: "report-config",

@@ -24,9 +24,17 @@
           class="notifPageComponents"
         />
         <q-btn
+          v-if="!sending"
           color="primary"
           @click="sendNotification()"
           label="Send Notification"
+          class="notifPageComponents"
+        />
+        <!-- Show spinner while waiting -->
+        <q-spinner
+          v-else
+          color="primary"
+          size="2.5em"
           class="notifPageComponents"
         />
       </div>
@@ -50,6 +58,7 @@ export default {
   name: "HomeMainInfo",
 
   data: () => ({
+    sending: false,
     tableStudents: [],
     toSendTo: [],
     body: "",
@@ -112,7 +121,7 @@ export default {
   },
   methods: {
     goToStudentCoop() {
-      this.$router.push("/admin/studentcoops");
+      this.$router.push("/admin/student-coops");
     },
     sendNotification() {
       var adminId = this.$store.state.currentUser.id;
@@ -120,7 +129,7 @@ export default {
       for (var i = 0; i < this.toSendTo.length; i++) {
         stuIds.push(this.toSendTo[i].id);
       }
-
+      this.sending = true;
       // create the notification
       this.$axios
         .post(
@@ -134,6 +143,7 @@ export default {
             stuIds
         )
         .then(_resp => {
+          this.sending = false;
           this.body = "";
           this.title = "";
           this.toSendTo = [];
@@ -146,6 +156,7 @@ export default {
           });
         })
         .catch(_err => {
+          this.sending = false;
           this.$q.notify({
             color: "red-4",
             position: "top",
