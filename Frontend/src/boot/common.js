@@ -65,8 +65,8 @@ const common = {
     }
   },
   /*
-   * Used for sorting notifications by timestamp. Returns later notifications
-   * first.
+   * Used for sorting notifications by timestamp. Returns most recent
+   * notifications first.
    */
   compareNotificationTimestamps: function(notif1, notif2) {
     return notif2.timeStamp - notif1.timeStamp;

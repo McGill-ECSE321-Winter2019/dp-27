@@ -53,6 +53,7 @@ export default {
       const studentId = this.$store.state.currentUser.id;
       // get all upcoming coops for the currently logged in student
       this.$axios.get(`/students/${studentId}/upcoming-coops`).then(resp => {
+        // sort Coops by term
         this.coops = resp.data.sort(this.$common.compareCoopTerms);
         this.loading = false;
       });
