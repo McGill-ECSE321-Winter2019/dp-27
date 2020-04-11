@@ -4,22 +4,17 @@
       <div class="col-7">
         <HomeMainInfo />
       </div>
-      <div class="col-5">
-        <HomeDeadlineInfo />
-      </div>
     </div>
   </q-page>
 </template>
 
 <script>
 import HomeMainInfo from "components/admin/HomeMainInfo.vue";
-import HomeDeadlineInfo from "components/admin/HomeCurrentCoopDeadlines.vue";
 
 export default {
   name: "AdminHome",
   components: {
-    HomeMainInfo,
-    HomeDeadlineInfo
+    HomeMainInfo
   }
 };
 </script>
