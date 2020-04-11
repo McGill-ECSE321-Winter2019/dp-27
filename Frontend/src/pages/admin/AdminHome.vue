@@ -1,9 +1,7 @@
 <template>
   <q-page class="flex justify-center">
     <div id="container" class="row">
-      <div class="col-7">
-        <HomeMainInfo />
-      </div>
+      <HomeMainInfo />
     </div>
   </q-page>
 </template>
@@ -21,6 +19,5 @@ export default {
 
 <style lang="scss">
 #container {
-  width: 85%;
 }
 </style>
