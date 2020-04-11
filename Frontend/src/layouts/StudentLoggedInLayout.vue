@@ -15,14 +15,45 @@
           <router-link to="/student/home">Co-operator</router-link>
         </q-toolbar-title>
 
+        <!-- Mark all notifications as read when the bell is clicked -->
         <q-btn
           dense
           round
           flat
           class="q-mr-sm"
           icon="notifications"
-          @click="goToNotifPage()"
+          @click="markAsRead"
         >
+          <q-menu v-if="recentNotifications === null">
+            <q-list>
+              <q-item>
+                <q-item-section>
+                  <div class="center-item" id="notifications-menu">
+                    <q-spinner color="primary" size="3em" class="q-ma-md" />
+                  </div>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+
+          <q-menu v-else>
+            <q-list>
+              <HomeNotificationsMenuItem
+                v-for="n in recentNotifications"
+                :key="n.id"
+                :notification="n"
+              />
+            </q-list>
+            <q-btn
+              flat
+              v-close-popup
+              color="primary"
+              label="View All"
+              class="q-ma-sm"
+              @click="goToNotifPage"
+            />
+          </q-menu>
+
           <q-badge
             v-if="unseen.length > 0"
             color="white"
@@ -100,37 +131,66 @@
 </template>
 
 <script>
+import HomeNotificationsMenuItem from "../components/student/HomeNotificationsMenuItem.vue";
 import SidebarLink from "../components/SidebarLink.vue";
 
 export default {
   name: "StudentLoggedInLayout",
   components: {
+    HomeNotificationsMenuItem,
     SidebarLink
   },
   data() {
     return {
       leftDrawerOpen: false,
       darkModeOn: this.$q.localStorage.getItem("darkMode"),
-      unseen: []
+      unseen: [],
+      recentNotifications: null
     };
   },
   created: function() {
     this.setDarkMode();
-
-    const user = this.$store.state.currentUser;
-    this.$axios
-      .get("/notifications/" + user.id + "/unread", {
-        headers: {
-          Authorization: this.$store.state.token
-        }
-      })
-      .then(resp => {
-        this.unseen = resp.data;
-      });
+    this.refreshNotifications();
   },
   methods: {
     goToNotifPage() {
-      this.$router.push("/student/notifications");
+      if (this.$route.path !== "/student/notifications") {
+        this.$router.push("/student/notifications");
+      }
+    },
+    refreshNotifications: function() {
+      const user = this.$store.state.currentUser;
+      // get all unread notifications
+      this.$axios
+        .get(`/notifications/student/${user.id}/unread`, {
+          headers: {
+            Authorization: this.$store.state.token
+          }
+        })
+        .then(resp => {
+          this.unseen = resp.data;
+        });
+      // get 5 most recent notifications
+      this.$axios
+        .get(`/notifications/student/${user.id}/recent`, {
+          headers: {
+            Authorization: this.$store.state.token
+          },
+          params: {
+            fetchSize: 5
+          }
+        })
+        .then(resp => {
+          this.recentNotifications = resp.data;
+        });
+    },
+    markAsRead: function() {
+      const user = this.$store.state.currentUser;
+      this.$axios.put(`/notifications/${user.id}/mark-as-read`, {
+        headers: {
+          Authorization: this.$store.state.token
+        }
+      });
     },
     setDarkMode: function() {
       if (this.darkModeOn === null) this.darkModeOn = false;
@@ -146,5 +206,13 @@ export default {
 a {
   color: inherit;
   text-decoration: inherit;
+}
+
+#notifications-menu {
+  width: 300px;
+}
+
+.center-item {
+  text-align: center;
 }
 </style>
