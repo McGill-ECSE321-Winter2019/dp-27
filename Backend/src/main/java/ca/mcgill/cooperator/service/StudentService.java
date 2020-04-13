@@ -12,6 +12,8 @@ import ca.mcgill.cooperator.model.Student;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -254,6 +256,22 @@ public class StudentService extends BaseService {
     @Transactional
     public Set<Student> getAllStudentsSet() {
         return ServiceUtils.toSet(studentRepository.findAll());
+    }
+    
+    /**
+     * Gets all new Students
+     *
+     * @return all Students
+     */
+    @Transactional
+    public List<Student> getNewStudents() {
+    	List<Student> newStudents = ServiceUtils.toList(
+    			studentRepository.findAll())
+    			.stream()
+    			.filter(student -> student.getCoops().size() == 0)
+    			.collect(Collectors.toList());   ;
+    	 
+        return newStudents;
     }
 
     /**

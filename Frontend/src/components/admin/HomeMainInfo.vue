@@ -33,11 +33,17 @@
       />
       <q-btn
         class="dashBtn"
+        label="View New Students"
+        color="primary"
+        @click="viewNewStudents()"
+      />
+      <q-btn
+        class="dashBtn"
         label="View Report Configurations"
         color="primary"
         @click="viewReportConfig"
       />
-      <q-btn class="dashBtn" label="View Incoming Students" color="primary" />
+
       <q-separator inset />
       <h6>View Current Students by Course</h6>
       <q-btn
@@ -46,7 +52,7 @@
         class="dashBtn"
         :label="cname"
         color="primary"
-        @click="viewStudentsOfCourse(cname)"
+        @click="viewNewStudents()"
       />
     </div>
   </q-card>
@@ -105,6 +111,15 @@ export default {
         params: {
           year: year,
           term: term
+        }
+      });
+    },
+    viewNewStudents() {
+      this.$router.push({
+        path: "/admin/students",
+        name: "AdminViewStudents",
+        params: {
+          newStudents: true
         }
       });
     }
