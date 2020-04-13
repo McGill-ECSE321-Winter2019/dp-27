@@ -28,8 +28,20 @@
             <q-list>
               <q-item>
                 <q-item-section>
-                  <div class="center-item" id="notifications-menu">
+                  <div class="center-item notifications-menu">
                     <q-spinner color="primary" size="3em" class="q-ma-md" />
+                  </div>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+
+          <q-menu v-else-if="recentNotifications.length === 0">
+            <q-list>
+              <q-item>
+                <q-item-section>
+                  <div class="center-item notifications-menu">
+                    No recent notifications.
                   </div>
                 </q-item-section>
               </q-item>
@@ -208,7 +220,7 @@ a {
   text-decoration: inherit;
 }
 
-#notifications-menu {
+.notifications-menu {
   width: 300px;
 }
 
