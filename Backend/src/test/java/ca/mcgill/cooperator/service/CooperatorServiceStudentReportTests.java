@@ -61,6 +61,7 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         List<Report> reports = reportService.getAllReports();
         for (Report report : reports) {
             report.setReportSections(new HashSet<ReportSection>());
+            report.setReportConfig(null);
             reportRepository.save(report);
         }
 
@@ -79,13 +80,16 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Eavluation", courseOfferings);
 
         try {
             MultipartFile multipartFile =
                     new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
             reportService.createReport(
-                    ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile);
+                    ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile, rc);
         } catch (Exception e) {
             fail();
         }
@@ -99,7 +103,7 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
     public void testCreateStudentReportNull() {
         String error = "";
         try {
-            reportService.createReport(null, null, null, null, null);
+            reportService.createReport(null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -109,7 +113,8 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
                         + "Report Status cannot be null! "
                         + "Coop cannot be null! "
                         + "Author cannot be null! "
-                        + "File title cannot be empty!",
+                        + "File title cannot be empty! "
+                        + "Report Config cannot be null!",
                 error);
         assertEquals(0, reportService.getAllReports().size());
     }
@@ -122,7 +127,9 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Eavluation", courseOfferings);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
@@ -133,7 +140,7 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
 
             r =
                     reportService.createReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile, rc);
         } catch (Exception e) {
             fail();
         }
@@ -151,6 +158,7 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
                             coop,
                             "Offer Letter",
                             s,
+                            rc,
                             sections,
                             multipartFile);
         } catch (IllegalArgumentException e) {
@@ -173,7 +181,9 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Eavluation", courseOfferings);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
@@ -184,7 +194,7 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
 
             r =
                     reportService.createReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile, rc);
         } catch (Exception e) {
             fail();
         }
@@ -202,6 +212,7 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
                             coop,
                             "Offer Letter",
                             s,
+                            rc,
                             sections,
                             multipartFile);
         } catch (IllegalArgumentException e) {
@@ -220,6 +231,9 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Eavluation", courseOfferings);
 
         // 1. create Student Report
         MultipartFile multipartFile = null;
@@ -228,7 +242,7 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
 
             r =
                     reportService.createReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile, rc);
         } catch (Exception e) {
             fail();
         }
@@ -236,7 +250,7 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         // 2. try updating with invalid values
         String error = "";
         try {
-            r = reportService.updateReport(null, null, null, null, null, null, null);
+            r = reportService.updateReport(null, null, null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -253,6 +267,9 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Eavluation", courseOfferings);
 
         // 1. create Student Report
         try {
@@ -261,7 +278,7 @@ public class CooperatorServiceStudentReportTests extends BaseServiceTest {
 
             r =
                     reportService.createReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", s, multipartFile, rc);
         } catch (Exception e) {
             fail();
         }

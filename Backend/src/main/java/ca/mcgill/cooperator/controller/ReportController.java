@@ -5,10 +5,12 @@ import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.model.Author;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Report;
+import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.service.AuthorService;
 import ca.mcgill.cooperator.service.CoopService;
+import ca.mcgill.cooperator.service.ReportConfigService;
 import ca.mcgill.cooperator.service.ReportSectionService;
 import ca.mcgill.cooperator.service.ReportService;
 import java.util.List;
@@ -35,6 +37,7 @@ public class ReportController extends BaseController {
     @Autowired AuthorService authorService;
     @Autowired ReportService reportService;
     @Autowired ReportSectionService reportSectionService;
+    @Autowired ReportConfigService reportConfigService;
 
     /**
      * Creates a Report using multipart form data
@@ -52,13 +55,16 @@ public class ReportController extends BaseController {
             @RequestParam String status,
             @RequestParam String title,
             @RequestParam Integer coopId,
-            @RequestParam Integer authorId) {
+            @RequestParam Integer authorId,
+            @RequestParam Integer reportConfigId) {
         Coop coop = coopService.getCoopById(coopId);
 
         Author a = authorService.getAuthorById(authorId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
+        
+        ReportConfig reportConfig = reportConfigService.getReportConfig(reportConfigId);
 
-        Report createdReport = reportService.createReport(reportStatus, coop, title, a, file);
+        Report createdReport = reportService.createReport(reportStatus, coop, title, a, file, reportConfig);
 
         return ControllerUtils.convertToDto(createdReport);
     }
@@ -114,11 +120,13 @@ public class ReportController extends BaseController {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Integer coopId,
             @RequestParam(required = false) Integer authorId,
+            @RequestParam(required = false) Integer reportConfigId,
             @RequestBody(required = false) Set<ReportSectionDto> reportSections) {
         Report reportToUpdate = reportService.getReport(id);
 
         Coop coop = coopService.getCoopById(coopId);
         Author a = authorService.getAuthorById(authorId);
+        ReportConfig reportConfig = reportConfigService.getReportConfig(reportConfigId);
         ReportStatus reportStatus = ReportStatus.valueOf(status);
         Set<ReportSection> sections = null;
         if (reportSections != null) {
@@ -129,7 +137,7 @@ public class ReportController extends BaseController {
 
         Report updatedReport =
                 reportService.updateReport(
-                        reportToUpdate, reportStatus, coop, title, a, sections, file);
+                        reportToUpdate, reportStatus, coop, title, a, reportConfig, sections, file);
 
         return ControllerUtils.convertToDto(updatedReport);
     }

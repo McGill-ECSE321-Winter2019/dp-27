@@ -191,7 +191,7 @@ public class CoopService extends BaseService {
         studentRepository.save(s);
 
         CourseOffering courseOffering = coop.getCourseOffering();
-        List<Coop> courseOfferingCoops = courseOffering.getCoops();
+        Set<Coop> courseOfferingCoops = courseOffering.getCoops();
         courseOfferingCoops.remove(coop);
         courseOffering.setCoops(courseOfferingCoops);
         courseOfferingRepository.save(courseOffering);

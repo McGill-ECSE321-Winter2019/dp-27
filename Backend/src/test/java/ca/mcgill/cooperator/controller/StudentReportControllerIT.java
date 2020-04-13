@@ -14,6 +14,7 @@ import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
+import ca.mcgill.cooperator.dto.ReportConfigDto;
 import ca.mcgill.cooperator.dto.ReportDto;
 import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.dto.StudentDto;
@@ -22,6 +23,7 @@ import ca.mcgill.cooperator.model.ReportStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -84,6 +86,9 @@ public class StudentReportControllerIT extends BaseControllerIT {
         CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
         StudentDto studentDto = createTestStudent();
         CoopDto coopDto = createTestCoop(courseOfferingDto, studentDto, CoopStatus.IN_PROGRESS);
+        List<CourseOfferingDto> courseOfferingDtos = new ArrayList<CourseOfferingDto>();
+        courseOfferingDtos.add(courseOfferingDto);
+        ReportConfigDto reportConfigDto = createTestReportConfig(true, 14, true, "First Evaluation", courseOfferingDtos);
 
         // 1. create the StudentReport with a POST request
         MvcResult mvcResult =
@@ -94,6 +99,7 @@ public class StudentReportControllerIT extends BaseControllerIT {
                                         .param("title", "Offer Letter")
                                         .param("coopId", String.valueOf(coopDto.getId()))
                                         .param("authorId", String.valueOf(studentDto.getId()))
+                                        .param("reportConfigId",  String.valueOf(reportConfigDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
@@ -127,6 +133,7 @@ public class StudentReportControllerIT extends BaseControllerIT {
                                         .param("title", "Offer Letter")
                                         .param("coopId", String.valueOf(coopDto.getId()))
                                         .param("authorId", String.valueOf(studentDto.getId()))
+                                        .param("reportConfigId",  String.valueOf(reportConfigDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))

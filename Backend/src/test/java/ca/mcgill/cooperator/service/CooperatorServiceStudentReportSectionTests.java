@@ -19,7 +19,11 @@ import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.Student;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,6 +60,11 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         for (ReportSection reportSection : reportSections) {
             reportSectionService.deleteReportSection(reportSection);
         }
+        for (Report report : reportRepository.findAll()) {
+    		report.setReportConfig(null);
+    		reportRepository.save(report);
+    	}
+    	reportRepository.deleteAll();
 
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
@@ -74,8 +83,10 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        Report r = createTestStudentReport(reportService, coop, s);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
+        Report r = createTestStudentReport(reportService, coop, s, rc);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
@@ -86,6 +97,8 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         }
 
         assertEquals(1, reportSectionService.getAllReportSections().size());
+        r = reportService.getReport(r.getId());
+        assertEquals(1, r.getReportSections().size());
     }
 
     @Test
@@ -150,8 +163,11 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        Report r = createTestStudentReport(reportService, coop, s);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
+        Report r = createTestStudentReport(reportService, coop, s, rc);
+        
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
@@ -186,8 +202,10 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        Report r = createTestStudentReport(reportService, coop, s);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
+        Report r = createTestStudentReport(reportService, coop, s, rc);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
@@ -218,8 +236,10 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        Report r = createTestStudentReport(reportService, coop, s);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
+        Report r = createTestStudentReport(reportService, coop, s, rc);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
@@ -249,8 +269,10 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        Report r = createTestStudentReport(reportService, coop, s);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
+        Report r = createTestStudentReport(reportService, coop, s, rc);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
@@ -273,27 +295,29 @@ public class CooperatorServiceStudentReportSectionTests extends BaseServiceTest 
 
     @Test
     public void deleteReportSectionStudentReport() {
-        ReportSection rs = null;
         String response = "This is a response";
         Course course = createTestCourse(courseService);
         CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
         Student s = createTestStudent(studentService);
         Coop coop = createTestCoop(coopService, courseOffering, s);
-        Report r = createTestStudentReport(reportService, coop, s);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
+        Report r = createTestStudentReport(reportService, coop, s, rc);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
         try {
-            rs = reportSectionService.createReportSection(response, rsConfig, r);
-
-            reportService.deleteReport(rs.getReport());
+            reportSectionService.createReportSection(response, rsConfig, r);
+            r = reportService.getReport(r.getId());
+            assertEquals(1, r.getReportSections().size());
+            reportService.deleteReport(r);
         } catch (IllegalArgumentException e) {
             fail();
         }
-
-        assertEquals(0, reportSectionService.getAllReportSections().size());
+        
         assertEquals(0, reportService.getAllReports().size());
+        assertEquals(0, reportSectionService.getAllReportSections().size());
     }
 
     @Test

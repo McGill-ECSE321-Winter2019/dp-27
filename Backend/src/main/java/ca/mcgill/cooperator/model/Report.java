@@ -22,10 +22,12 @@ public class Report {
     @ManyToOne private Coop coop;
 
     @ManyToOne private Author author;
+    
+    @ManyToOne private ReportConfig reportConfig;
 
     @OneToMany(
             mappedBy = "report",
-            cascade = CascadeType.PERSIST,
+            cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -83,6 +85,14 @@ public class Report {
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+    
+    public ReportConfig getReportConfig() {
+        return this.reportConfig;
+    }
+
+    public void setReportConfig(ReportConfig reportConfig) {
+        this.reportConfig = reportConfig;
     }
 
     public Set<ReportSection> getReportSections() {

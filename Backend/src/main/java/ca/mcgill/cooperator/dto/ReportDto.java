@@ -12,6 +12,7 @@ public class ReportDto {
 
     private CoopDto coop;
     private AuthorDto author;
+    private ReportConfigDto reportConfig;
     private List<ReportSectionDto> reportSections;
 
     public ReportDto() {}
@@ -77,6 +78,14 @@ public class ReportDto {
 
     public void setAuthor(AuthorDto author) {
         this.author = author;
+    }
+    
+    public ReportConfigDto getReportConfigDto() {
+        return this.reportConfig;
+    }
+
+    public void setReportConfigDto(ReportConfigDto reportConfig) {
+        this.reportConfig = reportConfig;
     }
 
     public List<ReportSectionDto> getReportSections() {

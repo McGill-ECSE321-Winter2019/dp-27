@@ -1,11 +1,15 @@
 package ca.mcgill.cooperator.model;
 
-import java.util.List;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.OnDelete;
@@ -26,7 +30,14 @@ public class CourseOffering {
             orphanRemoval = true,
             fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Coop> coops;
+    private Set<Coop> coops;
+    
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.DETACH})
+    @JoinTable(
+  		   name = "course_offering_report_config",
+  		  joinColumns = @JoinColumn(name = "course_offering_id", referencedColumnName = "id"), 
+  		  inverseJoinColumns = @JoinColumn(name = "report_config_id", referencedColumnName = "id"))
+    private Set<ReportConfig> reportConfigs;
 
     /*--- Getters and Setters ---*/
 
@@ -58,11 +69,11 @@ public class CourseOffering {
         this.course = course;
     }
 
-    public List<Coop> getCoops() {
+    public Set<Coop> getCoops() {
         return this.coops;
     }
 
-    public void setCoops(List<Coop> coops) {
+    public void setCoops(Set<Coop> coops) {
         if (this.coops == null) {
             this.coops = coops;
         } else {
@@ -70,4 +81,28 @@ public class CourseOffering {
             this.coops.addAll(coops);
         }
     }
+    
+    public Set<ReportConfig> getReportConfigs() {
+        return this.reportConfigs;
+    }
+
+    public void setReportConfigs(Set<ReportConfig> reportConfigs) {
+        if (this.reportConfigs == null) {
+            this.reportConfigs = reportConfigs;
+        } else {
+            this.reportConfigs.clear();
+            this.reportConfigs.removeAll(this.reportConfigs);
+            this.reportConfigs.addAll(reportConfigs);
+        }
+    }
+    
+    public void addReportConfig(ReportConfig reportConfig) {
+        reportConfigs.add(reportConfig);
+        reportConfig.getCourseOfferings().add(this);
+    }
+
+    public void removeReportConfig(ReportConfig reportConfig) {
+        reportConfigs.remove(reportConfig);
+        reportConfig.getCourseOfferings().remove(this);
+    }  
 }

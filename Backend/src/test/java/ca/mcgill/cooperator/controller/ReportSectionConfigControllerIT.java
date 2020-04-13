@@ -7,12 +7,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.cooperator.dao.CourseOfferingRepository;
+import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.ReportSectionConfigRepository;
+import ca.mcgill.cooperator.dto.CourseDto;
+import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.ReportConfigDto;
 import ca.mcgill.cooperator.dto.ReportSectionConfigDto;
 import ca.mcgill.cooperator.model.ReportResponseType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -37,12 +43,16 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
 
     @Autowired ReportConfigRepository reportConfigRepository;
     @Autowired ReportSectionConfigRepository reportSectionConfigRepository;
+    @Autowired CourseRepository courseRepository;
+    @Autowired CourseOfferingRepository courseOfferingRepository;
 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
         reportConfigRepository.deleteAll();
         reportSectionConfigRepository.deleteAll();
+        courseRepository.deleteAll();
+        courseOfferingRepository.deleteAll();
     }
 
     @Test
@@ -54,6 +64,11 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
         rcDto.setRequiresFile(true);
         rcDto.setIsDeadlineFromStart(true);
         rcDto.setType("First Evaluation");
+        CourseDto courseDto = createTestCourse();
+        CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
+        List<CourseOfferingDto> courseOfferingDtos = new ArrayList<CourseOfferingDto>();
+        courseOfferingDtos.add(courseOfferingDto);
+        rcDto.setCourseOfferings(courseOfferingDtos);
 
         // 1. create a ReportConfig with a POST request
         MvcResult mvcResult =
@@ -178,6 +193,11 @@ public class ReportSectionConfigControllerIT extends BaseControllerIT {
         rcDto.setRequiresFile(true);
         rcDto.setIsDeadlineFromStart(true);
         rcDto.setType("First Evaluation");
+        CourseDto courseDto = createTestCourse();
+        CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
+        List<CourseOfferingDto> courseOfferingDtos = new ArrayList<CourseOfferingDto>();
+        courseOfferingDtos.add(courseOfferingDto);
+        rcDto.setCourseOfferings(courseOfferingDtos);
 
         // create a ReportConfig
         MvcResult mvcResult =

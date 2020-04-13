@@ -40,6 +40,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -131,7 +132,9 @@ public class StudentUploadReportIT extends BaseControllerIT {
                 createTestEmployerContact(
                         companyDto, "John", "Smith", "smithy@smithy.com", "12345678");
         coopDetailsDto = createTestCoopDetails(coopDto, 2500, 40, employerContactDto);
-        reportConfigDto = createTestReportConfig(true, 14, true, "Evaluation");
+        List<CourseOfferingDto> courseOfferingDtos = new ArrayList<CourseOfferingDto>();
+        courseOfferingDtos.add(courseOfferingDto);
+        reportConfigDto = createTestReportConfig(true, 14, true, "Evaluation", courseOfferingDtos);
         reportSectionConfigDto =
                 createTestReportSectionConfig(
                         "How was your co-op?", ReportResponseType.LONG_TEXT, reportConfigDto);
@@ -147,6 +150,7 @@ public class StudentUploadReportIT extends BaseControllerIT {
                                         .param("title", "Offer Letter")
                                         .param("coopId", String.valueOf(coopDto.getId()))
                                         .param("authorId", String.valueOf(studentDto.getId()))
+                                        .param("reportConfigId", String.valueOf(reportConfigDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
@@ -186,6 +190,7 @@ public class StudentUploadReportIT extends BaseControllerIT {
                                         .param("title", "Offer Letter")
                                         .param("coopId", String.valueOf(coopDto.getId()))
                                         .param("authorId", String.valueOf(studentDto.getId()))
+                                        .param("reportConfigId", String.valueOf(reportConfigDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))
@@ -218,6 +223,7 @@ public class StudentUploadReportIT extends BaseControllerIT {
                                         .param("title", "Offer Letter")
                                         .param("coopId", String.valueOf(coopDto.getId()))
                                         .param("authorId", String.valueOf(studentDto.getId()))
+                                        .param("reportConfigId", String.valueOf(reportConfigDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
@@ -259,6 +265,7 @@ public class StudentUploadReportIT extends BaseControllerIT {
                                         .param("title", "Offer Letter")
                                         .param("coopId", String.valueOf(coopDto.getId()))
                                         .param("authorId", String.valueOf(studentDto.getId()))
+                                        .param("reportConfigId", String.valueOf(reportConfigDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rdtos))

@@ -10,6 +10,8 @@ public class ReportConfigDto {
     private String type;
 
     private List<ReportSectionConfigDto> reportSectionConfigs;
+    private List<ReportDto> reports;
+    private List<CourseOfferingDto> courseOfferings;
 
     public ReportConfigDto() {}
 
@@ -72,5 +74,21 @@ public class ReportConfigDto {
 
     public void setReportSectionConfigs(List<ReportSectionConfigDto> reportSectionConfigs) {
         this.reportSectionConfigs = reportSectionConfigs;
+    }
+    
+    public List<ReportDto> getReports() {
+        return this.reports;
+    }
+
+    public void setReports(List<ReportDto> reports) {
+        this.reports = reports;
+    }
+    
+    public List<CourseOfferingDto> getCourseOfferings() {
+        return this.courseOfferings;
+    }
+
+    public void setCourseOfferings(List<CourseOfferingDto> courseOfferings) {
+        this.courseOfferings = courseOfferings;
     }
 }

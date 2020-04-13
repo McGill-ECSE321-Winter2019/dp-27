@@ -33,6 +33,7 @@ import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.NotificationService;
+import ca.mcgill.cooperator.service.ReportConfigService;
 import ca.mcgill.cooperator.service.ReportSectionConfigService;
 import ca.mcgill.cooperator.service.ReportSectionService;
 import ca.mcgill.cooperator.service.ReportService;
@@ -496,7 +497,7 @@ public class ControllerUtils {
         courseOfferingDto.setCourse(courseDto);
 
         // create coop dtos
-        List<Coop> coops = co.getCoops();
+        Set<Coop> coops = co.getCoops();
         List<CoopDto> coopDtos = new ArrayList<CoopDto>();
         if (coops != null) {
             for (Coop coop : coops) {
@@ -1273,5 +1274,19 @@ public class ControllerUtils {
         }
 
         return coopDetails;
+    }
+    
+    public static Set<ReportConfig> convertReportConfigDtosToDomainObjects(ReportConfigService reportConfigService, List<ReportConfigDto> reportConfigDtos) {
+    	Set<ReportConfig> reportConfigs = new HashSet<ReportConfig>();
+    	if (reportConfigDtos == null) {
+    		return reportConfigs;
+    	}
+    	
+    	for (ReportConfigDto reportConfigDto : reportConfigDtos) {
+    		ReportConfig reportConfig = reportConfigService.getReportConfig(reportConfigDto.getId());
+    		reportConfigs.add(reportConfig);
+    	}
+    	
+    	return reportConfigs;
     }
 }

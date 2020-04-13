@@ -1,10 +1,15 @@
 package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.ReportConfigDto;
+import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
+import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.ReportConfigService;
 import ca.mcgill.cooperator.service.ReportSectionConfigService;
+import ca.mcgill.cooperator.service.ReportService;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,6 +31,8 @@ public class ReportConfigController extends BaseController {
 
     @Autowired ReportConfigService reportConfigService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
+    @Autowired CourseOfferingService courseOfferingService;
+    @Autowired ReportService reportService;
 
     /**
      * Creates a new ReportConfig
@@ -40,12 +47,19 @@ public class ReportConfigController extends BaseController {
      */
     @PostMapping("")
     public ReportConfigDto createReportConfig(@RequestBody ReportConfigDto rcDto) {
+    	
+    	Set<CourseOffering> courseOfferings = null;
+    	if (rcDto.getCourseOfferings() != null) {
+    		courseOfferings = new HashSet<CourseOffering>(ControllerUtils.convertCourseOfferingListToDomainObject(courseOfferingService, rcDto.getCourseOfferings()));
+    	}
+    	
         ReportConfig reportConfig =
                 reportConfigService.createReportConfig(
                         rcDto.getRequiresFile(),
                         rcDto.getDeadline(),
                         rcDto.getIsDeadlineFromStart(),
-                        rcDto.getType());
+                        rcDto.getType(),
+                        courseOfferings);
 
         return ControllerUtils.convertToDto(reportConfig);
     }
@@ -96,6 +110,16 @@ public class ReportConfigController extends BaseController {
                             ControllerUtils.convertReportSectionConfigDtosToDomainObjects(
                                     reportSectionConfigService, rcDto.getReportSectionConfigs()));
         }
+        
+        Set<CourseOffering> courseOfferings = null;
+    	if (rcDto.getCourseOfferings() != null) {
+    		courseOfferings = new HashSet<CourseOffering>(ControllerUtils.convertCourseOfferingListToDomainObject(courseOfferingService, rcDto.getCourseOfferings()));
+    	}
+    	
+    	Set<Report> reports = null;
+    	if (rcDto.getReports() != null) {
+    		reports = new HashSet<Report>(ControllerUtils.convertReportDtosToDomainObjects(reportService, rcDto.getReports()));
+    	}
 
         ReportConfig updatedReportConfig =
                 reportConfigService.updateReportConfig(
@@ -104,7 +128,9 @@ public class ReportConfigController extends BaseController {
                         rcDto.getDeadline(),
                         rcDto.getIsDeadlineFromStart(),
                         rcDto.getType(),
-                        rscConfigs);
+                        rscConfigs,
+                        courseOfferings,
+                        reports);
 
         return ControllerUtils.convertToDto(updatedReportConfig);
     }

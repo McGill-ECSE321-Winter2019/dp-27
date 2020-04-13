@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -28,6 +29,20 @@ public class ReportConfig {
             fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<ReportSectionConfig> reportSectionConfigs;
+    
+    @OneToMany(
+            mappedBy = "reportConfig",
+            cascade = CascadeType.PERSIST,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Report> reports;
+    
+    @ManyToMany(
+    		mappedBy = "reportConfigs",
+            fetch = FetchType.EAGER)
+    private Set<CourseOffering> courseOfferings;
+    
 
     /*--- Getters and Setters ---*/
 
@@ -77,6 +92,32 @@ public class ReportConfig {
         } else {
             this.reportSectionConfigs.clear();
             this.reportSectionConfigs.addAll(reportSectionConfigs);
+        }
+    }
+    
+    public Set<Report> getReports() {
+        return this.reports;
+    }
+
+    public void setReports(Set<Report> reports) {
+        if (this.reports == null) {
+            this.reports = reports;
+        } else {
+            this.reports.clear();
+            this.reports.addAll(reports);
+        }
+    }
+    
+    public Set<CourseOffering> getCourseOfferings() {
+        return this.courseOfferings;
+    }
+
+    public void setCourseOfferings(Set<CourseOffering> courseOfferings) {
+        if (this.courseOfferings == null) {
+            this.courseOfferings = courseOfferings;
+        } else {
+            this.courseOfferings.clear();
+            this.courseOfferings.addAll(courseOfferings);
         }
     }
 }

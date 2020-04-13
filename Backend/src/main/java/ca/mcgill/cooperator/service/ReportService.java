@@ -2,11 +2,12 @@ package ca.mcgill.cooperator.service;
 
 import ca.mcgill.cooperator.dao.AuthorRepository;
 import ca.mcgill.cooperator.dao.CoopRepository;
+import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.ReportRepository;
-import ca.mcgill.cooperator.dao.ReportSectionRepository;
 import ca.mcgill.cooperator.model.Author;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Report;
+import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportStatus;
 import java.io.IOException;
@@ -23,8 +24,8 @@ public class ReportService extends BaseService {
 
     @Autowired AuthorRepository authorRepository;
     @Autowired ReportRepository reportRepository;
-    @Autowired ReportSectionRepository reportSectionRepository;
     @Autowired CoopRepository coopRepository;
+    @Autowired ReportConfigRepository reportConfigRepository;
 
     /**
      * Creates new report in database
@@ -38,7 +39,7 @@ public class ReportService extends BaseService {
      */
     @Transactional
     public Report createReport(
-            ReportStatus status, Coop coop, String title, Author author, MultipartFile file) {
+            ReportStatus status, Coop coop, String title, Author author, MultipartFile file, ReportConfig reportConfig) {
         StringBuilder error = new StringBuilder();
         if (status == null) {
             error.append("Report Status cannot be null! ");
@@ -52,6 +53,9 @@ public class ReportService extends BaseService {
         if (title == null || title.trim().length() == 0) {
             error.append("File title cannot be empty! ");
         }
+        if (reportConfig == null) {
+        	error.append("Report Config cannot be null!");
+        }
         if (error.length() > 0) {
             throw new IllegalArgumentException(ERROR_PREFIX + error.toString().trim());
         }
@@ -61,6 +65,7 @@ public class ReportService extends BaseService {
         r.setTitle(title);
         r.setCoop(coop);
         r.setAuthor(author);
+        r.setReportConfig(reportConfig);
         r.setReportSections(new HashSet<ReportSection>());
 
         if (file != null) {
@@ -118,6 +123,7 @@ public class ReportService extends BaseService {
             Coop coop,
             String title,
             Author author,
+            ReportConfig reportConfig,
             Set<ReportSection> sections,
             MultipartFile file) {
         StringBuilder error = new StringBuilder();
@@ -143,6 +149,9 @@ public class ReportService extends BaseService {
         }
         if (author != null) {
             report.setAuthor(author);
+        }
+        if (reportConfig != null) {
+        	report.setReportConfig(reportConfig);
         }
         if (sections != null) {
             report.setReportSections(sections);
@@ -174,13 +183,22 @@ public class ReportService extends BaseService {
         coopReports.remove(report);
         c.setReports(coopReports);
         coopRepository.save(c);
-
+        
+        Set<Report> config_reports = new HashSet<Report>();
+        
+        ReportConfig reportConfig = report.getReportConfig();
+        config_reports = reportConfig.getReports();
+        config_reports.remove(report);
+        reportConfig.setReports(config_reports);
+        reportConfigRepository.save(reportConfig);
+        
+        Set<Report> author_reports = new HashSet<Report>();
         Author a = report.getAuthor();
-        Set<Report> reports = a.getReports();
-        reports.remove(report);
-        a.setReports(reports);
+        author_reports = a.getReports();
+        author_reports.remove(report);
+        a.setReports(author_reports);
         authorRepository.save(a);
-
+        
         reportRepository.delete(report);
 
         return report;

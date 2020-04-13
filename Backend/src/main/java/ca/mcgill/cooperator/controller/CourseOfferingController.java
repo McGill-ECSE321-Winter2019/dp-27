@@ -2,11 +2,16 @@ package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
+import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.Season;
+import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
+import ca.mcgill.cooperator.service.ReportConfigService;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +34,8 @@ public class CourseOfferingController extends BaseController {
 
     @Autowired CourseOfferingService courseOfferingService;
     @Autowired CourseService courseService;
+    @Autowired CoopService coopService;
+    @Autowired ReportConfigService reportConfigService;
 
     /**
      * Creates a new CourseOffering
@@ -159,10 +166,20 @@ public class CourseOfferingController extends BaseController {
         if (courseOfferingDto.getCourse() != null) {
             course = courseService.getCourseById(courseOfferingDto.getCourse().getId());
         }
+        
+        Set<Coop> coops = null;
+        if (courseOfferingDto.getCoops() != null) {
+        	coops = ControllerUtils.convertCoopsListToDomainObject(coopService, courseOfferingDto.getCoops());
+        }
+        
+        Set<ReportConfig> reportConfigs = null;
+        if (courseOfferingDto.getReportConfigs() != null) {
+        	reportConfigs = ControllerUtils.convertReportConfigDtosToDomainObjects(reportConfigService, courseOfferingDto.getReportConfigs());
+        }
 
         CourseOffering courseOffering =
                 courseOfferingService.updateCourseOffering(
-                        co, courseOfferingDto.getYear(), courseOfferingDto.getSeason(), course);
+                        co, courseOfferingDto.getYear(), courseOfferingDto.getSeason(), course, coops, reportConfigs);
         return ControllerUtils.convertToDto(courseOffering);
     }
 

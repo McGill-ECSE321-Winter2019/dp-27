@@ -3,12 +3,20 @@ package ca.mcgill.cooperator.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import ca.mcgill.cooperator.dao.CourseOfferingRepository;
+import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.ReportSectionConfigRepository;
+import ca.mcgill.cooperator.model.Course;
+import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,13 +30,19 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
 
     @Autowired ReportConfigService reportConfigService;
     @Autowired ReportSectionConfigService reportSectionConfigService;
+    @Autowired CourseService courseService;
+    @Autowired CourseOfferingService courseOfferingService;
 
     @Autowired ReportConfigRepository reportConfigRepository;
     @Autowired ReportSectionConfigRepository reportSectionConfigRepository;
+    @Autowired CourseOfferingRepository courseOfferingRepository;
+    @Autowired CourseRepository courseRepository;
 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
+    	courseOfferingRepository.deleteAll();
+    	courseRepository.deleteAll();
         reportConfigRepository.deleteAll();
         reportSectionConfigRepository.deleteAll();
     }
@@ -36,10 +50,14 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
     @Test
     public void testCreateReportSectionConfig() {
         String prompt = "How was your co-op?";
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
 
         // 1. create valid ReportSectionConfig
         try {
-            ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+            ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
             reportSectionConfigService.createReportSectionConfig(
                     prompt, ReportResponseType.LONG_TEXT, 1, rc);
         } catch (IllegalArgumentException e) {
@@ -72,12 +90,16 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
     @Test
     public void testUpdateReportSectionConfig() {
         String prompt = "How was your co-op?";
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
 
         // 1. create ReportSectionConfig
         ReportSectionConfig rsConfig = null;
         ReportConfig rc = null;
         try {
-            rc = createTestReportConfig(reportConfigService, "First Evaluation");
+            rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
             rsConfig =
                     reportSectionConfigService.createReportSectionConfig(
                             prompt, ReportResponseType.LONG_TEXT, 1, rc);
@@ -106,7 +128,7 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
             // update ReportConfig here without explicitly updating it below
             rc =
                     reportConfigService.updateReportConfig(
-                            rc, null, null, null, "Second Evaluation", null);
+                            rc, null, null, null, "Second Evaluation", null, courseOfferings, null);
 
             reportSectionConfigService.updateReportSectionConfig(
                     rsConfig, prompt, ReportResponseType.SHORT_TEXT, 2, null, null);
@@ -116,18 +138,24 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
 
         // 5. verify correctness
         rsConfig = reportSectionConfigService.getReportSectionConfig(rsConfig.getId());
+        rc = reportConfigService.getReportConfig(rc.getId());
         assertEquals(prompt, rsConfig.getSectionPrompt());
         assertEquals(ReportResponseType.SHORT_TEXT, rsConfig.getResponseType());
         assertEquals(rc.getType(), rsConfig.getReportConfig().getType());
+        assertEquals(1, rc.getCourseOfferings().size());
     }
 
     @Test
     public void testUpdateReportSectionConfigInvalid() {
         String prompt = "How was your co-op?";
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
 
         // 1. create ReportSectionConfig
         try {
-            ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+            ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
             reportSectionConfigService.createReportSectionConfig(
                     prompt, ReportResponseType.LONG_TEXT, 1, rc);
         } catch (IllegalArgumentException e) {
@@ -157,10 +185,14 @@ public class CooperatorServiceReportSectionConfigTests extends BaseServiceTest {
     @Test
     public void testDeleteReportSectionConfig() {
         String prompt = "How was your co-op?";
+        Course course = createTestCourse(courseService);
+        CourseOffering courseOffering = createTestCourseOffering(courseOfferingService, course);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
 
         // 1. create and delete ReportSectionConfig
         try {
-            ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+            ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
             ReportSectionConfig rsc =
                     reportSectionConfigService.createReportSectionConfig(
                             prompt, ReportResponseType.LONG_TEXT, 1, rc);

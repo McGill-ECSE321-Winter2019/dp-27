@@ -20,6 +20,8 @@ import ca.mcgill.cooperator.model.ReportResponseType;
 import ca.mcgill.cooperator.model.Season;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -358,13 +360,14 @@ public abstract class BaseControllerIT {
     }
 
     public ReportConfigDto createTestReportConfig(
-            boolean requiresFile, int deadline, boolean isDeadlineFromStart, String type)
+            boolean requiresFile, int deadline, boolean isDeadlineFromStart, String type, List<CourseOfferingDto> courseOfferingDtos)
             throws Exception {
         ReportConfigDto rcDto = new ReportConfigDto();
         rcDto.setRequiresFile(requiresFile);
         rcDto.setDeadline(deadline);
         rcDto.setIsDeadlineFromStart(isDeadlineFromStart);
         rcDto.setType(type);
+        rcDto.setCourseOfferings(courseOfferingDtos);
 
         MvcResult mvcResult =
                 mvc.perform(

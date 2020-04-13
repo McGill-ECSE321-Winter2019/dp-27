@@ -12,6 +12,7 @@ import ca.mcgill.cooperator.dao.CompanyRepository;
 import ca.mcgill.cooperator.dao.CoopDetailsRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
+import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.CoopDetailsDto;
 import ca.mcgill.cooperator.dto.CoopDto;
@@ -22,6 +23,7 @@ import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
 import ca.mcgill.cooperator.model.EmployerContact;
+import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportStatus;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
@@ -30,6 +32,7 @@ import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
 import ca.mcgill.cooperator.service.EmployerContactService;
+import ca.mcgill.cooperator.service.ReportConfigService;
 import ca.mcgill.cooperator.service.StudentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.java.After;
@@ -42,7 +45,10 @@ import java.io.FileInputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -61,7 +67,8 @@ public class StudentSubmitOfferLetterIT {
     @Autowired private CourseRepository courseRepository;
     @Autowired private CoopDetailsRepository coopDetailsRepository;
     @Autowired private CourseOfferingRepository courseOfferingRepository;
-    @Autowired AuthorRepository authorRepository;
+    @Autowired private AuthorRepository authorRepository;
+    @Autowired private ReportConfigRepository reportConfigRepository;
 
     @Autowired private StudentService studentService;
     @Autowired private EmployerContactService employerContactService;
@@ -69,6 +76,7 @@ public class StudentSubmitOfferLetterIT {
     @Autowired private CourseService courseService;
     @Autowired private CourseOfferingService courseOfferingService;
     @Autowired private CoopDetailsService coopDetailsService;
+    @Autowired private ReportConfigService reportConfigService;
 
     /* Global test variables */
 
@@ -77,6 +85,7 @@ public class StudentSubmitOfferLetterIT {
     CourseOffering courseOffering;
     EmployerContact employerContact;
     CoopDto testCoop;
+    ReportConfig reportConfig;
 
     @Before
     @After
@@ -95,6 +104,7 @@ public class StudentSubmitOfferLetterIT {
         courseRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         coopDetailsRepository.deleteAll();
+        reportConfigRepository.deleteAll();
     }
 
     @When("the Student uploads a copy of their offer letter")
@@ -105,6 +115,9 @@ public class StudentSubmitOfferLetterIT {
         course = createTestCourse();
         courseOffering = createTestCourseOffering(course);
         testCoop = createTestCoop(CoopStatus.UNDER_REVIEW, courseOffering, student);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        reportConfig = createTestReportConfig(courseOfferings);
 
         // set up file to upload
         File testFile = new File("src/test/resources/Test_Offer_Letter.pdf");
@@ -119,6 +132,7 @@ public class StudentSubmitOfferLetterIT {
                                 .param("title", "Offer Letter")
                                 .param("coopId", String.valueOf(testCoop.getId()))
                                 .param("authorId", String.valueOf(student.getId()))
+                                .param("reportConfigId", String.valueOf(reportConfig.getId()))
                                 .contentType(MediaType.MULTIPART_FORM_DATA)
                                 .characterEncoding("utf-8"))
                 .andExpect(status().isOk());
@@ -223,5 +237,11 @@ public class StudentSubmitOfferLetterIT {
         CourseOffering co = null;
         co = courseOfferingService.createCourseOffering(2020, Season.WINTER, c);
         return co;
+    }
+    
+    private ReportConfig createTestReportConfig(Set<CourseOffering> courseOfferings) {
+    	ReportConfig reportConfig = null;
+    	reportConfig = reportConfigService.createReportConfig(true, 14, true, "First Evaluation", courseOfferings);
+    	return reportConfig;
     }
 }

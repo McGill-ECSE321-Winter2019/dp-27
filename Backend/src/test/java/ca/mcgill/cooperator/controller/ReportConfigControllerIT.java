@@ -9,9 +9,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import ca.mcgill.cooperator.dao.CourseOfferingRepository;
+import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.ReportConfigRepository;
+import ca.mcgill.cooperator.dto.CourseDto;
+import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.ReportConfigDto;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -35,11 +42,15 @@ public class ReportConfigControllerIT extends BaseControllerIT {
     @Autowired private ObjectMapper objectMapper;
 
     @Autowired ReportConfigRepository reportConfigRepository;
+    @Autowired CourseRepository courseRepository;
+    @Autowired CourseOfferingRepository courseOfferingRepository;
 
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
         reportConfigRepository.deleteAll();
+        courseRepository.deleteAll();
+        courseOfferingRepository.deleteAll();
     }
 
     @Test
@@ -49,6 +60,11 @@ public class ReportConfigControllerIT extends BaseControllerIT {
         rcDto.setRequiresFile(true);
         rcDto.setIsDeadlineFromStart(true);
         rcDto.setType("First Evaluation");
+        CourseDto courseDto = createTestCourse();
+        CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
+        List<CourseOfferingDto> courseOfferingDtos = new ArrayList<CourseOfferingDto>();
+        courseOfferingDtos.add(courseOfferingDto);
+        rcDto.setCourseOfferings(courseOfferingDtos);
 
         // 1. create the ReportConfig with a POST request
         MvcResult mvcResult =
@@ -153,6 +169,11 @@ public class ReportConfigControllerIT extends BaseControllerIT {
         rcDto.setRequiresFile(true);
         rcDto.setIsDeadlineFromStart(true);
         rcDto.setType("First Evaluation");
+        CourseDto courseDto = createTestCourse();
+        CourseOfferingDto courseOfferingDto = createTestCourseOffering(courseDto);
+        List<CourseOfferingDto> courseOfferingDtos = new ArrayList<CourseOfferingDto>();
+        courseOfferingDtos.add(courseOfferingDto);
+        rcDto.setCourseOfferings(courseOfferingDtos);
 
         // valid create so that we have a ReportConfig to work with
         MvcResult mvcResult =

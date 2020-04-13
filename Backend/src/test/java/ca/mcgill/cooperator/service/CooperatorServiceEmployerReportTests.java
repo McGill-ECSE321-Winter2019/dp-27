@@ -11,6 +11,7 @@ import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
 import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.ReportRepository;
+import ca.mcgill.cooperator.dao.ReportSectionConfigRepository;
 import ca.mcgill.cooperator.dao.ReportSectionRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.model.Company;
@@ -51,6 +52,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
     @Autowired StudentRepository studentRepository;
     @Autowired ReportSectionRepository reportSectionRepository;
     @Autowired ReportConfigRepository reportConfigRepository;
+    @Autowired ReportSectionConfigRepository reportSectionConfigRepository;
 
     @Autowired ReportService reportService;
     @Autowired CoopService coopService;
@@ -73,6 +75,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         for (Report r : reports) {
             r.setCoop(null);
             r.setReportSections(new HashSet<ReportSection>());
+            r.setReportConfig(null);
             reportRepository.save(r);
         }
 
@@ -89,6 +92,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         companyRepository.deleteAll();
         studentRepository.deleteAll();
         reportSectionRepository.deleteAll();
+        reportSectionConfigRepository.deleteAll();
         reportRepository.deleteAll();
         reportConfigRepository.deleteAll();
     }
@@ -101,13 +105,16 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company company = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, company);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
 
         try {
             MultipartFile multipartFile =
                     new MockMultipartFile("Offer Letter", new FileInputStream(testFile));
 
             reportService.createReport(
-                    ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
+                    ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile, rc);
         } catch (Exception e) {
             fail();
         }
@@ -123,7 +130,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
     public void testCreateEmployerReportNull() {
         String error = "";
         try {
-            reportService.createReport(null, null, null, null, null);
+            reportService.createReport(null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -133,7 +140,8 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
                         + "Report Status cannot be null! "
                         + "Coop cannot be null! "
                         + "Author cannot be null! "
-                        + "File title cannot be empty!",
+                        + "File title cannot be empty! "
+                        + "Report Config cannot be null!",
                 error);
     }
 
@@ -146,7 +154,9 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company company = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, company);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
@@ -156,7 +166,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
 
             r =
                     reportService.createReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile, rc);
         } catch (Exception e) {
             fail();
         }
@@ -173,6 +183,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
                             coop,
                             "Offer Letter",
                             ec,
+                            rc,
                             sections,
                             multipartFile);
         } catch (IllegalArgumentException e) {
@@ -192,7 +203,9 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company company = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, company);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
 
@@ -202,7 +215,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
 
             r =
                     reportService.createReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile, rc);
         } catch (Exception e) {
             fail();
         }
@@ -213,7 +226,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
 
         try {
             reportService.updateReport(
-                    r, ReportStatus.INCOMPLETE, coop, "Offer Letter", ec, sections, multipartFile);
+                    r, ReportStatus.INCOMPLETE, coop, "Offer Letter", ec, rc, sections, multipartFile);
         } catch (IllegalArgumentException e) {
             fail();
         }
@@ -238,6 +251,9 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company company = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, company);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
 
         try {
             MultipartFile multipartFile =
@@ -245,14 +261,14 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
 
             r =
                     reportService.createReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile, rc);
         } catch (Exception e) {
             fail();
         }
 
         String error = "";
         try {
-            r = reportService.updateReport(null, null, null, null, null, null, null);
+            r = reportService.updateReport(null, null, null, null, null, null, null, null);
         } catch (IllegalArgumentException e) {
             error = e.getMessage();
         }
@@ -271,6 +287,9 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company company = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, company);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
 
         try {
             MultipartFile multipartFile =
@@ -278,7 +297,7 @@ public class CooperatorServiceEmployerReportTests extends BaseServiceTest {
 
             r =
                     reportService.createReport(
-                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile);
+                            ReportStatus.COMPLETED, coop, "Offer Letter", ec, multipartFile, rc);
         } catch (Exception e) {
             fail();
         }

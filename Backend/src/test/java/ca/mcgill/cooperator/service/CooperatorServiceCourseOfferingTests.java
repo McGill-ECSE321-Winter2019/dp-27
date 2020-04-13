@@ -3,10 +3,14 @@ package ca.mcgill.cooperator.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.Season;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +25,7 @@ public class CooperatorServiceCourseOfferingTests extends BaseServiceTest {
 
     @Autowired CourseService courseService;
     @Autowired CourseOfferingService courseOfferingService;
+    @Autowired ReportConfigService reportConfigService;
 
     @Autowired CourseRepository courseRepository;
     @Autowired CourseOfferingRepository courseOfferingRepository;
@@ -94,9 +99,14 @@ public class CooperatorServiceCourseOfferingTests extends BaseServiceTest {
         Season season2 = Season.FALL;
         String name2 = "ECSE223";
         Course c2 = courseService.createCourse(name2);
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(co);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
+        Set<ReportConfig> reportConfigs = new HashSet<ReportConfig>();
+        reportConfigs.add(rc);
 
         try {
-            courseOfferingService.updateCourseOffering(co, year2, season2, c2);
+            courseOfferingService.updateCourseOffering(co, year2, season2, c2, null, reportConfigs);
 
         } catch (IllegalArgumentException e) {
             fail();
@@ -108,6 +118,7 @@ public class CooperatorServiceCourseOfferingTests extends BaseServiceTest {
         assertEquals(co.getSeason(), season2);
         assertEquals(co.getYear(), year2);
         assertEquals(co.getCourse().getId(), c2.getId());
+        assertEquals(1, co.getReportConfigs().size());
         c2 = courseService.getCourseById(c2.getId());
         assertEquals(season2, c2.getCourseOfferings().get(0).getSeason());
     }
@@ -138,7 +149,7 @@ public class CooperatorServiceCourseOfferingTests extends BaseServiceTest {
         Course c2 = null;
 
         try {
-            courseOfferingService.updateCourseOffering(null, year2, season2, c2);
+            courseOfferingService.updateCourseOffering(null, year2, season2, c2, null, null);
 
         } catch (IllegalArgumentException e) {
             assertEquals(

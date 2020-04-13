@@ -11,6 +11,7 @@ public class CourseOfferingDto {
 
     private CourseDto course;
     private List<CoopDto> coops;
+    private List<ReportConfigDto> reportConfigs;
 
     public CourseOfferingDto() {}
 
@@ -59,5 +60,13 @@ public class CourseOfferingDto {
 
     public void setCoops(List<CoopDto> coops) {
         this.coops = coops;
+    }
+    
+    public List<ReportConfigDto> getReportConfigs() {
+        return this.reportConfigs;
+    }
+
+    public void setReportConfigs(List<ReportConfigDto> reportConfigs) {
+        this.reportConfigs = reportConfigs;
     }
 }

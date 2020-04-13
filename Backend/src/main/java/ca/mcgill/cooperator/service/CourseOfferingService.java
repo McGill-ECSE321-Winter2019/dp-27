@@ -2,11 +2,13 @@ package ca.mcgill.cooperator.service;
 
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
+import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.Season;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ public class CourseOfferingService extends BaseService {
 
     @Autowired CourseOfferingRepository courseOfferingRepository;
     @Autowired CourseRepository courseRepository;
+    @Autowired ReportConfigRepository reportConfigRepository;
 
     /**
      * Creates a new CourseOffering
@@ -47,7 +50,8 @@ public class CourseOfferingService extends BaseService {
         co.setYear(year);
         co.setSeason(season);
         co.setCourse(course);
-        co.setCoops(new ArrayList<Coop>());
+        co.setCoops(new HashSet<Coop>());
+        co.setReportConfigs(new HashSet<ReportConfig>());
 
         return courseOfferingRepository.save(co);
     }
@@ -164,7 +168,7 @@ public class CourseOfferingService extends BaseService {
      */
     @Transactional
     public CourseOffering updateCourseOffering(
-            CourseOffering courseOffering, int year, Season season, Course course) {
+            CourseOffering courseOffering, int year, Season season, Course course, Set<Coop> coops, Set<ReportConfig> reportConfigs) {
         StringBuilder error = new StringBuilder();
         if (courseOffering == null) {
             error.append("Course Offering to update cannot be null!");
@@ -181,6 +185,13 @@ public class CourseOfferingService extends BaseService {
         }
         if (course != null) {
             courseOffering.setCourse(course);
+        }
+        if (coops != null) {
+        	courseOffering.setCoops(coops);
+        }
+        if (reportConfigs != null) {
+        	courseOfferingRepository.deleteAllReportConfigsById(courseOffering.getId());
+        	courseOffering.setReportConfigs(reportConfigs);
         }
 
         return courseOfferingRepository.save(courseOffering);

@@ -12,6 +12,7 @@ import ca.mcgill.cooperator.dao.CoopRepository;
 import ca.mcgill.cooperator.dao.CourseOfferingRepository;
 import ca.mcgill.cooperator.dao.CourseRepository;
 import ca.mcgill.cooperator.dao.EmployerContactRepository;
+import ca.mcgill.cooperator.dao.ReportConfigRepository;
 import ca.mcgill.cooperator.dao.ReportRepository;
 import ca.mcgill.cooperator.dao.StudentRepository;
 import ca.mcgill.cooperator.dto.CompanyDto;
@@ -19,6 +20,7 @@ import ca.mcgill.cooperator.dto.CoopDto;
 import ca.mcgill.cooperator.dto.CourseDto;
 import ca.mcgill.cooperator.dto.CourseOfferingDto;
 import ca.mcgill.cooperator.dto.EmployerContactDto;
+import ca.mcgill.cooperator.dto.ReportConfigDto;
 import ca.mcgill.cooperator.dto.ReportDto;
 import ca.mcgill.cooperator.dto.ReportSectionDto;
 import ca.mcgill.cooperator.model.CoopStatus;
@@ -28,6 +30,7 @@ import ca.mcgill.cooperator.service.ReportService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -67,7 +70,8 @@ public class EmployerReportControllerIT extends BaseControllerIT {
     @Autowired private CourseRepository courseRepository;
     @Autowired private EmployerContactRepository employerContactRepository;
     @Autowired private CompanyRepository companyRepository;
-    @Autowired AuthorRepository authorRepository;
+    @Autowired private AuthorRepository authorRepository;
+    @Autowired private ReportConfigRepository reportConfigRepository;
 
     @BeforeEach
     @AfterEach
@@ -85,6 +89,7 @@ public class EmployerReportControllerIT extends BaseControllerIT {
         courseOfferingRepository.deleteAll();
         courseRepository.deleteAll();
         studentRepository.deleteAll();
+        reportConfigRepository.deleteAll();
     }
 
     /**
@@ -105,6 +110,9 @@ public class EmployerReportControllerIT extends BaseControllerIT {
                 createTestCoop(courseOfferingDto, createTestStudent(), CoopStatus.IN_PROGRESS);
         CompanyDto companyDto = createTestCompany();
         EmployerContactDto ecDto = createTestEmployerContact(companyDto);
+        List<CourseOfferingDto> courseOfferingDtos = new ArrayList<CourseOfferingDto>();
+        courseOfferingDtos.add(courseOfferingDto);
+        ReportConfigDto reportConfigDto = createTestReportConfig(true, 14, true, "First Evaluation", courseOfferingDtos);
 
         // 1. create the EmployerReport with a POST request
         MvcResult mvcResult =
@@ -115,6 +123,7 @@ public class EmployerReportControllerIT extends BaseControllerIT {
                                         .param("title", "Offer Letter")
                                         .param("coopId", String.valueOf(coopDto.getId()))
                                         .param("authorId", String.valueOf(ecDto.getId()))
+                                        .param("reportConfigId", String.valueOf(reportConfigDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .characterEncoding("utf-8"))
                         .andExpect(status().isOk())
@@ -147,6 +156,7 @@ public class EmployerReportControllerIT extends BaseControllerIT {
                                         .param("title", "Offer Letter")
                                         .param("coopId", String.valueOf(coopDto.getId()))
                                         .param("authorId", String.valueOf(ecDto.getId()))
+                                        .param("reportConfigId", String.valueOf(reportConfigDto.getId()))
                                         .contentType(MediaType.MULTIPART_FORM_DATA)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(objectMapper.writeValueAsString(rsDtos))

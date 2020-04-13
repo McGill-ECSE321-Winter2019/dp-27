@@ -3,6 +3,7 @@ package ca.mcgill.cooperator.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -10,7 +11,8 @@ public class ReportSection {
     @Id @GeneratedValue private int id;
     private String response;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "report_id")
     private Report report;
 
     @ManyToOne(optional = false)

@@ -95,11 +95,11 @@ public class EmployerContactControllerIT extends BaseControllerIT {
 
         // 2. get the Employer Contact by ID, valid
         mvc.perform(
-                        get("/employer-contacts/" + returnedEmployerContact.getId())
+                        get("/employer-contacts/id/" + returnedEmployerContact.getId())
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        // 3. test getting all Employer Contact
+        // 3. test getting all Employer Contacts
         mvcResult =
                 mvc.perform(get("/employer-contacts").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
@@ -143,7 +143,7 @@ public class EmployerContactControllerIT extends BaseControllerIT {
         // get the Employer Contact by ID
         mvcResult =
                 mvc.perform(
-                                get("/employer-contacts/" + employerContactToUpdate.getId())
+                                get("/employer-contacts/id/" + employerContactToUpdate.getId())
                                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andReturn();

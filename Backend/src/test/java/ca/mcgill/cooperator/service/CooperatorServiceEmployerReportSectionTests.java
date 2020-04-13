@@ -23,7 +23,11 @@ import ca.mcgill.cooperator.model.ReportConfig;
 import ca.mcgill.cooperator.model.ReportSection;
 import ca.mcgill.cooperator.model.ReportSectionConfig;
 import ca.mcgill.cooperator.model.Student;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,6 +68,12 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         for (ReportSection reportSection : reportSections) {
             reportSectionService.deleteReportSection(reportSection);
         }
+        
+        for (Report report : reportRepository.findAll()) {
+    		report.setReportConfig(null);
+    		reportRepository.save(report);
+    	}
+    	reportRepository.deleteAll();
 
         coopRepository.deleteAll();
         courseOfferingRepository.deleteAll();
@@ -86,10 +96,12 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
-        Report r = createTestEmployerReport(reportService, coop, ec);
+        Report r = createTestEmployerReport(reportService, coop, ec, rc);
 
         try {
             reportSectionService.createReportSection(response, rsConfig, r);
@@ -164,10 +176,12 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
-        Report r = createTestEmployerReport(reportService, coop, ec);
+        Report r = createTestEmployerReport(reportService, coop, ec, rc);
 
         try {
             rs = reportSectionService.createReportSection(response, rsConfig, r);
@@ -200,10 +214,12 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
-        Report r = createTestEmployerReport(reportService, coop, ec);
+        Report r = createTestEmployerReport(reportService, coop, ec, rc);
 
         try {
             reportSectionService.createReportSection(response, rsConfig, r);
@@ -232,10 +248,12 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
-        Report r = createTestEmployerReport(reportService, coop, ec);
+        Report r = createTestEmployerReport(reportService, coop, ec, rc);
 
         try {
             reportSectionService.createReportSection(response, rsConfig, r);
@@ -263,10 +281,12 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
-        Report r = createTestEmployerReport(reportService, coop, ec);
+        Report r = createTestEmployerReport(reportService, coop, ec, rc);
 
         try {
             rs = reportSectionService.createReportSection(response, rsConfig, r);
@@ -292,10 +312,12 @@ public class CooperatorServiceEmployerReportSectionTests extends BaseServiceTest
         Coop coop = createTestCoop(coopService, courseOffering, s);
         Company c = createTestCompany(companyService);
         EmployerContact ec = createTestEmployerContact(employerContactService, c);
-        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation");
+        Set<CourseOffering> courseOfferings = new HashSet<CourseOffering>();
+        courseOfferings.add(courseOffering);
+        ReportConfig rc = createTestReportConfig(reportConfigService, "First Evaluation", courseOfferings);
         ReportSectionConfig rsConfig =
                 createTestReportSectionConfig(reportConfigService, reportSectionConfigService, rc);
-        Report r = createTestEmployerReport(reportService, coop, ec);
+        Report r = createTestEmployerReport(reportService, coop, ec, rc);
 
         try {
             reportSectionService.createReportSection(response, rsConfig, r);

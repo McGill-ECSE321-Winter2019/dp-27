@@ -22,6 +22,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Set;
+
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -113,13 +115,13 @@ public class BaseServiceTest {
         return s;
     }
 
-    Report createTestStudentReport(ReportService service, Coop c, Student s) {
+    Report createTestStudentReport(ReportService service, Coop c, Student s, ReportConfig rc) {
         Report r = new Report();
         File file = new File("src/test/resources/Test_Offer_Letter.pdf");
         try {
             MultipartFile multipartFile = new MockMultipartFile("file", new FileInputStream(file));
 
-            r = service.createReport(ReportStatus.COMPLETED, c, "Offer Letter", s, multipartFile);
+            r = service.createReport(ReportStatus.COMPLETED, c, "Offer Letter", s, multipartFile, rc);
             return r;
         } catch (IOException e) {
             return null;
@@ -131,21 +133,21 @@ public class BaseServiceTest {
         return service.createReportSection("This is a response", rsConfig, r);
     }
 
-    Report createTestEmployerReport(ReportService service, Coop c, EmployerContact ec) {
+    Report createTestEmployerReport(ReportService service, Coop c, EmployerContact ec, ReportConfig rc) {
         Report r = new Report();
         File file = new File("src/test/resources/Test_Offer_Letter.pdf");
         try {
             MultipartFile multipartFile = new MockMultipartFile("file", new FileInputStream(file));
 
-            r = service.createReport(ReportStatus.COMPLETED, c, "Offer Letter", ec, multipartFile);
+            r = service.createReport(ReportStatus.COMPLETED, c, "Offer Letter", ec, multipartFile, rc);
             return r;
         } catch (IOException e) {
             return null;
         }
     }
 
-    ReportConfig createTestReportConfig(ReportConfigService service, String type) {
-        return service.createReportConfig(true, 14, true, type);
+    ReportConfig createTestReportConfig(ReportConfigService service, String type, Set<CourseOffering> courseOfferings) {
+        return service.createReportConfig(true, 14, true, type, courseOfferings);
     }
 
     ReportSectionConfig createTestReportSectionConfig(
