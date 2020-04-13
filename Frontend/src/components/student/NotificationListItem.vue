@@ -2,19 +2,15 @@
   <div class="row items-center">
     <div class="col">
       <div>
-        <span
-          v-if="!notification.seen"
-          class="text-weight-medium"
-          style="color:red"
-        >
-          NEW &nbsp;
-        </span>
-
         <span class="text-h6 text-weight-medium">
           {{ notification.title }}
         </span>
 
-        <div>{{ notification.body }}</div>
+        <q-badge v-if="!notification.seen" color="red">
+          NEW
+        </q-badge>
+
+        <div class="q-mb-md">{{ notification.body }}</div>
 
         <div class="row text-caption">
           From: {{ senderName }}

@@ -10,6 +10,8 @@ import ca.mcgill.cooperator.service.AdminService;
 import ca.mcgill.cooperator.service.NotificationService;
 import ca.mcgill.cooperator.service.StudentService;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -69,7 +71,6 @@ public class NotificationController extends BaseController {
 
     /**
      * Creates a new Notification for all the students in the list
-     *
      *
      * @param title
      * @param body
@@ -144,7 +145,7 @@ public class NotificationController extends BaseController {
      *
      * @return list of NotificationDtos
      */
-    @GetMapping("/{id}/unread")
+    @GetMapping("/student/{id}/unread")
     public List<NotificationDto> getUnreadForStudent(@PathVariable int id) {
         Student student = studentService.getStudentById(id);
         List<Notification> n = notificationService.getUnreadForStudent(student);
@@ -163,6 +164,41 @@ public class NotificationController extends BaseController {
         List<Notification> n = notificationService.getAllNotificationsOfStudent(student);
 
         return ControllerUtils.convertNotifListToDto(n);
+    }
+
+    /**
+     * Gets recent Notifications for Student, with number of notifications to return specified by
+     * fetchSize.
+     *
+     * @param id
+     * @param fetchSize
+     * @return list of NotificationDtos
+     */
+    @GetMapping("/student/{id}/recent")
+    public List<NotificationDto> getRecentForStudent(
+            @PathVariable int id, @RequestParam int fetchSize) {
+        Student student = studentService.getStudentById(id);
+        List<Notification> notifications =
+                notificationService.getAllNotificationsOfStudent(student);
+        List<Notification> recentNotifs = new ArrayList<>(fetchSize);
+
+        Collections.sort(
+                notifications,
+                new Comparator<Notification>() {
+                    @Override
+                    public int compare(Notification n1, Notification n2) {
+                        if (n2.getTimeStamp() > n1.getTimeStamp()) return 1;
+                        else return -1;
+                    }
+                });
+
+        if (notifications.size() < fetchSize) fetchSize = notifications.size();
+
+        for (int i = 0; i < fetchSize; i++) {
+            recentNotifs.add(notifications.get(i));
+        }
+
+        return ControllerUtils.convertNotifListToDto(recentNotifs);
     }
 
     /**
