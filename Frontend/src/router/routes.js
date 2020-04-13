@@ -55,7 +55,7 @@ const routes = [
       },
       {
         path: "home",
-        component: () => import("pages/admin/AdminHome.vue")
+        component: () => import("pages/admin/AdminHomePage.vue")
       },
       {
         path: "student-coops",
