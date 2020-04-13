@@ -269,7 +269,7 @@ public class StudentService extends BaseService {
     			studentRepository.findAll())
     			.stream()
     			.filter(student -> student.getCoops().size() == 0)
-    			.collect(Collectors.toList());   ;
+    			.collect(Collectors.toList());
     	 
         return newStudents;
     }
