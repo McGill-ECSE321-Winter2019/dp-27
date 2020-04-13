@@ -1,60 +1,70 @@
+<!-- This component contains the buttons on the Admin's homepage. -->
 <template>
-  <q-card flat bordered id="card">
+  <q-card flat bordered class="q-mt-md">
     <q-card-section>
-      <div class="text-h6">Welcome, Admin!</div>
+      <div class="text-h6">
+        Welcome, {{ this.$store.state.currentUser.firstName }}!
+      </div>
     </q-card-section>
 
     <q-separator inset />
 
-    <div class="q-pa-md">
+    <q-card-section class="q-pa-md">
       <q-btn
-        class="dashBtn"
+        class="dash-button"
         label="View Current Coop Students"
         color="primary"
         @click="viewCurrentStudents"
       />
       <q-btn
-        class="dashBtn"
-        label="View Offers to Approve"
-        color="primary"
-        @click="viewApprovalsPage('new_coops')"
-      />
-      <q-btn
-        class="dashBtn"
-        label="View Completed Coops to Approve"
-        color="primary"
-        @click="viewApprovalsPage('completed_coops')"
-      />
-      <q-btn
-        class="dashBtn"
-        label="View Students with Late Reports"
-        color="primary"
-        @click="viewCurrentStudents"
-      />
-      <q-btn
-        class="dashBtn"
+        class="dash-button q-mt-md q-mb-md"
         label="View New Students"
         color="primary"
         @click="viewNewStudents()"
       />
       <q-btn
-        class="dashBtn"
+        class="dash-button q-mt-md q-mb-md"
+        label="View Offer Letters to Approve"
+        color="primary"
+        @click="viewApprovalsPage('new_coops')"
+      />
+      <q-btn
+        class="dash-button q-mt-md q-mb-md"
+        label="View Completed Coops to Approve"
+        color="primary"
+        @click="viewApprovalsPage('completed_coops')"
+      />
+      <q-btn
+        class="dash-button q-mt-md q-mb-md"
+        label="View Students with Late Reports"
+        color="primary"
+        @click="viewCurrentStudents"
+      />
+      <q-btn
+        class="dash-button q-mt-md q-mb-md"
         label="View Report Configurations"
         color="primary"
         @click="viewReportConfig"
       />
 
-      <q-separator inset />
-      <h6>View Current Students by Course</h6>
-      <q-btn
-        v-for="cname in courseNames"
-        :key="cname"
-        class="dashBtn"
-        :label="cname"
-        color="primary"
-        @click="viewNewStudents()"
-      />
-    </div>
+      <div class="text-h6 q-mt-sm q-mb-sm">View Current Students by Course</div>
+
+      <q-separator />
+
+      <div v-if="loading" class="center-item notifications-menu">
+        <q-spinner color="primary" size="3em" class="q-ma-md" />
+      </div>
+      <div v-else>
+        <q-btn
+          v-for="cname in courseNames"
+          :key="cname"
+          class="dash-button q-mt-md q-mb-md"
+          :label="cname"
+          color="primary"
+          @click="viewStudentsOfCourse(cname)"
+        />
+      </div>
+    </q-card-section>
   </q-card>
 </template>
 
@@ -63,12 +73,14 @@ export default {
   name: "HomeMainInfo",
   data() {
     return {
+      loading: true,
       courseNames: []
     };
   },
   created: function() {
     this.$axios.get("/courses/names", {}).then(resp => {
       this.courseNames = resp.data;
+      this.loading = false;
     });
   },
   methods: {
@@ -128,18 +140,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
-h6 {
-  margin: 1%;
-  font-size: 1.2em;
-}
-#card {
-  width: 100%;
-  margin-top: 25px;
+.dash-button {
+  width: 46%;
+  margin-left: 2%;
+  margin-right: 2%;
+  text-align: center;
 }
 
-.dashBtn {
-  width: 46%;
-  margin: 2%;
+.center-item {
   text-align: center;
 }
 </style>

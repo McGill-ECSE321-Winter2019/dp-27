@@ -49,14 +49,14 @@
                 Log in to Co-operator using your McGill email and password.
               </div>
               <q-input
-                filled
+                outlined
                 v-model="username"
                 hint="Enter your email"
                 suffix="@mail.mcgill.ca"
               />
 
               <q-input
-                filled
+                outlined
                 v-model="password"
                 type="password"
                 hint="Enter your password"
@@ -87,7 +87,7 @@
                 password.
               </div>
               <q-input
-                filled
+                outlined
                 v-model="username"
                 hint="Enter your email"
                 suffix="@mcgill.ca"
@@ -95,7 +95,7 @@
               </q-input>
 
               <q-input
-                filled
+                outlined
                 v-model="password"
                 type="password"
                 hint="Enter your password"

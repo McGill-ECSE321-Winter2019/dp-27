@@ -30,11 +30,11 @@ public class ReportService extends BaseService {
      * Creates new report in database
      *
      * @param status
-     * @param c
+     * @param coop
      * @param title
-     * @param a
+     * @param author
      * @param file
-     * @return
+     * @return the created Report
      */
     @Transactional
     public Report createReport(
@@ -104,10 +104,10 @@ public class ReportService extends BaseService {
     /**
      * Updates existing report in database
      *
-     * @param r
+     * @param report
      * @param status
-     * @param c
-     * @param a
+     * @param coop
+     * @param author
      * @param sections
      * @return updated report
      */
@@ -147,10 +147,12 @@ public class ReportService extends BaseService {
         if (sections != null) {
             report.setReportSections(sections);
         }
-        try {
-            report.setData(file.getBytes());
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e.getMessage());
+        if (file != null) {
+        	try {
+                report.setData(file.getBytes());
+            } catch (IOException e) {
+                throw new IllegalArgumentException(e.getMessage());
+            }
         }
 
         return reportRepository.save(report);
@@ -159,7 +161,7 @@ public class ReportService extends BaseService {
     /**
      * Deletes specific report from database
      *
-     * @param r
+     * @param report
      * @return deleted report
      */
     @Transactional

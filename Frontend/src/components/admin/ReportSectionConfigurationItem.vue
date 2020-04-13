@@ -7,7 +7,13 @@ Parent: ReportConfigurationItem.vue -->
     <div class="col-7 text-body2">{{ reportSectionConfig.sectionPrompt }}</div>
     <div class="col-4 text-body2">{{ reportSectionConfig.responseType }}</div>
     <div class="col-1">
-      <q-btn label="Edit" color="primary" flat @click="showPopup = true" />
+      <q-btn
+        label="Edit"
+        color="primary"
+        flat
+        class="float-right"
+        @click="showPopup = true"
+      />
     </div>
 
     <q-dialog v-model="showPopup">

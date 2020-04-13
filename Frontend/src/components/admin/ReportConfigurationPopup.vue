@@ -14,7 +14,7 @@ Parent: AdminReportConfigPage.vue -->
     <q-card-section>
       <q-form @submit="onSubmit" class="q-gutter-sm">
         <q-input
-          filled
+          outlined
           v-model="typeData"
           label="Report Type (e.g. Final Evaluation)"
           lazy-rules
@@ -32,7 +32,7 @@ Parent: AdminReportConfigPage.vue -->
         <div class="text-subtitle2">Deadline:</div>
         <div class="row items-start">
           <q-input
-            filled
+            outlined
             v-model.number="deadlineData"
             type="number"
             label="Number of Days"
@@ -44,7 +44,7 @@ Parent: AdminReportConfigPage.vue -->
           <span class="text-body2 col-2 center-item q-mt-md">from</span>
 
           <q-select
-            filled
+            outlined
             v-model="isDeadlineFromStartData"
             :options="options"
             class="col-6"

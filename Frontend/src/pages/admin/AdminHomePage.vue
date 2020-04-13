@@ -17,7 +17,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-#container {
-}
-</style>
+<style lang="scss" scoped></style>

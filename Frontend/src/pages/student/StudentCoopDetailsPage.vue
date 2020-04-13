@@ -9,12 +9,12 @@ CoopDetails they have already submitted. -->
       </div>
       <div v-else>
         <!-- Allow Student to add their CoopDetails if it doesn't exist -->
-        <StudentCoopDetailsPageNewCoopDetails
+        <CoopDetailsPageNewCoopDetails
           v-if="coop.coopDetails === null"
           :coop="coop"
         />
         <!-- Allow viewing only otherwise -->
-        <StudentCoopDetailsPageExistingCoopDetails v-else :coop="coop" />
+        <CoopDetailsPageExistingCoopDetails v-else :coop="coop" />
       </div>
     </q-card>
   </BasePage>
@@ -22,15 +22,15 @@ CoopDetails they have already submitted. -->
 
 <script>
 import BasePage from "../BasePage.vue";
-import StudentCoopDetailsPageNewCoopDetails from "../../components/student/StudentCoopDetailsPageNewCoopDetails.vue";
-import StudentCoopDetailsPageExistingCoopDetails from "../../components/student/StudentCoopDetailsPageExistingCoopDetails.vue";
+import CoopDetailsPageNewCoopDetails from "../../components/student/CoopDetailsPageNewCoopDetails.vue";
+import CoopDetailsPageExistingCoopDetails from "../../components/student/CoopDetailsPageExistingCoopDetails.vue";
 
 export default {
   name: "StudentCoopDetailsPage",
   components: {
     BasePage,
-    StudentCoopDetailsPageNewCoopDetails,
-    StudentCoopDetailsPageExistingCoopDetails
+    CoopDetailsPageNewCoopDetails,
+    CoopDetailsPageExistingCoopDetails
   },
   data: function() {
     return {
