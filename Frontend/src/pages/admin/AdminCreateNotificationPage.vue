@@ -1,43 +1,63 @@
+<!-- This page allows an Admin to send a notification to Students they
+select. -->
 <template>
   <BasePage title="Send Notification">
-    <q-card>
-      <div class="q-pa-md">
-        <q-table
-          title="Select Students"
-          :data="tableStudents"
-          :columns="columns"
-          row-key="email"
-          selection="multiple"
-          :selected.sync="toSendTo"
-        />
-        <q-input
-          outlined
-          v-model="title"
-          label="Title"
-          class="notifPageComponents"
-        />
-        <q-input
-          v-model="body"
-          label="Body"
-          outlined
-          type="textarea"
-          class="notifPageComponents"
-        />
-        <q-btn
-          v-if="!sending"
-          color="primary"
-          @click="sendNotification()"
-          label="Send Notification"
-          class="notifPageComponents"
-        />
-        <!-- Show spinner while waiting -->
-        <q-spinner
-          v-else
-          color="primary"
-          size="2.5em"
-          class="notifPageComponents"
-        />
-      </div>
+    <q-card flat bordered class="q-mb-md">
+      <q-card-section>
+        <q-form @submit="sendNotification">
+          <!-- Show spinner while table data is loading -->
+          <div v-if="loading" class="center-item">
+            <q-spinner color="primary" size="3em"></q-spinner>
+          </div>
+          <q-table
+            v-else
+            title="Select Students"
+            :data="tableStudents"
+            :columns="columns"
+            row-key="email"
+            selection="multiple"
+            :selected.sync="toSendTo"
+          />
+          <q-input
+            outlined
+            v-model="title"
+            label="Title"
+            hint="Title"
+            class="q-mt-md"
+            :rules="[
+              val =>
+                (val && val.length > 0) || 'Please enter a notification title'
+            ]"
+          />
+          <q-input
+            v-model="body"
+            label="Body"
+            hint="Body"
+            outlined
+            type="textarea"
+            class="q-mt-md"
+            :rules="[
+              val =>
+                (val && val.length > 0) || 'Please enter a notification body'
+            ]"
+          />
+
+          <q-btn
+            color="primary"
+            type="submit"
+            label="Send Notification"
+            class="q-mt-md"
+            :disabled="sending"
+          />
+          <!-- Show spinner while waiting -->
+          <q-spinner
+            v-if="sending"
+            color="primary"
+            size="2.5em"
+            class="q-mt-md q-ml-md"
+          />
+        </q-form>
+      </q-card-section>
     </q-card>
   </BasePage>
 </template>
@@ -52,61 +72,65 @@ export default {
   props: {
     selected: {
       type: Array,
-      required: false
+      default: function() {
+        return [];
+      }
     }
   },
   name: "HomeMainInfo",
-
-  data: () => ({
-    sending: false,
-    tableStudents: [],
-    toSendTo: [],
-    body: "",
-    title: "",
-    selectedString: "Please select a student",
-    columns: [
-      {
-        name: "studentLastName",
-        required: true,
-        label: "Student Last Name",
-        align: "left",
-        field: "lastName",
-        sortable: true,
-        classes: "my-class",
-        style: "width: 500px"
-      },
-      {
-        name: "studentFirstName",
-        required: true,
-        label: "Student First Name",
-        align: "left",
-        field: "firstName",
-        sortable: true,
-        classes: "my-class",
-        style: "width: 500px"
-      },
-      {
-        name: "studentID",
-        required: true,
-        label: "Student ID",
-        align: "left",
-        field: "id",
-        sortable: true,
-        classes: "my-class",
-        style: "width: 500px"
-      },
-      {
-        name: "email",
-        required: true,
-        label: "Email",
-        align: "left",
-        field: "email",
-        sortable: true,
-        classes: "my-class",
-        style: "width: 500px"
-      }
-    ]
-  }),
+  data: function() {
+    return {
+      sending: false,
+      loading: true,
+      tableStudents: [],
+      toSendTo: [],
+      body: "",
+      title: "",
+      selectedString: "Please select a student",
+      columns: [
+        {
+          name: "studentLastName",
+          required: true,
+          label: "Student Last Name",
+          align: "left",
+          field: "lastName",
+          sortable: true,
+          classes: "my-class",
+          style: "width: 500px"
+        },
+        {
+          name: "studentFirstName",
+          required: true,
+          label: "Student First Name",
+          align: "left",
+          field: "firstName",
+          sortable: true,
+          classes: "my-class",
+          style: "width: 500px"
+        },
+        {
+          name: "studentID",
+          required: true,
+          label: "Student ID",
+          align: "left",
+          field: "id",
+          sortable: true,
+          classes: "my-class",
+          style: "width: 500px"
+        },
+        {
+          name: "email",
+          required: true,
+          label: "Email",
+          align: "left",
+          field: "email",
+          sortable: true,
+          classes: "my-class",
+          style: "width: 500px"
+        }
+      ]
+    };
+  },
   created: function() {
     this.$axios
       .get("/students", {
@@ -116,18 +140,30 @@ export default {
       })
       .then(resp => {
         this.tableStudents = resp.data;
+        this.loading = false;
       });
     this.toSendTo = this.selected;
   },
   methods: {
-    goToStudentCoop() {
+    goToStudentCoop: function() {
       this.$router.push("/admin/student-coops");
     },
-    sendNotification() {
+    sendNotification: function() {
+      if (this.toSendTo.length === 0) {
+        this.$q.notify({
+          color: "red-4",
+          position: "top",
+          textColor: "white",
+          icon: "error",
+          message: "Please select at least one student"
+        });
+        return;
+      }
+
       var adminId = this.$store.state.currentUser.id;
-      var stuIds = [];
+      var studentIds = [];
       for (var i = 0; i < this.toSendTo.length; i++) {
-        stuIds.push(this.toSendTo[i].id);
+        studentIds.push(this.toSendTo[i].id);
       }
       this.sending = true;
       // create the notification
@@ -140,12 +176,10 @@ export default {
             "&body=" +
             this.body +
             "&studentIds=" +
-            stuIds
+            studentIds
         )
         .then(_resp => {
           this.sending = false;
-          this.body = "";
-          this.title = "";
           this.toSendTo = [];
           this.$q.notify({
             color: "green-4",
@@ -170,16 +204,8 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-h6 {
-  margin: 10px;
-}
-#card {
-  width: 100%;
-  margin-top: 25px;
-  margin-right: 10px;
-}
-.notifPageComponents {
-  margin-top: 3%;
+<style lang="scss" scoped>
+.center-item {
+  text-align: center;
 }
 </style>

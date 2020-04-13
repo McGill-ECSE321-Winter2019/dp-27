@@ -127,7 +127,7 @@ import BasePage from "../BasePage.vue";
 import NotificationPopup from "../../components/admin/NotificationPopup.vue";
 
 export default {
-  name: "CSVParserPage",
+  name: "AdminVerifyCsvPage",
   components: {
     BasePage,
     NotificationPopup
