@@ -17,6 +17,7 @@ import ca.mcgill.cooperator.model.Notification;
 import ca.mcgill.cooperator.model.Season;
 import ca.mcgill.cooperator.model.Student;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,6 +74,24 @@ public class CooperatorServiceStudentTests extends BaseServiceTest {
         assertEquals(s.getEmail(), email);
         assertEquals(s.getStudentId(), studentID);
         assertEquals(1, studentService.getAllStudents().size());
+    }
+    
+    @Test
+    public void testGetNewStudents() {
+        String firstName = "Emma";
+        String lastName = "Eagles";
+        String email = "theeagle@eagles.com";
+        String studentID = "260709533";
+        
+        studentService.createStudent(firstName, lastName, email, studentID);
+        List<Student> students = studentService.getNewStudents();
+        Student student = students.get(0);
+        
+        assertEquals(student.getFirstName(), firstName);
+        assertEquals(student.getLastName(), lastName);
+        assertEquals(student.getEmail(), email);
+        assertEquals(student.getStudentId(), studentID);
+        assertEquals(1, students.size());
     }
 
     @Test

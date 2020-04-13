@@ -29,6 +29,16 @@
           />
         </div>
         <div class="q-pa-md">
+          <q-btn @click="viewNewStudents" class="largeFilterBtn">
+            New Students Only
+          </q-btn>
+        </div>
+        <div class="q-pa-md">
+          <q-btn @click="viewAllStudents" class="largeFilterBtn">
+            All Students
+          </q-btn>
+        </div>
+        <div class="q-pa-md">
           <q-btn @click="applyFilter" class="filterBtn">Apply Filter</q-btn>
           <q-btn @click="clearFilter" class="filterBtn">Clear Filter</q-btn>
         </div>
@@ -78,6 +88,10 @@ export default {
     term: {
       type: String,
       default: ""
+    },
+    newStudents: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -139,26 +153,34 @@ export default {
     this.yearData = this.year;
     this.termData = this.term;
     this.statsData = this.status;
-
-    this.$axios
-      .get(
-        "/students?season=" +
-          this.termData +
-          "&year=" +
-          this.yearData +
-          "&name=" +
-          this.courseNameData +
-          "&status=" +
-          this.statsData,
-        {
-          headers: {
-            Authorization: this.$store.state.token
+    console.log(this.newStudents);
+    if (this.newStudents === false) {
+      console.log("getting all");
+      this.$axios
+        .get(
+          "/students?season=" +
+            this.termData +
+            "&year=" +
+            this.yearData +
+            "&name=" +
+            this.courseNameData +
+            "&status=" +
+            this.statsData,
+          {
+            headers: {
+              Authorization: this.$store.state.token
+            }
           }
-        }
-      )
-      .then(resp => {
+        )
+        .then(resp => {
+          this.students = resp.data;
+        });
+    } else {
+      this.$axios.get("/students/new").then(resp => {
         this.students = resp.data;
       });
+    }
+
     this.$axios
       .get("/coops/status", {
         headers: {
@@ -193,6 +215,24 @@ export default {
         params: {
           selected: this.selected
         }
+      });
+    },
+    viewNewStudents() {
+      this.$axios.get("/students/new").then(resp => {
+        this.students = resp.data;
+        this.courseNameData = "";
+        this.termData = "";
+        this.yearData = "";
+        this.statsData = "";
+      });
+    },
+    viewAllStudents() {
+      this.$axios.get("/students").then(resp => {
+        this.students = resp.data;
+        this.courseNameData = "";
+        this.termData = "";
+        this.yearData = "";
+        this.statsData = "";
       });
     },
     clearFilter() {
@@ -242,6 +282,10 @@ export default {
 }
 .filterBtn {
   width: 19%;
+  margin-right: 2%;
+}
+.largeFilterBtn {
+  width: 40%;
   margin-right: 2%;
 }
 </style>

@@ -127,6 +127,18 @@ public class StudentController extends BaseController {
 
         return ControllerUtils.convertStudentSetToDto(toReturn);
     }
+    
+    /**
+     * Gets Students with filters
+     *
+     * @return collection of StudentDtos
+     */
+    @GetMapping("/new")
+    public Collection<StudentDto> getNewStudents() {
+        List<Student> newStudents = studentService.getNewStudents();
+
+        return ControllerUtils.convertStudentListToDto(newStudents);
+    }
 
     /**
      * Gets a Student by ID
