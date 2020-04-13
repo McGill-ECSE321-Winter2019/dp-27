@@ -31,7 +31,15 @@
         color="primary"
         @click="viewCurrentStudents"
       />
+      <q-btn
+        class="dashBtn"
+        label="View Report Configurations"
+        color="primary"
+        @click="viewReportConfig"
+      />
       <q-btn class="dashBtn" label="View Incoming Students" color="primary" />
+      <q-separator inset />
+      <h6>View Current Students by Course</h6>
       <q-btn
         v-for="cname in courseNames"
         :key="cname"
@@ -83,6 +91,11 @@ export default {
         }
       });
     },
+    viewReportConfig() {
+      this.$router.push({
+        path: "/admin/report-config"
+      });
+    },
     viewCurrentStudents() {
       var year = this.$common.getCurrentYear().toString();
       var term = this.$common.getCurrentTerm();
@@ -101,12 +114,12 @@ export default {
 
 <style scoped lang="scss">
 h6 {
-  margin: 10px;
+  margin: 1%;
+  font-size: 1.2em;
 }
 #card {
   width: 100%;
   margin-top: 25px;
-  margin-right: 10px;
 }
 
 .dashBtn {
