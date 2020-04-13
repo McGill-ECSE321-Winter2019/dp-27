@@ -13,111 +13,128 @@
             corresponding co-op yet.
           </div>
           <div class="input-section">
-            <q-select
-              outlined
-              class="q-mb-sm"
-              v-model="selectedYear"
-              :options="yearList"
-              label="Select Year"
-            />
-            <q-select
-              outlined
-              class="q-mb-sm"
-              v-model="selectedSeason"
-              :options="seasonList"
-              label="Select Season"
-            />
-            <q-select
-              outlined
-              class="q-mb-sm"
-              v-model="selectedCourse"
-              :options="courseList"
-              label="Select Course"
-            />
-            <q-file
-              outlined
-              class="q-mb-sm"
-              v-model="csvFile"
-              label="Upload Course CSV"
-              accept=".csv"
-            >
-              <template v-slot:prepend>
-                <q-icon name="attach_file" />
-              </template>
-            </q-file>
+            <q-form @submit="parseCsv">
+              <q-select
+                outlined
+                class="q-mb-sm"
+                v-model="selectedYear"
+                :options="yearList"
+                label="Select Year"
+                :rules="[
+                  val => (val && val.length > 0) || 'Please select a year'
+                ]"
+              />
+              <q-select
+                outlined
+                class="q-mb-sm"
+                v-model="selectedSeason"
+                :options="seasonList"
+                label="Select Season"
+                :rules="[
+                  val => (val && val.length > 0) || 'Please select a season'
+                ]"
+              />
+              <q-select
+                outlined
+                class="q-mb-sm"
+                v-model="selectedCourse"
+                :options="courseList"
+                label="Select Course"
+                :rules="[
+                  val => (val && val.length > 0) || 'Please select a course'
+                ]"
+              />
+              <q-file
+                outlined
+                class="q-mb-sm"
+                v-model="csvFile"
+                label="Upload Course CSV"
+                accept=".csv"
+                :rules="[val => val || 'Please upload a file']"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="attach_file" />
+                </template>
+              </q-file>
 
-            <q-btn
-              color="primary"
-              label="Check Students"
-              :loading="uploading"
-              @click="parseCsv"
-            />
+              <q-btn
+                color="primary"
+                type="submit"
+                label="Check Students"
+                :disabled="uploading"
+              />
+              <span v-if="uploading" class="q-ml-md">
+                <q-spinner color="primary" size="2.5em"></q-spinner>
+              </span>
+            </q-form>
           </div>
         </div>
       </q-card-section>
     </q-card>
 
-    <div id="container" class="row flex justify-center" v-if="submitted">
-      <div class="col">
-        <q-card flat bordered class="q-mb-md">
-          <q-card-section>
-            <div class="text-h6 q-mb-md">Students who have not enrolled</div>
-          </q-card-section>
-          <div v-if="unenrolledStudents.length > 0" class="q-ml-md">
-            <q-chip
-              icon="email"
-              size="md"
-              v-for="student in unenrolledStudents"
-              :key="student"
-            >
-              {{ student }}
-            </q-chip>
+    <div v-if="submitted">
+      <q-card flat bordered class="q-mb-md q-mt-md">
+        <q-card-section>
+          <div class="text-h6 q-mb-md">
+            Students who have not enrolled on Minerva
           </div>
-          <q-card-actions vertical align="right">
-            <q-btn @click="showPopup = true" flat>Notify all</q-btn>
-            <q-btn
-              v-clipboard:copy="unenrolledStudents"
-              v-clipboard:success="onCopy"
-              flat
-              >Copy List</q-btn
-            >
-          </q-card-actions>
-        </q-card>
+        </q-card-section>
+        <div v-if="unenrolledStudents.length > 0" class="q-ml-md">
+          <q-chip
+            icon="email"
+            size="md"
+            v-for="student in unenrolledStudents"
+            :key="student"
+          >
+            {{ student }}
+          </q-chip>
+        </div>
+        <q-card-actions vertical align="right">
+          <q-btn @click="showPopup = true" flat>Notify all</q-btn>
+          <q-btn
+            v-clipboard:copy="unenrolledStudents"
+            v-clipboard:success="onCopy"
+            flat
+          >
+            Copy List
+          </q-btn>
+        </q-card-actions>
+      </q-card>
 
-        <q-card flat bordered class="q-mb-md">
-          <q-card-section>
-            <div class="text-h6 q-mb-md">
-              Students who have not created a new Co-op
-            </div>
-          </q-card-section>
-          <div v-if="unregisteredStudents.length > 0" class="q-ml-md">
-            <q-chip
-              icon="email"
-              size="md"
-              v-for="student in unregisteredStudents"
-              :key="student"
-            >
-              {{ student }}
-            </q-chip>
+      <q-card flat bordered class="q-mb-md">
+        <q-card-section>
+          <div class="text-h6 q-mb-md">
+            Students who have not created a new Co-op
           </div>
-          <q-card-actions vertical align="right">
-            <q-btn
-              v-clipboard:copy="unregisteredStudents"
-              v-clipboard:success="onCopy"
-              flat
-              >Copy List</q-btn
-            >
-          </q-card-actions>
-        </q-card>
+        </q-card-section>
+        <div v-if="unregisteredStudents.length > 0" class="q-ml-md">
+          <q-chip
+            icon="email"
+            size="md"
+            v-for="student in unregisteredStudents"
+            :key="student"
+          >
+            {{ student }}
+          </q-chip>
+        </div>
+        <q-card-actions vertical align="right">
+          <q-btn
+            v-clipboard:copy="unregisteredStudents"
+            v-clipboard:success="onCopy"
+            flat
+          >
+            Copy List
+          </q-btn>
+        </q-card-actions>
+      </q-card>
 
-        <q-dialog v-model="showPopup">
-          <NotificationPopup
-            :title="selectedCourse"
-            :course="specificCourse"
-            :students="unenrolledStudents"
-          />
-        </q-dialog>
-      </div>
+      <q-dialog v-model="showPopup">
+        <NotificationPopup
+          :title="selectedCourse"
+          :course="specificCourse"
+          :students="unenrolledStudents"
+        />
+      </q-dialog>
     </div>
   </BasePage>
 </template>
@@ -193,6 +210,7 @@ export default {
         .then(resp => {
           this.specificCourse = resp.data;
           this.courseOfferingId = resp.data.id;
+
           const formData = new FormData();
           formData.append("file", this.csvFile);
           formData.append("course_id", this.courseOfferingId);
