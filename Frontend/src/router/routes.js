@@ -6,7 +6,6 @@ const routes = [
   {
     path: "/employer",
     component: () => import("layouts/EmployerLayout.vue"),
-    meta: {},
     children: [
       { path: "", redirect: "upload" },
       {
