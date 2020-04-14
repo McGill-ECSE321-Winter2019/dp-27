@@ -28,12 +28,7 @@
               (val && val.length > 0) || 'Please enter a notification body',
           ]"
         />
-        <q-btn
-          color="primary"
-          type="submit"
-          label="Send Notification"
-          v-close-popup
-        />
+        <q-btn color="primary" type="submit" label="Send Notification" />
         <q-btn flat color="secondary" label="Cancel" v-close-popup />
       </q-form>
     </q-card-section>
@@ -51,7 +46,6 @@ export default {
   created: function () {
     this.header = this.title;
     this.message = this.body;
-    console.log(this.students);
   },
   props: {
     title: String,

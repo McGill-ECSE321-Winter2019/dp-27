@@ -180,6 +180,7 @@ export default {
     },
 
     confirmReject: function () {
+      console.log("HEllo");
       const coopBody = {
         status: "REJECTED",
       };
@@ -194,6 +195,7 @@ export default {
           message: "Something went wrong, please try again",
         });
       });
+      this.showPopup = false;
     },
   },
 };
