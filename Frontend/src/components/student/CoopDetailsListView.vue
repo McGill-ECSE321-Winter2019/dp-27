@@ -11,17 +11,6 @@ Used on the Student homepage. -->
 
     <q-item class="row">
       <q-item-section class="col-6">
-        <q-item-label overline>START DATE</q-item-label>
-        <q-item-label>{{ startDate }}</q-item-label>
-      </q-item-section>
-      <q-item-section class="col-6">
-        <q-item-label overline>END DATE</q-item-label>
-        <q-item-label>{{ endDate }}</q-item-label>
-      </q-item-section>
-    </q-item>
-
-    <q-item class="row">
-      <q-item-section class="col-6">
         <q-item-label overline>COMPANY</q-item-label>
         <q-item-label>{{
           this.coop.coopDetails.employerContact.company.name
@@ -30,6 +19,17 @@ Used on the Student homepage. -->
       <q-item-section class="col-6">
         <q-item-label overline>EMPLOYER CONTACT</q-item-label>
         <q-item-label>{{ employerContactInfo }}</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-item class="row">
+      <q-item-section class="col-6">
+        <q-item-label overline>START DATE</q-item-label>
+        <q-item-label>{{ startDate }}</q-item-label>
+      </q-item-section>
+      <q-item-section class="col-6">
+        <q-item-label overline>END DATE</q-item-label>
+        <q-item-label>{{ endDate }}</q-item-label>
       </q-item-section>
     </q-item>
 

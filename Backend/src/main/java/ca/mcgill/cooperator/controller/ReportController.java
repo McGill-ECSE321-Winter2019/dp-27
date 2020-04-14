@@ -114,12 +114,24 @@ public class ReportController extends BaseController {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) Integer coopId,
             @RequestParam(required = false) Integer authorId,
-            @RequestBody(required = false) Set<ReportSectionDto> reportSections) {
+            @RequestParam(required = false) Set<ReportSectionDto> reportSections) {
         Report reportToUpdate = reportService.getReport(id);
 
-        Coop coop = coopService.getCoopById(coopId);
-        Author a = authorService.getAuthorById(authorId);
-        ReportStatus reportStatus = ReportStatus.valueOf(status);
+        Coop coop = null; 
+        if (coopId != null) {
+        	coop = coopService.getCoopById(coopId);
+        }
+        
+        Author author = null;
+        if (authorId != null) {
+        	author = authorService.getAuthorById(authorId);
+        }
+        
+        ReportStatus reportStatus = null; 
+        if (status != null) {
+        	reportStatus = ReportStatus.valueOf(status);
+        }
+        
         Set<ReportSection> sections = null;
         if (reportSections != null) {
             sections =
@@ -129,7 +141,7 @@ public class ReportController extends BaseController {
 
         Report updatedReport =
                 reportService.updateReport(
-                        reportToUpdate, reportStatus, coop, title, a, sections, file);
+                        reportToUpdate, reportStatus, coop, title, author, sections, file);
 
         return ControllerUtils.convertToDto(updatedReport);
     }

@@ -12,9 +12,9 @@ Parent: ReportSectionConfigurationItem.vue -->
     </q-card-section>
 
     <q-card-section>
-      <q-form @submit="onSubmit" class="q-gutter-sm">
+      <q-form @submit="onSubmit">
         <q-input
-          filled
+          outlined
           v-model="promptData"
           type="textarea"
           label="Section Prompt (e.g. How was your co-op?)"
@@ -23,21 +23,31 @@ Parent: ReportSectionConfigurationItem.vue -->
         />
 
         <q-select
-          filled
+          outlined
           v-model="responseTypeData"
           label="Response Type"
           :options="options"
-          class="col-6"
         />
 
-        <q-btn color="primary" type="submit" :label="buttonLabel" />
+        <q-btn
+          class="q-mt-md"
+          color="primary"
+          type="submit"
+          :label="buttonLabel"
+          :disabled="submitting"
+        />
         <q-btn
           v-if="isEditing"
+          class="q-mt-md q-ml-sm"
           color="primary"
           label="Delete"
           flat
+          :disabled="submitting"
           @click="deleteReportSectionConfig"
         />
+        <span v-if="submitting" class="q-ml-sm">
+          <q-spinner color="primary" size="2.5em"></q-spinner>
+        </span>
       </q-form>
     </q-card-section>
   </q-card>
@@ -51,14 +61,13 @@ export default {
       promptData: "",
       responseTypeData: "",
       buttonLabel: "Create",
-      options: []
+      options: [],
+      submitting: false
     };
   },
   props: {
-    reportSectionConfig: {
-      type: Object,
-      required: true
-    },
+    reportSectionConfig: Object,
+    reportConfigId: Number,
     numberOfQuestions: Number,
     isEditing: Boolean
   },
@@ -91,6 +100,7 @@ export default {
           id: this.reportConfigId
         }
       };
+      this.submitting = true;
 
       this.$axios
         .post("/report-section-configs", body)
@@ -102,10 +112,12 @@ export default {
             icon: "cloud_done",
             message: "Created Successfully"
           });
+          this.submitting = false;
           // let parent know to close the dialog and refresh its list of report configs
           this.$emit("refresh");
         })
         .catch(_err => {
+          this.submitting = false;
           this.$q.notify({
             color: "red-4",
             position: "top",
@@ -121,6 +133,7 @@ export default {
         sectionPrompt: this.promptData,
         responseType: this.responseTypeData
       };
+      this.submitting = true;
 
       this.$axios
         .put(`/report-section-configs/${this.reportSectionConfig.id}`, body)
@@ -132,11 +145,13 @@ export default {
             icon: "cloud_done",
             message: "Updated Successfully"
           });
+          this.submitting = false;
           // let parent know to close the dialog and refresh its list
           // of report configs
           this.$emit("refresh");
         })
         .catch(_err => {
+          this.submitting = false;
           this.$q.notify({
             color: "red-4",
             position: "top",
@@ -147,6 +162,7 @@ export default {
         });
     },
     deleteReportSectionConfig: function() {
+      this.submitting = true;
       this.$axios
         .delete("/report-section-configs/" + this.reportSectionConfig.id)
         .then(_resp => {
@@ -157,10 +173,12 @@ export default {
             icon: "cloud_done",
             message: "Deleted Successfully"
           });
+          this.submitting = false;
           // let parent know to close the dialog and refresh its list of report configs
           this.$emit("refresh");
         })
         .catch(_err => {
+          this.submitting = false;
           this.$q.notify({
             color: "red-4",
             position: "top",

@@ -1,5 +1,6 @@
+<!-- This component represents a Student's current Coop on their homepage. -->
 <template>
-  <q-card flat bordered id="card">
+  <q-card flat bordered class="q-mt-md">
     <q-card-section>
       <div class="text-h6">Current Co-op</div>
     </q-card-section>
@@ -72,12 +73,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#card {
-  width: 100%;
-  margin-top: 25px;
-  margin-right: 10px;
-}
-
 .center-item {
   text-align: center;
 }

@@ -8,27 +8,29 @@
     <q-card-section>
       <q-form @submit="onSubmit" class="q-gutter-sm">
         <q-input
-          filled
+          outlined
           v-model="header"
           label="Notification Title"
+          hint="Notification Title"
           lazy-rules
           :rules="[
             val =>
               (val && val.length > 0) || 'Please enter a notification title'
           ]"
         />
-        <div class="text-subtitle2">Body of Notification</div>
         <q-input
-          filled
+          outlined
           v-model="body"
           lazy-rules
-          autogrow
+          type="textarea"
+          label="Notification Body"
+          hint="Notification Body"
           :rules="[
             val =>
               (val && val.length > 0) || 'Please enter a notification title'
           ]"
         />
-        <q-btn color="primary" type="submit" label="Notify All" v-close-popup />
+        <q-btn color="primary" type="submit" label="Send" v-close-popup />
       </q-form>
     </q-card-section>
   </q-card>
@@ -82,6 +84,6 @@ export default {
 
 <style lang="scss" scoped>
 #card {
-  width: 40%;
+  width: 45%;
 }
 </style>

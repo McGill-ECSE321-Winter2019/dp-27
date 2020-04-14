@@ -14,10 +14,6 @@ const routes = [
         component: () => import("pages/student/StudentHomePage.vue")
       },
       {
-        path: "profile",
-        component: () => import("pages/student/StudentProfile.vue")
-      },
-      {
         path: "coops",
         component: () => import("pages/student/StudentCoops.vue")
       },
@@ -62,10 +58,6 @@ const routes = [
         component: () => import("pages/admin/AdminStudentCoops.vue")
       },
       {
-        path: "profile",
-        component: () => import("pages/admin/AdminProfile.vue")
-      },
-      {
         path: "coops",
         component: () => import("pages/admin/AdminCoops.vue")
       },
@@ -82,10 +74,6 @@ const routes = [
         props: true
       },
       {
-        path: "student",
-        component: () => import("pages/admin/AdminStudent.vue")
-      },
-      {
         path: "companies",
         component: () => import("pages/admin/AdminCompanies.vue")
       },
@@ -94,8 +82,8 @@ const routes = [
         component: () => import("pages/admin/AdminReportConfigPage.vue")
       },
       {
-        path: "csv-parse",
-        component: () => import("pages/admin/CsvParse.vue")
+        path: "verify-csv",
+        component: () => import("pages/admin/AdminVerifyCsvPage.vue")
       },
       {
         path: "create-notification",

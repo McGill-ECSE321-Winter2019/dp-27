@@ -1,32 +1,38 @@
 <template>
   <BasePage title="Students">
-    <q-card flat bordered>
+    <q-card flat bordered class="q-mb-md">
       <q-card-section>
         <div class="q-pa-md">
-          <q-select
-            v-model="courseNameData"
-            :options="courseNames"
-            label="Course"
-            style="width:25%"
-          />
-          <q-select
-            v-model="statsData"
-            :options="statusOptions"
-            label="Coop Status"
-            style="width:25%"
-          />
-          <q-select
-            v-model="yearData"
-            :options="years"
-            label="Years"
-            style="width:25%"
-          />
-          <q-select
-            v-model="termData"
-            :options="terms"
-            label="Term"
-            style="width:25%"
-          />
+          <div class="row q-col-gutter-md">
+            <q-select
+              outlined
+              v-model="courseNameData"
+              :options="courseNames"
+              class="col-3"
+              label="Course"
+            />
+            <q-select
+              outlined
+              v-model="statusData"
+              :options="statusOptions"
+              class="col-3"
+              label="Coop Status"
+            />
+            <q-select
+              outlined
+              v-model="yearData"
+              :options="years"
+              class="col-3"
+              label="Years"
+            />
+            <q-select
+              outlined
+              v-model="termData"
+              :options="terms"
+              class="col-3"
+              label="Term"
+            />
+          </div>
         </div>
         <div class="q-pa-md">
           <q-btn @click="viewNewStudents" class="largeFilterBtn">
@@ -43,7 +49,10 @@
           <q-btn @click="clearFilter" class="filterBtn">Clear Filter</q-btn>
         </div>
 
-        <div class="q-pa-md">
+        <div v-if="loading" class="center-item">
+          <q-spinner color="primary" size="3em"></q-spinner>
+        </div>
+        <div v-else class="q-pa-md">
           <q-table
             :data="students"
             :columns="columns"
@@ -94,90 +103,90 @@ export default {
       default: false
     }
   },
-  data: () => ({
-    selected: [],
-    students: [],
-    courseNames: [],
-    courseNameData: "",
-    statusOptions: [],
-    statsData: "",
-    terms: [],
-    termData: "",
-    years: [],
-    yearData: "",
-    columns: [
-      {
-        name: "studentLastName",
-        required: true,
-        label: "Student Last Name",
-        align: "left",
-        field: "lastName",
-        sortable: true,
-        classes: "my-class",
-        style: "width: 500px"
-      },
-      {
-        name: "studentFirstName",
-        required: true,
-        label: "Student First Name",
-        align: "left",
-        field: "firstName",
-        sortable: true,
-        classes: "my-class",
-        style: "width: 500px"
-      },
-      {
-        name: "studentID",
-        required: true,
-        label: "Student ID",
-        align: "left",
-        field: "id",
-        sortable: true,
-        classes: "my-class",
-        style: "width: 500px"
-      },
-      {
-        name: "email",
-        required: true,
-        label: "Email",
-        align: "left",
-        field: "email",
-        sortable: true,
-        classes: "my-class",
-        style: "width: 500px"
-      }
-    ]
-  }),
+  data: function() {
+    return {
+      loading: true,
+      selected: [],
+      students: [],
+      courseNames: [],
+      courseNameData: "",
+      statusOptions: [],
+      statusData: "",
+      terms: [],
+      termData: "",
+      years: [],
+      yearData: "",
+      columns: [
+        {
+          name: "studentLastName",
+          required: true,
+          label: "Student Last Name",
+          align: "left",
+          field: "lastName",
+          sortable: true,
+          classes: "my-class",
+          style: "width: 500px"
+        },
+        {
+          name: "studentFirstName",
+          required: true,
+          label: "Student First Name",
+          align: "left",
+          field: "firstName",
+          sortable: true,
+          classes: "my-class",
+          style: "width: 500px"
+        },
+        {
+          name: "studentID",
+          required: true,
+          label: "Student ID",
+          align: "left",
+          field: "id",
+          sortable: true,
+          classes: "my-class",
+          style: "width: 500px"
+        },
+        {
+          name: "email",
+          required: true,
+          label: "Email",
+          align: "left",
+          field: "email",
+          sortable: true,
+          classes: "my-class",
+          style: "width: 500px"
+        }
+      ]
+    };
+  },
   created: function() {
     this.courseNameData = this.courseName;
     this.yearData = this.year;
     this.termData = this.term;
     this.statsData = this.status;
-    console.log(this.newStudents);
+
     if (this.newStudents === false) {
-      console.log("getting all");
       this.$axios
-        .get(
-          "/students?season=" +
-            this.termData +
-            "&year=" +
-            this.yearData +
-            "&name=" +
-            this.courseNameData +
-            "&status=" +
-            this.statsData,
-          {
-            headers: {
-              Authorization: this.$store.state.token
-            }
+        .get("/students", {
+          headers: {
+            Authorization: this.$store.state.token
+          },
+          params: {
+            season: this.termData,
+            year: this.yearData,
+            name: this.courseNameData,
+            status: this.statusData
           }
-        )
+        })
         .then(resp => {
           this.students = resp.data;
+          this.loading = false;
         });
     } else {
       this.$axios.get("/students/new").then(resp => {
         this.students = resp.data;
+        this.loading = false;
       });
     }
 
@@ -190,6 +199,7 @@ export default {
       .then(resp => {
         this.statusOptions = resp.data;
       });
+
     this.years = this.$common.getYears();
     this.$axios
       .get("/course-offerings/seasons", {
@@ -200,15 +210,16 @@ export default {
       .then(resp => {
         this.terms = resp.data;
       });
+
     this.$axios.get("/courses/names", {}).then(resp => {
       this.courseNames = resp.data;
     });
   },
   methods: {
-    goToStudentCoop() {
+    goToStudentCoop: function() {
       this.$router.push("/admin/student-coops");
     },
-    sendNotif() {
+    sendNotif: function() {
       this.$router.push({
         path: "/admin/notification",
         name: "CreateNotif",
@@ -217,25 +228,30 @@ export default {
         }
       });
     },
-    viewNewStudents() {
+    viewNewStudents: function() {
+      this.loading = true;
       this.$axios.get("/students/new").then(resp => {
         this.students = resp.data;
         this.courseNameData = "";
         this.termData = "";
         this.yearData = "";
         this.statsData = "";
+        this.loading = false;
       });
     },
-    viewAllStudents() {
+    viewAllStudents: function() {
+      this.loading = true;
       this.$axios.get("/students").then(resp => {
         this.students = resp.data;
         this.courseNameData = "";
         this.termData = "";
         this.yearData = "";
         this.statsData = "";
+        this.loading = false;
       });
     },
-    clearFilter() {
+    clearFilter: function() {
+      this.loading = true;
       this.courseNameData = "";
       this.termData = "";
       this.yearData = "";
@@ -248,44 +264,49 @@ export default {
         })
         .then(resp => {
           this.students = resp.data;
+          this.loading = false;
         });
     },
-    applyFilter() {
+    applyFilter: function() {
+      this.loading = true;
       this.$axios
-        .get(
-          "/students?season=" +
-            this.termData +
-            "&year=" +
-            this.yearData +
-            "&name=" +
-            this.courseNameData +
-            "&status=" +
-            this.statsData,
-          {
-            headers: {
-              Authorization: this.$store.state.token
-            }
+        .get("/students", {
+          headers: {
+            Authorization: this.$store.state.token
+          },
+          params: {
+            season: this.termData,
+            year: this.yearData,
+            name: this.courseNameData,
+            status: this.statusData
           }
-        )
+        })
         .then(resp => {
           this.students = resp.data;
+          this.loading = false;
         });
     }
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .dashBtn {
   width: 40%;
   margin-top: 4%;
 }
+
 .filterBtn {
   width: 19%;
   margin-right: 2%;
 }
+
 .largeFilterBtn {
   width: 40%;
   margin-right: 2%;
+}
+
+.center-item {
+  text-align: center;
 }
 </style>

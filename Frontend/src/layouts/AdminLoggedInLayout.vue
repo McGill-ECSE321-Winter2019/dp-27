@@ -66,7 +66,9 @@
           link="/admin/companies"
           icon="domain"
         />
+
         <q-separator />
+
         <SidebarLink
           title="Co-op Review"
           caption="Review new and completed co-ops"
@@ -82,7 +84,7 @@
         <Sidebar-link
           title="Check Enrollment"
           caption="Check who is enrolled via CSV upload"
-          link="/admin/csv-parse"
+          link="/admin/verify-csv"
           icon="assignment_ind"
         />
       </q-list>

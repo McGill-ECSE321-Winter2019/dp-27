@@ -100,7 +100,29 @@ export default {
         status: "COMPLETED"
       };
       // update the student report status
-      this.$axios.put(`/reports/${this.coop.reports[0].id}`, reportBody);
+      this.$axios
+        .put(`/reports/${this.coop.reports[0].id}`, reportBody)
+        .then(resp => {
+          this.$emit("refresh-new-coops");
+
+          this.$q.notify({
+            color: "green-4",
+            position: "top",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "Co-op Approved Successfully"
+          });
+          this.submitting = false;
+        })
+        .catch(_err => {
+          this.$q.notify({
+            color: "red-4",
+            position: "top",
+            textColor: "white",
+            icon: "error",
+            message: "Something went wrong, please try again"
+          });
+        });
 
       // also send the student a notification that their coop has been approved
       const notifBody = {
@@ -114,29 +136,15 @@ export default {
         }
       };
       // create the notification
-      this.$axios
-        .post("/notifications", notifBody)
-        .then(_resp => {
-          this.$q.notify({
-            color: "green-4",
-            position: "top",
-            textColor: "white",
-            icon: "cloud_done",
-            message: "Co-op Approved Successfully"
-          });
-          this.submitting = false;
-
-          this.$emit("refresh-new-coops");
-        })
-        .catch(_err => {
-          this.$q.notify({
-            color: "red-4",
-            position: "top",
-            textColor: "white",
-            icon: "error",
-            message: "Something went wrong, please try again"
-          });
+      this.$axios.post("/notifications", notifBody).catch(_err => {
+        this.$q.notify({
+          color: "red-4",
+          position: "top",
+          textColor: "white",
+          icon: "error",
+          message: "Something went wrong, please try again"
         });
+      });
     },
     rejectCoop: function() {
       // TODO: implement This
