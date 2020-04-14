@@ -180,22 +180,26 @@ export default {
     },
 
     confirmReject: function () {
-      console.log("HEllo");
       const coopBody = {
         status: "REJECTED",
       };
 
       //update the coop
-      this.$axios.put("/coops/" + this.coop.id, coopBody).catch((_err) => {
-        this.$q.notify({
-          color: "red-4",
-          position: "top",
-          textColor: "white",
-          icon: "error",
-          message: "Something went wrong, please try again",
+      this.$axios
+        .put("/coops/" + this.coop.id, coopBody)
+        .then((_resp) => {
+          this.showPopup = false;
+          this.$emit("refresh-new-coops");
+        })
+        .catch((_err) => {
+          this.$q.notify({
+            color: "red-4",
+            position: "top",
+            textColor: "white",
+            icon: "error",
+            message: "Something went wrong, please try again",
+          });
         });
-      });
-      this.showPopup = false;
     },
   },
 };
