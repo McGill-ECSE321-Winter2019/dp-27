@@ -2,6 +2,7 @@ package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import java.io.BufferedReader;
@@ -80,7 +81,9 @@ public class CSVParserController {
                 courseOfferingService.getCourseOfferingById(courseOfferingId);
         List<Coop> coops = coopService.getAllCoopsForCourseOffering(courseOffering);
         for (Coop c : coops) {
-            students.add(c.getStudent().getEmail());
+            if(c.getStatus() != CoopStatus.UNDER_REVIEW){
+                students.add(c.getStudent().getEmail());
+            }
         }
 
         String line;
