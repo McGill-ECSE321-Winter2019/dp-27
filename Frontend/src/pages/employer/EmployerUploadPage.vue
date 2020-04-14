@@ -16,6 +16,7 @@
             :rules="[val => val != null || 'Please upload a file']"
           >
           </q-select>
+          <div class="text-h6 q-mb-sm">Upload Evaluation (PDF)</div>
           <q-file
             outlined
             v-model="evaluationFile"
@@ -65,8 +66,7 @@ export default {
     };
   },
   created: function() {
-    //var url = $route.params.url;
-    var url = "PdbJGyYpv7ddr6No25u95w%3D%3D";
+    var url = $route.params.url;
     this.$axios.get("/employer-contacts/url/" + url).then(resp => {
       this.employerContact = resp.data;
       this.$axios
