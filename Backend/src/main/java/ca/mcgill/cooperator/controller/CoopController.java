@@ -9,14 +9,18 @@ import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.model.Course;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.model.Report;
 import ca.mcgill.cooperator.model.Student;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import ca.mcgill.cooperator.service.CourseService;
+import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.ReportService;
 import ca.mcgill.cooperator.service.StudentService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +46,7 @@ public class CoopController extends BaseController {
     @Autowired StudentService studentService;
     @Autowired CoopDetailsService coopDetailsService;
     @Autowired ReportService reportService;
+    @Autowired EmployerContactService employerContactService;
 
     /**
      * Creates a new Coop
@@ -142,6 +147,22 @@ public class CoopController extends BaseController {
         Student s = studentService.getStudentById(id);
         List<Coop> coops = coopService.getAllCoopsByStudent(s);
         return ControllerUtils.convertCoopListToDto(coops);
+    }
+    
+    @GetMapping("/employer-contact/{id}")
+    public List<CoopDto> getCoopsByEmployerId(@PathVariable int id) {
+    	EmployerContact ec = employerContactService.getEmployerContact(id);
+    	Set<CoopDetails> coopDetails = ec.getCoopDetails();
+    	List<Coop> coops = new ArrayList<Coop>();
+    	
+    	for (CoopDetails cd : coopDetails) {
+    		Coop coop = cd.getCoop();
+    		if (coop.getStatus() == CoopStatus.IN_PROGRESS) {
+    			coops.add(coop);
+    		}
+    	}
+    	
+    	return ControllerUtils.convertCoopListToDto(coops);
     }
 
     /**

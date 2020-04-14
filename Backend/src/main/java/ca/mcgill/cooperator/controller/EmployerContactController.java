@@ -12,8 +12,17 @@ import ca.mcgill.cooperator.service.CompanyService;
 import ca.mcgill.cooperator.service.CoopDetailsService;
 import ca.mcgill.cooperator.service.EmployerContactService;
 import ca.mcgill.cooperator.service.ReportService;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -99,6 +108,33 @@ public class EmployerContactController extends BaseController {
         List<EmployerContact> employerContacts = employerContactService.getAllEmployerContacts();
         return ControllerUtils.convertEmployerContactListToDto(employerContacts);
     }
+    
+    @GetMapping("/url/{url}")
+    public EmployerContactDto getEmployerContactByUrl(@PathVariable String url) {
+    	 // Create key and cipher
+    	String key = "PeShVmYq3t6w9z$C"; // 128 bit key
+        Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
+        System.err.println(aesKey.toString());
+        Cipher cipher = null;
+        byte[] decrypted = null;
+		try {
+			cipher = Cipher.getInstance("AES");
+			// decrypt the text
+	        cipher.init(Cipher.DECRYPT_MODE, aesKey);
+	        decrypted = cipher.doFinal(Base64.getDecoder().decode(decode(url)));
+			 
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+    	String email = new String(decrypted);
+		
+		return ControllerUtils.convertToDto(employerContactService.getEmployerContact(email));
+    }
+    
+    private String decode(String value) throws Exception {
+        return URLDecoder.decode(value, StandardCharsets.UTF_8.toString());
+    }
+
 
     /**
      * Updates an existing EmployerContact

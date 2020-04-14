@@ -1,10 +1,23 @@
 package ca.mcgill.cooperator.schedule;
 
 import ca.mcgill.cooperator.model.Coop;
+import ca.mcgill.cooperator.model.CoopDetails;
 import ca.mcgill.cooperator.model.CoopStatus;
+import ca.mcgill.cooperator.model.EmployerContact;
 import ca.mcgill.cooperator.service.CoopService;
+import ca.mcgill.cooperator.service.EmployerContactService;
+
+import java.net.URLEncoder;
+import java.security.Key;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.Set;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -21,6 +34,7 @@ import org.springframework.stereotype.Component;
 public class NightlyTasks {
 
     @Autowired CoopService coopService;
+    @Autowired EmployerContactService employerContactService;
 
     static final Logger logger = Logger.getLogger(NightlyTasks.class);
 
@@ -67,4 +81,54 @@ public class NightlyTasks {
             logger.info("Completed job to update Coop statuses");
         }
     }
+    
+    @Async
+    @Scheduled(cron = CRON_TEST)
+    public void sendEmployerContactLinks() throws Exception {
+    	//find employer contacts that have reports to complete
+    	//for now just do all employer contacts in the system that have active coops
+    	if (logger.isInfoEnabled()) {
+            logger.info("Running job to generate EmployerContact links");
+        }
+    	
+    	List<EmployerContact> employerContacts = employerContactService.getAllEmployerContacts();
+    	
+    	List<String> links = new ArrayList<String>();
+    	
+    	for (EmployerContact employerContact: employerContacts) {
+    		Set<CoopDetails> coopDetails = employerContact.getCoopDetails();
+    		for (CoopDetails cd : coopDetails) {
+    			//if coop in progress, generate link
+    			if (cd.getCoop().getStatus() == CoopStatus.IN_PROGRESS) {
+    				String text = employerContact.getEmail();
+    	            String key = "PeShVmYq3t6w9z$C"; // 128 bit key
+    	            // Create key and cipher
+    	            Key aesKey = new SecretKeySpec(key.getBytes(), "AES");
+    	            System.err.println(aesKey.toString());
+    	            Cipher cipher = null;
+    	            byte[] encrypted = null;
+    	            
+					try {
+						cipher = Cipher.getInstance("AES");
+						 // encrypt the text
+						cipher.init(Cipher.ENCRYPT_MODE, aesKey);
+	    	            encrypted = cipher.doFinal(text.getBytes("UTF-8"));
+					} catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+					
+    				//localhost for now, switch to actual website later
+    				String link = "localhost:8080/#/employer-contact/" + URLEncoder.encode(Base64.getEncoder().encodeToString(encrypted), "UTF-8");
+    				links.add(link);
+    				break;
+    			}
+    		}
+    	}
+    	
+    	if (logger.isInfoEnabled()) {
+            logger.info(links.toString());
+        }
+    	
+    }
+
 }
