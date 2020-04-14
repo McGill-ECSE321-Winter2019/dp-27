@@ -49,12 +49,6 @@
       <q-list>
         <q-item-label header class="text-grey-8">Navigation</q-item-label>
         <SidebarLink
-          title="Co-ops"
-          caption="View all co-op information"
-          link="/admin/coops"
-          icon="work_outline"
-        />
-        <SidebarLink
           title="Students"
           caption="View all student information"
           link="/admin/students"
