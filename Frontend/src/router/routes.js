@@ -4,6 +4,18 @@ const routes = [
     component: () => import("layouts/LoginLayout.vue")
   },
   {
+    path: "/employer",
+    component: () => import("layouts/EmployerLayout.vue"),
+    meta: {},
+    children: [
+      { path: "", redirect: "upload" },
+      {
+        path: "upload",
+        component: () => import("pages/employer/EmployerUploadPage.vue")
+      }
+    ]
+  },
+  {
     path: "/student",
     component: () => import("layouts/StudentLoggedInLayout.vue"),
     meta: { requiresStudentAuth: true },
