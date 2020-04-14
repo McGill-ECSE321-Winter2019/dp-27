@@ -37,59 +37,91 @@
         <q-btn
           label="Approve"
           color="primary"
-          @click="approveCoop"
+          @click="confirm = true"
           :disabled="submitting"
         />
         <q-btn
           label="Reject"
           color="primary"
           flat
-          @click="rejectCoop"
+          @click="rejectCoop(coop.student)"
           :disabled="submitting"
         />
         <!-- Show spinner while submitting -->
         <q-spinner v-if="submitting" color="primary" size="2.5em" />
       </div>
+      <q-dialog v-model="showPopup">
+        <NotificationPopup
+          :title="title"
+          :body="message"
+          :students="s"
+          @sent="confirmReject"
+        />
+      </q-dialog>
+      <q-dialog v-model="confirm">
+        <q-card>
+          <q-card-section>
+            <div class="text-h6 primary">
+              Are you sure you would like to confirm this Coop
+            </div>
+          </q-card-section>
+
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Confirm Co-op" @click="approveCoop" />
+            <q-btn flat label="Cancel" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </q-card-section>
   </q-card>
 </template>
 
 <script>
+import NotificationPopup from "./NotificationPopup.vue";
+
 export default {
   name: "CoopReviewPageNewCoopItem",
-  data: function() {
+  components: {
+    NotificationPopup,
+  },
+  data: function () {
     return {
       offerLetterURL: null,
-      submitting: false
+      submitting: false,
+      showPopup: false,
+      confirm: false,
+      s: [],
+      message: "",
+      title: "",
     };
   },
   props: {
     coop: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
-    term: function() {
+    term: function () {
       const term = `${this.coop.courseOffering.season} ${this.coop.courseOffering.year}`;
       return this.$common.convertEnumTextToReadableString(term);
-    }
+    },
   },
-  created: function() {
+  created: function () {
     var bytes = this.coop.reports[0].data;
 
     let blob = this.$common.b64toBlob(bytes, "application/pdf");
     this.offerLetterURL = window.URL.createObjectURL(blob);
   },
   methods: {
-    openPDF: function() {
+    openPDF: function () {
       window.open(this.offerLetterURL);
     },
-    approveCoop: function() {
+    approveCoop: function () {
       this.submitting = true;
       // set the status of the coop to FUTURE
       const coopBody = {
-        status: "FUTURE"
+        status: "FUTURE",
       };
       // update the coop
       this.$axios.put(`/coops/${this.coop.id}`, coopBody);
@@ -97,61 +129,73 @@ export default {
       // set the status of the offer letter to COMPLETED
       // assuming the offer letter is the only Report, which it should be
       const reportBody = {
-        status: "COMPLETED"
+        status: "COMPLETED",
       };
       // update the student report status
-      this.$axios
-        .put(`/reports/${this.coop.reports[0].id}`, reportBody)
-        .then(resp => {
-          this.$emit("refresh-new-coops");
-
-          this.$q.notify({
-            color: "green-4",
-            position: "top",
-            textColor: "white",
-            icon: "cloud_done",
-            message: "Co-op Approved Successfully"
-          });
-          this.submitting = false;
-        })
-        .catch(_err => {
-          this.$q.notify({
-            color: "red-4",
-            position: "top",
-            textColor: "white",
-            icon: "error",
-            message: "Something went wrong, please try again"
-          });
-        });
+      this.$axios.put(`/reports/${this.coop.reports[0].id}`, reportBody);
 
       // also send the student a notification that their coop has been approved
       const notifBody = {
         title: "Co-op Approved",
         body: `Your co-op for ${this.term} has been approved!`,
         student: {
-          id: this.coop.student.id
+          id: this.coop.student.id,
         },
         sender: {
-          id: this.$store.state.currentUser.id
-        }
+          id: this.$store.state.currentUser.id,
+        },
       };
       // create the notification
-      this.$axios.post("/notifications", notifBody).catch(_err => {
+      this.$axios
+        .post("/notifications", notifBody)
+        .then((_resp) => {
+          this.$q.notify({
+            color: "green-4",
+            position: "top",
+            textColor: "white",
+            icon: "cloud_done",
+            message: "Co-op Approved Successfully",
+          });
+          this.submitting = false;
+
+          this.$emit("refresh-new-coops");
+        })
+        .catch((_err) => {
+          this.$q.notify({
+            color: "red-4",
+            position: "top",
+            textColor: "white",
+            icon: "error",
+            message: "Something went wrong, please try again",
+          });
+        });
+    },
+
+    rejectCoop: function (student) {
+      this.title = "Your Co-op request has been rejected";
+      this.message =
+        "After reviewing the contents of the Co-op offer letter, it has been deemed unsatisfactory as relevant experience.";
+      this.showPopup = true;
+      this.s = [student];
+    },
+
+    confirmReject: function () {
+      const coopBody = {
+        status: "REJECTED",
+      };
+
+      //update the coop
+      this.$axios.put("/coops/" + this.coop.id, coopBody).catch((_err) => {
         this.$q.notify({
           color: "red-4",
           position: "top",
           textColor: "white",
           icon: "error",
-          message: "Something went wrong, please try again"
+          message: "Something went wrong, please try again",
         });
       });
     },
-    rejectCoop: function() {
-      // TODO: implement This
-      // the notification body should be customizable, i.e. the admin should
-      // enter why they rejected the co-op
-    }
-  }
+  },
 };
 </script>
 

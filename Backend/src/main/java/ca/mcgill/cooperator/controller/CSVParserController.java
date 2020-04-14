@@ -80,7 +80,9 @@ public class CSVParserController {
                 courseOfferingService.getCourseOfferingById(courseOfferingId);
         List<Coop> coops = coopService.getAllCoopsForCourseOffering(courseOffering);
         for (Coop c : coops) {
-            students.add(c.getStudent().getEmail());
+            if(c.getStatus() != CoopStatus.UNDER_REVIEW){
+                students.add(c.getStudent().getEmail());
+            }
         }
 
         String line;
