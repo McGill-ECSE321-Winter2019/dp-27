@@ -2,6 +2,7 @@ package ca.mcgill.cooperator.controller;
 
 import ca.mcgill.cooperator.model.Coop;
 import ca.mcgill.cooperator.model.CourseOffering;
+import ca.mcgill.cooperator.model.CoopStatus;
 import ca.mcgill.cooperator.service.CoopService;
 import ca.mcgill.cooperator.service.CourseOfferingService;
 import java.io.BufferedReader;
