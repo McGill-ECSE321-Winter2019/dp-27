@@ -58,17 +58,18 @@
           @sent="confirmReject"
         />
       </q-dialog>
+      <!-- Popup for an Admin to confirm that they want to approve the Coop -->
       <q-dialog v-model="confirm">
         <q-card>
           <q-card-section>
             <div class="text-h6 primary">
-              Are you sure you would like to confirm this Coop
+              Are you sure you would like to confirm this Coop?
             </div>
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">
-            <q-btn flat label="Confirm Co-op" @click="approveCoop" />
             <q-btn flat label="Cancel" v-close-popup />
+            <q-btn color="primary" label="Confirm Co-op" @click="approveCoop" />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -82,9 +83,9 @@ import NotificationPopup from "./NotificationPopup.vue";
 export default {
   name: "CoopReviewPageNewCoopItem",
   components: {
-    NotificationPopup,
+    NotificationPopup
   },
-  data: function () {
+  data: function() {
     return {
       offerLetterURL: null,
       submitting: false,
@@ -92,44 +93,56 @@ export default {
       confirm: false,
       s: [],
       message: "",
-      title: "",
+      title: ""
     };
   },
   props: {
     coop: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   computed: {
-    term: function () {
+    term: function() {
       const term = `${this.coop.courseOffering.season} ${this.coop.courseOffering.year}`;
       return this.$common.convertEnumTextToReadableString(term);
-    },
+    }
   },
-  created: function () {
+  created: function() {
     var bytes = this.coop.reports[0].data;
 
     let blob = this.$common.b64toBlob(bytes, "application/pdf");
     this.offerLetterURL = window.URL.createObjectURL(blob);
   },
   methods: {
-    openPDF: function () {
+    openPDF: function() {
       window.open(this.offerLetterURL);
     },
-    approveCoop: function () {
+    approveCoop: function() {
       this.submitting = true;
+      this.confirm = false;
       // set the status of the coop to FUTURE
       const coopBody = {
-        status: "FUTURE",
+        status: "FUTURE"
       };
       // update the coop
-      this.$axios.put(`/coops/${this.coop.id}`, coopBody);
+      this.$axios.put(`/coops/${this.coop.id}`, coopBody).then(() => {
+        this.$emit("refresh-new-coops");
+
+        this.$q.notify({
+          color: "green-4",
+          position: "top",
+          textColor: "white",
+          icon: "cloud_done",
+          message: "Co-op Approved Successfully"
+        });
+        this.submitting = false;
+      });
 
       // set the status of the offer letter to COMPLETED
       // assuming the offer letter is the only Report, which it should be
       const reportBody = {
-        status: "COMPLETED",
+        status: "COMPLETED"
       };
       // update the student report status
       this.$axios.put(`/reports/${this.coop.reports[0].id}`, reportBody);
@@ -139,39 +152,25 @@ export default {
         title: "Co-op Approved",
         body: `Your co-op for ${this.term} has been approved!`,
         student: {
-          id: this.coop.student.id,
+          id: this.coop.student.id
         },
         sender: {
-          id: this.$store.state.currentUser.id,
-        },
+          id: this.$store.state.currentUser.id
+        }
       };
       // create the notification
-      this.$axios
-        .post("/notifications", notifBody)
-        .then((_resp) => {
-          this.$q.notify({
-            color: "green-4",
-            position: "top",
-            textColor: "white",
-            icon: "cloud_done",
-            message: "Co-op Approved Successfully",
-          });
-          this.submitting = false;
-
-          this.$emit("refresh-new-coops");
-        })
-        .catch((_err) => {
-          this.$q.notify({
-            color: "red-4",
-            position: "top",
-            textColor: "white",
-            icon: "error",
-            message: "Something went wrong, please try again",
-          });
+      this.$axios.post("/notifications", notifBody).catch(_err => {
+        this.$q.notify({
+          color: "red-4",
+          position: "top",
+          textColor: "white",
+          icon: "error",
+          message: "Something went wrong, please try again"
         });
+      });
     },
 
-    rejectCoop: function (student) {
+    rejectCoop: function(student) {
       this.title = "Your Co-op request has been rejected";
       this.message =
         "After reviewing the contents of the Co-op offer letter, it has been deemed unsatisfactory as relevant experience.";
@@ -179,29 +178,29 @@ export default {
       this.s = [student];
     },
 
-    confirmReject: function () {
+    confirmReject: function() {
       const coopBody = {
-        status: "REJECTED",
+        status: "REJECTED"
       };
 
       //update the coop
       this.$axios
         .put("/coops/" + this.coop.id, coopBody)
-        .then((_resp) => {
+        .then(_resp => {
           this.showPopup = false;
           this.$emit("refresh-new-coops");
         })
-        .catch((_err) => {
+        .catch(_err => {
           this.$q.notify({
             color: "red-4",
             position: "top",
             textColor: "white",
             icon: "error",
-            message: "Something went wrong, please try again",
+            message: "Something went wrong, please try again"
           });
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

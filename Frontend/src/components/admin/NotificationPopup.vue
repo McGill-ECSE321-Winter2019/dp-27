@@ -13,8 +13,8 @@
           label="Notification Title"
           lazy-rules
           :rules="[
-            (val) =>
-              (val && val.length > 0) || 'Please enter a notification title',
+            val =>
+              (val && val.length > 0) || 'Please enter a notification title'
           ]"
         />
         <div class="text-subtitle2">Body of Notification</div>
@@ -24,12 +24,11 @@
           lazy-rules
           autogrow
           :rules="[
-            (val) =>
-              (val && val.length > 0) || 'Please enter a notification body',
+            val => (val && val.length > 0) || 'Please enter a notification body'
           ]"
         />
         <q-btn color="primary" type="submit" label="Send Notification" />
-        <q-btn flat color="secondary" label="Cancel" v-close-popup />
+        <q-btn flat color="primary" label="Cancel" v-close-popup />
       </q-form>
     </q-card-section>
   </q-card>
@@ -37,61 +36,61 @@
 
 <script>
 export default {
-  data: function () {
+  data: function() {
     return {
       header: "",
-      message: "",
+      message: ""
     };
   },
-  created: function () {
+  created: function() {
     this.header = this.title;
     this.message = this.body;
   },
   props: {
     title: String,
     students: Array,
-    body: String,
+    body: String
   },
   methods: {
-    onSubmit: function () {
-      this.students.forEach((s) => {
-        this.$axios.get("/students/email/" + s.email).then((studentObject) => {
+    onSubmit: function() {
+      this.students.forEach(s => {
+        this.$axios.get("/students/email/" + s.email).then(studentObject => {
           const body = {
             title: this.header,
             body: this.body,
             student: {
-              id: studentObject.data.id,
+              id: studentObject.data.id
             },
             sender: {
-              id: this.$store.state.currentUser.id,
-            },
+              id: this.$store.state.currentUser.id
+            }
           };
           this.$axios
             .post("/notifications", body)
-            .then((_resp) => {
+            .then(_resp => {
               this.$q.notify({
                 color: "green-4",
                 position: "top",
                 textColor: "white",
                 icon: "cloud_done",
-                message: "Successfully notified",
+                message: "Successfully notified"
               });
 
               this.$emit("sent");
             })
-            .catch((_err) => {
+            .catch(_err => {
               this.$q.notify({
                 color: "red-4",
                 position: "top",
                 textColor: "white",
                 icon: "error",
-                message: "Something went wrong, please try again",
+                message: "Something went wrong, please try again"
               });
             });
         });
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

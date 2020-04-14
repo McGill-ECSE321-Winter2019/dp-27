@@ -67,7 +67,7 @@ export default {
       this.submitting = true;
 
       this.$axios
-        .put(`/student-reports/${this.reportId}`, formData, {
+        .put(`/reports/${this.reportId}`, formData, {
           headers: { "Content-Type": "multipart/form-data" }
         })
         .then(_resp => {
