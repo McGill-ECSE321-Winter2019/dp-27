@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.6.1",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "moment": "^2.24.0",
     "quasar": "^1.9.13",
     "vue-clipboard2": "^0.3.1"
